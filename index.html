@@ -62,42 +62,6 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-new-article" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/07/11/new-article/" class="article-date">
-  <time datetime="2019-07-11T04:28:35.000Z" itemprop="datePublished">2019-07-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/11/new-article/">new article</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://hzkvectory.github.io/2019/07/11/new-article/" data-id="cjxy6b3ql00011jfypwv3b56e" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-zookeeper/zookeeper_expiryQueue" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/07/11/zookeeper/zookeeper_expiryQueue/" class="article-date">
@@ -135,7 +99,9 @@ private final ConcurrentHashMap&lt;Long, Set&lt;E&gt;&gt; expiryMap = new Concur
 ****elemMap和expiryMap是利用空间换时间，方便根据SessionImpl 和 过期时间相互查找****</code></pre><p>ExpiryQueue的remove方法</p>
 <pre><code>ExpiryQueue的实现相当于一个缓存，想起之前面试的一个题目：实现一个缓存fifo,缓存的value可以有过期时间/无过
 期时间，缓存大小一定，当put时，如果缓存满了(达到缓存上线)，优先剔除最近要失效的key-value，如果key都不过
-期，优先剔除最先进来的key，直到能放下新的key-value
+期，优先剔除最先进来的key，直到能放下新的key-value。这个题可以用ConcurrentHashMap缓存，TreeSet(有序集
+合)过期时间排序，或者二分查找。
+**从这里感觉算法的重要性。时间复杂度、空间复杂度在实际工作中得以应用。**
 
 public Long remove(E elem) {
      //快速根据SessionImpl获取过期的时间
@@ -189,7 +155,7 @@ public Long remove(E elem) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://hzkvectory.github.io/2019/07/11/zookeeper/zookeeper_expiryQueue/" data-id="cjxy6b3r700021jfyqp7spsiy" class="article-share-link">Share</a>
+      <a data-url="http://hzkvectory.github.io/2019/07/11/zookeeper/zookeeper_expiryQueue/" data-id="cjxy6l6g400024zfykdlqc444" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
@@ -218,7 +184,7 @@ public Long remove(E elem) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://hzkvectory.github.io/2019/07/11/http/http/" data-id="cjxy6b3r900031jfy8ch9ky34" class="article-share-link">Share</a>
+      <a data-url="http://hzkvectory.github.io/2019/07/11/http/http/" data-id="cjxy6l6g300014zfyv5h0pg59" class="article-share-link">Share</a>
       
       
     </footer>
@@ -262,7 +228,7 @@ echo &quot;select adx,adid,adslotid,count(1) as total from common_ad_req_all whe
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://hzkvectory.github.io/2019/07/11/linux-init/" data-id="cjxy6b3qg00001jfyvqsnobch" class="article-share-link">Share</a>
+      <a data-url="http://hzkvectory.github.io/2019/07/11/linux-init/" data-id="cjxy6l6fl00004zfyuvy5t4xm" class="article-share-link">Share</a>
       
       
     </footer>
@@ -315,10 +281,6 @@ echo &quot;select adx,adid,adslotid,count(1) as total from common_ad_req_all whe
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
-        
-          <li>
-            <a href="/2019/07/11/new-article/">new article</a>
-          </li>
         
           <li>
             <a href="/2019/07/11/zookeeper/zookeeper_expiryQueue/">zookeeper之ExpiryQueue</a>
