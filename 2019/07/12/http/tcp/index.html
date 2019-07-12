@@ -3,20 +3,19 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-  <title>linux 命令 | 我的博客</title>
+  <title>tcp三次握手、四次挥手 | 我的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="linux 高效命令 vmstat -n 5 | awk &amp;apos;{print strftime(&amp;quot;[%Y-%m-%d %H:%M:%S]&amp;quot;),$0}&amp;apos;在maxpro上添加访问minikube内部ip的路由 sudo route -n add 172.17.0.0/24 192.168.99.100 sudo route -n delete 172.17.0.0/">
-<meta name="keywords" content="linux">
+  <meta name="keywords" content="tcp">
 <meta property="og:type" content="article">
-<meta property="og:title" content="linux 命令">
-<meta property="og:url" content="http://hzkvectory.github.io/2019/07/12/linux-init/index.html">
+<meta property="og:title" content="tcp三次握手、四次挥手">
+<meta property="og:url" content="http://hzkvectory.github.io/2019/07/12/http/tcp/index.html">
 <meta property="og:site_name" content="我的博客">
-<meta property="og:description" content="linux 高效命令 vmstat -n 5 | awk &amp;apos;{print strftime(&amp;quot;[%Y-%m-%d %H:%M:%S]&amp;quot;),$0}&amp;apos;在maxpro上添加访问minikube内部ip的路由 sudo route -n add 172.17.0.0/24 192.168.99.100 sudo route -n delete 172.17.0.0/">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-12T05:34:31.976Z">
+<meta property="og:image" content="http://hzkvectory.github.io/2019/07/12/http/tcp/tcp三次握手.jpeg">
+<meta property="og:updated_time" content="2019-07-12T06:01:20.175Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="linux 命令">
-<meta name="twitter:description" content="linux 高效命令 vmstat -n 5 | awk &amp;apos;{print strftime(&amp;quot;[%Y-%m-%d %H:%M:%S]&amp;quot;),$0}&amp;apos;在maxpro上添加访问minikube内部ip的路由 sudo route -n add 172.17.0.0/24 192.168.99.100 sudo route -n delete 172.17.0.0/">
+<meta name="twitter:title" content="tcp三次握手、四次挥手">
+<meta name="twitter:image" content="http://hzkvectory.github.io/2019/07/12/http/tcp/tcp三次握手.jpeg">
   
   
 <!--    <link rel="icon" href="/favicon.ico">-->
@@ -63,9 +62,9 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-linux-init" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-http/tcp" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/07/12/linux-init/" class="article-date">
+    <a href="/2019/07/12/http/tcp/" class="article-date">
   <time datetime="2019-07-12T04:28:35.000Z" itemprop="datePublished">2019-07-12</time>
 </a>
     
@@ -77,7 +76,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      linux 命令
+      tcp三次握手、四次挥手
     </h1>
   
 
@@ -87,33 +86,15 @@
       
         <!-- Table of Contents -->
         
-        <p>linux 高效命令</p>
-<pre><code>vmstat -n 5 | awk &apos;{print strftime(&quot;[%Y-%m-%d %H:%M:%S]&quot;),$0}&apos;</code></pre><p>在maxpro上添加访问minikube内部ip的路由</p>
-<pre><code>sudo route -n add 172.17.0.0/24 192.168.99.100
-sudo route -n delete 172.17.0.0/24 192.168.99.100</code></pre><p>解压命令</p>
-<pre><code>gunzip -c make-4.0.tar.gz |tar xvf -
-/lib/systemd/system/docker.service --insecure-registry 192.168.99.1:5000</code></pre><p>设置centos时区</p>
-<pre><code>#timedatectl list-timezones  # 列出所有时区
-#timedatectl set-local-rtc 1  
-# 将硬件时钟调整为与本地时钟一致, 0 为设置为 UTC 时间
-#timedatectl set-timezone Asia/Shanghai  
-# 设置系统时区为上海
-#cp/usr/share/zoneinfo/Asia/Shanghai /etc/localtime</code></pre><p>curl使用</p>
-<pre><code>curl -X POST http://localhost:8080/upload \
-  -F &quot;file=@/Users/appleboy/test.zip&quot; \
-  -H &quot;Content-Type: multipart/form-data”
-
-curl -o /dev/null -w %{time_namelookup}::%{time_connect}::%{time_starttransfer}::%{time_total}::%{speed_download}&quot;\n&quot; &quot;http://sa.a.alldk.com/“
-
-echo &quot;select adx,adid,adslotid,count(1) as total from common_ad_req_all where logday = &apos;2019-05-27&apos; and hour = &apos;14&apos; group by adx,adid,adslotid;&quot;| curl dcs-inc.xxx.com:8123/\?database=common_ad\&amp;user=&apos;&apos;\&amp;password=&apos;&apos; --data-binary @-</code></pre>
+        <img src="/2019/07/12/http/tcp/tcp三次握手.jpeg" title="[tcp三次握手、四次挥手]">
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://hzkvectory.github.io/2019/07/12/linux-init/" data-id="cjxzp18320000oofy4m70awi7" class="article-share-link">分享</a>
+      <a data-url="http://hzkvectory.github.io/2019/07/12/http/tcp/" data-id="cjxzp183y0003oofy8fttehbt" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcp/">tcp</a></li></ul>
 
     </footer>
   </div>
@@ -163,10 +144,19 @@ echo &quot;select adx,adid,adslotid,count(1) as total from common_ad_req_all whe
     
 <nav id="article-nav">
   
+    <a href="/2019/07/12/linux-init/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          linux 命令
+        
+      </div>
+    </a>
   
-    <a href="/2019/07/12/http/tcp/" id="article-nav-older" class="article-nav-link-wrap">
+  
+    <a href="/2019/07/12/http/http/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">tcp三次握手、四次挥手</div>
+      <div class="article-nav-title">http</div>
     </a>
   
 </nav>
