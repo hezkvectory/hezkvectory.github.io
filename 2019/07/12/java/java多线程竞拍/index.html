@@ -7,6 +7,9 @@
   
   <title>阿里云面试题-多线程竞拍 | 我的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
   <meta name="description" content="多线程竞拍 创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）  每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。  所有人的心理上线价位都为 M ，不会出价比M高  每次出价必须比上一次出价高  经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。个人觉得主要考察java基础（CountDownLatch、CyclicBarrier）的">
 <meta name="keywords" content="java">
 <meta property="og:type" content="article">
@@ -23,69 +26,76 @@
     <link rel="alternate" href="/atom.xml" title="我的博客" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
+    <link rel="icon" href="/images/default-avatar.webp">
   
   
     <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/highlight.css">
+  <script>
+  let antiquityStorage = window.sessionStorage.getItem('antiquitySessionStorage');
+  if (antiquityStorage == '' || antiquityStorage == null) {
+    var antiquityLoader = '<div id="loaderbox"><div class="loader"><div class="load-roll"><div class="load-top"></div><div class="load-right"></div><div class="load-bottom"></div></div></div></div>';
+    document.write(antiquityLoader);
+    document.body.style.overflow = 'hidden'
+  }
+  </script>
 </head>
 </html>
 <body>
-  <div id="container">
-    <div id="wrap">
+  <div id="fullpage" class="mobile-nav-right">
+    
+      <div id="wrapper" title="图片来自网络">
+    
+    
       <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">我的博客</a>
-      </h1>
+  <div id="nav-toggle" class="nav-toggle"></div>
+  <div class="head-box global-width">
+    <nav class="nav-box nav-right">
       
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
+        <a class="nav-item" href="/" title
         
-          <a class="main-nav-link" href="/">Home</a>
+        >首页</a>
+      
+        <a class="nav-item" href="/archives" title
         
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://hzkvectory.github.io"></form>
-      </div>
-    </div>
+        >归档</a>
+      
+    </nav>
   </div>
 </header>
-      <div class="outer">
-        <section id="main"><article id="post-java/java多线程竞拍" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/07/12/java/java多线程竞拍/" class="article-date">
-  <time datetime="2019-07-12T04:28:35.000Z" itemprop="datePublished">2019-07-12</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+      <div id="middlecontent" title class="global-width sidebar-right">
+        <section id="main"><article id="post-java/java多线程竞拍" class="article global-container article-type-post" itemscope itemprop="blogPost">
+  
+    <header class="article-header">
+      
   
     <h1 class="article-title" itemprop="name">
       阿里云面试题-多线程竞拍
     </h1>
   
 
-      </header>
+    </header>
+  
+  <div class="article-meta">
+    <a href="/2019/07/12/java/java多线程竞拍/" class="article-date">
+  <time datetime="2019-07-12T04:28:35.000Z" itemprop="datePublished">2019-07-12</time>
+</a>
     
-    <div class="article-entry" itemprop="articleBody">
+    
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+  </div>
+  
+    <span id="busuanzi_container_page_pv">
+      本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+  
+
+  <div class="article-inner">
+    
+    <div class="article-content article-content-cloud" itemprop="articleBody">
       
         <p>多线程竞拍</p>
 <pre><code>创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）
@@ -221,38 +231,71 @@ static class Auction implements Runnable {
 
       
     </div>
-    <footer class="article-footer">
-      <a data-url="http://hzkvectory.github.io/2019/07/12/java/java多线程竞拍/" data-id="cjxzmx8md000185fy6hiehofm" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
+    
+      <footer class="article-footer">
+        完
+      </footer>
+    
   </div>
   
     
 <nav id="article-nav">
-  
-  
-    <a href="/2019/07/11/zookeeper/zookeeper_expiryQueue/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">zookeeper之ExpiryQueue</div>
-    </a>
-  
+  <div class="article-nav-block">
+    
+  </div>
+  <div class="article-nav-block">
+    
+      <a href="/2019/07/11/zookeeper/zookeeper_expiryQueue/" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">zookeeper之ExpiryQueue</div>
+        <strong class="article-nav-caption"></strong>
+      </a>
+    
+  </div>
 </nav>
 
+    
+<div id="gitmentContainer"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  owner: '',
+  repo: '',
+  oauth: {
+    client_id: '',
+    client_secret: '',
+  },
+})
+gitment.render('gitmentContainer')
+</script>
+
+  
   
 </article>
-
 </section>
-        
-          <aside id="sidebar">
+        <aside id="sidebar">
+  
+    <div class="widget-box">
+  <div class="avatar-box">
+    <img class="avatar" src="/images/default-avatar.webp" title="图片来自网络"></img>
+    <h3 class="avatar-name">
+      
+        一路烟霞
+      
+    </h3>
+    <p class="avatar-slogan">
+      特别耐撕的小前端，资深的打酱油攻城狮。
+    </p>
+  </div>
+</div>
+
+
   
     
 
   
     
-  <div class="widget-wrap">
+  <div class="widget-box">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
@@ -262,7 +305,7 @@ static class Auction implements Runnable {
 
   
     
-  <div class="widget-wrap">
+  <div class="widget-box">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
       <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/zookeeper/" style="font-size: 10px;">zookeeper</a>
@@ -271,17 +314,16 @@ static class Auction implements Runnable {
 
   
     
-  <div class="widget-wrap">
+  <div class="widget-box">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li></ul>
     </div>
   </div>
 
-
   
     
-  <div class="widget-wrap">
+  <div class="widget-box">
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
@@ -307,30 +349,37 @@ static class Auction implements Runnable {
   </div>
 
   
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2019 hezhengkui<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      <div class="widget-box">
+    <h3 class="widget-title">友链</h3>
+    <div class="widget">
+      
+        <a style="display: block;" href="https://yiluyanxia.github.io/" title target='_blank'
+        >一路眼瞎</a>
+      
     </div>
   </div>
+
+  
+</aside>
+      </div>
+      <footer id="footer">
+  <div class="foot-box global-width">
+    &copy; 2019 hezhengkui &nbsp;&nbsp;
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    &nbsp;|&nbsp;主题 <a href="https://github.com/yiluyanxia/hexo-theme-antiquity">antiquity</a>
+    <br>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">不蒜子告之   阁下是第<span id="busuanzi_value_site_pv"></span>个访客</span>
+  </div>
 </footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
+      <script src="https://code.jquery.com/jquery-2.0.3.min.js"></script>
+<script>
+if (!window.jQuery) {
+var script = document.createElement('script');
+script.src = "/js/jquery-2.0.3.min.js";
+document.body.write(script);
+}
+</script>
 
   <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
   <script src="/fancybox/jquery.fancybox.pack.js"></script>
@@ -340,6 +389,16 @@ static class Auction implements Runnable {
 
 
 
+    </div>
+    <nav id="mobile-nav" class="mobile-nav-box">
+  <div class="mobile-nav-img mobile-nav-top"></div>
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+  <div class="mobile-nav-img  mobile-nav-bottom"></div>
+</nav>    
   </div>
 </body>
 </html>
