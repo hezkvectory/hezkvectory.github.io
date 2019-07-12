@@ -5,15 +5,20 @@
   
 
   
-  <title>我的博客</title>
+  <title>阿里云面试题-多线程竞拍 | 我的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="我的博客">
-<meta property="og:url" content="http://hzkvectory.github.io/index.html">
+  <meta name="description" content="多线程竞拍 创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）  每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。  所有人的心理上线价位都为 M ，不会出价比M高  每次出价必须比上一次出价高  经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。个人觉得主要考察java基础（CountDownLatch、CyclicBarrier）的">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阿里云面试题-多线程竞拍">
+<meta property="og:url" content="http://hzkvectory.github.io/2019/07/12/java/java多线程竞拍/index.html">
 <meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="多线程竞拍 创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）  每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。  所有人的心理上线价位都为 M ，不会出价比M高  每次出价必须比上一次出价高  经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。个人觉得主要考察java基础（CountDownLatch、CyclicBarrier）的">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-07-12T05:01:55.985Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="我的博客">
+<meta name="twitter:title" content="阿里云面试题-多线程竞拍">
+<meta name="twitter:description" content="多线程竞拍 创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）  每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。  所有人的心理上线价位都为 M ，不会出价比M高  每次出价必须比上一次出价高  经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。个人觉得主要考察java基础（CountDownLatch、CyclicBarrier）的">
   
     <link rel="alternate" href="/atom.xml" title="我的博客" type="application/atom+xml">
   
@@ -60,9 +65,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-java/java多线程竞拍" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-java/java多线程竞拍" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/07/12/java/java多线程竞拍/" class="article-date">
   <time datetime="2019-07-12T04:28:35.000Z" itemprop="datePublished">2019-07-12</time>
@@ -75,8 +78,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/12/java/java多线程竞拍/">阿里云面试题-多线程竞拍</a>
+    <h1 class="article-title" itemprop="name">
+      阿里云面试题-多线程竞拍
     </h1>
   
 
@@ -227,187 +230,19 @@ static class Auction implements Runnable {
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-zookeeper/zookeeper_expiryQueue" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/07/11/zookeeper/zookeeper_expiryQueue/" class="article-date">
-  <time datetime="2019-07-11T04:28:35.000Z" itemprop="datePublished">2019-07-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/11/zookeeper/zookeeper_expiryQueue/">zookeeper之ExpiryQueue</a>
-    </h1>
+    <a href="/2019/07/11/zookeeper/zookeeper_expiryQueue/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">zookeeper之ExpiryQueue</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>zookeeper之ExpiryQueue</p>
-<pre><code>ExpiryQueue是在SessionTrackerImpl中使用的，主要是维护zk中session的队列
-了解ExpiryQueue的实现
-
-//ExpiryQueue&lt;SessionImpl&gt; sessionExpiryQueue;
-
-//elemMap保存的是SessionImpl--&gt;过期时间
-private final ConcurrentHashMap&lt;E, Long&gt; elemMap = new ConcurrentHashMap&lt;E, Long&gt;();
-
-//expiryMap保存的是 过期时间--&gt;SessionImpl集合
-private final ConcurrentHashMap&lt;Long, Set&lt;E&gt;&gt; expiryMap = new ConcurrentHashMap&lt;Long, Set&lt;E&gt;&gt;();
-
-****elemMap和expiryMap是利用空间换时间，方便根据SessionImpl 和 过期时间相互查找****</code></pre><p>ExpiryQueue的remove方法</p>
-<pre><code>ExpiryQueue的实现相当于一个缓存，想起之前面试的一个题目：实现一个缓存fifo,缓存的value可以有过期时间/无过
-期时间，缓存大小一定，当put时，如果缓存满了(达到缓存上线)，优先剔除最近要失效的key-value，如果key都不过
-期，优先剔除最先进来的key，直到能放下新的key-value。这个题可以用ConcurrentHashMap缓存，TreeSet(有序集
-合)过期时间排序，或者二分查找。
-**从这里感觉算法的重要性。时间复杂度、空间复杂度在实际工作中得以应用。**
-
-public Long remove(E elem) {
-     //快速根据SessionImpl获取过期的时间
-    Long expiryTime = elemMap.remove(elem);
-    if (expiryTime != null) {
-        Set&lt;E&gt; set = expiryMap.get(expiryTime);
-        if (set != null) {
-                //从expiryMap中删除
-            set.remove(elem);
-        }
-    }
-    return expiryTime;
-}</code></pre><p>ExpiryQueue的update方法</p>
-<pre><code>public Long update(E elem, int timeout) {
-    Long prevExpiryTime = elemMap.get(elem);
-    long now = Time.currentElapsedTime();
-    Long newExpiryTime = roundToNextInterval(now + timeout);
-
-    if (newExpiryTime.equals(prevExpiryTime)) {
-        // No change, so nothing to update
-        return null;
-    }
-
-    // First add the elem to the new expiry time bucket in expiryMap.
-    Set&lt;E&gt; set = expiryMap.get(newExpiryTime);
-    //**如果elemMap中不存在，放入到elemMap中
-    if (set == null) {
-        // Construct a ConcurrentHashSet using a ConcurrentHashMap
-        set = Collections.newSetFromMap(
-            new ConcurrentHashMap&lt;E, Boolean&gt;());
-        // Put the new set in the map, but only if another thread
-        // hasn&apos;t beaten us to it
-        Set&lt;E&gt; existingSet = expiryMap.putIfAbsent(newExpiryTime, set);
-        if (existingSet != null) {
-            set = existingSet;
-        }
-    }
-    set.add(elem);
-
-    // Map the elem to the new expiry time. If a different previous
-    // mapping was present, clean up the previous expiry bucket.
-    prevExpiryTime = elemMap.put(elem, newExpiryTime);
-    if (prevExpiryTime != null &amp;&amp; !newExpiryTime.equals(prevExpiryTime)) {
-        Set&lt;E&gt; prevSet = expiryMap.get(prevExpiryTime);
-        if (prevSet != null) {
-            prevSet.remove(elem);
-        }
-    }
-    return newExpiryTime;
-}</code></pre>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://hzkvectory.github.io/2019/07/11/zookeeper/zookeeper_expiryQueue/" data-id="cjxzmx8mf000285fyhci9vver" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
-
-    </footer>
-  </div>
   
 </article>
-
-
-  
-    <article id="post-http/http" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/07/11/http/http/" class="article-date">
-  <time datetime="2019-07-11T03:35:52.538Z" itemprop="datePublished">2019-07-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>http<br>    evernotecid://7965BD71-6DF7-4FDE-8F44-CC524BE44A29/appyinxiangcom/9791091/ENResource/p107</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://hzkvectory.github.io/2019/07/11/http/http/" data-id="cjxzmx8mj000485fy6kdd97b4" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-linux-init" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/07/11/linux-init/" class="article-date">
-  <time datetime="2019-07-11T02:57:05.811Z" itemprop="datePublished">2019-07-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>linux 高效命令</p>
-<pre><code>vmstat -n 5 | awk &apos;{print strftime(&quot;[%Y-%m-%d %H:%M:%S]&quot;),$0}&apos;</code></pre><p>在maxpro上添加访问minikube内部ip的路由</p>
-<pre><code>sudo route -n add 172.17.0.0/24 192.168.99.100
-sudo route -n delete 172.17.0.0/24 192.168.99.100</code></pre><p>解压命令</p>
-<pre><code>gunzip -c make-4.0.tar.gz |tar xvf -
-/lib/systemd/system/docker.service --insecure-registry 192.168.99.1:5000</code></pre><p>设置centos时区</p>
-<pre><code>#timedatectl list-timezones  # 列出所有时区
-#timedatectl set-local-rtc 1  
-# 将硬件时钟调整为与本地时钟一致, 0 为设置为 UTC 时间
-#timedatectl set-timezone Asia/Shanghai  
-# 设置系统时区为上海
-#cp/usr/share/zoneinfo/Asia/Shanghai /etc/localtime</code></pre><p>curl使用</p>
-<pre><code>curl -X POST http://localhost:8080/upload \
-  -F &quot;file=@/Users/appleboy/test.zip&quot; \
-  -H &quot;Content-Type: multipart/form-data”
-
-curl -o /dev/null -w %{time_namelookup}::%{time_connect}::%{time_starttransfer}::%{time_total}::%{speed_download}&quot;\n&quot; &quot;http://sa.a.alldk.com/“
-
-echo &quot;select adx,adid,adslotid,count(1) as total from common_ad_req_all where logday = &apos;2019-05-27&apos; and hour = &apos;14&apos; group by adx,adid,adslotid;&quot;| curl dcs-inc.xxx.com:8123/\?database=common_ad\&amp;user=&apos;&apos;\&amp;password=&apos;&apos; --data-binary @-</code></pre>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://hzkvectory.github.io/2019/07/11/linux-init/" data-id="cjxzmx8lv000085fy7z97g415" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
 
 </section>
         
