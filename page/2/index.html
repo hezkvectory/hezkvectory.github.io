@@ -60,6 +60,203 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-linux-init" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/07/12/linux-init/" class="article-date">
+  <time datetime="2019-07-12T04:28:35.000Z" itemprop="datePublished">2019-07-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/07/12/linux-init/">linux 命令</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>linux 高效命令</p>
+<pre><code>vmstat -n 5 | awk &apos;{print strftime(&quot;[%Y-%m-%d %H:%M:%S]&quot;),$0}&apos;</code></pre><p>在maxpro上添加访问minikube内部ip的路由</p>
+<pre><code>sudo route -n add 172.17.0.0/24 192.168.99.100
+sudo route -n delete 172.17.0.0/24 192.168.99.100</code></pre><p>解压命令</p>
+<pre><code>gunzip -c make-4.0.tar.gz |tar xvf -
+/lib/systemd/system/docker.service --insecure-registry 192.168.99.1:5000</code></pre><p>设置centos时区</p>
+<pre><code>#timedatectl list-timezones  # 列出所有时区
+#timedatectl set-local-rtc 1  
+# 将硬件时钟调整为与本地时钟一致, 0 为设置为 UTC 时间
+#timedatectl set-timezone Asia/Shanghai  
+# 设置系统时区为上海
+#cp/usr/share/zoneinfo/Asia/Shanghai /etc/localtime</code></pre><p>curl使用</p>
+<pre><code>curl -X POST http://localhost:8080/upload \
+  -F &quot;file=@/Users/appleboy/test.zip&quot; \
+  -H &quot;Content-Type: multipart/form-data”
+
+curl -o /dev/null -w %{time_namelookup}::%{time_connect}::%{time_starttransfer}::%{time_total}::%{speed_download}&quot;\n&quot; &quot;http://sa.a.alldk.com/“
+
+echo &quot;select adx,adid,adslotid,count(1) as total from common_ad_req_all where logday = &apos;2019-05-27&apos; and hour = &apos;14&apos; group by adx,adid,adslotid;&quot;| curl dcs-inc.xxx.com:8123/\?database=common_ad\&amp;user=&apos;&apos;\&amp;password=&apos;&apos; --data-binary @-</code></pre><p>mysql explain执行计划</p>
+<pre><code>explain
+select distinct (ng.id), ng.`name`
+from naming_group ng left JOIN naming_group_user  ngu on ng.id = ngu.group_id where ngu.account_name = &apos;hezhengkui&apos;
+AND ng.name LIKE CONCAT(&apos;%g%&apos;)
+
+
+
+explain
+select ng.id, ng.`name`
+from naming_group ng left JOIN naming_group_user  ngu on ng.id = ngu.group_id where ngu.account_name = &apos;hezhengkui&apos;
+AND ng.name LIKE CONCAT(&apos;%g%&apos;)
+
+
+
+explain
+select g.id,g.name from naming_group as g where 1=1 and exists(
+    select 1 from naming_group_user as u where 1 = 1 and g.id = u.group_id and u.account_name = &apos;hezhengkui&apos; and g.name like concat(&apos;gg%&apos;)
+)
+
+
+
+explain
+select g.id,g.name from naming_group as g where 1=1 and exists(
+    select 1 from naming_group_user as u where 1 = 1 and g.id = u.group_id and u.account_name = &apos;hezhengkui&apos; 
+)
+AND G.name LIKE CONCAT(&apos;%gg%&apos;)</code></pre><p>Linux内核参数优化</p>
+<pre><code>#!/bin/bash
+#adwpc
+
+OBJ=&quot;&quot;
+CURDIR=$(cd `dirname $0`; pwd)
+NAME=`basename $0`
+LOG=&quot;$CURDIR/$NAME.log&quot;
+ERR=&quot;$CURDIR/$NAME.err&quot;
+
+
+
+function sysctl_conf_optm() {
+    sudo mv /etc/sysctl.conf /etc/sysctl.conf.`date +%Y%m%d%H%M%S`
+    cat &gt;&gt; sysctl.conf &lt;&lt; EOF
+#the process open file limit
+fs.nr_open = 1048576
+#the system open file limit
+fs.file-max = 1048576
+#port range
+net.ipv4.ip_local_port_range = 1024 65535
+# Decrease the time default value for connections to keep alive
+#tcp keepalive packet cycle
+net.ipv4.tcp_keepalive_time = 600
+#tcp keepalive packet retry times
+net.ipv4.tcp_keepalive_probes = 10
+#tcp keepalive packet retry delay when packet lost
+net.ipv4.tcp_keepalive_intvl = 30
+# TCP window scaling for high-throughput, high-pingtime TCP performance
+net.ipv4.tcp_window_scaling = 1
+net.ipv4.tcp_syncookies = 1
+net.ipv4.tcp_max_syn_backlog = 65535
+# Controls the System Request debugging functionality of the kernel
+#disable debug
+kernel.sysrq = 0
+# Don&apos;t ignore directed pings
+net.ipv4.icmp_echo_ignore_all = 0
+# Controls the maximum size of a message queue, in bytes
+kernel.msgmnb = 65536
+# Controls the maximum msg num of queue
+kernel.msgmni = 1024
+# Controls the default maximum size of a message
+kernel.msgmax = 655360
+# specifies the minimum virtual address that a process is allowed to mmap
+vm.mmap_min_addr = 4096
+# How many times to retry killing an alive TCP connection
+net.ipv4.tcp_retries2 = 15
+net.ipv4.tcp_retries1 = 3
+# Increase the maximum memory used to reassemble IP fragments
+net.ipv4.ipfrag_high_thresh = 512000
+net.ipv4.ipfrag_low_thresh = 446464
+# Set maximum amount of memory allocated to shm to 16G
+kernel.shmmax = 16000000000
+kernel.shmall = 4000000
+# number of unprocessed input packets before kernel starts dropping them
+net.core.netdev_max_backlog = 262144
+net.core.rmem_default = 1048576
+net.core.optmem_max = 1048576
+net.core.rmem_max = 33554432
+net.core.somaxconn = 65535
+net.core.wmem_max = 1048576
+#iptables
+net.netfilter.nf_conntrack_max = 1048576
+net.ipv4.tcp_fin_timeout = 2
+net.ipv4.tcp_max_orphans = 262144
+net.ipv4.tcp_timestamps = 1
+# 
+net.ipv4.tcp_rmem = 32768 131072 16777216
+net.ipv4.tcp_wmem = 8192 131072 16777216
+net.ipv4.tcp_tw_recycle = 1
+net.ipv4.tcp_tw_reuse = 1
+net.ipv4.tcp_max_tw_buckets = 10000
+# Do a &apos;modprobe tcp_cubic&apos; first
+net.ipv4.tcp_congestion_control = cubic
+# cache ssthresh from previous connection
+net.ipv4.tcp_no_metrics_save = 0
+net.ipv4.tcp_moderate_rcvbuf = 0
+# Enable a fix for RFC1337 - time-wait assassination hazards in TCP
+net.ipv4.tcp_rfc1337 = 1
+# UDP parameters
+net.ipv4.udp_mem = 262144 1048576 10485760
+net.ipv4.udp_rmem_min = 1048576
+net.ipv4.udp_wmem_min = 1048576
+# Enable ignoring broadcasts request
+net.ipv4.icmp_echo_ignore_broadcasts = 1
+# Enable bad error message Protection
+net.ipv4.icmp_ignore_bogus_error_responses = 1
+vm/min_free_kbytes = 65536
+# disable ipv6
+# net.ipv6.conf.all.disable_ipv6 = 1
+# net.ipv6.conf.default.disable_ipv6 = 1
+# net.ipv6.conf.lo.disable_ipv6 = 1
+# This will ensure that immediately subsequent connections use the new values
+net.ipv4.route.flush = 1
+# net.ipv6.route.flush = 1
+EOF
+    sudo mv sysctl.conf /etc
+    sudo sysctl -p
+
+    sudo cp /etc/security/limits.conf /etc/security/limits.conf.`date +%Y%m%d%H%M%S`
+    cat &gt;&gt; limits.conf &lt;&lt; EOF
+#the shell open file limit, the soft limit is a warning point, and the hard limit is a block.
+#relogin make params work
+* soft nofile 1048575
+* hard nofile 1048575
+* soft nproc 1048575
+* hard nproc 1048575
+# End of file
+EOF
+    sudo mv limits.conf /etc/security
+
+}</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/2019/07/12/linux-init/" data-id="cklaqpo0c0001939b71a864iw" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-http/http" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/07/12/http/http/" class="article-date">
@@ -89,7 +286,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2019/07/12/http/http/" data-id="cklaqccrr00032w9be3605apf" class="article-share-link">分享</a>
+      <a data-url="/2019/07/12/http/http/" data-id="cklaqpo0u0004939bxseailp2" class="article-share-link">分享</a>
       
       
       
@@ -133,7 +330,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2019/07/12/http/tcp/" data-id="cklaqccrt00042w9broz6y2kx" class="article-share-link">分享</a>
+      <a data-url="/2019/07/12/http/tcp/" data-id="cklaqpo0w0005939bq3ugedwt" class="article-share-link">分享</a>
       
       
       
@@ -147,183 +344,10 @@
 
 
   
-    <article id="post-java/java多线程竞拍" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/07/12/java/java多线程竞拍/" class="article-date">
-  <time datetime="2019-07-12T04:28:35.000Z" itemprop="datePublished">2019-07-12</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/12/java/java多线程竞拍/">阿里云面试题-多线程竞拍</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <!-- Table of Contents -->
-        
-        <p>多线程竞拍</p>
-<pre><code>创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）
-
-每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
-
-所有人的心理上线价位都为 M ，不会出价比M高
-
-每次出价必须比上一次出价高
-
-经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。</code></pre><p>个人觉得主要考察java基础（CountDownLatch、CyclicBarrier）的使用方法</p>
-<pre><code>import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.*;
-import java.util.concurrent.locks.ReentrantLock;
-
-
-public class AuctionTest {
-
-/**
- * 创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）
- * 每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
- * 所有人的心理上线价位都为 M ，不会出价比M高
- * 每次出价必须比上一次出价高
- * 经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。
- */
-static int N = 10; //竞拍人数
-static int M = 100;//所有人的心理上线价位都为 M ，不会出价比M高
-static int AUCTION_NUM = 5; //经过 k 次竞拍后
-
-static ConcurrentHashMap&lt;String, List&lt;Integer&gt;&gt; ACTION_HIST = new ConcurrentHashMap&lt;&gt;();
-
-static ReentrantLock lock = new ReentrantLock();//这个锁是为了保证出价比上一个人出价高
-
-static volatile int CUR_MAX_PRICE = 0;
-
-public static void main(String[] args) throws Exception {
-    CyclicBarrier barrier = new CyclicBarrier(N);//每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
-    CountDownLatch countDownLatch = new CountDownLatch(N);//这里应该是N
-    ThreadPoolExecutor executor = new ThreadPoolExecutor(N, N, 1, TimeUnit.SECONDS, new ArrayBlockingQueue&lt;Runnable&gt;(1), new ThreadFactory() {
-        @Override
-        public Thread newThread(Runnable r) {
-            return new Thread(r, &quot;Auction&quot;);
-        }
-    });
-
-
-    int step = M / (AUCTION_NUM * N); //每次出价阶梯
-
-    for (int i = 1; i &lt;= N; i++) {
-        executor.execute(new Auction(barrier, countDownLatch, &quot;P&quot; + i, step));
-    }
-
-    countDownLatch.await();
-
-    String personName = null;
-    int maxPrice = 0;
-    int personId = 0;
-    for (int num = 1; num &lt;= AUCTION_NUM; num++) {
-        for (int i = 1; i &lt;= N; i++) {
-            personName = &quot;P&quot; + i;
-            Integer price = ACTION_HIST.get(personName).get(num - 1);
-            if (num == AUCTION_NUM) {
-                if (maxPrice &lt; price) {
-                    maxPrice = price;
-                    personId = i;
-                }
-            }
-            System.out.println(&quot;第&quot; + num + &quot;次出价人:P&quot; + i + &quot; 出价:&quot; + price);
-        }
-        System.out.println(&quot;-----------------&quot;);
-    }
-    System.out.println(&quot;最终竞价成功人:P&quot; + personId + &quot;,最终出价:&quot; + maxPrice);
-    executor.shutdown();
-}
-
-static class Auction implements Runnable {
-    private String name;
-    private CyclicBarrier barrier;
-    private int step;
-    private CountDownLatch countDownLatch;
-
-    public Auction(CyclicBarrier barrier, CountDownLatch countDownLatch, String name, int step) {
-        this.name = name;
-        this.barrier = barrier;
-        this.step = step;
-        this.countDownLatch = countDownLatch;
-    }
-
-    @Override
-    public void run() {
-        if (!ACTION_HIST.containsKey(name)) {
-            ACTION_HIST.put(name, new ArrayList&lt;&gt;());
-        }
-        lock.lock();
-        int currentPrice = 0;
-        try {
-            currentPrice = getRandPrice(step);
-            CUR_MAX_PRICE = CUR_MAX_PRICE &lt; currentPrice ? currentPrice : CUR_MAX_PRICE;
-        } finally {
-            lock.unlock();
-        }
-
-        ACTION_HIST.get(name).add(currentPrice);
-        int tmp = 1;
-        try {
-            while (tmp &lt; AUCTION_NUM) {
-                barrier.await();
-                currentPrice = getRandPrice(step);
-                currentPrice = currentPrice &gt; M ? M : currentPrice;
-                CUR_MAX_PRICE = CUR_MAX_PRICE &lt; currentPrice ? currentPrice : CUR_MAX_PRICE;
-                ACTION_HIST.get(name).add(currentPrice);
-                tmp++;
-            }
-            countDownLatch.countDown();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    /**
-     * 当前心里价比上次多多少
-     *
-     * @param step
-     * @return
-     */
-    int getRandPrice(int step) {
-        return CUR_MAX_PRICE + new Random().nextInt(step) + 1;
-    }
-}</code></pre><p>}</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="/2019/07/12/java/java多线程竞拍/" data-id="cklaqccrx00072w9b7o9x67iu" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">下一页&raquo;</a>
+    <a class="extend prev" rel="prev" href="/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">下一页&raquo;</a>
   </nav>
 </section>
            
@@ -349,6 +373,10 @@ static class Auction implements Runnable {
       <ul>
         
           <li>
+            <a href="/2021/02/18/Java类加载/">Java类加载</a>
+          </li>
+        
+          <li>
             <a href="/2019/07/15/java/java-nio/">java-nio-server</a>
           </li>
         
@@ -362,10 +390,6 @@ static class Auction implements Runnable {
         
           <li>
             <a href="/2019/07/12/http/http/">http</a>
-          </li>
-        
-          <li>
-            <a href="/2019/07/12/http/tcp/">tcp三次握手、四次挥手</a>
           </li>
         
       </ul>

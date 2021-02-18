@@ -60,6 +60,94 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Java类加载" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/02/18/Java类加载/" class="article-date">
+  <time datetime="2021-02-18T10:44:02.000Z" itemprop="datePublished">2021-02-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/02/18/Java类加载/">Java类加载</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h4 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a><strong>类加载</strong></h4><p>​        在java代码中，类的加载、连接和初始化过程都是在程序运行期间完成的。（类从磁盘加载到内存中经历的三个阶段）</p>
+<p>提供了更大的灵活性，增加了更多的可能性。</p>
+<h4 id="类加载器深入剖析："><a href="#类加载器深入剖析：" class="headerlink" title="类加载器深入剖析："></a><strong>类加载器深入剖析：</strong></h4><p>Java虚拟机与程序的生命周期</p>
+<p>在如下几种情况下，java虚拟机将结束生命周期</p>
+<p>（1）执行了System.exit()方法</p>
+<p>（2）程序正常执行结束</p>
+<p>（3）程序在执行过程中遇到了异常或错误而异常终止</p>
+<p>（4）由于操作系统出现错误而导致虚拟机进程终止</p>
+<h5 id="类的加载、连接与初始化："><a href="#类的加载、连接与初始化：" class="headerlink" title="类的加载、连接与初始化："></a><strong>类的加载、连接与初始化：</strong></h5><ol>
+<li><p>加载：查找并加载类的二进制数据到java虚拟机中</p>
+</li>
+<li><p>连接：</p>
+<ul>
+<li><p>​    验证 : 确保被加载的类的正确性</p>
+</li>
+<li><p>​    准备：为类的<strong>静态变量</strong>分配内存，并将其初始化为<strong>默认值</strong>，但是到达初始化之前类变量都没有初始化为真正的初始值</p>
+</li>
+<li><p>​    解析：<strong>把类中的符号引用转换为直接引用</strong>，就是在类型的常量池中寻找类、接口、字段和方法的符号引用，把这些符号引用替换成直接引用的过程</p>
+</li>
+</ul>
+</li>
+<li><p>初始化：为类的静态变量赋予正确的初始值</p>
+</li>
+</ol>
+<p><strong>类从磁盘上加载到内存中要经历五个阶段：加载、连接、初始化、使用、卸载</strong></p>
+<p>Java程序对类的使用方式可分为两种</p>
+<ol>
+<li>主动使用</li>
+<li>被动使用</li>
+</ol>
+<p>所有的Java虚拟机实现必须在每个类或接口被Java程序“首次主动使用”时才能初始化他们</p>
+<p><strong>主动使用</strong></p>
+<p>（1）创建类的实例</p>
+<p>（2）访问某个类或接口的静态变量 getstatic（助记符），或者对该静态变量赋值 putstatic</p>
+<p>（3）调用类的静态方法 invokestatic</p>
+<p>（4）反射（Class.forName(“com.test.Test”)）</p>
+<p>（5）初始化一个类的子类</p>
+<p>（6）Java虚拟机启动时被标明启动类的类</p>
+<p>（7）JDK1.7开始提供的动态语言支持（了解）</p>
+<p><strong>被动使用</strong></p>
+<p>​    除了上面七种情况外，其他使用java类的方式都被看做是对类的被动使用，都不会导致类的初始化</p>
+<h5 id="类的加载详解："><a href="#类的加载详解：" class="headerlink" title="类的加载详解："></a><strong>类的加载详解：</strong></h5><p>​        类的加载指的是将类的.class文件中的二进制数据读入到内存中，将其放在运行时数据区的方法区内，然后在内存中创建一个java.lang.Class对象（规范并未说明Class对象位于哪里，HotSpot虚拟机将其放在<strong>方法区</strong>中）用来封装内在方法区内的数据结构。</p>
+<p>加载.calss文件的方式</p>
+<p>（1）从本地系统中直接加载</p>
+<p>（2）通过网络下载.class文件</p>
+<p>（3）从zip，jar等归档文件中加载.class文件</p>
+<p>（4）从专用数据库中提取.class文件</p>
+<p>（5）将java源文件动态编译为.class文件</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/2021/02/18/Java类加载/" data-id="cklaqpnzb0000939bcy4wf0hm" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-java/java-nio" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/07/15/java/java-nio/" class="article-date">
@@ -1034,7 +1122,7 @@ public class NIOServerCnxn {
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2019/07/15/java/java-nio/" data-id="cklaqccrv00062w9bchtq8utd" class="article-share-link">分享</a>
+      <a data-url="/2019/07/15/java/java-nio/" data-id="cklaqpo0y0008939bh4sxngg2" class="article-share-link">分享</a>
       
       
       
@@ -1291,7 +1379,7 @@ db0:keys=2,expires=0,avg_ttl=0</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2019/07/12/redis/redis-info信息/" data-id="cklaqccs1000b2w9bmqjst5w4" class="article-share-link">分享</a>
+      <a data-url="/2019/07/12/redis/redis-info信息/" data-id="cklaqpo11000d939bj9bispnk" class="article-share-link">分享</a>
       
       
       
@@ -1305,207 +1393,10 @@ db0:keys=2,expires=0,avg_ttl=0</code></pre>
 
 
   
-    <article id="post-linux-init" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/07/12/linux-init/" class="article-date">
-  <time datetime="2019-07-12T04:28:35.000Z" itemprop="datePublished">2019-07-12</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/12/linux-init/">linux 命令</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <!-- Table of Contents -->
-        
-        <p>linux 高效命令</p>
-<pre><code>vmstat -n 5 | awk &apos;{print strftime(&quot;[%Y-%m-%d %H:%M:%S]&quot;),$0}&apos;</code></pre><p>在maxpro上添加访问minikube内部ip的路由</p>
-<pre><code>sudo route -n add 172.17.0.0/24 192.168.99.100
-sudo route -n delete 172.17.0.0/24 192.168.99.100</code></pre><p>解压命令</p>
-<pre><code>gunzip -c make-4.0.tar.gz |tar xvf -
-/lib/systemd/system/docker.service --insecure-registry 192.168.99.1:5000</code></pre><p>设置centos时区</p>
-<pre><code>#timedatectl list-timezones  # 列出所有时区
-#timedatectl set-local-rtc 1  
-# 将硬件时钟调整为与本地时钟一致, 0 为设置为 UTC 时间
-#timedatectl set-timezone Asia/Shanghai  
-# 设置系统时区为上海
-#cp/usr/share/zoneinfo/Asia/Shanghai /etc/localtime</code></pre><p>curl使用</p>
-<pre><code>curl -X POST http://localhost:8080/upload \
-  -F &quot;file=@/Users/appleboy/test.zip&quot; \
-  -H &quot;Content-Type: multipart/form-data”
-
-curl -o /dev/null -w %{time_namelookup}::%{time_connect}::%{time_starttransfer}::%{time_total}::%{speed_download}&quot;\n&quot; &quot;http://sa.a.alldk.com/“
-
-echo &quot;select adx,adid,adslotid,count(1) as total from common_ad_req_all where logday = &apos;2019-05-27&apos; and hour = &apos;14&apos; group by adx,adid,adslotid;&quot;| curl dcs-inc.xxx.com:8123/\?database=common_ad\&amp;user=&apos;&apos;\&amp;password=&apos;&apos; --data-binary @-</code></pre><p>mysql explain执行计划</p>
-<pre><code>explain
-select distinct (ng.id), ng.`name`
-from naming_group ng left JOIN naming_group_user  ngu on ng.id = ngu.group_id where ngu.account_name = &apos;hezhengkui&apos;
-AND ng.name LIKE CONCAT(&apos;%g%&apos;)
-
-
-
-explain
-select ng.id, ng.`name`
-from naming_group ng left JOIN naming_group_user  ngu on ng.id = ngu.group_id where ngu.account_name = &apos;hezhengkui&apos;
-AND ng.name LIKE CONCAT(&apos;%g%&apos;)
-
-
-
-explain
-select g.id,g.name from naming_group as g where 1=1 and exists(
-    select 1 from naming_group_user as u where 1 = 1 and g.id = u.group_id and u.account_name = &apos;hezhengkui&apos; and g.name like concat(&apos;gg%&apos;)
-)
-
-
-
-explain
-select g.id,g.name from naming_group as g where 1=1 and exists(
-    select 1 from naming_group_user as u where 1 = 1 and g.id = u.group_id and u.account_name = &apos;hezhengkui&apos; 
-)
-AND G.name LIKE CONCAT(&apos;%gg%&apos;)</code></pre><p>Linux内核参数优化</p>
-<pre><code>#!/bin/bash
-#adwpc
-
-OBJ=&quot;&quot;
-CURDIR=$(cd `dirname $0`; pwd)
-NAME=`basename $0`
-LOG=&quot;$CURDIR/$NAME.log&quot;
-ERR=&quot;$CURDIR/$NAME.err&quot;
-
-
-
-function sysctl_conf_optm() {
-    sudo mv /etc/sysctl.conf /etc/sysctl.conf.`date +%Y%m%d%H%M%S`
-    cat &gt;&gt; sysctl.conf &lt;&lt; EOF
-#the process open file limit
-fs.nr_open = 1048576
-#the system open file limit
-fs.file-max = 1048576
-#port range
-net.ipv4.ip_local_port_range = 1024 65535
-# Decrease the time default value for connections to keep alive
-#tcp keepalive packet cycle
-net.ipv4.tcp_keepalive_time = 600
-#tcp keepalive packet retry times
-net.ipv4.tcp_keepalive_probes = 10
-#tcp keepalive packet retry delay when packet lost
-net.ipv4.tcp_keepalive_intvl = 30
-# TCP window scaling for high-throughput, high-pingtime TCP performance
-net.ipv4.tcp_window_scaling = 1
-net.ipv4.tcp_syncookies = 1
-net.ipv4.tcp_max_syn_backlog = 65535
-# Controls the System Request debugging functionality of the kernel
-#disable debug
-kernel.sysrq = 0
-# Don&apos;t ignore directed pings
-net.ipv4.icmp_echo_ignore_all = 0
-# Controls the maximum size of a message queue, in bytes
-kernel.msgmnb = 65536
-# Controls the maximum msg num of queue
-kernel.msgmni = 1024
-# Controls the default maximum size of a message
-kernel.msgmax = 655360
-# specifies the minimum virtual address that a process is allowed to mmap
-vm.mmap_min_addr = 4096
-# How many times to retry killing an alive TCP connection
-net.ipv4.tcp_retries2 = 15
-net.ipv4.tcp_retries1 = 3
-# Increase the maximum memory used to reassemble IP fragments
-net.ipv4.ipfrag_high_thresh = 512000
-net.ipv4.ipfrag_low_thresh = 446464
-# Set maximum amount of memory allocated to shm to 16G
-kernel.shmmax = 16000000000
-kernel.shmall = 4000000
-# number of unprocessed input packets before kernel starts dropping them
-net.core.netdev_max_backlog = 262144
-net.core.rmem_default = 1048576
-net.core.optmem_max = 1048576
-net.core.rmem_max = 33554432
-net.core.somaxconn = 65535
-net.core.wmem_max = 1048576
-#iptables
-net.netfilter.nf_conntrack_max = 1048576
-net.ipv4.tcp_fin_timeout = 2
-net.ipv4.tcp_max_orphans = 262144
-net.ipv4.tcp_timestamps = 1
-# 
-net.ipv4.tcp_rmem = 32768 131072 16777216
-net.ipv4.tcp_wmem = 8192 131072 16777216
-net.ipv4.tcp_tw_recycle = 1
-net.ipv4.tcp_tw_reuse = 1
-net.ipv4.tcp_max_tw_buckets = 10000
-# Do a &apos;modprobe tcp_cubic&apos; first
-net.ipv4.tcp_congestion_control = cubic
-# cache ssthresh from previous connection
-net.ipv4.tcp_no_metrics_save = 0
-net.ipv4.tcp_moderate_rcvbuf = 0
-# Enable a fix for RFC1337 - time-wait assassination hazards in TCP
-net.ipv4.tcp_rfc1337 = 1
-# UDP parameters
-net.ipv4.udp_mem = 262144 1048576 10485760
-net.ipv4.udp_rmem_min = 1048576
-net.ipv4.udp_wmem_min = 1048576
-# Enable ignoring broadcasts request
-net.ipv4.icmp_echo_ignore_broadcasts = 1
-# Enable bad error message Protection
-net.ipv4.icmp_ignore_bogus_error_responses = 1
-vm/min_free_kbytes = 65536
-# disable ipv6
-# net.ipv6.conf.all.disable_ipv6 = 1
-# net.ipv6.conf.default.disable_ipv6 = 1
-# net.ipv6.conf.lo.disable_ipv6 = 1
-# This will ensure that immediately subsequent connections use the new values
-net.ipv4.route.flush = 1
-# net.ipv6.route.flush = 1
-EOF
-    sudo mv sysctl.conf /etc
-    sudo sysctl -p
-
-    sudo cp /etc/security/limits.conf /etc/security/limits.conf.`date +%Y%m%d%H%M%S`
-    cat &gt;&gt; limits.conf &lt;&lt; EOF
-#the shell open file limit, the soft limit is a warning point, and the hard limit is a block.
-#relogin make params work
-* soft nofile 1048575
-* hard nofile 1048575
-* soft nproc 1048575
-* hard nproc 1048575
-# End of file
-EOF
-    sudo mv limits.conf /etc/security
-
-}</code></pre>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="/2019/07/12/linux-init/" data-id="cklaqccom00002w9bxg7o1guu" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">下一页&raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">下一页&raquo;</a>
   </nav>
 </section>
            
@@ -1552,6 +1443,10 @@ EOF
       <ul>
         
           <li>
+            <a href="/2021/02/18/Java类加载/">Java类加载</a>
+          </li>
+        
+          <li>
             <a href="/2019/07/15/java/java-nio/">java-nio-server</a>
           </li>
         
@@ -1567,10 +1462,6 @@ EOF
             <a href="/2019/07/12/http/http/">http</a>
           </li>
         
-          <li>
-            <a href="/2019/07/12/http/tcp/">tcp三次握手、四次挥手</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -1580,7 +1471,7 @@ EOF
   <div class="widget-wrap">
     <h3 class="widget-title archive">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">9</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">9</span></li></ul>
     </div>
   </div>
 

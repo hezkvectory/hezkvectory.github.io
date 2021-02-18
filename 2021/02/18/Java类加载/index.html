@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>Java类加载 | 我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="类加载​        在java代码中，类的加载、连接和初始化过程都是在程序运行期间完成的。（类从磁盘加载到内存中经历的三个阶段） 提供了更大的灵活性，增加了更多的可能性。 类加载器深入剖析：Java虚拟机与程序的生命周期 在如下几种情况下，java虚拟机将结束生命周期 （1）执行了System.exit()方法 （2）程序正常执行结束 （3）程序在执行过程中遇到了异常或错误而异常终止 （4）由">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java类加载">
+<meta property="og:url" content="/2021/02/18/Java类加载/index.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="类加载​        在java代码中，类的加载、连接和初始化过程都是在程序运行期间完成的。（类从磁盘加载到内存中经历的三个阶段） 提供了更大的灵活性，增加了更多的可能性。 类加载器深入剖析：Java虚拟机与程序的生命周期 在如下几种情况下，java虚拟机将结束生命周期 （1）执行了System.exit()方法 （2）程序正常执行结束 （3）程序在执行过程中遇到了异常或错误而异常终止 （4）由">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2021-02-18T10:53:51.326Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java类加载">
+<meta name="twitter:description" content="类加载​        在java代码中，类的加载、连接和初始化过程都是在程序运行期间完成的。（类从磁盘加载到内存中经历的三个阶段） 提供了更大的灵活性，增加了更多的可能性。 类加载器深入剖析：Java虚拟机与程序的生命周期 在如下几种情况下，java虚拟机将结束生命周期 （1）执行了System.exit()方法 （2）程序正常执行结束 （3）程序在执行过程中遇到了异常或错误而异常终止 （4）由">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Java类加载" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/02/18/Java类加载/" class="article-date">
+  <time datetime="2021-02-18T10:44:02.000Z" itemprop="datePublished">2021-02-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java类加载
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h4 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a><strong>类加载</strong></h4><p>​        在java代码中，类的加载、连接和初始化过程都是在程序运行期间完成的。（类从磁盘加载到内存中经历的三个阶段）</p>
+<p>提供了更大的灵活性，增加了更多的可能性。</p>
+<h4 id="类加载器深入剖析："><a href="#类加载器深入剖析：" class="headerlink" title="类加载器深入剖析："></a><strong>类加载器深入剖析：</strong></h4><p>Java虚拟机与程序的生命周期</p>
+<p>在如下几种情况下，java虚拟机将结束生命周期</p>
+<p>（1）执行了System.exit()方法</p>
+<p>（2）程序正常执行结束</p>
+<p>（3）程序在执行过程中遇到了异常或错误而异常终止</p>
+<p>（4）由于操作系统出现错误而导致虚拟机进程终止</p>
+<h5 id="类的加载、连接与初始化："><a href="#类的加载、连接与初始化：" class="headerlink" title="类的加载、连接与初始化："></a><strong>类的加载、连接与初始化：</strong></h5><ol>
+<li><p>加载：查找并加载类的二进制数据到java虚拟机中</p>
+</li>
+<li><p>连接：</p>
+<ul>
+<li><p>​    验证 : 确保被加载的类的正确性</p>
+</li>
+<li><p>​    准备：为类的<strong>静态变量</strong>分配内存，并将其初始化为<strong>默认值</strong>，但是到达初始化之前类变量都没有初始化为真正的初始值</p>
+</li>
+<li><p>​    解析：<strong>把类中的符号引用转换为直接引用</strong>，就是在类型的常量池中寻找类、接口、字段和方法的符号引用，把这些符号引用替换成直接引用的过程</p>
+</li>
+</ul>
+</li>
+<li><p>初始化：为类的静态变量赋予正确的初始值</p>
+</li>
+</ol>
+<p><strong>类从磁盘上加载到内存中要经历五个阶段：加载、连接、初始化、使用、卸载</strong></p>
+<p>Java程序对类的使用方式可分为两种</p>
+<ol>
+<li>主动使用</li>
+<li>被动使用</li>
+</ol>
+<p>所有的Java虚拟机实现必须在每个类或接口被Java程序“首次主动使用”时才能初始化他们</p>
+<p><strong>主动使用</strong></p>
+<p>（1）创建类的实例</p>
+<p>（2）访问某个类或接口的静态变量 getstatic（助记符），或者对该静态变量赋值 putstatic</p>
+<p>（3）调用类的静态方法 invokestatic</p>
+<p>（4）反射（Class.forName(“com.test.Test”)）</p>
+<p>（5）初始化一个类的子类</p>
+<p>（6）Java虚拟机启动时被标明启动类的类</p>
+<p>（7）JDK1.7开始提供的动态语言支持（了解）</p>
+<p><strong>被动使用</strong></p>
+<p>​    除了上面七种情况外，其他使用java类的方式都被看做是对类的被动使用，都不会导致类的初始化</p>
+<h5 id="类的加载详解："><a href="#类的加载详解：" class="headerlink" title="类的加载详解："></a><strong>类的加载详解：</strong></h5><p>​        类的加载指的是将类的.class文件中的二进制数据读入到内存中，将其放在运行时数据区的方法区内，然后在内存中创建一个java.lang.Class对象（规范并未说明Class对象位于哪里，HotSpot虚拟机将其放在<strong>方法区</strong>中）用来封装内在方法区内的数据结构。</p>
+<p>加载.calss文件的方式</p>
+<p>（1）从本地系统中直接加载</p>
+<p>（2）通过网络下载.class文件</p>
+<p>（3）从zip，jar等归档文件中加载.class文件</p>
+<p>（4）从专用数据库中提取.class文件</p>
+<p>（5）将java源文件动态编译为.class文件</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/2021/02/18/Java类加载/" data-id="cklaqpnzb0000939bcy4wf0hm" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/07/15/java/java-nio/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">java-nio-server</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#类加载"><span class="toc-number">1.</span> <span class="toc-text">类加载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#类加载器深入剖析："><span class="toc-number">2.</span> <span class="toc-text">类加载器深入剖析：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#类的加载、连接与初始化："><span class="toc-number">2.1.</span> <span class="toc-text">类的加载、连接与初始化：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#类的加载详解："><span class="toc-number">2.2.</span> <span class="toc-text">类的加载详解：</span></a></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>
