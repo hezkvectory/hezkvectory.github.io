@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="我的博客">
 <meta property="og:description" content="类加载​        在java代码中，类的加载、连接和初始化过程都是在程序运行期间完成的。（类从磁盘加载到内存中经历的三个阶段） 提供了更大的灵活性，增加了更多的可能性。 类加载器深入剖析：Java虚拟机与程序的生命周期 在如下几种情况下，java虚拟机将结束生命周期 （1）执行了System.exit()方法 （2）程序正常执行结束 （3）程序在执行过程中遇到了异常或错误而异常终止 （4）由">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2021-02-18T10:56:48.989Z">
+<meta property="og:updated_time" content="2021-02-18T10:58:21.004Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java类加载">
 <meta name="twitter:description" content="类加载​        在java代码中，类的加载、连接和初始化过程都是在程序运行期间完成的。（类从磁盘加载到内存中经历的三个阶段） 提供了更大的灵活性，增加了更多的可能性。 类加载器深入剖析：Java虚拟机与程序的生命周期 在如下几种情况下，java虚拟机将结束生命周期 （1）执行了System.exit()方法 （2）程序正常执行结束 （3）程序在执行过程中遇到了异常或错误而异常终止 （4）由">
@@ -135,11 +135,15 @@
 <p>（3）从zip，jar等归档文件中加载.class文件</p>
 <p>（4）从专用数据库中提取.class文件</p>
 <p>（5）将java源文件动态编译为.class文件</p>
+<h5 id="类加载器双亲委托模型的好处："><a href="#类加载器双亲委托模型的好处：" class="headerlink" title="类加载器双亲委托模型的好处："></a>类加载器双亲委托模型的好处：</h5><p>（1）可以确保Java和核心库的安全：所有的Java应用都会引用java.lang中的类，也就是说在运行期java.lang中的类会被加载到虚拟机中，如果这个加载过程如果是由自己的类加载器所加载，那么很可能就会在JVM中存在多个版本的java.lang中的类，而且这些类是相互不可见的（命名空间的作用）。借助于双亲委托机制，Java核心类库中的类的加载工作都是由启动根加载器去加载，从而确保了Java应用所使用的的都是同一个版本的Java核心类库，他们之间是相互兼容的；</p>
+<p>（2）确保Java核心类库中的类不会被自定义的类所替代；</p>
+<p>（3）不同的类加载器可以为相同名称的类（binary name）创建额外的命名空间。相同名称的类可以并存在Java虚拟机中，只需要用不同的类加载器去加载即可。相当于在Java虚拟机内部建立了一个又一个相互隔离的Java类空间。</p>
+<p>父亲委托机制的优点是能够提高软件系统的安全性。因此在此机制下，用户自定义的类加载器不可能加载应该由父类加载器加载的可靠类，从而防止不可靠甚至恶意的代码代替由父类加载器加载的可靠代码。例如，java.lang.Object类是由跟类加载器加载，其他任何用哪个户自定义的类加载器都不可能加载含有恶意代码的java.lang.Object类。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2021/02/18/Java类加载/" data-id="cklar21ew0000e29beybn75tp" class="article-share-link">分享</a>
+      <a data-url="/2021/02/18/Java类加载/" data-id="cklar3xbf0000f09bpg1oq9ov" class="article-share-link">分享</a>
       
       
       
@@ -235,7 +239,7 @@
       
         <strong class="toc-title">文章目录</strong>
         <div class="toc-widget-list">
-              <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#类加载"><span class="toc-number">1.</span> <span class="toc-text">类加载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#类加载器深入剖析："><span class="toc-number">2.</span> <span class="toc-text">类加载器深入剖析：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#类的加载、连接与初始化："><span class="toc-number">2.1.</span> <span class="toc-text">类的加载、连接与初始化：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#类的加载详解："><span class="toc-number">2.2.</span> <span class="toc-text">类的加载详解：</span></a></li></ol></li></ol>
+              <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#类加载"><span class="toc-number">1.</span> <span class="toc-text">类加载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#类加载器深入剖析："><span class="toc-number">2.</span> <span class="toc-text">类加载器深入剖析：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#类的加载、连接与初始化："><span class="toc-number">2.1.</span> <span class="toc-text">类的加载、连接与初始化：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#类的加载详解："><span class="toc-number">2.2.</span> <span class="toc-text">类的加载详解：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#类加载器双亲委托模型的好处："><span class="toc-number">2.3.</span> <span class="toc-text">类加载器双亲委托模型的好处：</span></a></li></ol></li></ol>
           </div>
       </div>
     </div>

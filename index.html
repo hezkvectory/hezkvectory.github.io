@@ -132,11 +132,15 @@
 <p>（3）从zip，jar等归档文件中加载.class文件</p>
 <p>（4）从专用数据库中提取.class文件</p>
 <p>（5）将java源文件动态编译为.class文件</p>
+<h5 id="类加载器双亲委托模型的好处："><a href="#类加载器双亲委托模型的好处：" class="headerlink" title="类加载器双亲委托模型的好处："></a>类加载器双亲委托模型的好处：</h5><p>（1）可以确保Java和核心库的安全：所有的Java应用都会引用java.lang中的类，也就是说在运行期java.lang中的类会被加载到虚拟机中，如果这个加载过程如果是由自己的类加载器所加载，那么很可能就会在JVM中存在多个版本的java.lang中的类，而且这些类是相互不可见的（命名空间的作用）。借助于双亲委托机制，Java核心类库中的类的加载工作都是由启动根加载器去加载，从而确保了Java应用所使用的的都是同一个版本的Java核心类库，他们之间是相互兼容的；</p>
+<p>（2）确保Java核心类库中的类不会被自定义的类所替代；</p>
+<p>（3）不同的类加载器可以为相同名称的类（binary name）创建额外的命名空间。相同名称的类可以并存在Java虚拟机中，只需要用不同的类加载器去加载即可。相当于在Java虚拟机内部建立了一个又一个相互隔离的Java类空间。</p>
+<p>父亲委托机制的优点是能够提高软件系统的安全性。因此在此机制下，用户自定义的类加载器不可能加载应该由父类加载器加载的可靠类，从而防止不可靠甚至恶意的代码代替由父类加载器加载的可靠代码。例如，java.lang.Object类是由跟类加载器加载，其他任何用哪个户自定义的类加载器都不可能加载含有恶意代码的java.lang.Object类。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2021/02/18/Java类加载/" data-id="cklar21ew0000e29beybn75tp" class="article-share-link">分享</a>
+      <a data-url="/2021/02/18/Java类加载/" data-id="cklar3xbf0000f09bpg1oq9ov" class="article-share-link">分享</a>
       
       
       
@@ -1124,7 +1128,7 @@ public class NIOServerCnxn {
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2019/07/15/java/java-nio/" data-id="cklar21gf0009e29bg5jrqrl6" class="article-share-link">分享</a>
+      <a data-url="/2019/07/15/java/java-nio/" data-id="cklar3xd3000bf09bhjcn8cgf" class="article-share-link">分享</a>
       
       
       
@@ -1381,7 +1385,7 @@ db0:keys=2,expires=0,avg_ttl=0</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2019/07/12/redis/redis-info信息/" data-id="cklar21gj000fe29bmcpw9106" class="article-share-link">分享</a>
+      <a data-url="/2019/07/12/redis/redis-info信息/" data-id="cklar3xd7000ff09bewz5pnga" class="article-share-link">分享</a>
       
       
       
@@ -1461,7 +1465,7 @@ db0:keys=2,expires=0,avg_ttl=0</code></pre>
           </li>
         
           <li>
-            <a href="/2019/07/12/http/http/">http</a>
+            <a href="/2019/07/12/http/tcp/">tcp三次握手、四次挥手</a>
           </li>
         
       </ul>
