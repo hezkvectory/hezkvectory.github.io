@@ -3,15 +3,31 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-  <title>我的博客</title>
+  <title>深入理解Kubernetes环境中的iptables | 我的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="我的博客">
-<meta property="og:url" content="http://hzkvectory.github.io/page/2/index.html">
+  <meta name="description" content="一、iptables简介 当主机收到一个数据包后，数据包先在内核空间中处理，若发现目的地址是自身， 则传到用户空间中交给对应的应用程序处理，若发现目的不是自身，则会将包丢弃或进行转发。  iptables实现防火墙功能的原理是：在数据包经过内核的过程中有五处关键地方， 分别是PREROUTING、INPUT、OUTPUT、FORWARD、POSTROUTING，称为钩子函数。 iptables这款">
+<meta name="keywords" content="k8s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解Kubernetes环境中的iptables">
+<meta property="og:url" content="http://hzkvectory.github.io/2019/07/12/k8s/深入理解Kubernetes环境中的iptables/index.html">
 <meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="一、iptables简介 当主机收到一个数据包后，数据包先在内核空间中处理，若发现目的地址是自身， 则传到用户空间中交给对应的应用程序处理，若发现目的不是自身，则会将包丢弃或进行转发。  iptables实现防火墙功能的原理是：在数据包经过内核的过程中有五处关键地方， 分别是PREROUTING、INPUT、OUTPUT、FORWARD、POSTROUTING，称为钩子函数。 iptables这款">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://hzkvectory.github.io/2019/07/12/k8s/深入理解Kubernetes环境中的iptables/images/iptable-1.jpeg">
+<meta property="og:image" content="http://hzkvectory.github.io/2019/07/12/k8s/深入理解Kubernetes环境中的iptables/images/iptable-2.jpeg">
+<meta property="og:image" content="http://hzkvectory.github.io/2019/07/12/k8s/深入理解Kubernetes环境中的iptables/images/iptable-3.jpeg">
+<meta property="og:image" content="http://hzkvectory.github.io/2019/07/12/k8s/深入理解Kubernetes环境中的iptables/images/iptable-4.jpeg">
+<meta property="og:image" content="http://hzkvectory.github.io/2019/07/12/k8s/深入理解Kubernetes环境中的iptables/images/iptable-5.jpeg">
+<meta property="og:image" content="http://hzkvectory.github.io/2019/07/12/k8s/深入理解Kubernetes环境中的iptables/images/iptable-6.jpeg">
+<meta property="og:image" content="http://hzkvectory.github.io/2019/07/12/k8s/深入理解Kubernetes环境中的iptables/images/iptable-7.jpeg">
+<meta property="og:image" content="http://hzkvectory.github.io/2019/07/12/k8s/深入理解Kubernetes环境中的iptables/images/iptable-8.jpeg">
+<meta property="og:image" content="http://hzkvectory.github.io/2019/07/12/k8s/深入理解Kubernetes环境中的iptables/images/iptable-9.jpeg">
+<meta property="og:image" content="http://hzkvectory.github.io/2019/07/12/k8s/深入理解Kubernetes环境中的iptables/images/iptable-9.jpeg">
+<meta property="og:updated_time" content="2020-05-21T02:35:51.852Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="我的博客">
+<meta name="twitter:title" content="深入理解Kubernetes环境中的iptables">
+<meta name="twitter:description" content="一、iptables简介 当主机收到一个数据包后，数据包先在内核空间中处理，若发现目的地址是自身， 则传到用户空间中交给对应的应用程序处理，若发现目的不是自身，则会将包丢弃或进行转发。  iptables实现防火墙功能的原理是：在数据包经过内核的过程中有五处关键地方， 分别是PREROUTING、INPUT、OUTPUT、FORWARD、POSTROUTING，称为钩子函数。 iptables这款">
+<meta name="twitter:image" content="http://hzkvectory.github.io/2019/07/12/k8s/深入理解Kubernetes环境中的iptables/images/iptable-1.jpeg">
   
   
 <!--    <link rel="icon" href="/favicon.ico">-->
@@ -58,52 +74,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-http/http" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/07/12/http/http/" class="article-date">
-  <time datetime="2019-07-12T04:28:35.000Z" itemprop="datePublished">2019-07-12</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/12/http/http/">http</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <!-- Table of Contents -->
-        
-        <p>http<br>    evernotecid://7965BD71-6DF7-4FDE-8F44-CC524BE44A29/appyinxiangcom/9791091/ENResource/p107</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://hzkvectory.github.io/2019/07/12/http/http/" data-id="cklaogs040003239b9od69f89" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/">http</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-k8s/深入理解Kubernetes环境中的iptables" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-k8s/深入理解Kubernetes环境中的iptables" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/07/12/k8s/深入理解Kubernetes环境中的iptables/" class="article-date">
   <time datetime="2019-07-12T04:28:35.000Z" itemprop="datePublished">2019-07-12</time>
@@ -116,8 +87,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/12/k8s/深入理解Kubernetes环境中的iptables/">深入理解Kubernetes环境中的iptables</a>
+    <h1 class="article-title" itemprop="name">
+      深入理解Kubernetes环境中的iptables
     </h1>
   
 
@@ -271,58 +242,85 @@ iptables-save | grep KUBE-SEP-H5CCP4V3TZFUD6ZZ</code></pre><p><img src="./images
     </footer>
   </div>
   
-</article>
- 
-
-
-  
-    <article id="post-http/tcp" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/07/12/http/tcp/" class="article-date">
-  <time datetime="2019-07-12T04:28:35.000Z" itemprop="datePublished">2019-07-12</time>
-</a>
     
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/12/http/tcp/">tcp三次握手、四次挥手</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <!-- Table of Contents -->
-        
-        <img src="/2019/07/12/http/tcp/tcp三次握手.jpeg" title="[tcp三次握手、四次挥手]">
-      
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
     </div>
-    <footer class="article-footer">
-      <a data-url="http://hzkvectory.github.io/2019/07/12/http/tcp/" data-id="cklaogs070006239b77opbby4" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcp/">tcp</a></li></ul>
-
-    </footer>
   </div>
+
+    
+<nav id="article-nav">
+  
+    <a href="/2019/07/12/http/http/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          http
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/07/12/http/tcp/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">tcp三次握手、四次挥手</div>
+    </a>
+  
+</nav>
+
   
 </article>
  
-
-
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
   
 
-
-  <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">下一页&raquo;</a>
-  </nav>
 </section>
            
     <aside id="sidebar">
