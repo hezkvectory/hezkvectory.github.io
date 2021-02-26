@@ -219,7 +219,7 @@ iptables-save | grep KUBE-SEP-H5CCP4V3TZFUD6ZZ</code></pre><p><img src="./images
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2019/07/12/k8s/深入理解Kubernetes环境中的iptables/" data-id="cklm3mtem000ijb9b4otubnxq" class="article-share-link">分享</a>
+      <a data-url="/2019/07/12/k8s/深入理解Kubernetes环境中的iptables/" data-id="cklm3nfxg000ik19baf76mxx6" class="article-share-link">分享</a>
       
       
       
@@ -233,9 +233,9 @@ iptables-save | grep KUBE-SEP-H5CCP4V3TZFUD6ZZ</code></pre><p><img src="./images
 
 
   
-    <article id="post-linux-init" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-http/http" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/07/12/linux-init/" class="article-date">
+    <a href="/2019/07/12/http/http/" class="article-date">
   <time datetime="2019-07-12T04:28:35.000Z" itemprop="datePublished">2019-07-12</time>
 </a>
     
@@ -247,7 +247,7 @@ iptables-save | grep KUBE-SEP-H5CCP4V3TZFUD6ZZ</code></pre><p><img src="./images
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/12/linux-init/">linux 命令</a>
+      <a class="article-title" href="/2019/07/12/http/http/">http</a>
     </h1>
   
 
@@ -257,39 +257,16 @@ iptables-save | grep KUBE-SEP-H5CCP4V3TZFUD6ZZ</code></pre><p><img src="./images
       
         <!-- Table of Contents -->
         
-        <p>linux 高效命令</p>
-<pre><code>vmstat -n 5 | awk &apos;{print strftime(&quot;[%Y-%m-%d %H:%M:%S]&quot;),$0}&apos;</code></pre><p>在maxpro上添加访问minikube内部ip的路由</p>
-<pre><code>sudo route -n add 172.17.0.0/24 192.168.99.100
-sudo route -n delete 172.17.0.0/24 192.168.99.100</code></pre><p>解压命令</p>
-<pre><code>gunzip -c make-4.0.tar.gz |tar xvf -
-/lib/systemd/system/docker.service --insecure-registry 192.168.99.1:5000</code></pre><p>​<br>设置centos时区</p>
-<pre><code>#timedatectl list-timezones  # 列出所有时区
-#timedatectl set-local-rtc 1  
-# 将硬件时钟调整为与本地时钟一致, 0 为设置为 UTC 时间
-#timedatectl set-timezone Asia/Shanghai  
-# 设置系统时区为上海
-#cp/usr/share/zoneinfo/Asia/Shanghai /etc/localtime</code></pre><p>curl使用</p>
-<pre><code>curl -X POST http://localhost:8080/upload \
-  -F &quot;file=@/Users/appleboy/test.zip&quot; \
-  -H &quot;Content-Type: multipart/form-data”
-
-curl -o /dev/null -w %{time_namelookup}::%{time_connect}::%{time_starttransfer}::%{time_total}::%{speed_download}&quot;\n&quot; &quot;http://sa.a.alldk.com/“
-
-echo &quot;select adx,adid,adslotid,count(1) as total from common_ad_req_all where logday = &apos;2019-05-27&apos; and hour = &apos;14&apos; group by adx,adid,adslotid;&quot;| curl dcs-inc.xxx.com:8123/\?database=common_ad\&amp;user=&apos;&apos;\&amp;password=&apos;&apos; --data-binary @-</code></pre><p>​<br>mysql explain执行计划<br>​<br>    explain<br>    select distinct (ng.id), ng.<code>name</code><br>    from naming_group ng left JOIN naming_group_user  ngu on ng.id = ngu.group_id where ngu.account_name = ‘hezhengkui’<br>    AND ng.name LIKE CONCAT(‘%g%’)</p>
-<p>​<br>​<br>    explain<br>    select ng.id, ng.<code>name</code><br>    from naming_group ng left JOIN naming_group_user  ngu on ng.id = ngu.group_id where ngu.account_name = ‘hezhengkui’<br>    AND ng.name LIKE CONCAT(‘%g%’)</p>
-<p>​<br>​<br>    explain<br>    select g.id,g.name from naming_group as g where 1=1 and exists(<br>        select 1 from naming_group_user as u where 1 = 1 and g.id = u.group_id and u.account_name = ‘hezhengkui’ and g.name like concat(‘gg%’)<br>    )</p>
-<p>​<br>​<br>    explain<br>    select g.id,g.name from naming_group as g where 1=1 and exists(<br>        select 1 from naming_group_user as u where 1 = 1 and g.id = u.group_id and u.account_name = ‘hezhengkui’<br>    )<br>    AND G.name LIKE CONCAT(‘%gg%’)</p>
-<p>​<br>​<br>​<br>Linux内核参数优化<br>​<br>    #!/bin/bash<br>    #adwpc<br><br>    OBJ=””<br>    CURDIR=$(cd <code>dirname $0</code>; pwd)<br>    NAME=<code>basename $0</code><br>    LOG=”$CURDIR/$NAME.log”<br>    ERR=”$CURDIR/$NAME.err”</p>
-<p>​<br>​<br>    function sysctl_conf_optm() {<br>        sudo mv /etc/sysctl.conf /etc/sysctl.conf.<code>date +%Y%m%d%H%M%S</code><br>        cat &gt;&gt; sysctl.conf &lt;&lt; EOF<br>    #the process open file limit<br>    fs.nr_open = 1048576<br>    #the system open file limit<br>    fs.file-max = 1048576<br>    #port range<br>    net.ipv4.ip_local_port_range = 1024 65535<br>    # Decrease the time default value for connections to keep alive<br>    #tcp keepalive packet cycle<br>    net.ipv4.tcp_keepalive_time = 600<br>    #tcp keepalive packet retry times<br>    net.ipv4.tcp_keepalive_probes = 10<br>    #tcp keepalive packet retry delay when packet lost<br>    net.ipv4.tcp_keepalive_intvl = 30<br>    # TCP window scaling for high-throughput, high-pingtime TCP performance<br>    net.ipv4.tcp_window_scaling = 1<br>    net.ipv4.tcp_syncookies = 1<br>    net.ipv4.tcp_max_syn_backlog = 65535<br>    # Controls the System Request debugging functionality of the kernel<br>    #disable debug<br>    kernel.sysrq = 0<br>    # Don’t ignore directed pings<br>    net.ipv4.icmp_echo_ignore_all = 0<br>    # Controls the maximum size of a message queue, in bytes<br>    kernel.msgmnb = 65536<br>    # Controls the maximum msg num of queue<br>    kernel.msgmni = 1024<br>    # Controls the default maximum size of a message<br>    kernel.msgmax = 655360<br>    # specifies the minimum virtual address that a process is allowed to mmap<br>    vm.mmap_min_addr = 4096<br>    # How many times to retry killing an alive TCP connection<br>    net.ipv4.tcp_retries2 = 15<br>    net.ipv4.tcp_retries1 = 3<br>    # Increase the maximum memory used to reassemble IP fragments<br>    net.ipv4.ipfrag_high_thresh = 512000<br>    net.ipv4.ipfrag_low_thresh = 446464<br>    # Set maximum amount of memory allocated to shm to 16G<br>    kernel.shmmax = 16000000000<br>    kernel.shmall = 4000000<br>    # number of unprocessed input packets before kernel starts dropping them<br>    net.core.netdev_max_backlog = 262144<br>    net.core.rmem_default = 1048576<br>    net.core.optmem_max = 1048576<br>    net.core.rmem_max = 33554432<br>    net.core.somaxconn = 65535<br>    net.core.wmem_max = 1048576<br>    #iptables<br>    net.netfilter.nf_conntrack_max = 1048576<br>    net.ipv4.tcp_fin_timeout = 2<br>    net.ipv4.tcp_max_orphans = 262144<br>    net.ipv4.tcp_timestamps = 1<br>    #<br>    net.ipv4.tcp_rmem = 32768 131072 16777216<br>    net.ipv4.tcp_wmem = 8192 131072 16777216<br>    net.ipv4.tcp_tw_recycle = 1<br>    net.ipv4.tcp_tw_reuse = 1<br>    net.ipv4.tcp_max_tw_buckets = 10000<br>    # Do a ‘modprobe tcp_cubic’ first<br>    net.ipv4.tcp_congestion_control = cubic<br>    # cache ssthresh from previous connection<br>    net.ipv4.tcp_no_metrics_save = 0<br>    net.ipv4.tcp_moderate_rcvbuf = 0<br>    # Enable a fix for RFC1337 - time-wait assassination hazards in TCP<br>    net.ipv4.tcp_rfc1337 = 1<br>    # UDP parameters<br>    net.ipv4.udp_mem = 262144 1048576 10485760<br>    net.ipv4.udp_rmem_min = 1048576<br>    net.ipv4.udp_wmem_min = 1048576<br>    # Enable ignoring broadcasts request<br>    net.ipv4.icmp_echo_ignore_broadcasts = 1<br>    # Enable bad error message Protection<br>    net.ipv4.icmp_ignore_bogus_error_responses = 1<br>    vm/min_free_kbytes = 65536<br>    # disable ipv6<br>    # net.ipv6.conf.all.disable_ipv6 = 1<br>    # net.ipv6.conf.default.disable_ipv6 = 1<br>    # net.ipv6.conf.lo.disable_ipv6 = 1<br>    # This will ensure that immediately subsequent connections use the new values<br>    net.ipv4.route.flush = 1<br>    # net.ipv6.route.flush = 1<br>    EOF<br>        sudo mv sysctl.conf /etc<br>        sudo sysctl -p<br><br>        sudo cp /etc/security/limits.conf /etc/security/limits.conf.<code>date +%Y%m%d%H%M%S</code><br>        cat &gt;&gt; limits.conf &lt;&lt; EOF<br>    #the shell open file limit, the soft limit is a warning point, and the hard limit is a block.<br>    #relogin make params work<br>    * soft nofile 1048575<br>    * hard nofile 1048575<br>    * soft nproc 1048575<br>    * hard nproc 1048575<br>    # End of file<br>    EOF<br>        sudo mv limits.conf /etc/security<br><br>    }</p>
+        <p>http<br>    evernotecid://7965BD71-6DF7-4FDE-8F44-CC524BE44A29/appyinxiangcom/9791091/ENResource/p107</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2019/07/12/linux-init/" data-id="cklm3mtd70003jb9bpu5t6waw" class="article-share-link">分享</a>
+      <a data-url="/2019/07/12/http/http/" data-id="cklm3nfxd000bk19baptin4e8" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/">http</a></li></ul>
 
     </footer>
   </div>
@@ -299,10 +276,10 @@ echo &quot;select adx,adid,adslotid,count(1) as total from common_ad_req_all whe
 
 
   
-    <article id="post-java/java多线程竞拍" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-zookeeper/zookeeper_expiryQueue" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/07/12/java/java多线程竞拍/" class="article-date">
-  <time datetime="2019-07-12T04:28:35.000Z" itemprop="datePublished">2019-07-12</time>
+    <a href="/2019/07/11/zookeeper/zookeeper_expiryQueue/" class="article-date">
+  <time datetime="2019-07-11T04:28:35.000Z" itemprop="datePublished">2019-07-11</time>
 </a>
     
   </div>
@@ -313,7 +290,7 @@ echo &quot;select adx,adid,adslotid,count(1) as total from common_ad_req_all whe
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/12/java/java多线程竞拍/">阿里云面试题-多线程竞拍</a>
+      <a class="article-title" href="/2019/07/11/zookeeper/zookeeper_expiryQueue/">zookeeper之ExpiryQueue</a>
     </h1>
   
 
@@ -323,146 +300,82 @@ echo &quot;select adx,adid,adslotid,count(1) as total from common_ad_req_all whe
       
         <!-- Table of Contents -->
         
-        <p>多线程竞拍</p>
-<pre><code>创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）
+        <p>zookeeper之ExpiryQueue</p>
+<pre><code>ExpiryQueue是在SessionTrackerImpl中使用的，主要是维护zk中session的队列
+了解ExpiryQueue的实现
 
-每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
+//ExpiryQueue&lt;SessionImpl&gt; sessionExpiryQueue;
 
-所有人的心理上线价位都为 M ，不会出价比M高
+//elemMap保存的是SessionImpl--&gt;过期时间
+private final ConcurrentHashMap&lt;E, Long&gt; elemMap = new ConcurrentHashMap&lt;E, Long&gt;();
 
-每次出价必须比上一次出价高
+//expiryMap保存的是 过期时间--&gt;SessionImpl集合
+private final ConcurrentHashMap&lt;Long, Set&lt;E&gt;&gt; expiryMap = new ConcurrentHashMap&lt;Long, Set&lt;E&gt;&gt;();
 
-经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。</code></pre><p>个人觉得主要考察java基础（CountDownLatch、CyclicBarrier）的使用方法</p>
-<pre><code>import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.*;
-import java.util.concurrent.locks.ReentrantLock;
+****elemMap和expiryMap是利用空间换时间，方便根据SessionImpl 和 过期时间相互查找****</code></pre><p>ExpiryQueue的remove方法</p>
+<pre><code>ExpiryQueue的实现相当于一个缓存，想起之前面试的一个题目：实现一个缓存fifo,缓存的value可以有过期时间/无过
+期时间，缓存大小一定，当put时，如果缓存满了(达到缓存上线)，优先剔除最近要失效的key-value，如果key都不过
+期，优先剔除最先进来的key，直到能放下新的key-value。这个题可以用ConcurrentHashMap缓存，TreeSet(有序集
+合)过期时间排序，或者二分查找。
+**从这里感觉算法的重要性。时间复杂度、空间复杂度在实际工作中得以应用。**
 
-
-public class AuctionTest {
-
-/**
- * 创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）
- * 每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
- * 所有人的心理上线价位都为 M ，不会出价比M高
- * 每次出价必须比上一次出价高
- * 经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。
- */
-static int N = 10; //竞拍人数
-static int M = 100;//所有人的心理上线价位都为 M ，不会出价比M高
-static int AUCTION_NUM = 5; //经过 k 次竞拍后
-
-static ConcurrentHashMap&lt;String, List&lt;Integer&gt;&gt; ACTION_HIST = new ConcurrentHashMap&lt;&gt;();
-
-static ReentrantLock lock = new ReentrantLock();//这个锁是为了保证出价比上一个人出价高
-
-static volatile int CUR_MAX_PRICE = 0;
-
-public static void main(String[] args) throws Exception {
-    CyclicBarrier barrier = new CyclicBarrier(N);//每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
-    CountDownLatch countDownLatch = new CountDownLatch(N);//这里应该是N
-    ThreadPoolExecutor executor = new ThreadPoolExecutor(N, N, 1, TimeUnit.SECONDS, new ArrayBlockingQueue&lt;Runnable&gt;(1), new ThreadFactory() {
-        @Override
-        public Thread newThread(Runnable r) {
-            return new Thread(r, &quot;Auction&quot;);
-        }
-    });
-
-
-    int step = M / (AUCTION_NUM * N); //每次出价阶梯
-
-    for (int i = 1; i &lt;= N; i++) {
-        executor.execute(new Auction(barrier, countDownLatch, &quot;P&quot; + i, step));
-    }
-
-    countDownLatch.await();
-
-    String personName = null;
-    int maxPrice = 0;
-    int personId = 0;
-    for (int num = 1; num &lt;= AUCTION_NUM; num++) {
-        for (int i = 1; i &lt;= N; i++) {
-            personName = &quot;P&quot; + i;
-            Integer price = ACTION_HIST.get(personName).get(num - 1);
-            if (num == AUCTION_NUM) {
-                if (maxPrice &lt; price) {
-                    maxPrice = price;
-                    personId = i;
-                }
-            }
-            System.out.println(&quot;第&quot; + num + &quot;次出价人:P&quot; + i + &quot; 出价:&quot; + price);
-        }
-        System.out.println(&quot;-----------------&quot;);
-    }
-    System.out.println(&quot;最终竞价成功人:P&quot; + personId + &quot;,最终出价:&quot; + maxPrice);
-    executor.shutdown();
-}
-
-static class Auction implements Runnable {
-    private String name;
-    private CyclicBarrier barrier;
-    private int step;
-    private CountDownLatch countDownLatch;
-
-    public Auction(CyclicBarrier barrier, CountDownLatch countDownLatch, String name, int step) {
-        this.name = name;
-        this.barrier = barrier;
-        this.step = step;
-        this.countDownLatch = countDownLatch;
-    }
-
-    @Override
-    public void run() {
-        if (!ACTION_HIST.containsKey(name)) {
-            ACTION_HIST.put(name, new ArrayList&lt;&gt;());
-        }
-        lock.lock();
-        int currentPrice = 0;
-        try {
-            currentPrice = getRandPrice(step);
-            CUR_MAX_PRICE = CUR_MAX_PRICE &lt; currentPrice ? currentPrice : CUR_MAX_PRICE;
-        } finally {
-            lock.unlock();
-        }
-
-        ACTION_HIST.get(name).add(currentPrice);
-        int tmp = 1;
-        try {
-            while (tmp &lt; AUCTION_NUM) {
-                barrier.await();
-                currentPrice = getRandPrice(step);
-                currentPrice = currentPrice &gt; M ? M : currentPrice;
-                CUR_MAX_PRICE = CUR_MAX_PRICE &lt; currentPrice ? currentPrice : CUR_MAX_PRICE;
-                ACTION_HIST.get(name).add(currentPrice);
-                tmp++;
-            }
-            countDownLatch.countDown();
-        } catch (Exception e) {
-            e.printStackTrace();
+public Long remove(E elem) {
+     //快速根据SessionImpl获取过期的时间
+    Long expiryTime = elemMap.remove(elem);
+    if (expiryTime != null) {
+        Set&lt;E&gt; set = expiryMap.get(expiryTime);
+        if (set != null) {
+                //从expiryMap中删除
+            set.remove(elem);
         }
     }
+    return expiryTime;
+}</code></pre><p>ExpiryQueue的update方法</p>
+<pre><code>public Long update(E elem, int timeout) {
+    Long prevExpiryTime = elemMap.get(elem);
+    long now = Time.currentElapsedTime();
+    Long newExpiryTime = roundToNextInterval(now + timeout);
 
-
-    /**
-     * 当前心里价比上次多多少
-     *
-     * @param step
-     * @return
-     */
-    int getRandPrice(int step) {
-        return CUR_MAX_PRICE + new Random().nextInt(step) + 1;
+    if (newExpiryTime.equals(prevExpiryTime)) {
+        // No change, so nothing to update
+        return null;
     }
-}</code></pre><p>}</p>
 
+    // First add the elem to the new expiry time bucket in expiryMap.
+    Set&lt;E&gt; set = expiryMap.get(newExpiryTime);
+    //**如果elemMap中不存在，放入到elemMap中
+    if (set == null) {
+        // Construct a ConcurrentHashSet using a ConcurrentHashMap
+        set = Collections.newSetFromMap(
+            new ConcurrentHashMap&lt;E, Boolean&gt;());
+        // Put the new set in the map, but only if another thread
+        // hasn&apos;t beaten us to it
+        Set&lt;E&gt; existingSet = expiryMap.putIfAbsent(newExpiryTime, set);
+        if (existingSet != null) {
+            set = existingSet;
+        }
+    }
+    set.add(elem);
+
+    // Map the elem to the new expiry time. If a different previous
+    // mapping was present, clean up the previous expiry bucket.
+    prevExpiryTime = elemMap.put(elem, newExpiryTime);
+    if (prevExpiryTime != null &amp;&amp; !newExpiryTime.equals(prevExpiryTime)) {
+        Set&lt;E&gt; prevSet = expiryMap.get(prevExpiryTime);
+        if (prevSet != null) {
+            prevSet.remove(elem);
+        }
+    }
+    return newExpiryTime;
+}</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2019/07/12/java/java多线程竞拍/" data-id="cklm3mtek000ejb9b099lzabp" class="article-share-link">分享</a>
+      <a data-url="/2019/07/11/zookeeper/zookeeper_expiryQueue/" data-id="cklm3nfxi000nk19b457q21m7" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
 
     </footer>
   </div>
@@ -501,15 +414,7 @@ static class Auction implements Runnable {
       <ul>
         
           <li>
-            <a href="/2021/02/26/java/synchronized/synchronized/">synchronized</a>
-          </li>
-        
-          <li>
             <a href="/2021/02/26/技术栈/">java技术</a>
-          </li>
-        
-          <li>
-            <a href="/2021/02/26/spring/springmvc long polling实战/">(no title)</a>
           </li>
         
           <li>
@@ -517,7 +422,15 @@ static class Auction implements Runnable {
           </li>
         
           <li>
+            <a href="/2021/02/26/spring/springmvc long polling实战/">(no title)</a>
+          </li>
+        
+          <li>
             <a href="/2021/02/18/Java类加载/">Java类加载</a>
+          </li>
+        
+          <li>
+            <a href="/2019/07/15/java/java-nio/">java-nio-server</a>
           </li>
         
       </ul>
