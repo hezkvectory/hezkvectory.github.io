@@ -17,7 +17,7 @@
 <meta property="og:image" content="/2021/02/26/java/synchronized/synchronized/jvm-markword.jpg">
 <meta property="og:image" content="/2021/02/26/java/synchronized/synchronized/%E9%94%81%E6%92%A4%E9%94%80.jpg">
 <meta property="og:image" content="/2021/02/26/java/synchronized/synchronized/synchronized%E9%94%81%E5%8D%87%E7%BA%A7.jpg">
-<meta property="og:updated_time" content="2021-02-26T09:34:09.416Z">
+<meta property="og:updated_time" content="2021-02-26T09:35:40.386Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="synchronized">
 <meta name="twitter:description" content="CAS操作什么是CAS?​        使用锁时，线程获取锁是一种悲观锁策略，即假设每一次执行临界区代码都会产生冲突，所以当前线程获取到锁的时候同时也会阻塞其他线程获取该锁。而CAS操作（又称为无锁操作）是一种乐观锁策略，它假设所有线程访问共享资源的时候不会出现冲突，既然不会出现冲突自然而然就不会阻塞其他线程的操作。因此，线程就不会出现阻塞停顿的状态。那么，如果出现冲突了怎么办？无锁操作是使用C">
@@ -93,7 +93,6 @@
         <!-- Table of Contents -->
         
         <h4 id="CAS操作"><a href="#CAS操作" class="headerlink" title="CAS操作"></a>CAS操作</h4><h5 id="什么是CAS"><a href="#什么是CAS" class="headerlink" title="什么是CAS?"></a>什么是CAS?</h5><p>​        使用锁时，线程获取锁是一种<strong>悲观锁策略</strong>，即假设每一次执行临界区代码都会产生冲突，所以当前线程获取到锁的时候同时也会阻塞其他线程获取该锁。而CAS操作（又称为无锁操作）是一种<strong>乐观锁策略</strong>，它假设所有线程访问共享资源的时候不会出现冲突，既然不会出现冲突自然而然就不会阻塞其他线程的操作。因此，线程就不会出现阻塞停顿的状态。那么，如果出现冲突了怎么办？无锁操作是使用<strong>CAS(compare and swap)</strong>又叫做比较交换来鉴别线程是否出现冲突，出现冲突就重试当前操作直到没有冲突为止。</p>
-<h4 id="CAS的操作过程"><a href="#CAS的操作过程" class="headerlink" title="CAS的操作过程"></a>CAS的操作过程</h4><p>​        CAS比较交换的过程可以通俗的理解为CAS(V,O,N)，包含三个值分别为：<strong>V 内存地址存放的实际值；O 预期的值（旧值）；N 更新的新值</strong>。当V和O相同时，也就是说旧值和内存中实际的值相同表明该值没有被其他线程更改过，即该旧值O就是目前来说最新的值了，自然而然可以将新值N赋值给V。反之，V和O不相同，表明该值已经被其他线程改过了则该旧值O不是最新版本的值了，所以不能将新值N赋给V，返回V即可。当多个线程使用CAS操作一个变量是，只有一个线程会成功，并成功更新，其余会失败。失败的线程会重新尝试，当然也可以选择挂起线程</p>
 <h5 id="Synchronized-VS-CAS"><a href="#Synchronized-VS-CAS" class="headerlink" title="Synchronized VS CAS"></a>Synchronized VS CAS</h5><p>​        元老级的Synchronized(未优化前)最主要的问题是：在存在线程竞争的情况下会出现线程阻塞和唤醒锁带来的性能问题，因为这是一种互斥同步（阻塞同步）。</p>
 <p>​        而CAS并不是武断的间线程挂起，当CAS操作失败后会进行一定的尝试，而非进行耗时的挂起唤醒的操作，因此也叫做非阻塞同步。这是两者主要的区别。</p>
 <h4 id="CAS的问题"><a href="#CAS的问题" class="headerlink" title="CAS的问题"></a>CAS的问题</h4><ol>
@@ -157,7 +156,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2021/02/26/java/synchronized/synchronized/" data-id="cklm3mtf4000xjb9bqr96r6sg" class="article-share-link">分享</a>
+      <a data-url="/2021/02/26/java/synchronized/synchronized/" data-id="cklm3ofwu000xkf9bb7iiabbs" class="article-share-link">分享</a>
       
       
       
@@ -253,7 +252,7 @@
       
         <strong class="toc-title">文章目录</strong>
         <div class="toc-widget-list">
-              <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS操作"><span class="toc-number">1.</span> <span class="toc-text">CAS操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#什么是CAS"><span class="toc-number">1.1.</span> <span class="toc-text">什么是CAS?</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS的操作过程"><span class="toc-number">2.</span> <span class="toc-text">CAS的操作过程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Synchronized-VS-CAS"><span class="toc-number">2.1.</span> <span class="toc-text">Synchronized VS CAS</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS的问题"><span class="toc-number">3.</span> <span class="toc-text">CAS的问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#java对象头"><span class="toc-number">4.</span> <span class="toc-text">java对象头</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#偏向锁"><span class="toc-number">5.</span> <span class="toc-text">偏向锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#轻量级锁"><span class="toc-number">6.</span> <span class="toc-text">轻量级锁</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#那么，什么是偏向锁"><span class="toc-number">6.1.</span> <span class="toc-text">那么，什么是偏向锁?</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#锁膨胀"><span class="toc-number">7.</span> <span class="toc-text">锁膨胀</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#锁撤销"><span class="toc-number">8.</span> <span class="toc-text">锁撤销</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#轻量级锁-1"><span class="toc-number">9.</span> <span class="toc-text">轻量级锁</span></a></li></ol>
+              <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS操作"><span class="toc-number">1.</span> <span class="toc-text">CAS操作</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#什么是CAS"><span class="toc-number">1.1.</span> <span class="toc-text">什么是CAS?</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Synchronized-VS-CAS"><span class="toc-number">1.2.</span> <span class="toc-text">Synchronized VS CAS</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CAS的问题"><span class="toc-number">2.</span> <span class="toc-text">CAS的问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#java对象头"><span class="toc-number">3.</span> <span class="toc-text">java对象头</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#偏向锁"><span class="toc-number">4.</span> <span class="toc-text">偏向锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#轻量级锁"><span class="toc-number">5.</span> <span class="toc-text">轻量级锁</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#那么，什么是偏向锁"><span class="toc-number">5.1.</span> <span class="toc-text">那么，什么是偏向锁?</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#锁膨胀"><span class="toc-number">6.</span> <span class="toc-text">锁膨胀</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#锁撤销"><span class="toc-number">7.</span> <span class="toc-text">锁撤销</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#轻量级锁-1"><span class="toc-number">8.</span> <span class="toc-text">轻量级锁</span></a></li></ol>
           </div>
       </div>
     </div>
