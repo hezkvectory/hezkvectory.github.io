@@ -5,13 +5,25 @@
   
   <title>我的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
+  <meta name="description" content="01 | 基础架构：一条SQL查询语句是如何执行的？https://blog.csdn.net/zxcc1314/article/details/84842650 大体来说，MySQL分为Server层和存储引擎层两部分。   连接器：负责跟客户端建立连接、获取权限、维持和管理连接。 查询缓存：查询请求先访问缓存(key 是查询的语句，value 是查询的结果)。命中直接返回。不推荐使用缓存，更新">
+<meta property="og:type" content="article">
 <meta property="og:title" content="我的博客">
-<meta property="og:url" content="/index.html">
+<meta property="og:url" content="/2021/02/26/MySQL实战45讲/index.html">
 <meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="01 | 基础架构：一条SQL查询语句是如何执行的？https://blog.csdn.net/zxcc1314/article/details/84842650 大体来说，MySQL分为Server层和存储引擎层两部分。   连接器：负责跟客户端建立连接、获取权限、维持和管理连接。 查询缓存：查询请求先访问缓存(key 是查询的语句，value 是查询的结果)。命中直接返回。不推荐使用缓存，更新">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181205200741375.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181214201529442.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181205200935425.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181205201633554.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181207205124386.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181211194643271.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181211195928928.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2021-02-26T04:46:11.581Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="01 | 基础架构：一条SQL查询语句是如何执行的？https://blog.csdn.net/zxcc1314/article/details/84842650 大体来说，MySQL分为Server层和存储引擎层两部分。   连接器：负责跟客户端建立连接、获取权限、维持和管理连接。 查询缓存：查询请求先访问缓存(key 是查询的语句，value 是查询的结果)。命中直接返回。不推荐使用缓存，更新">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20181205200741375.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70">
   
   
 <!--    <link rel="icon" href="/favicon.ico">-->
@@ -58,66 +70,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-spring/springmvc long polling实战" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2021/02/26/spring/springmvc long polling实战/" class="article-date">
-  <time datetime="2021-02-26T03:57:28.112Z" itemprop="datePublished">2021-02-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <!-- Table of Contents -->
-        
-        <p>​        </p>
-<p>​        一个servlet请求ServletRequest可以通过调用request.startAsync()方法而进入异步模式。这样做的主要结果就是该servlet以及所有的过滤器都可以结束，但其响应（response）会留待异步处理结束后再返回调用request.startAsync()方法会返回一个AsyncContext对象，可用它对异步处理进行进一步的控制和操作。比如说它也提供了一个与转向（forward）很相似的dispatch方法，只不过它允许应用恢复Servlet容器的请求处理进程ServletRequest提供了获取当前DispatherType的方式，后者可以用来区别当前处理的是原始请求、异步分发请求、转向，或是其他类型的请求分发类型。</p>
-<p>有了上面的知识，下面可以来看一下Callable的异步请求被处理时所依次发生的事件：</p>
-<ol>
-<li>控制器先返回一个Callable对象</li>
-<li>Spring MVC开始进行异步处理，并把该Callable对象提交给另一个独立线程的执行器TaskExecutor处理</li>
-<li>DispatcherServlet和所有过滤器都退出Servlet容器线程，但此时方法的响应对象仍未返回</li>
-<li>Callable对象最终产生一个返回结果，此时Spring MVC会重新把请求分派回Servlet容器，恢复处理</li>
-<li>DispatcherServlet再次被调用，恢复对Callable异步处理所返回结果的处理</li>
-<li>对DeferredResult异步请求的处理顺序也非常类似，区别仅在于应用可以通过任何线程来计算返回一个结果：</li>
-<li>控制器先返回一个DeferredResult对象，并把它存取在内存（队列或列表等）中以便存取</li>
-<li>Spring MVC开始进行异步处理</li>
-<li>DispatcherServlet和所有过滤器都退出Servlet容器线程，但此时方法的响应对象仍未返回</li>
-<li>由处理该请求的线程对 DeferredResult进行设值，然后Spring MVC会重新把请求分派回Servlet容器，恢复处理</li>
-<li>DispatcherServlet再次被调用，恢复对该异步返回结果的处理</li>
-</ol>
-<p><strong>1.定义异步接口</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">@RequestMapping(&quot;/async&quot;)</span><br><span class="line">public class AsyncController &#123;</span><br><span class="line">    final Map deferredResultMap=new ConcurrentReferenceHashMap&lt;&gt;();</span><br><span class="line">    @GetMapping(&quot;/longPolling&quot;)</span><br><span class="line">    public DeferredResultlongPolling()&#123;</span><br><span class="line">        DeferredResultdeferredResult=new DeferredResult(0L);</span><br><span class="line">        deferredResultMap.put(deferredResult.hashCode(),deferredResult);</span><br><span class="line">        deferredResult.onCompletion(()-&gt;&#123;</span><br><span class="line">            deferredResultMap.remove(deferredResult.hashCode());</span><br><span class="line">            System.err.println(&quot;还剩&quot;+deferredResultMap.size()+&quot;个deferredResult未响应&quot;);</span><br><span class="line">        &#125;);</span><br><span class="line">        return deferredResult;</span><br><span class="line">    &#125;</span><br><span class="line">    @GetMapping(&quot;/returnLongPollingValue&quot;)</span><br><span class="line">    public void returnLongPollingValue()&#123;</span><br><span class="line">        for (Map.Entry entry:deferredResultMap.entrySet())&#123;</span><br><span class="line">            entry.getValue().setResult(&quot;kl&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>2.定义接口访问实例，使用fegin</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@FeignClient(url = &quot;localhost:8976&quot;,name = &quot;async&quot;)</span><br><span class="line">public interface AsyncFeginService &#123;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/async/longPolling&quot;)</span><br><span class="line">    String longPolling();</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/async/returnLongPollingValue&quot;)</span><br><span class="line">     void returnLongPollingValue();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>3.测试用例</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">@RunWith(SpringRunner.class)</span><br><span class="line">@SpringBootTest</span><br><span class="line">public class LongPollingdemoApplicationTests &#123;</span><br><span class="line">	@Autowired</span><br><span class="line">	AsyncFeginService asyncFeginService;</span><br><span class="line">	/**</span><br><span class="line">	 * 模拟多个浏览器客户端发起长轮询请求，等待testLongPolling测试用例请求通知服务端返回各浏览器的请求结果</span><br><span class="line">	 * @throws Exception</span><br><span class="line">	 */</span><br><span class="line">	@Test</span><br><span class="line">	public void contextLoads() throws Exception&#123;</span><br><span class="line">		ExecutorService executorService=Executors.newFixedThreadPool(4);</span><br><span class="line">		for (int i=0;i&lt;=3;i++)&#123;</span><br><span class="line">			executorService.execute(()-&gt;&#123;</span><br><span class="line">				String kl=asyncFeginService.longPolling();</span><br><span class="line">				System.err.println(&quot;收到响应：&quot;+kl);</span><br><span class="line">			&#125;);</span><br><span class="line">		&#125;</span><br><span class="line">		System.in.read();</span><br><span class="line">	&#125;</span><br><span class="line">	/**</span><br><span class="line">	 * 通知服务端返回上个测试的长轮询结果</span><br><span class="line">	 */</span><br><span class="line">	@Test</span><br><span class="line">	public void testLongPolling()&#123;</span><br><span class="line">		asyncFeginService.returnLongPollingValue();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="SseEmitter、ResponseBodyEmitter"><a href="#SseEmitter、ResponseBodyEmitter" class="headerlink" title="SseEmitter、ResponseBodyEmitter"></a>SseEmitter、ResponseBodyEmitter</h5><p>Callback和DeferredResult用于设置单个结果，如果有多个结果需要返回给客户端时，可以使用SseEmitter以及ResponseBodyEmitter等；</p>
-<p>http 分块传输，以及k8s list-watch机制，也是采用http分块传输机制实现的。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="/2021/02/26/spring/springmvc long polling实战/" data-id="ckllzkift000j8y9bmvddfhqu" class="article-share-link">分享</a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-MySQL实战45讲" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-MySQL实战45讲" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2021/02/26/MySQL实战45讲/" class="article-date">
   <time datetime="2021-02-26T03:57:28.112Z" itemprop="datePublished">2021-02-26</time>
@@ -341,199 +294,121 @@
     </footer>
   </div>
   
-</article>
- 
-
-
-  
-    <article id="post-Java类加载" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2021/02/18/Java类加载/" class="article-date">
-  <time datetime="2021-02-18T10:44:02.000Z" itemprop="datePublished">2021-02-18</time>
-</a>
     
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/02/18/Java类加载/">Java类加载</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <!-- Table of Contents -->
-        
-        <h4 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a><strong>类加载</strong></h4><p>​        在java代码中，类的加载、连接和初始化过程都是在程序运行期间完成的。（类从磁盘加载到内存中经历的三个阶段）</p>
-<p>提供了更大的灵活性，增加了更多的可能性。</p>
-<h4 id="类加载器深入剖析："><a href="#类加载器深入剖析：" class="headerlink" title="类加载器深入剖析："></a><strong>类加载器深入剖析：</strong></h4><p>Java虚拟机与程序的生命周期</p>
-<p>在如下几种情况下，java虚拟机将结束生命周期</p>
-<p>（1）执行了System.exit()方法</p>
-<p>（2）程序正常执行结束</p>
-<p>（3）程序在执行过程中遇到了异常或错误而异常终止</p>
-<p>（4）由于操作系统出现错误而导致虚拟机进程终止</p>
-<h5 id="类的加载、连接与初始化："><a href="#类的加载、连接与初始化：" class="headerlink" title="类的加载、连接与初始化："></a><strong>类的加载、连接与初始化：</strong></h5><ol>
-<li><p>加载：查找并加载类的二进制数据到java虚拟机中</p>
-</li>
-<li><p>连接：</p>
-<ul>
-<li><p>​    验证 : 确保被加载的类的正确性</p>
-</li>
-<li><p>​    准备：为类的<strong>静态变量</strong>分配内存，并将其初始化为<strong>默认值</strong>，但是到达初始化之前类变量都没有初始化为真正的初始值</p>
-</li>
-<li><p>​    解析：<strong>把类中的符号引用转换为直接引用</strong>，就是在类型的常量池中寻找类、接口、字段和方法的符号引用，把这些符号引用替换成直接引用的过程</p>
-</li>
-</ul>
-</li>
-<li><p>初始化：为类的静态变量赋予正确的初始值</p>
-</li>
-</ol>
-<p><strong>类从磁盘上加载到内存中要经历五个阶段：加载、连接、初始化、使用、卸载</strong></p>
-<p>Java程序对类的使用方式可分为两种</p>
-<ol>
-<li><em>主动使用</em></li>
-<li><em>被动使用</em></li>
-</ol>
-<p>所有的Java虚拟机实现必须在每个类或接口被Java程序“首次主动使用”时才能初始化他们</p>
-<p><strong>主动使用</strong></p>
-<p>（1）创建类的实例</p>
-<p>（2）访问某个类或接口的静态变量 getstatic（助记符），或者对该静态变量赋值 putstatic</p>
-<p>（3）调用类的静态方法 invokestatic</p>
-<p>（4）反射（Class.forName(“com.test.Test”)）</p>
-<p>（5）初始化一个类的子类</p>
-<p>（6）Java虚拟机启动时被标明启动类的类</p>
-<p>（7）JDK1.7开始提供的动态语言支持（了解）</p>
-<p><strong>被动使用</strong></p>
-<p>​    除了上面七种情况外，其他使用java类的方式都被看做是对类的被动使用，都不会导致类的初始化</p>
-<h5 id="类的加载详解："><a href="#类的加载详解：" class="headerlink" title="类的加载详解："></a><strong>类的加载详解：</strong></h5><p>​        类的加载指的是将类的.class文件中的二进制数据读入到内存中，将其放在运行时数据区的方法区内，然后在内存中创建一个java.lang.Class对象（规范并未说明Class对象位于哪里，HotSpot虚拟机将其放在<strong>方法区</strong>中）用来封装内在方法区内的数据结构。</p>
-<p>加载.calss文件的方式</p>
-<p>（1）从本地系统中直接加载</p>
-<p>（2）通过网络下载.class文件</p>
-<p>（3）从zip，jar等归档文件中加载.class文件</p>
-<p>（4）从专用数据库中提取.class文件</p>
-<p>（5）将java源文件动态编译为.class文件</p>
-<h4 id="类加载器双亲委托模型的好处："><a href="#类加载器双亲委托模型的好处：" class="headerlink" title="类加载器双亲委托模型的好处："></a>类加载器双亲委托模型的好处：</h4><p>（1）可以确保Java和核心库的安全：所有的Java应用都会引用java.lang中的类，也就是说在运行期java.lang中的类会被加载到虚拟机中，如果这个加载过程如果是由自己的类加载器所加载，那么很可能就会在JVM中存在多个版本的java.lang中的类，而且这些类是相互不可见的（命名空间的作用）。借助于双亲委托机制，Java核心类库中的类的加载工作都是由启动根加载器去加载，从而确保了Java应用所使用的的都是同一个版本的Java核心类库，他们之间是相互兼容的；</p>
-<p>（2）确保Java核心类库中的类不会被自定义的类所替代；</p>
-<p>（3）不同的类加载器可以为相同名称的类（binary name）创建额外的命名空间。相同名称的类可以并存在Java虚拟机中，只需要用不同的类加载器去加载即可。相当于在Java虚拟机内部建立了一个又一个相互隔离的Java类空间。</p>
-<p>父亲委托机制的优点是能够提高软件系统的安全性。因此在此机制下，用户自定义的类加载器不可能加载应该由父类加载器加载的可靠类，从而防止不可靠甚至恶意的代码代替由父类加载器加载的可靠代码。例如，java.lang.Object类是由跟类加载器加载，其他任何用哪个户自定义的类加载器都不可能加载含有恶意代码的java.lang.Object类。</p>
-
-      
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
     </div>
-    <footer class="article-footer">
-      <a data-url="/2021/02/18/Java类加载/" data-id="ckllzkid600008y9bgw1x2358" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jvm/">jvm</a></li></ul>
-
-    </footer>
   </div>
+
+    
+<nav id="article-nav">
+  
+    <a href="/2021/02/26/spring/springmvc long polling实战/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/02/18/Java类加载/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">Java类加载</div>
+    </a>
+  
+</nav>
+
   
 </article>
  
-
-
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
   
 
-
-  <nav id="page-nav">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">下一页&raquo;</a>
-  </nav>
 </section>
            
     <aside id="sidebar">
   
     <!--
 
- <div class="widget-wrap">
-     
-        <h3 class="follow-title ">Follow me</h3>
-     
-    <div class="widget follow">
-      
-      
-      
-      
-            <a class="email" aria-hidden="true"  href="mailto:hezkvectory@163.com" target="_blank" title="邮箱"></a>
-      
-    </div>
-  </div>
-
 
 -->
 
   
     
-  
+    <div class="widget-wrap">
     
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title tagcloud">标签云</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/java/" style="font-size: 25px;">java</a> <a href="/tags/jvm/" style="font-size: 14px;">jvm</a> <a href="/tags/k8s/" style="font-size: 14px;">k8s</a> <a href="/tags/linux/" style="font-size: 14px;">linux</a> <a href="/tags/redis/" style="font-size: 14px;">redis</a> <a href="/tags/tcp/" style="font-size: 14px;">tcp</a> <a href="/tags/zookeeper/" style="font-size: 14px;">zookeeper</a>
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#01-基础架构：一条SQL查询语句是如何执行的？"><span class="toc-number">1.</span> <span class="toc-text">01 | 基础架构：一条SQL查询语句是如何执行的？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#02-日志系统：一条SQL更新语句是如何执行的？"><span class="toc-number">2.</span> <span class="toc-text">02 | 日志系统：一条SQL更新语句是如何执行的？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#redo-log"><span class="toc-number">2.1.</span> <span class="toc-text">redo log</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#binlog（归档日志）"><span class="toc-number">2.2.</span> <span class="toc-text">binlog（归档日志）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#不同点"><span class="toc-number">2.2.1.</span> <span class="toc-text">不同点:</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#03-事务隔离：为什么你改了我还看不见？"><span class="toc-number">3.</span> <span class="toc-text">03 | 事务隔离：为什么你改了我还看不见？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#回滚段"><span class="toc-number">3.1.</span> <span class="toc-text">回滚段</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#事务隔离的实现"><span class="toc-number">4.</span> <span class="toc-text">事务隔离的实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#04-深入浅出索引（上）"><span class="toc-number">5.</span> <span class="toc-text">04 | 深入浅出索引（上）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#索引的常见模型"><span class="toc-number">5.1.</span> <span class="toc-text">索引的常见模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#InnoDB-的索引模型"><span class="toc-number">5.2.</span> <span class="toc-text">InnoDB 的索引模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#索引维护"><span class="toc-number">5.3.</span> <span class="toc-text">索引维护</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#索引重建"><span class="toc-number">5.4.</span> <span class="toc-text">索引重建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#05-深入浅出索引（下）"><span class="toc-number">5.5.</span> <span class="toc-text">05 | 深入浅出索引（下）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#覆盖索引"><span class="toc-number">5.6.</span> <span class="toc-text">覆盖索引</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#最左前缀原则"><span class="toc-number">5.7.</span> <span class="toc-text">最左前缀原则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#索引下推"><span class="toc-number">5.8.</span> <span class="toc-text">索引下推</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#06-全局锁和表锁-：给表加个字段怎么有这么多阻碍？"><span class="toc-number">6.</span> <span class="toc-text">06 | 全局锁和表锁 ：给表加个字段怎么有这么多阻碍？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#全局锁"><span class="toc-number">6.1.</span> <span class="toc-text">全局锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#表级锁"><span class="toc-number">6.2.</span> <span class="toc-text">表级锁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#07-行锁功过：怎么减少行锁对性能的影响？"><span class="toc-number">7.</span> <span class="toc-text">07 | 行锁功过：怎么减少行锁对性能的影响？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#行锁"><span class="toc-number">7.1.</span> <span class="toc-text">行锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#两阶段锁"><span class="toc-number">7.2.</span> <span class="toc-text">两阶段锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#死锁和死锁检测"><span class="toc-number">7.3.</span> <span class="toc-text">死锁和死锁检测</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#解决方案："><span class="toc-number">7.3.1.</span> <span class="toc-text">解决方案：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#08-事务到底是隔离的还是不隔离的？"><span class="toc-number">8.</span> <span class="toc-text">08 | 事务到底是隔离的还是不隔离的？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#快照”在-MVCC-里是怎么工作的？"><span class="toc-number">8.1.</span> <span class="toc-text">快照”在 MVCC 里是怎么工作的？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#快照实现"><span class="toc-number">8.2.</span> <span class="toc-text">快照实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#14-count-这么慢，我该怎么办？"><span class="toc-number">9.</span> <span class="toc-text">14 | count(*)这么慢，我该怎么办？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#count-的实现方式"><span class="toc-number">9.1.</span> <span class="toc-text">count(*) 的实现方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#不同的-count-用法"><span class="toc-number">9.2.</span> <span class="toc-text">不同的 count 用法</span></a></li></ol></li></ol>
+          </div>
+      </div>
     </div>
-  </div>
 
   
     
-  <div class="widget-wrap">
-    <h3 class="widget-title recent-posts">最新文章</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2021/02/26/spring/springmvc long polling实战/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2021/02/26/MySQL实战45讲/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2021/02/18/Java类加载/">Java类加载</a>
-          </li>
-        
-          <li>
-            <a href="/2019/07/15/java/java-nio/">java-nio-server</a>
-          </li>
-        
-          <li>
-            <a href="/2019/07/12/redis/redis-info信息/">redis info信息</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
 
   
     
-  <div class="widget-wrap">
-    <h3 class="widget-title archive">归档</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">10</span></li></ul>
-    </div>
-  </div>
-
+  
+    
+  
+    
 
   
     
   
     <!--微信公众号二维码-->
-
-  <div class="widget-wrap">
-    <h3 class="follow-title ">WeChat</h3>
-<!--    <div class="widget wechat-widget">
-        <img src="http://blog.giscafer.com/static/images/qrcode_giscafer.jpg" alt="扫码关注" width="250"/>
-    </div>
- --> </div>
 
 
   
