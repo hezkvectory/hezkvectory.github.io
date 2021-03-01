@@ -60,6 +60,59 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-leetcode/lru" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/03/01/leetcode/lru/" class="article-date">
+  <time datetime="2021-03-01T10:45:02.000Z" itemprop="datePublished">2021-03-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/03/01/leetcode/lru/">146、LRU 缓存机制</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>运用你所掌握的数据结构，设计和实现一个  LRU (最近最少使用) 缓存机制 。</p>
+<p>实现 LRUCache 类：</p>
+<p>​        LRUCache(int capacity) 以正整数作为容量 capacity 初始化 LRU 缓存<br>​        int get(int key) 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 。<br>​        void put(int key, int value) 如果关键字已经存在，则变更其数据值；如果关键字不存在，则插入该组「关键字-值」。</p>
+<p>当缓存容量达到上限时，它应该在写入新数据之前删除最久未使用的数据值，从而为新的数据值留出空间。</p>
+<p>进阶：你是否可以在 O(1) 时间复杂度内完成这两种操作？</p>
+<p>1、借助LinkedHashMap实现lru算法，只需要实现removeEldestEntry方法即可</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span> </span>&#123;</span><br><span class="line">         <span class="keyword">private</span> Map&lt;Integer, Integer&gt; cache;</span><br><span class="line">         <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> max;</span><br><span class="line"></span><br><span class="line">         <span class="function"><span class="keyword">public</span> <span class="title">LRUCache</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">             max = capacity;</span><br><span class="line">             cache = <span class="keyword">new</span> es&lt;Integer, Integer&gt;(capacity, <span class="number">1.0f</span>, <span class="keyword">true</span>) &#123;</span><br><span class="line">                 <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">removeEldestEntry</span><span class="params">(Map.Entry eldest)</span> </span>&#123;</span><br><span class="line">                     <span class="keyword">return</span> cache.size() &gt; max;</span><br><span class="line">                 &#125;</span><br><span class="line">             &#125;;</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">             <span class="keyword">return</span> cache.getOrDefault(key, -<span class="number">1</span>);</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">             cache.put(key, value);</span><br><span class="line">         &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>2、自己基于链表+map实现lru</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">            <span class="keyword">int</span> key;</span><br><span class="line">            <span class="keyword">int</span> value;</span><br><span class="line"></span><br><span class="line">            LRUCache.Node prev;</span><br><span class="line">            LRUCache.Node next;</span><br><span class="line"></span><br><span class="line">            Node(<span class="keyword">int</span> k, <span class="keyword">int</span> v) &#123;</span><br><span class="line">                <span class="keyword">this</span>.key = k;</span><br><span class="line">                <span class="keyword">this</span>.value = v;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            Node() &#123;</span><br><span class="line">                <span class="keyword">this</span>.key = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">this</span>.value = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> capacity;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> count;</span><br><span class="line">        <span class="keyword">private</span> LRUCache.Node head;</span><br><span class="line">        <span class="keyword">private</span> LRUCache.Node tail;</span><br><span class="line">        <span class="keyword">private</span> Map&lt;Integer, LRUCache.Node&gt; map;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">LRUCache</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.capacity = capacity;</span><br><span class="line">            <span class="keyword">this</span>.count = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">this</span>.map = <span class="keyword">new</span> HashMap();</span><br><span class="line">            head = <span class="keyword">new</span> LRUCache.Node();</span><br><span class="line">            tail = <span class="keyword">new</span> LRUCache.Node();</span><br><span class="line">            head.next = tail;</span><br><span class="line">            tail.prev = head;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">            LRUCache.Node node = map.get(key);</span><br><span class="line">            <span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                remove(node);</span><br><span class="line">                add(node);</span><br><span class="line">                <span class="keyword">return</span> node.value;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">            LRUCache.Node node = map.get(key);</span><br><span class="line">            <span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</span><br><span class="line">                node = <span class="keyword">new</span> LRUCache.Node(key, value);</span><br><span class="line">                map.put(key, node);</span><br><span class="line">                add(node);</span><br><span class="line">                count++;</span><br><span class="line">                <span class="keyword">if</span> (count &gt; capacity) &#123;</span><br><span class="line">                    LRUCache.Node toDelete = tail.prev;</span><br><span class="line">                    map.remove(toDelete.key);</span><br><span class="line">                    remove(toDelete);</span><br><span class="line">                    count--;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                remove(node);</span><br><span class="line">                node.value = value;</span><br><span class="line">                add(node);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(LRUCache.Node node)</span> </span>&#123;</span><br><span class="line">            LRUCache.Node next = node.next;</span><br><span class="line">            LRUCache.Node prev = node.prev;</span><br><span class="line">            prev.next = next;</span><br><span class="line">            next.prev = prev;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(LRUCache.Node node)</span> </span>&#123;</span><br><span class="line">            LRUCache.Node next = head.next;</span><br><span class="line">            head.next = node;</span><br><span class="line">            node.next = next;</span><br><span class="line">            node.prev = head;</span><br><span class="line">            next.prev = node;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/2021/03/01/leetcode/lru/" data-id="cklqgof0o000a7l9btalasz0v" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-leetcode/买卖股票的最佳时机I、II、III、IV、含手续费、含冷冻期 -- 动态规划" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2021/03/01/leetcode/买卖股票的最佳时机I、II、III、IV、含手续费、含冷冻期 -- 动态规划/" class="article-date">
@@ -126,7 +179,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2021/03/01/leetcode/买卖股票的最佳时机I、II、III、IV、含手续费、含冷冻期 -- 动态规划/" data-id="cklq77adl000gqd9bbsmfy3mc" class="article-share-link">分享</a>
+      <a data-url="/2021/03/01/leetcode/买卖股票的最佳时机I、II、III、IV、含手续费、含冷冻期 -- 动态规划/" data-id="cklqgof0l00077l9bbrdetknr" class="article-share-link">分享</a>
       
       
       
@@ -241,100 +294,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2021/02/26/java/synchronized/synchronized/" data-id="cklq77ae5000zqd9bjl9wn5vs" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/面试/">面试</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-技术栈" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2021/02/26/技术栈/" class="article-date">
-  <time datetime="2021-02-26T06:18:00.000Z" itemprop="datePublished">2021-02-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/02/26/技术栈/">java技术</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <!-- Table of Contents -->
-        
-        <h3 id="Java技术"><a href="#Java技术" class="headerlink" title="Java技术"></a>Java技术</h3><ol>
-<li><p>java</p>
-</li>
-<li><p>spring、springboot、springcloud</p>
-<ol>
-<li>eureka</li>
-<li>open-feign</li>
-<li>sleuth、zipkin</li>
-<li>智能路由</li>
-</ol>
-</li>
-<li><p>mybatis、sharing-jdbc</p>
-</li>
-<li><p>hystrix、sentinel</p>
-</li>
-<li><p>arthas、jconsole、profile</p>
-</li>
-<li><p>Redis</p>
-</li>
-<li><p>mysql</p>
-</li>
-<li><p>dubbo、motan</p>
-</li>
-<li><p>xxl-job、quartz</p>
-</li>
-<li><p>rocketmq、kafka</p>
-</li>
-<li><p>netty、nio、t-io</p>
-</li>
-<li><p>skywalking、zipkin、cat</p>
-</li>
-<li><p>apollo、nacos</p>
-</li>
-<li><p>zookeeper、etcd</p>
-</li>
-<li><p>nginx</p>
-</li>
-<li><p>prometheus、grafana</p>
-</li>
-<li><p>数据结构和算法-leetcode</p>
-</li>
-<li><p>elk</p>
-<ol>
-<li>elasticsearch</li>
-<li>logstash、filebeat、flume</li>
-<li>kibana</li>
-</ol>
-</li>
-<li><p>kubernetes</p>
-</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="/2021/02/26/技术栈/" data-id="cklq77ac20003qd9bbv2zjdhd" class="article-share-link">分享</a>
+      <a data-url="/2021/02/26/java/synchronized/synchronized/" data-id="cklqgof1n00127l9b82ctpnwt" class="article-share-link">分享</a>
       
       
       
@@ -386,7 +346,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title tagcloud">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/java/" style="font-size: 25px;">java</a> <a href="/tags/jvm/" style="font-size: 14px;">jvm</a> <a href="/tags/k8s/" style="font-size: 14px;">k8s</a> <a href="/tags/redis/" style="font-size: 14px;">redis</a> <a href="/tags/tcp/" style="font-size: 14px;">tcp</a> <a href="/tags/zookeeper/" style="font-size: 14px;">zookeeper</a> <a href="/tags/数据结构与算法/" style="font-size: 14px;">数据结构与算法</a> <a href="/tags/面试/" style="font-size: 25px;">面试</a>
+      <a href="/tags/http/" style="font-size: 14px;">http</a> <a href="/tags/java/" style="font-size: 25px;">java</a> <a href="/tags/jvm/" style="font-size: 14px;">jvm</a> <a href="/tags/k8s/" style="font-size: 14px;">k8s</a> <a href="/tags/redis/" style="font-size: 14px;">redis</a> <a href="/tags/tcp/" style="font-size: 14px;">tcp</a> <a href="/tags/zookeeper/" style="font-size: 14px;">zookeeper</a> <a href="/tags/数据结构与算法/" style="font-size: 25px;">数据结构与算法</a> <a href="/tags/面试/" style="font-size: 25px;">面试</a>
     </div>
   </div>
 
@@ -396,6 +356,10 @@
     <h3 class="widget-title recent-posts">最新文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2021/03/01/leetcode/lru/">146、LRU 缓存机制</a>
+          </li>
         
           <li>
             <a href="/2021/03/01/leetcode/买卖股票的最佳时机I、II、III、IV、含手续费、含冷冻期 -- 动态规划/">买卖股票的最佳时机I、II、III、IV、含手续费、含冷冻期 -- 动态规划</a>
@@ -410,11 +374,7 @@
           </li>
         
           <li>
-            <a href="/2021/02/26/spring/spring常用类、方法/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2021/02/26/spring/springmvc long polling实战/">(no title)</a>
+            <a href="/2021/02/26/shell/url数据检测脚本/">(no title)</a>
           </li>
         
       </ul>
@@ -426,7 +386,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title archive">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">8</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">8</span></li></ul>
     </div>
   </div>
 

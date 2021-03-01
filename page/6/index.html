@@ -60,6 +60,115 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-zookeeper/zookeeper_expiryQueue" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/07/11/zookeeper/zookeeper_expiryQueue/" class="article-date">
+  <time datetime="2019-07-11T04:28:35.000Z" itemprop="datePublished">2019-07-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/07/11/zookeeper/zookeeper_expiryQueue/">zookeeper之ExpiryQueue</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>zookeeper之ExpiryQueue</p>
+<pre><code>ExpiryQueue是在SessionTrackerImpl中使用的，主要是维护zk中session的队列
+了解ExpiryQueue的实现
+
+//ExpiryQueue&lt;SessionImpl&gt; sessionExpiryQueue;
+
+//elemMap保存的是SessionImpl--&gt;过期时间
+private final ConcurrentHashMap&lt;E, Long&gt; elemMap = new ConcurrentHashMap&lt;E, Long&gt;();
+
+//expiryMap保存的是 过期时间--&gt;SessionImpl集合
+private final ConcurrentHashMap&lt;Long, Set&lt;E&gt;&gt; expiryMap = new ConcurrentHashMap&lt;Long, Set&lt;E&gt;&gt;();
+
+****elemMap和expiryMap是利用空间换时间，方便根据SessionImpl 和 过期时间相互查找****</code></pre><p>ExpiryQueue的remove方法</p>
+<pre><code>ExpiryQueue的实现相当于一个缓存，想起之前面试的一个题目：实现一个缓存fifo,缓存的value可以有过期时间/无过
+期时间，缓存大小一定，当put时，如果缓存满了(达到缓存上线)，优先剔除最近要失效的key-value，如果key都不过
+期，优先剔除最先进来的key，直到能放下新的key-value。这个题可以用ConcurrentHashMap缓存，TreeSet(有序集
+合)过期时间排序，或者二分查找。
+**从这里感觉算法的重要性。时间复杂度、空间复杂度在实际工作中得以应用。**
+
+public Long remove(E elem) {
+     //快速根据SessionImpl获取过期的时间
+    Long expiryTime = elemMap.remove(elem);
+    if (expiryTime != null) {
+        Set&lt;E&gt; set = expiryMap.get(expiryTime);
+        if (set != null) {
+                //从expiryMap中删除
+            set.remove(elem);
+        }
+    }
+    return expiryTime;
+}</code></pre><p>ExpiryQueue的update方法</p>
+<pre><code>public Long update(E elem, int timeout) {
+    Long prevExpiryTime = elemMap.get(elem);
+    long now = Time.currentElapsedTime();
+    Long newExpiryTime = roundToNextInterval(now + timeout);
+
+    if (newExpiryTime.equals(prevExpiryTime)) {
+        // No change, so nothing to update
+        return null;
+    }
+
+    // First add the elem to the new expiry time bucket in expiryMap.
+    Set&lt;E&gt; set = expiryMap.get(newExpiryTime);
+    //**如果elemMap中不存在，放入到elemMap中
+    if (set == null) {
+        // Construct a ConcurrentHashSet using a ConcurrentHashMap
+        set = Collections.newSetFromMap(
+            new ConcurrentHashMap&lt;E, Boolean&gt;());
+        // Put the new set in the map, but only if another thread
+        // hasn&apos;t beaten us to it
+        Set&lt;E&gt; existingSet = expiryMap.putIfAbsent(newExpiryTime, set);
+        if (existingSet != null) {
+            set = existingSet;
+        }
+    }
+    set.add(elem);
+
+    // Map the elem to the new expiry time. If a different previous
+    // mapping was present, clean up the previous expiry bucket.
+    prevExpiryTime = elemMap.put(elem, newExpiryTime);
+    if (prevExpiryTime != null &amp;&amp; !newExpiryTime.equals(prevExpiryTime)) {
+        Set&lt;E&gt; prevSet = expiryMap.get(prevExpiryTime);
+        if (prevSet != null) {
+            prevSet.remove(elem);
+        }
+    }
+    return newExpiryTime;
+}</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/2019/07/11/zookeeper/zookeeper_expiryQueue/" data-id="cklqgof0x000q7l9bmrce126i" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-java/jvm指令" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/07/11/java/jvm指令/" class="article-date">
@@ -79,7 +188,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2019/07/11/java/jvm指令/" data-id="cklq77adj000cqd9b5j8kcv0l" class="article-share-link">分享</a>
+      <a data-url="/2019/07/11/java/jvm指令/" data-id="cklqgof0v000m7l9b4v6wsmye" class="article-share-link">分享</a>
       
       
       
@@ -120,6 +229,10 @@
       <ul>
         
           <li>
+            <a href="/2021/03/01/leetcode/lru/">146、LRU 缓存机制</a>
+          </li>
+        
+          <li>
             <a href="/2021/03/01/leetcode/买卖股票的最佳时机I、II、III、IV、含手续费、含冷冻期 -- 动态规划/">买卖股票的最佳时机I、II、III、IV、含手续费、含冷冻期 -- 动态规划</a>
           </li>
         
@@ -132,11 +245,7 @@
           </li>
         
           <li>
-            <a href="/2021/02/26/spring/spring常用类、方法/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2021/02/26/spring/springmvc long polling实战/">(no title)</a>
+            <a href="/2021/02/26/shell/url数据检测脚本/">(no title)</a>
           </li>
         
       </ul>
