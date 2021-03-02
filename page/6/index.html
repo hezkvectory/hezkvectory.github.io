@@ -60,6 +60,994 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-java/java-nio" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/07/15/java/java-nio/" class="article-date">
+  <time datetime="2019-07-15T06:49:35.000Z" itemprop="datePublished">2019-07-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/07/15/java/java-nio/">java-nio-server</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p>之前对Java nio的了解局限于简答的socket数据传输，对tcp沾包、拆包有一些简单的了解，但是没有深入的研究。后来<br>简单的了解了一些tcp知识，例如：tcp滑动窗口。</p>
+<p>最近粗略的看了一下zookeeper的源码，了解了zookeeper的底层实现，比如zk节点保存结构是使用的DataTree,临时节点使用的是Map&lt;String sessionId,Set<string path>&gt;进行保存的，使用ExpireQueue进行更行节点的过期时间（sessionId过期）。</string></p>
+<p>zk中实现了基于java nio和netty两种socket编程，本文根据zk Java nio实现socket服务端编程。测试时，客户端使用的是telnet进来连接。</p>
+<p>java nio中比较核心的几个类:</p>
+<pre><code>java.nio.channels.ServerSocketChannel
+java.nio.channels.SocketChannel
+java.nio.channels.SelectionKey
+java.nio.channels.Selector</code></pre><p>以下是核心代码，相关引用代码请clone zookeeper代码进行查看学习</p>
+<pre><code>package server;
+
+import common.ExpiryQueue;
+import common.WorkerService;
+import common.ZooKeeperThread;
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketException;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingQueue;
+
+/**
+ * Created by hezhengkui on 2019/7/15.
+ */
+@Slf4j
+public class NioServerFactory {
+        protected final Set&lt;NIOServerCnxn&gt; cnxns = Collections.newSetFromMap(new ConcurrentHashMap&lt;NIOServerCnxn, Boolean&gt;());
+        protected int maxClientCnxns = 60;
+        private volatile boolean stopped = true;
+        private AcceptThread acceptThread;
+        private ConnectionExpirerThread expirerThread;
+        private final ConcurrentHashMap&lt;InetAddress, Set&lt;NIOServerCnxn&gt;&gt; ipMap = new ConcurrentHashMap&lt;InetAddress, Set&lt;NIOServerCnxn&gt;&gt;();
+        private ExpiryQueue&lt;NIOServerCnxn&gt; cnxnExpiryQueue;
+        private final Set&lt;SelectorThread&gt; selectorThreads = new HashSet&lt;SelectorThread&gt;();
+        protected WorkerService workerPool;
+        final ConcurrentHashMap&lt;Long, NIOServerCnxn&gt; sessionMap = new ConcurrentHashMap&lt;Long, NIOServerCnxn&gt;();
+        private int numSelectorThreads;
+        private int numWorkerThreads;
+        private long workerShutdownTimeoutMS;
+        public static final String ZOOKEEPER_NIO_NUM_SELECTOR_THREADS = &quot;zookeeper.nio.numSelectorThreads&quot;;
+        public static final String ZOOKEEPER_NIO_NUM_WORKER_THREADS = &quot;zookeeper.nio.numWorkerThreads&quot;;
+        /**
+         * Default worker pool shutdown timeout in ms: 5000 (5s)
+         */
+        public static final String ZOOKEEPER_NIO_SHUTDOWN_TIMEOUT = &quot;zookeeper.nio.shutdownTimeout&quot;;
+
+    static {
+        try {
+            Selector.open().close();
+        } catch (IOException ie) {
+            log.error(&quot;Selector failed to open&quot;, ie);
+        }
+    }
+
+    private abstract class AbstractSelectThread extends ZooKeeperThread {
+        protected final Selector selector;
+
+        public AbstractSelectThread(String name) throws IOException {
+            super(name);
+            // Allows the JVM to shutdown even if this thread is still running.
+            setDaemon(true);
+            this.selector = Selector.open();
+        }
+
+        public void wakeupSelector() {
+            selector.wakeup();
+        }
+
+        /**
+         * Close the selector. This should be called when the thread is about to
+         * exit and no operation is going to be performed on the Selector or
+         * SelectionKey
+         */
+        protected void closeSelector() {
+            try {
+                selector.close();
+            } catch (IOException e) {
+                log.warn(&quot;ignored exception during selector close &quot;
+                        + e.getMessage());
+            }
+        }
+
+        protected void cleanupSelectionKey(SelectionKey key) {
+            if (key != null) {
+                try {
+                    key.cancel();
+                } catch (Exception ex) {
+                    if (log.isDebugEnabled()) {
+                        log.debug(&quot;ignoring exception during selectionkey cancel&quot;, ex);
+                    }
+                }
+            }
+        }
+
+        protected void fastCloseSock(SocketChannel sc) {
+            if (sc != null) {
+                try {
+                    // Hard close immediately, discarding buffers
+                    sc.socket().setSoLinger(true, 0);
+                } catch (SocketException e) {
+                    log.warn(&quot;Unable to set socket linger to 0, socket close&quot;
+                            + &quot; may stall in CLOSE_WAIT&quot;, e);
+                }
+                closeSock(sc);
+            }
+        }
+    }
+
+
+    public static void closeSock(SocketChannel sock) {
+        if (sock.isOpen() == false) {
+            return;
+        }
+
+        try {
+            /*
+             * The following sequence of code is stupid! You would think that
+             * only sock.close() is needed, but alas, it doesn&apos;t work that way.
+             * If you just do sock.close() there are cases where the socket
+             * doesn&apos;t actually close...
+             */
+            sock.socket().shutdownOutput();
+        } catch (IOException e) {
+            // This is a relatively common exception that we can&apos;t avoid
+            if (log.isDebugEnabled()) {
+                log.debug(&quot;ignoring exception during output shutdown&quot;, e);
+            }
+        }
+        try {
+            sock.socket().shutdownInput();
+        } catch (IOException e) {
+            // This is a relatively common exception that we can&apos;t avoid
+            if (log.isDebugEnabled()) {
+                log.debug(&quot;ignoring exception during input shutdown&quot;, e);
+            }
+        }
+        try {
+            sock.socket().close();
+        } catch (IOException e) {
+            if (log.isDebugEnabled()) {
+                log.debug(&quot;ignoring exception during socket close&quot;, e);
+            }
+        }
+        try {
+            sock.close();
+        } catch (IOException e) {
+            if (log.isDebugEnabled()) {
+                log.debug(&quot;ignoring exception during socketchannel close&quot;, e);
+            }
+        }
+    }
+
+
+    private class AcceptThread extends AbstractSelectThread {
+        private final ServerSocketChannel acceptSocket;
+        private final SelectionKey acceptKey;
+        private final Collection&lt;SelectorThread&gt; selectorThreads;
+        private Iterator&lt;SelectorThread&gt; selectorIterator;
+        private volatile boolean reconfiguring = false;
+
+        public AcceptThread(ServerSocketChannel ss, InetSocketAddress addr,
+                            Set&lt;SelectorThread&gt; selectorThreads) throws IOException {
+            super(&quot;NIOServerCxnFactory.AcceptThread:&quot; + addr);
+            this.acceptSocket = ss;
+            this.acceptKey = acceptSocket.register(selector, SelectionKey.OP_ACCEPT);
+            this.selectorThreads = Collections.unmodifiableList(new ArrayList&lt;SelectorThread&gt;(selectorThreads));
+            selectorIterator = this.selectorThreads.iterator();
+        }
+
+        public void run() {
+            try {
+                while (!stopped &amp;&amp; !acceptSocket.socket().isClosed()) {
+                    try {
+                        select();
+                    } catch (RuntimeException e) {
+                        log.warn(&quot;Ignoring unexpected runtime exception&quot;, e);
+                    } catch (Exception e) {
+                        log.warn(&quot;Ignoring unexpected exception&quot;, e);
+                    }
+                }
+            } finally {
+                closeSelector();
+                // This will wake up the selector threads, and tell the
+                // worker thread pool to begin shutdown.
+                if (!reconfiguring) {
+                    NioServerFactory.this.stop();
+                }
+                log.info(&quot;accept thread exitted run method&quot;);
+            }
+        }
+
+        public void setReconfiguring() {
+            reconfiguring = true;
+        }
+
+        private void select() {
+            try {
+                int select = selector.select();
+
+                Iterator&lt;SelectionKey&gt; selectedKeys = selector.selectedKeys().iterator();
+                while (!stopped &amp;&amp; selectedKeys.hasNext()) {
+                    SelectionKey key = selectedKeys.next();
+                    selectedKeys.remove();
+
+                    if (!key.isValid()) {
+                        continue;
+                    }
+                    if (key.isAcceptable()) {
+                        if (!doAccept()) {
+                            // If unable to pull a new connection off the accept
+                            // queue, pause accepting to give us time to free
+                            // up file descriptors and so the accept thread
+                            // doesn&apos;t spin in a tight loop.
+                            pauseAccept(10);
+                        }
+                    } else {
+                        log.warn(&quot;Unexpected ops in accept select &quot;
+                                + key.readyOps());
+                    }
+                }
+            } catch (IOException e) {
+                log.warn(&quot;Ignoring IOException while selecting&quot;, e);
+            }
+        }
+
+        /**
+         * Mask off the listen socket interest ops and use select() to sleep
+         * so that other threads can wake us up by calling wakeup() on the
+         * selector.
+         */
+        private void pauseAccept(long millisecs) {
+            acceptKey.interestOps(0);
+            try {
+                selector.select(millisecs);
+            } catch (IOException e) {
+                // ignore
+            } finally {
+                acceptKey.interestOps(SelectionKey.OP_ACCEPT);
+            }
+        }
+
+        /**
+         * Accept new socket connections. Enforces maximum number of connections
+         * per client IP address. Round-robin assigns to selector thread for
+         * handling. Returns whether pulled a connection off the accept queue
+         * or not. If encounters an error attempts to fast close the socket.
+         *
+         * @return whether was able to accept a connection or not
+         */
+        private boolean doAccept() {
+            boolean accepted = false;
+            SocketChannel sc = null;
+            try {
+                sc = acceptSocket.accept();
+                accepted = true;
+                InetAddress ia = sc.socket().getInetAddress();
+                int cnxncount = getClientCnxnCount(ia);
+
+                if (maxClientCnxns &gt; 0 &amp;&amp; cnxncount &gt;= maxClientCnxns) {
+                    throw new IOException(&quot;Too many connections from &quot; + ia
+                            + &quot; - max is &quot; + maxClientCnxns);
+                }
+
+                log.debug(&quot;Accepted socket connection from &quot;
+                        + sc.socket().getRemoteSocketAddress());
+                sc.configureBlocking(false);
+
+                // Round-robin assign this connection to a selector thread
+                if (!selectorIterator.hasNext()) {
+                    selectorIterator = selectorThreads.iterator();
+                }
+                SelectorThread selectorThread = selectorIterator.next();
+                //交给selector 线程执行
+                if (!selectorThread.addAcceptedConnection(sc)) {
+                    throw new IOException(
+                            &quot;Unable to add connection to selector queue&quot;
+                                    + (stopped ? &quot; (shutdown in progress)&quot; : &quot;&quot;));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                // accept, maxClientCnxns, configureBlocking
+                fastCloseSock(sc);
+            }
+            return accepted;
+        }
+    }
+
+    ServerSocketChannel ss;
+
+    public void stop() {
+        stopped = true;
+
+        // Stop queuing connection attempts
+        try {
+            ss.close();
+        } catch (IOException e) {
+            log.warn(&quot;Error closing listen socket&quot;, e);
+        }
+
+        if (acceptThread != null) {
+            if (acceptThread.isAlive()) {
+                acceptThread.wakeupSelector();
+            } else {
+                acceptThread.closeSelector();
+            }
+        }
+        if (expirerThread != null) {
+            expirerThread.interrupt();
+        }
+        for (SelectorThread thread : selectorThreads) {
+            if (thread.isAlive()) {
+                thread.wakeupSelector();
+            } else {
+                thread.closeSelector();
+            }
+        }
+        if (workerPool != null) {
+            workerPool.stop();
+        }
+    }
+
+
+    class SelectorThread extends AbstractSelectThread {
+        private final int id;
+        private final Queue&lt;SocketChannel&gt; acceptedQueue;
+        private final Queue&lt;SelectionKey&gt; updateQueue;
+
+        public SelectorThread(int id) throws IOException {
+            super(&quot;NIOServerCxnFactory.SelectorThread-&quot; + id);
+            this.id = id;
+            acceptedQueue = new LinkedBlockingQueue&lt;SocketChannel&gt;();
+            updateQueue = new LinkedBlockingQueue&lt;SelectionKey&gt;();
+        }
+
+        /**
+         * Place new accepted connection onto a queue for adding. Do this
+         * so only the selector thread modifies what keys are registered
+         * with the selector.
+         */
+        public boolean addAcceptedConnection(SocketChannel accepted) {
+            if (stopped || !acceptedQueue.offer(accepted)) {
+                return false;
+            }
+            wakeupSelector();
+            return true;
+        }
+
+        /**
+         * Place interest op update requests onto a queue so that only the
+         * selector thread modifies interest ops, because interest ops
+         * reads/sets are potentially blocking operations if other select
+         * operations are happening.
+         */
+        public boolean addInterestOpsUpdateRequest(SelectionKey sk) {
+            if (stopped || !updateQueue.offer(sk)) {
+                return false;
+            }
+            wakeupSelector();
+            return true;
+        }
+
+        /**
+         * The main loop for the thread selects() on the connections and
+         * dispatches ready I/O work requests, then registers all pending
+         * newly accepted connections and updates any interest ops on the
+         * queue.
+         */
+        public void run() {
+            try {
+                while (!stopped) {
+                    try {
+                        //accept事件第一次select()方法不会有任何事件触发，通过seletor.wakeUp（）唤起，
+                        select();
+                        //这个方法会触发registor(SelectorKey.OP_READ)事件
+                        processAcceptedConnections();
+                        processInterestOpsUpdateRequests();
+                    } catch (RuntimeException e) {
+                        log.warn(&quot;Ignoring unexpected runtime exception&quot;, e);
+                    } catch (Exception e) {
+                        log.warn(&quot;Ignoring unexpected exception&quot;, e);
+                    }
+                }
+
+                // Close connections still pending on the selector. Any others
+                // with in-flight work, let drain out of the work queue.
+                for (SelectionKey key : selector.keys()) {
+                    NIOServerCnxn cnxn = (NIOServerCnxn) key.attachment();
+                    if (cnxn.isSelectable()) {
+                        cnxn.close(NIOServerCnxn.DisconnectReason.SERVER_SHUTDOWN);
+                    }
+                    cleanupSelectionKey(key);
+                }
+                SocketChannel accepted;
+                while ((accepted = acceptedQueue.poll()) != null) {
+                    fastCloseSock(accepted);
+                }
+                updateQueue.clear();
+            } finally {
+                closeSelector();
+                // This will wake up the accept thread and the other selector
+                // threads, and tell the worker thread pool to begin shutdown.
+                NioServerFactory.this.stop();
+                log.info(&quot;selector thread exitted run method&quot;);
+            }
+        }
+
+        private void select() {
+            try {
+                //selector.wakeUp()方法会唤起select()方法执行
+                //registor()方法同样能唤起select()方法执行
+                int select = selector.select();
+
+                Set&lt;SelectionKey&gt; selected = selector.selectedKeys();
+                ArrayList&lt;SelectionKey&gt; selectedList = new ArrayList&lt;SelectionKey&gt;(selected);
+                Collections.shuffle(selectedList);
+                Iterator&lt;SelectionKey&gt; selectedKeys = selectedList.iterator();
+                while (!stopped &amp;&amp; selectedKeys.hasNext()) {
+                    SelectionKey key = selectedKeys.next();
+                    selected.remove(key);
+
+                    if (!key.isValid()) {
+                        cleanupSelectionKey(key);
+                        continue;
+                    }
+                    if (key.isReadable() || key.isWritable()) {
+                        handleIO(key);
+                    } else {
+                        log.warn(&quot;Unexpected ops in select &quot; + key.readyOps());
+                    }
+                }
+            } catch (IOException e) {
+                log.warn(&quot;Ignoring IOException while selecting&quot;, e);
+            }
+        }
+
+        /**
+         * Schedule I/O for processing on the connection associated with
+         * the given SelectionKey. If a worker thread pool is not being used,
+         * I/O is run directly by this thread.
+         */
+        private void handleIO(SelectionKey key) {
+            IOWorkRequest workRequest = new IOWorkRequest(this, key);
+            NIOServerCnxn cnxn = (NIOServerCnxn) key.attachment();
+
+            // Stop selecting this key while processing on its
+            // connection
+            cnxn.disableSelectable();
+            key.interestOps(0);
+            touchCnxn(cnxn);
+            workerPool.schedule(workRequest);
+        }
+
+        /**
+         * Iterate over the queue of accepted connections that have been
+         * assigned to this thread but not yet placed on the selector.
+         */
+        private void processAcceptedConnections() {
+            SocketChannel accepted;
+            while (!stopped &amp;&amp; (accepted = acceptedQueue.poll()) != null) {
+                SelectionKey key = null;
+                try {
+                    key = accepted.register(selector, SelectionKey.OP_READ);
+                    NIOServerCnxn cnxn = createConnection(accepted, key, this);
+                    key.attach(cnxn);
+                    addCnxn(cnxn);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    // register, createConnection
+                    cleanupSelectionKey(key);
+                    fastCloseSock(accepted);
+                }
+            }
+        }
+
+        /**
+         * Iterate over the queue of connections ready to resume selection,
+         * and restore their interest ops selection mask.
+         */
+        private void processInterestOpsUpdateRequests() {
+            SelectionKey key;
+            while (!stopped &amp;&amp; (key = updateQueue.poll()) != null) {
+                if (!key.isValid()) {
+                    cleanupSelectionKey(key);
+                }
+                NIOServerCnxn cnxn = (NIOServerCnxn) key.attachment();
+                if (cnxn.isSelectable()) {
+                    key.interestOps(cnxn.getInterestOps());
+                }
+            }
+        }
+    }
+
+
+    private void addCnxn(NIOServerCnxn cnxn) throws IOException {
+        InetAddress addr = cnxn.getSocketAddress();
+        if (addr == null) {
+            throw new IOException(&quot;Socket of &quot; + cnxn + &quot; has been closed&quot;);
+        }
+        Set&lt;NIOServerCnxn&gt; set = ipMap.get(addr);
+        if (set == null) {
+            // in general we will see 1 connection from each
+            // host, setting the initial cap to 2 allows us
+            // to minimize mem usage in the common case
+            // of 1 entry --  we need to set the initial cap
+            // to 2 to avoid rehash when the first entry is added
+            // Construct a ConcurrentHashSet using a ConcurrentHashMap
+            set = Collections.newSetFromMap(
+                    new ConcurrentHashMap&lt;NIOServerCnxn, Boolean&gt;(2));
+            // Put the new set in the map, but only if another thread
+            // hasn&apos;t beaten us to it
+            Set&lt;NIOServerCnxn&gt; existingSet = ipMap.putIfAbsent(addr, set);
+            if (existingSet != null) {
+                set = existingSet;
+            }
+        }
+        set.add(cnxn);
+
+        cnxns.add(cnxn);
+        touchCnxn(cnxn);
+    }
+
+    public void touchCnxn(NIOServerCnxn cnxn) {
+        cnxnExpiryQueue.update(cnxn, cnxn.getSessionTimeout());
+    }
+
+    public boolean removeCnxn(NIOServerCnxn cnxn) {
+        // If the connection is not in the master list it&apos;s already been closed
+        if (!cnxns.remove(cnxn)) {
+            return false;
+        }
+        cnxnExpiryQueue.remove(cnxn);
+
+        removeCnxnFromSessionMap(cnxn);
+
+        InetAddress addr = cnxn.getSocketAddress();
+        if (addr != null) {
+            Set&lt;NIOServerCnxn&gt; set = ipMap.get(addr);
+            if (set != null) {
+                set.remove(cnxn);
+                // Note that we make no effort here to remove empty mappings
+                // from ipMap.
+            }
+        }
+
+        return true;
+    }
+
+    protected NIOServerCnxn createConnection(SocketChannel sock,
+                                             SelectionKey sk, SelectorThread selectorThread) throws IOException {
+        return new NIOServerCnxn(sock, sk, this, selectorThread);
+    }
+
+    public void removeCnxnFromSessionMap(NIOServerCnxn cnxn) {
+        long sessionId = cnxn.getSessionId();
+        if (sessionId != 0) {
+            sessionMap.remove(sessionId);
+        }
+    }
+
+    private class ConnectionExpirerThread extends ZooKeeperThread {
+        ConnectionExpirerThread() {
+            super(&quot;ConnnectionExpirer&quot;);
+        }
+
+        public void run() {
+            try {
+                while (!stopped) {
+                    long waitTime = cnxnExpiryQueue.getWaitTime();
+                    if (waitTime &gt; 0) {
+                        Thread.sleep(waitTime);
+                        continue;
+                    }
+                    for (NIOServerCnxn conn : cnxnExpiryQueue.poll()) {
+//                        ServerMetrics.getMetrics().SESSIONLESS_CONNECTIONS_EXPIRED.add(1);
+                        conn.close(NIOServerCnxn.DisconnectReason.CONNECTION_EXPIRED);
+                    }
+                }
+
+            } catch (InterruptedException e) {
+                log.info(&quot;ConnnectionExpirerThread interrupted&quot;);
+            }
+        }
+    }
+
+    private int getClientCnxnCount(InetAddress cl) {
+        Set&lt;NIOServerCnxn&gt; s = ipMap.get(cl);
+        if (s == null) return 0;
+        return s.size();
+    }
+
+
+    private class IOWorkRequest extends WorkerService.WorkRequest {
+        private final SelectorThread selectorThread;
+        private final SelectionKey key;
+        private final NIOServerCnxn cnxn;
+
+        IOWorkRequest(SelectorThread selectorThread, SelectionKey key) {
+            this.selectorThread = selectorThread;
+            this.key = key;
+            this.cnxn = (NIOServerCnxn) key.attachment();
+        }
+
+        public void doWork() throws InterruptedException {
+            if (!key.isValid()) {
+                selectorThread.cleanupSelectionKey(key);
+                return;
+            }
+
+            if (key.isReadable() || key.isWritable()) {
+                cnxn.doIO(key);
+
+                // Check if we shutdown or doIO() closed this connection
+                if (stopped) {
+                    cnxn.close(NIOServerCnxn.DisconnectReason.SERVER_SHUTDOWN);
+                    return;
+                }
+                if (!key.isValid()) {
+                    selectorThread.cleanupSelectionKey(key);
+                    return;
+                }
+                touchCnxn(cnxn);
+            }
+
+            // Mark this connection as once again ready for selection
+            cnxn.enableSelectable();
+            // Push an update request on the queue to resume selecting
+            // on the current set of interest ops, which may have changed
+            // as a result of the I/O operations we just performed.
+            if (!selectorThread.addInterestOpsUpdateRequest(key)) {
+                cnxn.close(NIOServerCnxn.DisconnectReason.CONNECTION_MODE_CHANGED);
+            }
+        }
+
+        @Override
+        public void cleanup() {
+            cnxn.close(NIOServerCnxn.DisconnectReason.CLEAN_UP);
+        }
+    }
+
+    public void configure(InetSocketAddress addr, int maxcc) throws IOException {
+
+        maxClientCnxns = maxcc;
+        cnxnExpiryQueue =
+                new ExpiryQueue&lt;NIOServerCnxn&gt;(10000);
+        expirerThread = new ConnectionExpirerThread();
+
+        int numCores = Runtime.getRuntime().availableProcessors();
+        // 32 cores sweet spot seems to be 4 selector threads
+        numSelectorThreads = Integer.getInteger(
+                ZOOKEEPER_NIO_NUM_SELECTOR_THREADS,
+                Math.max((int) Math.sqrt((float) numCores / 2), 1));
+        if (numSelectorThreads &lt; 1) {
+            throw new IOException(&quot;numSelectorThreads must be at least 1&quot;);
+        }
+
+        numWorkerThreads = Integer.getInteger(
+                ZOOKEEPER_NIO_NUM_WORKER_THREADS, 2 * numCores);
+        workerShutdownTimeoutMS = Long.getLong(
+                ZOOKEEPER_NIO_SHUTDOWN_TIMEOUT, 5000);
+
+        for (int i = 0; i &lt; numSelectorThreads; ++i) {
+            selectorThreads.add(new SelectorThread(i));
+        }
+
+        this.ss = ServerSocketChannel.open();
+        ss.socket().setReuseAddress(true);
+        log.info(&quot;binding to port &quot; + addr);
+        ss.socket().bind(addr);
+
+        ss.configureBlocking(false);
+        acceptThread = new AcceptThread(ss, addr, selectorThreads);
+    }
+
+    public void start() {
+        stopped = false;
+        if (workerPool == null) {
+            workerPool = new WorkerService(
+                    &quot;NIOWorker&quot;, numWorkerThreads, false);
+        }
+        for (SelectorThread thread : selectorThreads) {
+            if (thread.getState() == Thread.State.NEW) {
+                thread.start();
+            }
+        }
+        // ensure thread is started once and only once
+        if (acceptThread.getState() == Thread.State.NEW) {
+            acceptThread.start();
+        }
+        if (expirerThread.getState() == Thread.State.NEW) {
+            expirerThread.start();
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        NioServerFactory factory = new NioServerFactory();
+        InetSocketAddress address = new InetSocketAddress(9999);
+        factory.configure(address, 3);
+        factory.start();
+    }
+}</code></pre><hr>
+<pre><code>package server;
+
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.CancelledKeyException;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.SocketChannel;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+/**
+ * Created by hezhengkui on 2019/7/15.
+ */
+@Slf4j
+public class NIOServerCnxn {
+    private final SelectionKey sk;
+    private final SocketChannel sock;
+    private final NioServerFactory.SelectorThread selectorThread;
+    private final NioServerFactory factory;
+    private final AtomicBoolean selectable = new AtomicBoolean(true);
+    private volatile boolean stale = false;
+    private long sessionId;
+    protected DisconnectReason disconnectReason = DisconnectReason.UNKNOWN;
+
+    private int sessionTimeout = 100000000;
+
+    private final AtomicBoolean throttled = new AtomicBoolean(false);
+
+    private final Queue&lt;ByteBuffer&gt; outgoingBuffers =
+            new LinkedBlockingQueue&lt;ByteBuffer&gt;();
+
+    public NIOServerCnxn(SocketChannel sock, SelectionKey sk, NioServerFactory factory,
+                         NioServerFactory.SelectorThread selectorThread) throws IOException {
+        this.sock = sock;
+        this.sk = sk;
+        this.factory = factory;
+        this.selectorThread = selectorThread;
+        sock.socket().setTcpNoDelay(true);
+        sock.socket().setSoLinger(false, -1);
+        InetAddress addr = ((InetSocketAddress) sock.socket().getRemoteSocketAddress()).getAddress();
+    }
+
+    public void enableSelectable() {
+        selectable.set(true);
+    }
+
+    public boolean isSelectable() {
+        return sk.isValid() &amp;&amp; selectable.get();
+    }
+
+    public void close(DisconnectReason reason) {
+        disconnectReason = reason;
+        close();
+    }
+
+    public InetAddress getSocketAddress() {
+        if (sock.isOpen() == false) {
+            return null;
+        }
+        return sock.socket().getInetAddress();
+    }
+
+    public int getInterestOps() {
+        if (!isSelectable()) {
+            return 0;
+        }
+        int interestOps = 0;
+        if (getReadInterest()) {
+            interestOps |= SelectionKey.OP_READ;
+        }
+        if (getWriteInterest()) {
+            interestOps |= SelectionKey.OP_WRITE;
+        }
+        return interestOps;
+    }
+
+    private boolean getWriteInterest() {
+        return !outgoingBuffers.isEmpty();
+    }
+
+    private boolean getReadInterest() {
+        return !throttled.get();
+    }
+
+    public void setStale() {
+        stale = true;
+    }
+
+    public long getSessionId() {
+        return sessionId;
+    }
+
+    private void close() {
+        setStale();
+        if (!factory.removeCnxn(this)) {
+            return;
+        }
+
+        if (sk != null) {
+            try {
+                // need to cancel this selection key from the selector
+                sk.cancel();
+            } catch (Exception e) {
+                if (log.isDebugEnabled()) {
+                    log.debug(&quot;ignoring exception during selectionkey cancel&quot;, e);
+                }
+            }
+        }
+
+        closeSock();
+    }
+
+    public void disableSelectable() {
+        selectable.set(false);
+    }
+
+    public int getSessionTimeout() {
+        return sessionTimeout;
+    }
+
+
+    private void closeSock() {
+        if (sock.isOpen() == false) {
+            return;
+        }
+
+        log.debug(&quot;Closed socket connection for client &quot;
+                + sock.socket().getRemoteSocketAddress()
+                + (sessionId != 0 ?
+                &quot; which had sessionid 0x&quot; + Long.toHexString(sessionId) :
+                &quot; (no session established for client)&quot;));
+        closeSock(sock);
+    }
+
+
+    public static void closeSock(SocketChannel sock) {
+        if (sock.isOpen() == false) {
+            return;
+        }
+
+        try {
+            /*
+             * The following sequence of code is stupid! You would think that
+             * only sock.close() is needed, but alas, it doesn&apos;t work that way.
+             * If you just do sock.close() there are cases where the socket
+             * doesn&apos;t actually close...
+             */
+            sock.socket().shutdownOutput();
+        } catch (IOException e) {
+            // This is a relatively common exception that we can&apos;t avoid
+            if (log.isDebugEnabled()) {
+                log.debug(&quot;ignoring exception during output shutdown&quot;, e);
+            }
+        }
+        try {
+            sock.socket().shutdownInput();
+        } catch (IOException e) {
+            // This is a relatively common exception that we can&apos;t avoid
+            if (log.isDebugEnabled()) {
+                log.debug(&quot;ignoring exception during input shutdown&quot;, e);
+            }
+        }
+        try {
+            sock.socket().close();
+        } catch (IOException e) {
+            if (log.isDebugEnabled()) {
+                log.debug(&quot;ignoring exception during socket close&quot;, e);
+            }
+        }
+        try {
+            sock.close();
+        } catch (IOException e) {
+            if (log.isDebugEnabled()) {
+                log.debug(&quot;ignoring exception during socketchannel close&quot;, e);
+            }
+        }
+    }
+
+    protected boolean isSocketOpen() {
+        return sock.isOpen();
+    }
+
+
+    /**
+     * 具体的read、write事件在这里处理，进行数据包的拆分
+     * @param k
+     * @throws InterruptedException
+     */
+    void doIO(SelectionKey k) throws InterruptedException {
+        try {
+            if (isSocketOpen() == false) {
+                log.warn(&quot;trying to do i/o on a null socket for session:0x&quot;
+                        + Long.toHexString(sessionId));
+
+                return;
+            }
+            if (k.isReadable()) {//只有客户端发送数据，才会触发这里方法的执行
+                ByteBuffer byteBuffer = ByteBuffer.allocate(10);
+                int rc = sock.read(byteBuffer);
+                byteBuffer.flip();
+                log.debug(&quot;------r--{}, {}, {}&quot;, k.interestOps(), rc, new String(byteBuffer.array()));
+            }
+            if (k.isWritable()) {
+                log.debug(&quot;------w--&quot;, k.interestOps());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (CancelledKeyException e) {
+            e.printStackTrace();
+            log.warn(&quot;CancelledKeyException causing close of session 0x&quot; + Long.toHexString(sessionId));
+            if (log.isDebugEnabled()) {
+                log.debug(&quot;CancelledKeyException stack trace&quot;, e);
+            }
+            close(DisconnectReason.CANCELLED_KEY_EXCEPTION);
+        }
+    }
+
+    public enum DisconnectReason {
+        UNKNOWN(&quot;unknown&quot;),
+        SERVER_SHUTDOWN(&quot;server_shutdown&quot;),
+        CONNECTION_EXPIRED(&quot;connection_expired&quot;),
+        CANCELLED_KEY_EXCEPTION(&quot;cancelled_key_exception&quot;),
+        CLEAN_UP(&quot;clean_up&quot;),
+        CONNECTION_MODE_CHANGED(&quot;connection_mode_changed&quot;);
+        String disconnectReason;
+
+        DisconnectReason(String reason) {
+            this.disconnectReason = reason;
+        }
+
+        public String toDisconnectReasonString() {
+            return disconnectReason;
+        }
+    }
+
+}</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/2019/07/15/java/java-nio/" data-id="cklrnw4cw0006oj9bk9jhjaqy" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-redis/redis-info信息" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/07/12/redis/redis-info信息/" class="article-date">
@@ -303,7 +1291,7 @@ db0:keys=2,expires=0,avg_ttl=0</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2019/07/12/redis/redis-info信息/" data-id="cklrj3i7e000zgr9bi3wls97x" class="article-share-link">分享</a>
+      <a data-url="/2019/07/12/redis/redis-info信息/" data-id="cklrnw4df0014oj9bcqloc05l" class="article-share-link">分享</a>
       
       
       
@@ -346,7 +1334,7 @@ db0:keys=2,expires=0,avg_ttl=0</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2019/07/12/http/tcp/" data-id="cklrj3i6w0003gr9b7i4noe8r" class="article-share-link">分享</a>
+      <a data-url="/2019/07/12/http/tcp/" data-id="cklrnw4cz0008oj9b81s4hq3r" class="article-share-link">分享</a>
       
       
       
@@ -360,183 +1348,10 @@ db0:keys=2,expires=0,avg_ttl=0</code></pre>
 
 
   
-    <article id="post-k8s/深入理解Kubernetes环境中的iptables" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/07/12/k8s/深入理解Kubernetes环境中的iptables/" class="article-date">
-  <time datetime="2019-07-12T04:28:35.000Z" itemprop="datePublished">2019-07-12</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/07/12/k8s/深入理解Kubernetes环境中的iptables/">深入理解Kubernetes环境中的iptables</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <!-- Table of Contents -->
-        
-        <p>一、iptables简介</p>
-<pre><code>当主机收到一个数据包后，数据包先在内核空间中处理，若发现目的地址是自身，
-则传到用户空间中交给对应的应用程序处理，若发现目的不是自身，则会将包丢弃或进行转发。
-
-iptables实现防火墙功能的原理是：在数据包经过内核的过程中有五处关键地方，
-分别是PREROUTING、INPUT、OUTPUT、FORWARD、POSTROUTING，称为钩子函数。
-iptables这款用户空间的软件可以在这5处地方写规则，对经过的数据包进行处理，
-规则一般的定义为“如果数据包头符合这样的条件，就这样处理数据包”。</code></pre><p><img src="./images/iptable-1.jpeg" alt></p>
-<pre><code>iptables中定义有5条链，说白了就是上面说的5个钩子函数，因为每个钩子函数中可以定义多条规则，
-每当数据包到达一个钩子函数时，iptables就会从钩子函数中第一条规则开始检查，
-看该数据包是否满足规则所定义的条件。如果满足，系统就会根据该条规则所定义的方法处理该数据包；
-否则iptables将继续检查下一条规则，如果该数据包不符合钩子函数中任一条规则，
-iptables就会根据该函数预先定义的默认策略来处理数据包。
-
-
-数据包先经过PREOUTING，由该链确定数据包的走向：
-
-1、目的地址是本地，则发送到INPUT，让INPUT决定是否接收下来送到用户空间，流程为①---&gt;②;
-
-2、若满足PREROUTING的nat表上的转发规则，则发送给FORWARD，然后再经过POSTROUTING发送出去，
-流程为： ①---&gt;③---&gt;④---&gt;⑥
-
-主机发送数据包时，流程则是⑤---&gt;⑥
-
-简单点说：
-iptables 是用户态的命令行工具，可以操作内核态的 iptables 的几个模块(基于更底层的 netfilter 模块)，
-然后达到过滤或网络地址转换数据包。</code></pre><p>二、四表五链</p>
-<pre><code>总体说来，iptables就是由“四表五链”组成。
-其中表是按照对数据包的操作区分的，链是按照不同的Hook点来区分的，表和链实际上是netfilter的两个维度。
-
-1. 四表
-
-filter：过滤，防火墙。
-nat ： 网络地址转换（端口映射，地址映射等）。
-mangle：拆解报文，作出修改，封装报文（即对数据包进行修改）。
-raw： 关闭nat表上启用的链接追踪机制，为了提高效率使用的，raw本身的含义是指“原生的”、“未经过加工的”，符合raw表所对应规则的数据包将会跳过一些检查，这样就可以提高效率。
-优先级为 ： raw &gt; mangle &gt; nat &gt; filter
-
-
-2. 五链
-
-在设计iptables的时候，在内核空间中选择了5个位置，放置了钩子函数，被称为链chain。前面已经介绍过了。
-
-PREROUTING : 数据包进入路由之前
-INPUT : 目的地址为本机
-FORWARD : 实现转发
-OUTPUT : 原地址为本机，向外发送
-POSTROUTING : 发送到网卡之前
-对于filter来讲一般只能做在3个链上：INPUT ，FORWARD ，OUTPUT
-
-对于nat来讲一般也只能做在3个链上：PREROUTING ，OUTPUT ，POSTROUTING
-而mangle则是5个链都可以做：PREROUTING，INPUT，FORWARD，OUTPUT，POSTROUTING</code></pre><p><img src="./images/iptable-2.jpeg" alt></p>
-<p>三、iptables命令</p>
-<pre><code>命令格式：iptables [-t 表名] 命令选项 ［链名］ ［条件匹配］ ［-j 目标动作或跳转］
-
-表名、链名用于指定 iptables命令所操作的表和链；
-命令选项用于指定管理iptables规则的方式，比如：插入、增加、删除、查看等；
-条件匹配用于指定对符合什么样条件的数据包进行处理；
-目标动作或跳转用于指定数据包的处理方式，比如允许通过、拒绝、丢弃、跳转（Jump）给其它链处理。
-
-
-iptables命令选项：
-
--A 在指定链的末尾添加（append）一条新的规则
--D 删除（delete）指定链中的某一条规则，可以按规则序号和内容删除
--I 在指定链中插入（insert）一条新的规则，默认在第一行添加
--R 修改、替换（replace）指定链中的某一条规则，可以按规则序号和内容替换
--L 列出（list）指定链中所有的规则进行查看
--E 重命名用户定义的链，不改变链本身
--F 清空（flush）
--N 新建（new-chain）一条用户自己定义的规则链
--X 删除指定表中用户自定义的规则链（delete-chain）
--P 设置指定链的默认策略（policy）
--Z 将所有表的所有链的字节和数据包计数器清零
--n 使用数字形式（numeric）显示输出结果
--v 查看规则表详细信息（verbose）的信息
--V 查看版本(version)-h 获取帮助（help）
-
-目标动作或跳转：</code></pre><p><img src="./images/iptable-3.jpeg" alt></p>
-<pre><code>下面对2条在Kubernetes集群中用到的iptables命令进行简要解释：
-
-iptables -L -n
-
-列出（list）指定链中所有的规则进行查看，使用数字形式（numeric）显示输出结果。
-
-iptables -P FORWARD ACCEPT
-
-设置指定链（FORWARD）的默认策略为ACCEPT，也就是允许数据包通过。</code></pre><p>四、Kubernetes环境中的iptables</p>
-<pre><code>Node节点的iptables是由kube-proxy生成的。
-
-Kubernetes中的 kube-proxy 模块会调用 iptables go client 向linux 内核中去用户自定义 iptables chain，
-和往一些表内(如 filter 表或 nat 表)写自定义rule，来实现每一个 Node 节点做到四层负载均衡功能，且由于 kube-proxy作为 DaemonSet 部署，会在每一个 Node 节点内运行这个进程，这样，这种负载均衡还是分布式的。
-另外，由于集群内每次新建一个 service 都会在每一个 Node 节点上写 iptables rules，
-由于 iptables 的数据结构是链表，所以每一次读操作都是 O(n)，效率就很低了，
-导致一个 k8s cluster如果使用 iptables 作为负载均衡底层技术的话，就只能支撑中小数量的 service 了。
-这一点就没有 ipvs 效率高，ipvs 的数据结构是哈希表，
-而且 ipvs 天生就是为负载均衡而生，支持的负载均衡策略更多，包括 rr、wrr 或 lc 等等。
-
-
-
-我们看一下Kubernetes Service，它是一个虚拟IP，并伴随着一组Pod IP作为Endpoint（通过标签选择器识别）。
-它们充当虚拟负载均衡器，其IP保持不变，而后端Pod IP可能会不断变化。    </code></pre><p><img src="./images/iptable-4.jpeg" alt></p>
-<pre><code>Service的Cluster IP和Port，如下图所示：</code></pre><p><img src="./images/iptable-5.jpeg" alt>    </p>
-<pre><code>整个虚拟IP实际上是一组iptables（最新版本可以选择使用IPVS）规则，由Kubernetes组件kube-proxy管理。
-
-有了这些iptables规则，每当数据包发往Service IP时，
-它就进行DNAT（Destination Network Address Translation，目标网络地址转换，
-是一种改变数据包目的ip地址的技术）操作，ip
-这意味着目标IP从Service IP更改为其中一个Endpoint - Pod IP - 由iptables随机选择。
-这可确保负载均匀分布在后端Pod中。</code></pre><p><img src="./images/iptable-6.jpeg" alt></p>
-<pre><code>kube-proxy对iptables的链进行了扩充，
-自定义了KUBE-SERVICES，KUBE-NODEPORTS，KUBE-POSTROUTING，KUBE-MARK-MASQ和KUBE-MARK-DROP五个链，
-并主要通过为KUBE-SERVICES chain增加rule来配制traffic routing 规则。
-
-执行命令，查看iptables规则：
-iptables -t nat -nvL
-
-输出信息比较多，我们只看看与nginx svc Cluster IP（10.10.248.36）相关的信息，如图所示：</code></pre><p><img src="./images/iptable-7.jpeg" alt></p>
-<pre><code>这两条规则的含义是：
-（1）如果Cluster内的Pod（源地址来自10.122.0.0/16），要访问nginx svc，则允许。
-（2）其他源地址访问nginx svc，则跳转到规则KUBE-SVC-4N57TFCL4MD7ZTDA。
-
-KUBE-SVC-4N57TFCL4MD7ZTDA规则如下图所示：    </code></pre><p><img src="./images/iptable-8.jpeg" alt></p>
-<pre><code>因为，我们只部署了一个Pod，所有流量都跳转到规则 KUBE-SEP-H5CCP4V3TZFUD6ZZ。
-
-在看一下KUBE-SEP-H5CCP4V3TZFUD6ZZ规则：
-
-iptables-save | grep KUBE-SEP-H5CCP4V3TZFUD6ZZ</code></pre><p><img src="./images/iptable-9.jpeg" alt></p>
-<pre><code>-A KUBE-SEP-H5CCP4V3TZFUD6ZZ -p tcp -m comment --comment &quot;default/nginx:&quot; -m tcp -j DNAT --to-destination 10.122.14.72:80</code></pre><p><img src="./images/iptable-9.jpeg" alt></p>
-<pre><code>即将请求分别转发到后端的Pod。
-如果有多个Pod，iptables将访问Service的流量转发到后端的多个Pod， 而且使用类似轮询的负载均衡策略。
-另外， 需要补充一点： Cluster的每一个节点都配置了相同的iptables规则，这样就确保了整个Cluster都能够通过Service的Cluster IP访问Service。</code></pre>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="/2019/07/12/k8s/深入理解Kubernetes环境中的iptables/" data-id="cklrj3i7f0011gr9b0jbv4y1f" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/k8s/">k8s</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/page/5/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/7/">下一页&raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/5/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/7/">下一页&raquo;</a>
   </nav>
 </section>
            
@@ -562,11 +1377,11 @@ iptables-save | grep KUBE-SEP-H5CCP4V3TZFUD6ZZ</code></pre><p><img src="./images
       <ul>
         
           <li>
-            <a href="/2021/03/02/leetcode/305. 岛屿数量2/">305. 岛屿数量2</a>
+            <a href="/2021/03/02/leetcode/验证平衡二叉树/">(面试题)校验平衡二叉树</a>
           </li>
         
           <li>
-            <a href="/2021/03/02/leetcode/128.最长连续序列/">128.最长连续序列</a>
+            <a href="/2021/03/02/leetcode/305. 岛屿数量2/">305. 岛屿数量2</a>
           </li>
         
           <li>
@@ -574,11 +1389,11 @@ iptables-save | grep KUBE-SEP-H5CCP4V3TZFUD6ZZ</code></pre><p><img src="./images
           </li>
         
           <li>
-            <a href="/2021/03/02/leetcode/301.删除无效括号/">301.删除无效括号</a>
+            <a href="/2021/03/02/leetcode/128.最长连续序列/">128.最长连续序列</a>
           </li>
         
           <li>
-            <a href="/2021/03/01/leetcode/lru/">146、LRU 缓存机制</a>
+            <a href="/2021/03/02/leetcode/301.删除无效括号/">301.删除无效括号</a>
           </li>
         
       </ul>

@@ -3,19 +3,20 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-  <title>我的博客</title>
+  <title>(面试题)校验平衡二叉树 | 我的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1234567891011121314151617181920212223242526#/bin/bashMYSQL=mysql USER=&apos;xxx&apos;    PASSWORD=&apos;xxx&apos; DB=&apos;xxx&apos;  HOST=&apos;xxx&apos;COMMAND=&quot; SELECT  ip FROM  broker&quot; declare list=`$MYSQL  -h$&amp;#123;HOST&amp;#125; -u$&amp;#123;">
+  <meta name="description" content="输入一棵二叉树的根节点，判断该树是不是平衡二叉树。如果某二叉树中任意节点的左右子树的深度相差不超过1，那么它就是一棵平衡二叉树。 示例 1: 给定二叉树 [3,9,20,null,null,15,7]     3    / \   9  20     /  \    15   7  返回 true 。示例 2: 给定二叉树 [1,2,2,3,3,null,null,4,4]       1">
+<meta name="keywords" content="数据结构与算法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="我的博客">
-<meta property="og:url" content="/2021/02/26/shell/url数据检测脚本/index.html">
+<meta property="og:title" content="(面试题)校验平衡二叉树">
+<meta property="og:url" content="/2021/03/02/leetcode/验证平衡二叉树/index.html">
 <meta property="og:site_name" content="我的博客">
-<meta property="og:description" content="1234567891011121314151617181920212223242526#/bin/bashMYSQL=mysql USER=&apos;xxx&apos;    PASSWORD=&apos;xxx&apos; DB=&apos;xxx&apos;  HOST=&apos;xxx&apos;COMMAND=&quot; SELECT  ip FROM  broker&quot; declare list=`$MYSQL  -h$&amp;#123;HOST&amp;#125; -u$&amp;#123;">
+<meta property="og:description" content="输入一棵二叉树的根节点，判断该树是不是平衡二叉树。如果某二叉树中任意节点的左右子树的深度相差不超过1，那么它就是一棵平衡二叉树。 示例 1: 给定二叉树 [3,9,20,null,null,15,7]     3    / \   9  20     /  \    15   7  返回 true 。示例 2: 给定二叉树 [1,2,2,3,3,null,null,4,4]       1">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2021-02-26T10:02:34.224Z">
+<meta property="og:updated_time" content="2021-03-02T07:00:10.472Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="我的博客">
-<meta name="twitter:description" content="1234567891011121314151617181920212223242526#/bin/bashMYSQL=mysql USER=&apos;xxx&apos;    PASSWORD=&apos;xxx&apos; DB=&apos;xxx&apos;  HOST=&apos;xxx&apos;COMMAND=&quot; SELECT  ip FROM  broker&quot; declare list=`$MYSQL  -h$&amp;#123;HOST&amp;#125; -u$&amp;#123;">
+<meta name="twitter:title" content="(面试题)校验平衡二叉树">
+<meta name="twitter:description" content="输入一棵二叉树的根节点，判断该树是不是平衡二叉树。如果某二叉树中任意节点的左右子树的深度相差不超过1，那么它就是一棵平衡二叉树。 示例 1: 给定二叉树 [3,9,20,null,null,15,7]     3    / \   9  20     /  \    15   7  返回 true 。示例 2: 给定二叉树 [1,2,2,3,3,null,null,4,4]       1">
   
   
 <!--    <link rel="icon" href="/favicon.ico">-->
@@ -62,30 +63,60 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-shell/url数据检测脚本" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-leetcode/验证平衡二叉树" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2021/02/26/shell/url数据检测脚本/" class="article-date">
-  <time datetime="2021-02-26T03:57:28.112Z" itemprop="datePublished">2021-02-26</time>
+    <a href="/2021/03/02/leetcode/验证平衡二叉树/" class="article-date">
+  <time datetime="2021-03-02T06:45:02.000Z" itemprop="datePublished">2021-03-02</time>
 </a>
     
   </div>
   <div class="article-inner">
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      (面试题)校验平衡二叉树
+    </h1>
+  
+
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
         <!-- Table of Contents -->
         
-        <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>/bin/bash</span><br><span class="line"></span><br><span class="line">MYSQL=mysql </span><br><span class="line">USER='xxx'    </span><br><span class="line">PASSWORD='xxx' </span><br><span class="line">DB='xxx'  </span><br><span class="line">HOST='xxx'</span><br><span class="line"></span><br><span class="line">COMMAND=" SELECT  ip FROM  broker" </span><br><span class="line">declare list=`$MYSQL  -h$&#123;HOST&#125; -u$&#123;USER&#125; -p$&#123;PASSWORD&#125; -D $&#123;DB&#125; -e "$&#123;COMMAND&#125;" --skip-column-name` </span><br><span class="line">for item in $list                                                                                                      </span><br><span class="line">do</span><br><span class="line">	port=8080</span><br><span class="line">	if [ "$test"x = "xxx"x ]; then	</span><br><span class="line">		port=22778</span><br><span class="line">	fi</span><br><span class="line">	echo " the item is $item"</span><br><span class="line">	url="http://$item:$port/stats"</span><br><span class="line">	curl $url | jq .data.brokerMaster</span><br><span class="line">done </span><br><span class="line"></span><br><span class="line">for i in $@</span><br><span class="line">do</span><br><span class="line">	url = "http://$i:8080/stats"</span><br><span class="line">   	curl $url | jq .data.brokerMaster</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+        <p>输入一棵二叉树的根节点，判断该树是不是平衡二叉树。如果某二叉树中任意节点的左右子树的深度相差不超过1，那么它就是一棵平衡二叉树。</p>
+<p>示例 1:</p>
+<p>给定二叉树 [3,9,20,null,null,15,7]</p>
+<pre><code>    3
+   / \
+  9  20
+    /  \
+   15   7
+
+返回 true 。</code></pre><p>示例 2:</p>
+<p>给定二叉树 [1,2,2,3,3,null,null,4,4]</p>
+<pre><code>      1
+     / \
+    2   2
+   / \
+  3   3
+ / \
+4   4
+返回 false </code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode left;</span></span><br><span class="line"><span class="comment"> *     TreeNode right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) &#123; val = x; &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isBalanced</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> (Math.abs(dfs(root.left, <span class="number">1</span>) - dfs(root.right, <span class="number">1</span>)) &lt; <span class="number">2</span>) &amp;&amp; (isBalanced(root.left) &amp;&amp; isBalanced(root.right));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">dfs</span><span class="params">(TreeNode root, <span class="keyword">int</span> curDepth)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> curDepth;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        curDepth++;</span><br><span class="line">        <span class="keyword">return</span> Math.max(dfs(root.left, curDepth), dfs(root.right, curDepth));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2021/02/26/shell/url数据检测脚本/" data-id="cklrnw4da000toj9bhnfumyi3" class="article-share-link">分享</a>
+      <a data-url="/2021/03/02/leetcode/验证平衡二叉树/" data-id="cklrnw4d9000ooj9bcyjq9aws" class="article-share-link">分享</a>
       
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li></ul>
+
     </footer>
   </div>
   
@@ -134,19 +165,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2021/02/26/技术栈/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
-      <div class="article-nav-title">
-        
-          java技术
-        
-      </div>
-    </a>
   
-  
-    <a href="/2021/02/26/spring/springmvc long polling实战/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2021/03/02/leetcode/305. 岛屿数量2/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title"></div>
+      <div class="article-nav-title">305. 岛屿数量2</div>
     </a>
   
 </nav>

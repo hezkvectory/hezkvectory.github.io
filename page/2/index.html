@@ -60,6 +60,70 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-leetcode/128.最长连续序列" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/03/02/leetcode/128.最长连续序列/" class="article-date">
+  <time datetime="2021-03-02T03:42:01.000Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/03/02/leetcode/128.最长连续序列/">128.最长连续序列</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p><a href="https://leetcode-cn.com/problems/longest-consecutive-sequence/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/longest-consecutive-sequence/</a></p>
+<p>给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。</p>
+<p>进阶：你可以设计并实现时间复杂度为 O(n) 的解决方案吗？</p>
+<p>示例 1：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [100,4,200,1,3,2]</span><br><span class="line">输出：4</span><br><span class="line">解释：最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。</span><br></pre></td></tr></table></figure>
+
+<p>示例 2：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [0,3,7,2,5,8,4,6,0,1]</span><br><span class="line">输出：9</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>方法一：排序</p>
+</li>
+<li><p>方法二：集合</p>
+</li>
+<li><p>方法三：哈希表</p>
+</li>
+<li><p>方法四：并查集</p>
+<p>并查集数据结构参考：<a href="https://hezkvectory.github.io/2021/03/01/leetcode/%E5%B9%B6%E6%9F%A5%E9%9B%86/" target="_blank" rel="noopener">https://hezkvectory.github.io/2021/03/01/leetcode/%E5%B9%B6%E6%9F%A5%E9%9B%86/</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public int longestConsecutive(int[] nums) &#123;</span><br><span class="line">    if (nums.length == 0) return 0;</span><br><span class="line">    </span><br><span class="line">    // 首次遍历，与邻居结盟</span><br><span class="line">    UnionFind uf = new UnionFind(nums);</span><br><span class="line">    for (int v : nums)</span><br><span class="line">        uf.union(v, v + 1); // uf.union() 结盟</span><br><span class="line"></span><br><span class="line">    // 二次遍历，记录领队距离</span><br><span class="line">    int max = 1;</span><br><span class="line">    for (int v : nums)</span><br><span class="line">        max = Math.max(max, uf.find(v) - v + 1); // uf.find() 查找领队</span><br><span class="line">    return max;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/2021/03/02/leetcode/128.最长连续序列/" data-id="cklrnw4d1000boj9bvk1eu7m6" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
     <article id="post-leetcode/301.删除无效括号" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2021/03/02/leetcode/301.删除无效括号/" class="article-date">
@@ -100,60 +164,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2021/03/02/leetcode/301.删除无效括号/" data-id="cklrj3i6x0004gr9bqhxxw1lj" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-leetcode/lru" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2021/03/01/leetcode/lru/" class="article-date">
-  <time datetime="2021-03-01T10:45:02.000Z" itemprop="datePublished">2021-03-01</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/01/leetcode/lru/">146、LRU 缓存机制</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <!-- Table of Contents -->
-        
-        <p>运用你所掌握的数据结构，设计和实现一个  LRU (最近最少使用) 缓存机制 。</p>
-<p>实现 LRUCache 类：</p>
-<p>​        LRUCache(int capacity) 以正整数作为容量 capacity 初始化 LRU 缓存<br>​        int get(int key) 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 。<br>​        void put(int key, int value) 如果关键字已经存在，则变更其数据值；如果关键字不存在，则插入该组「关键字-值」。</p>
-<p>当缓存容量达到上限时，它应该在写入新数据之前删除最久未使用的数据值，从而为新的数据值留出空间。</p>
-<p>进阶：你是否可以在 O(1) 时间复杂度内完成这两种操作？</p>
-<p>1、借助LinkedHashMap实现lru算法，只需要实现removeEldestEntry方法即可</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span> </span>&#123;</span><br><span class="line">         <span class="keyword">private</span> Map&lt;Integer, Integer&gt; cache;</span><br><span class="line">         <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> max;</span><br><span class="line"></span><br><span class="line">         <span class="function"><span class="keyword">public</span> <span class="title">LRUCache</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">             max = capacity;</span><br><span class="line">             cache = <span class="keyword">new</span> es&lt;Integer, Integer&gt;(capacity, <span class="number">1.0f</span>, <span class="keyword">true</span>) &#123;</span><br><span class="line">                 <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">removeEldestEntry</span><span class="params">(Map.Entry eldest)</span> </span>&#123;</span><br><span class="line">                     <span class="keyword">return</span> cache.size() &gt; max;</span><br><span class="line">                 &#125;</span><br><span class="line">             &#125;;</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">             <span class="keyword">return</span> cache.getOrDefault(key, -<span class="number">1</span>);</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">             cache.put(key, value);</span><br><span class="line">         &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>2、自己基于链表+map实现lru</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">            <span class="keyword">int</span> key;</span><br><span class="line">            <span class="keyword">int</span> value;</span><br><span class="line"></span><br><span class="line">            LRUCache.Node prev;</span><br><span class="line">            LRUCache.Node next;</span><br><span class="line"></span><br><span class="line">            Node(<span class="keyword">int</span> k, <span class="keyword">int</span> v) &#123;</span><br><span class="line">                <span class="keyword">this</span>.key = k;</span><br><span class="line">                <span class="keyword">this</span>.value = v;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            Node() &#123;</span><br><span class="line">                <span class="keyword">this</span>.key = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">this</span>.value = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> capacity;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> count;</span><br><span class="line">        <span class="keyword">private</span> LRUCache.Node head;</span><br><span class="line">        <span class="keyword">private</span> LRUCache.Node tail;</span><br><span class="line">        <span class="keyword">private</span> Map&lt;Integer, LRUCache.Node&gt; map;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">LRUCache</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.capacity = capacity;</span><br><span class="line">            <span class="keyword">this</span>.count = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">this</span>.map = <span class="keyword">new</span> HashMap();</span><br><span class="line">            head = <span class="keyword">new</span> LRUCache.Node();</span><br><span class="line">            tail = <span class="keyword">new</span> LRUCache.Node();</span><br><span class="line">            head.next = tail;</span><br><span class="line">            tail.prev = head;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">            LRUCache.Node node = map.get(key);</span><br><span class="line">            <span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                remove(node);</span><br><span class="line">                add(node);</span><br><span class="line">                <span class="keyword">return</span> node.value;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">            LRUCache.Node node = map.get(key);</span><br><span class="line">            <span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</span><br><span class="line">                node = <span class="keyword">new</span> LRUCache.Node(key, value);</span><br><span class="line">                map.put(key, node);</span><br><span class="line">                add(node);</span><br><span class="line">                count++;</span><br><span class="line">                <span class="keyword">if</span> (count &gt; capacity) &#123;</span><br><span class="line">                    LRUCache.Node toDelete = tail.prev;</span><br><span class="line">                    map.remove(toDelete.key);</span><br><span class="line">                    remove(toDelete);</span><br><span class="line">                    count--;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                remove(node);</span><br><span class="line">                node.value = value;</span><br><span class="line">                add(node);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(LRUCache.Node node)</span> </span>&#123;</span><br><span class="line">            LRUCache.Node next = node.next;</span><br><span class="line">            LRUCache.Node prev = node.prev;</span><br><span class="line">            prev.next = next;</span><br><span class="line">            next.prev = prev;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(LRUCache.Node node)</span> </span>&#123;</span><br><span class="line">            LRUCache.Node next = head.next;</span><br><span class="line">            head.next = node;</span><br><span class="line">            node.next = next;</span><br><span class="line">            node.prev = head;</span><br><span class="line">            next.prev = node;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="/2021/03/01/leetcode/lru/" data-id="cklrj3i6y0006gr9boew3zcqc" class="article-share-link">分享</a>
+      <a data-url="/2021/03/02/leetcode/301.删除无效括号/" data-id="cklrnw4d4000eoj9b07y6yvhy" class="article-share-link">分享</a>
       
       
       
@@ -218,7 +229,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2021/03/01/leetcode/并查集/" data-id="cklrj3i74000fgr9bd621uafq" class="article-share-link">分享</a>
+      <a data-url="/2021/03/01/leetcode/并查集/" data-id="cklrnw4d8000moj9bvem9m469" class="article-share-link">分享</a>
       
       
       
@@ -235,7 +246,7 @@
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/3/">下一页&raquo;</a>
+    <a class="extend prev" rel="prev" href="/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/3/">下一页&raquo;</a>
   </nav>
 </section>
            
@@ -261,11 +272,11 @@
       <ul>
         
           <li>
-            <a href="/2021/03/02/leetcode/305. 岛屿数量2/">305. 岛屿数量2</a>
+            <a href="/2021/03/02/leetcode/验证平衡二叉树/">(面试题)校验平衡二叉树</a>
           </li>
         
           <li>
-            <a href="/2021/03/02/leetcode/128.最长连续序列/">128.最长连续序列</a>
+            <a href="/2021/03/02/leetcode/305. 岛屿数量2/">305. 岛屿数量2</a>
           </li>
         
           <li>
@@ -273,11 +284,11 @@
           </li>
         
           <li>
-            <a href="/2021/03/02/leetcode/301.删除无效括号/">301.删除无效括号</a>
+            <a href="/2021/03/02/leetcode/128.最长连续序列/">128.最长连续序列</a>
           </li>
         
           <li>
-            <a href="/2021/03/01/leetcode/lru/">146、LRU 缓存机制</a>
+            <a href="/2021/03/02/leetcode/301.删除无效括号/">301.删除无效括号</a>
           </li>
         
       </ul>
