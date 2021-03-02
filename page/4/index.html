@@ -100,55 +100,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2021/03/02/leetcode/301.删除无效括号/" data-id="cklrv3k0d000liv9bs7vxeyad" class="article-share-link">分享</a>
+      <a data-url="/2021/03/02/leetcode/301.删除无效括号/" data-id="cklrv4eek000njt9bgm0vqghm" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
-    <article id="post-js/js高亮" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2021/03/01/js/js高亮/" class="article-date">
-  <time datetime="2021-03-01T10:45:02.000Z" itemprop="datePublished">2021-03-01</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/01/js/js高亮/">js高亮</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <!-- Table of Contents -->
-        
-        <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> regReserved = [<span class="string">'['</span>, <span class="string">']'</span>, <span class="string">'('</span>, <span class="string">')'</span>, <span class="string">'&#123;'</span>, <span class="string">'&#125;'</span>, <span class="string">'\\'</span>, <span class="string">'+'</span>, <span class="string">'?'</span>, <span class="string">'*'</span>, <span class="string">'.'</span>, <span class="string">'|'</span>, <span class="string">'^'</span>, <span class="string">'$'</span>, <span class="string">'!'</span>, <span class="string">'='</span>]</span><br><span class="line">  <span class="keyword">const</span> query = <span class="string">'Java 工程'</span></span><br><span class="line">  <span class="keyword">const</span> value = <span class="string">'毕业于北京工程大学，在java工程领域，从事Java开发工程专业'</span></span><br><span class="line">  <span class="keyword">const</span> escapedQuery = _.escape(query)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'escapedQuery: '</span>, escapedQuery)</span><br><span class="line">  <span class="keyword">let</span> escapedValue = _.escape(value)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'escapedValue: '</span>, escapedValue)</span><br><span class="line">  <span class="comment">// 将正则表达式本身的保留字转义</span></span><br><span class="line">  <span class="keyword">const</span> protectedQuery = escapedQuery.replace(<span class="keyword">new</span> <span class="built_in">RegExp</span>(_.map(regReserved, reserved =&gt; <span class="string">`\\<span class="subst">$&#123;reserved&#125;</span>`</span>).join(<span class="string">'|'</span>), <span class="string">'gi'</span>), <span class="string">'\\$&amp;'</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'protectedQuery: '</span>, protectedQuery)</span><br><span class="line">  escapedValue = escapedValue.replace(<span class="keyword">new</span> <span class="built_in">RegExp</span>(protectedQuery.split(<span class="regexp">/\s+/</span>).join(<span class="string">'|'</span>), <span class="string">'gi'</span>), <span class="string">`&lt;span&gt;$&amp;&lt;/span&gt;`</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'escapedValue: '</span>, escapedValue)</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="/2021/03/01/js/js高亮/" data-id="cklrv3k07000eiv9buxkh027s" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li></ul>
 
     </footer>
   </div>
@@ -209,11 +165,55 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2021/03/01/leetcode/并查集/" data-id="cklrv3k0n0014iv9bshfo1ewh" class="article-share-link">分享</a>
+      <a data-url="/2021/03/01/leetcode/并查集/" data-id="cklrv4ees0013jt9b1x9wayt8" class="article-share-link">分享</a>
       
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-js/js高亮" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/03/01/js/js高亮/" class="article-date">
+  <time datetime="2021-03-01T10:45:02.000Z" itemprop="datePublished">2021-03-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/03/01/js/js高亮/">js高亮</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> regReserved = [<span class="string">'['</span>, <span class="string">']'</span>, <span class="string">'('</span>, <span class="string">')'</span>, <span class="string">'&#123;'</span>, <span class="string">'&#125;'</span>, <span class="string">'\\'</span>, <span class="string">'+'</span>, <span class="string">'?'</span>, <span class="string">'*'</span>, <span class="string">'.'</span>, <span class="string">'|'</span>, <span class="string">'^'</span>, <span class="string">'$'</span>, <span class="string">'!'</span>, <span class="string">'='</span>]</span><br><span class="line">  <span class="keyword">const</span> query = <span class="string">'Java 工程'</span></span><br><span class="line">  <span class="keyword">const</span> value = <span class="string">'毕业于北京工程大学，在java工程领域，从事Java开发工程专业'</span></span><br><span class="line">  <span class="keyword">const</span> escapedQuery = _.escape(query)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'escapedQuery: '</span>, escapedQuery)</span><br><span class="line">  <span class="keyword">let</span> escapedValue = _.escape(value)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'escapedValue: '</span>, escapedValue)</span><br><span class="line">  <span class="comment">// 将正则表达式本身的保留字转义</span></span><br><span class="line">  <span class="keyword">const</span> protectedQuery = escapedQuery.replace(<span class="keyword">new</span> <span class="built_in">RegExp</span>(_.map(regReserved, reserved =&gt; <span class="string">`\\<span class="subst">$&#123;reserved&#125;</span>`</span>).join(<span class="string">'|'</span>), <span class="string">'gi'</span>), <span class="string">'\\$&amp;'</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'protectedQuery: '</span>, protectedQuery)</span><br><span class="line">  escapedValue = escapedValue.replace(<span class="keyword">new</span> <span class="built_in">RegExp</span>(protectedQuery.split(<span class="regexp">/\s+/</span>).join(<span class="string">'|'</span>), <span class="string">'gi'</span>), <span class="string">`&lt;span&gt;$&amp;&lt;/span&gt;`</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'escapedValue: '</span>, escapedValue)</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/2021/03/01/js/js高亮/" data-id="cklrv4eee000ejt9bs9nd7fsd" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li></ul>
 
     </footer>
   </div>
@@ -260,15 +260,15 @@
           </li>
         
           <li>
-            <a href="/2021/03/02/leetcode/graph/">graph</a>
-          </li>
-        
-          <li>
             <a href="/2021/03/02/leetcode/stack/">stack</a>
           </li>
         
           <li>
             <a href="/2021/03/02/leetcode/queue/">queue</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/02/leetcode/graph/">graph</a>
           </li>
         
       </ul>
