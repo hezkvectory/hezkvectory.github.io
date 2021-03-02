@@ -3,20 +3,20 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-  <title>128.最长连续序列 | 我的博客</title>
+  <title>面试题 | 我的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="https://leetcode-cn.com/problems/longest-consecutive-sequence/ 给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。 进阶：你可以设计并实现时间复杂度为 O(n) 的解决方案吗？ 示例 1： 123输入：nums = [100,4,200,1,3,2]输出：4解释：最长数字连续序列是 [1">
-<meta name="keywords" content="数据结构与算法">
+  <meta name="description" content="1、自我介绍，项目介绍，遇到的难点？产生原因？如何解决？2、HashMap1.8与1.7区别？ConcurrentHashMap实现原理 ？3、jvm类加载器，自定义类加载器，双亲委派机制，优缺点，tomcat类加载机制?4、tomcat热部署，怎么做到的热加载？5、cms收集器过程，g1收集器原理，怎么实现可预测停顿的，region的大小结构？6、内存溢出，内存泄漏遇到过吗？什么场景产生的，怎么">
+<meta name="keywords" content="面试">
 <meta property="og:type" content="article">
-<meta property="og:title" content="128.最长连续序列">
-<meta property="og:url" content="/2021/03/02/leetcode/128.最长连续序列/index.html">
+<meta property="og:title" content="面试题">
+<meta property="og:url" content="/2021/03/01/面试题/index.html">
 <meta property="og:site_name" content="我的博客">
-<meta property="og:description" content="https://leetcode-cn.com/problems/longest-consecutive-sequence/ 给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。 进阶：你可以设计并实现时间复杂度为 O(n) 的解决方案吗？ 示例 1： 123输入：nums = [100,4,200,1,3,2]输出：4解释：最长数字连续序列是 [1">
+<meta property="og:description" content="1、自我介绍，项目介绍，遇到的难点？产生原因？如何解决？2、HashMap1.8与1.7区别？ConcurrentHashMap实现原理 ？3、jvm类加载器，自定义类加载器，双亲委派机制，优缺点，tomcat类加载机制?4、tomcat热部署，怎么做到的热加载？5、cms收集器过程，g1收集器原理，怎么实现可预测停顿的，region的大小结构？6、内存溢出，内存泄漏遇到过吗？什么场景产生的，怎么">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2021-03-02T06:30:56.458Z">
+<meta property="og:updated_time" content="2021-03-02T07:08:00.887Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="128.最长连续序列">
-<meta name="twitter:description" content="https://leetcode-cn.com/problems/longest-consecutive-sequence/ 给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。 进阶：你可以设计并实现时间复杂度为 O(n) 的解决方案吗？ 示例 1： 123输入：nums = [100,4,200,1,3,2]输出：4解释：最长数字连续序列是 [1">
+<meta name="twitter:title" content="面试题">
+<meta name="twitter:description" content="1、自我介绍，项目介绍，遇到的难点？产生原因？如何解决？2、HashMap1.8与1.7区别？ConcurrentHashMap实现原理 ？3、jvm类加载器，自定义类加载器，双亲委派机制，优缺点，tomcat类加载机制?4、tomcat热部署，怎么做到的热加载？5、cms收集器过程，g1收集器原理，怎么实现可预测停顿的，region的大小结构？6、内存溢出，内存泄漏遇到过吗？什么场景产生的，怎么">
   
   
 <!--    <link rel="icon" href="/favicon.ico">-->
@@ -63,10 +63,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-leetcode/128.最长连续序列" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-面试题" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2021/03/02/leetcode/128.最长连续序列/" class="article-date">
-  <time datetime="2021-03-02T03:42:01.000Z" itemprop="datePublished">2021-03-02</time>
+    <a href="/2021/03/01/面试题/" class="article-date">
+  <time datetime="2021-03-01T10:45:02.000Z" itemprop="datePublished">2021-03-01</time>
 </a>
     
   </div>
@@ -77,7 +77,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      128.最长连续序列
+      面试题
     </h1>
   
 
@@ -87,37 +87,16 @@
       
         <!-- Table of Contents -->
         
-        <p><a href="https://leetcode-cn.com/problems/longest-consecutive-sequence/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/longest-consecutive-sequence/</a></p>
-<p>给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。</p>
-<p>进阶：你可以设计并实现时间复杂度为 O(n) 的解决方案吗？</p>
-<p>示例 1：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [100,4,200,1,3,2]</span><br><span class="line">输出：4</span><br><span class="line">解释：最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。</span><br></pre></td></tr></table></figure>
-
-<p>示例 2：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [0,3,7,2,5,8,4,6,0,1]</span><br><span class="line">输出：9</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>方法一：排序</p>
-</li>
-<li><p>方法二：集合</p>
-</li>
-<li><p>方法三：哈希表</p>
-</li>
-<li><p>方法四：并查集</p>
-<p>并查集数据结构参考：<a href="https://hezkvectory.github.io/2021/03/01/leetcode/%E5%B9%B6%E6%9F%A5%E9%9B%86/" target="_blank" rel="noopener">https://hezkvectory.github.io/2021/03/01/leetcode/%E5%B9%B6%E6%9F%A5%E9%9B%86/</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public int longestConsecutive(int[] nums) &#123;</span><br><span class="line">    if (nums.length == 0) return 0;</span><br><span class="line">    </span><br><span class="line">    // 首次遍历，与邻居结盟</span><br><span class="line">    UnionFind uf = new UnionFind(nums);</span><br><span class="line">    for (int v : nums)</span><br><span class="line">        uf.union(v, v + 1); // uf.union() 结盟</span><br><span class="line"></span><br><span class="line">    // 二次遍历，记录领队距离</span><br><span class="line">    int max = 1;</span><br><span class="line">    for (int v : nums)</span><br><span class="line">        max = Math.max(max, uf.find(v) - v + 1); // uf.find() 查找领队</span><br><span class="line">    return max;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
+        <p>1、自我介绍，项目介绍，遇到的难点？产生原因？如何解决？<br>2、HashMap1.8与1.7区别？ConcurrentHashMap实现原理 ？<br>3、jvm类加载器，自定义类加载器，双亲委派机制，优缺点，tomcat类加载机制?<br>4、tomcat热部署，怎么做到的热加载？<br>5、cms收集器过程，g1收集器原理，怎么实现可预测停顿的，region的大小结构？<br>6、内存溢出，内存泄漏遇到过吗？什么场景产生的，怎么解决的？<br>7、volatile的原理？synchronized和重入锁实现原理以及区别？<br>8、redis字符串实现，sds和c区别？<br>9、redis集群，为什么是16384个slot？选举过程，会有脑裂问题么，raft算法，优缺点？<br>10、redis有序集合怎么实现的，跳表是什么？往跳表添加一个元素的过程获取分数的时间复杂度，为什么不用红黑树，红黑树有什么特点，左旋右旋操作？<br>11、锁升级过程，轻量锁可以变成偏向锁么？偏向锁可以变成无锁么？对象头结构，锁状态变化过程？<br>12、Innodb的结构了解么？磁盘页和缓存区是怎么配合的？缓冲区和磁盘数据不一致怎么办，服务器突然宕机了数据会丢失么？<br>13、InnoDB 索引为什使用B+树而不是用B树？<br>14、MySQL 分表是怎么实现的？跨库join如何解决？数据量突增怎么解决？<br>15、数据库的隔离级别，怎么实现的？当前读，快照读？MVCC？<br>16、mysql优化的实践经验<br>17、分布式事务出现过不一致吗？为什么？怎么解决？有什么方法避免？怎么监控？监控到怎么处理？什么时候需要人工接入？<br>18、io模型了解么？多路复用？selete，poll，epoll，epoll的结构？怎么注册事件？<br>19、你们用的什么消息中间件，kafka，为什么用kafka？kafka是怎么保证高吞吐量的？<br>20、kafka重平衡，重启服务怎么保证kafka不发生重平衡，有什么方案？<br>21、netty的原理和使用？tcp的连接过程？一台服务器能支持多少连接，为什么 ？tcp各个参数怎么设置？<br>22、Sping的AOP实现原理，以及对象生成方式的种类，单例的还是原型的？<br>23、讲讲调度接口是怎么实现的<br>24、分布式唯一ID是怎么实现的<br>25、设计模式，以及自己使用的场景<br>26、有没有用过分布式锁，怎么实现的，讲讲原理<br>27、如何解决线上问题？cpu狂飙怎么办？频繁minor gc怎么办？可能造成的原因是什么？如何避免？<br>28、怎么理解分布式和微服务，为什么要拆分服务，会产生什么问题，怎么解决这些问题 ？<br>29、怎么理解高可用，如何保证高可用，有什么弊端，熔断机制，怎么实现 ？<br>30、对于高并发怎么看，怎么算高并发，你们项目有么，如果有会产生什么问题，怎么解决<br>31、有没有做过压测的项目？首页接口优化是怎么做的？<br>32、如何优雅的写代码？什么代码算做优雅？什么代码是规范？你们代码规范是什么样的？如何进行code review？<br>33、算法：给定一个长度为N的整形数组arr，其中有N个互不相等的自然数1-N，请实现arr的排序，但是不要把下标0∼N−1位置上的数通过直接赋值的方式替换成1∼N<br>34、算法：判断一个树是否是平衡二叉树<br>35、算法：给定一个二叉树，请计算节点值之和最大的路径的节点值之和是多少，这个路径的开始节点和结束节点可以是二叉树中的任意节点<br>36、算法：LRU 缓存<br>37、算法：实现带有getMin功能的栈，要求push，pop，getMin的时间复杂度都是O(1)<br>38、算法：两数之和<br>39、算法：实现二叉树先序，中序和后序遍历</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2021/03/02/leetcode/128.最长连续序列/" data-id="cklrrlkds000fth9bd2g528ad" class="article-share-link">分享</a>
+      <a data-url="/2021/03/01/面试题/" data-id="cklrrlkc50001th9bsakazywo" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/面试/">面试</a></li></ul>
 
     </footer>
   </div>
@@ -167,19 +146,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2021/03/02/leetcode/200. 岛屿数量/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2021/03/02/leetcode/301.删除无效括号/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">上一篇</strong>
       <div class="article-nav-title">
         
-          200. 岛屿数量
+          301.删除无效括号
         
       </div>
     </a>
   
   
-    <a href="/2021/03/02/leetcode/301.删除无效括号/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2021/03/01/js/js高亮/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">301.删除无效括号</div>
+      <div class="article-nav-title">js高亮</div>
     </a>
   
 </nav>

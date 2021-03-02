@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>heap &amp; heapSort | 我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="堆属性堆分为两种：最大堆和最小堆，两者的差别在于节点的排序方式。 在最大堆中，父节点的值比每一个子节点的值都要大。 在最小堆中，父节点的值比每一个子节点的值都要小。 这就是所谓的“堆属性”，并且这个属性对堆中的每一个节点都成立。 12345   10  / \ 7   2/  \5   1  这是一个最大堆，，因为每一个父节点的值都比其子节点要大。10 比 7 和 2 都大。7 比 5 和 1都大">
+<meta name="keywords" content="数据结构与算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="heap &amp; heapSort">
+<meta property="og:url" content="/2021/03/01/leetcode/heap&heapSort/index.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="堆属性堆分为两种：最大堆和最小堆，两者的差别在于节点的排序方式。 在最大堆中，父节点的值比每一个子节点的值都要大。 在最小堆中，父节点的值比每一个子节点的值都要小。 这就是所谓的“堆属性”，并且这个属性对堆中的每一个节点都成立。 12345   10  / \ 7   2/  \5   1  这是一个最大堆，，因为每一个父节点的值都比其子节点要大。10 比 7 和 2 都大。7 比 5 和 1都大">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2021-03-02T08:43:54.597Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="heap &amp; heapSort">
+<meta name="twitter:description" content="堆属性堆分为两种：最大堆和最小堆，两者的差别在于节点的排序方式。 在最大堆中，父节点的值比每一个子节点的值都要大。 在最小堆中，父节点的值比每一个子节点的值都要小。 这就是所谓的“堆属性”，并且这个属性对堆中的每一个节点都成立。 12345   10  / \ 7   2/  \5   1  这是一个最大堆，，因为每一个父节点的值都比其子节点要大。10 比 7 和 2 都大。7 比 5 和 1都大">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-leetcode/heap&amp;heapSort" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/03/01/leetcode/heap&heapSort/" class="article-date">
+  <time datetime="2021-03-01T10:45:02.000Z" itemprop="datePublished">2021-03-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      heap &amp; heapSort
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h4 id="堆属性"><a href="#堆属性" class="headerlink" title="堆属性"></a>堆属性</h4><p>堆分为两种：<em>最大堆</em>和<em>最小堆</em>，两者的差别在于节点的排序方式。</p>
+<p>在最大堆中，父节点的值比每一个子节点的值都要大。</p>
+<p>在最小堆中，父节点的值比每一个子节点的值都要小。</p>
+<p>这就是所谓的“堆属性”，并且这个属性对堆中的每一个节点都成立。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">   10</span><br><span class="line">  / \</span><br><span class="line"> 7   2</span><br><span class="line">/  \</span><br><span class="line">5   1</span><br></pre></td></tr></table></figure>
+
+<p>这是一个最大堆，，因为每一个父节点的值都比其子节点要大。<code>10</code> 比 <code>7</code> 和 <code>2</code> 都大。<code>7</code> 比 <code>5</code> 和 <code>1</code>都大。</p>
+<p>根据这一属性，那么最大堆总是将其中的最大值存放在树的根节点。而对于最小堆，根节点中的元素总是树中的最小值。</p>
+<p>堆属性非常有用，因为堆常常被当做优先队列使用，因为可以快速地访问到“最重要”的元素。</p>
+<p><strong>注意：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">堆的根节点中存放的是最大或者最小元素，但是其他节点的排序顺序是未知的。</span><br><span class="line"></span><br><span class="line">例如，在一个最大堆中，最大的那一个元素总是位于 index 0 的位置，但是最小的元素则未必是最后一个元素。</span><br><span class="line">唯一能够保证的是最小的元素是一个叶节点，但是不确定是哪一个。</span><br></pre></td></tr></table></figure>
+
+<h4 id="堆和普通树的区别"><a href="#堆和普通树的区别" class="headerlink" title="堆和普通树的区别"></a>堆和普通树的区别</h4><p>堆并不能取代二叉搜索树，它们之间有相似之处也有一些不同。我们来看一下两者的主要差别：</p>
+<p><strong>节点的顺序。</strong>在二叉搜索树中，左子节点必须比父节点小，右子节点必须必比父节点大。但是在堆中并非如此。在最大堆中两个子节点都必须比父节点小，而在最小堆中，它们都必须比父节点大。</p>
+<p><strong>内存占用。</strong>普通树占用的内存空间比它们存储的数据要多。你必须为节点对象以及左/右子节点指针分配内存。堆仅仅使用一个数据来存储数组，且不使用指针。</p>
+<p><strong>平衡。</strong>二叉搜索树必须是“平衡”的情况下，其大部分操作的复杂度才能达到<strong>O(log n)</strong>。你可以按任意顺序位置插入/删除数据，或者使用 AVL 树或者红黑树，但是在堆中实际上不需要整棵树都是有序的。我们只需要满足堆属性即可，所以在堆中平衡不是问题。因为堆中数据的组织方式可以保证<strong>O(log n)</strong> 的性能。</p>
+<p><strong>搜索。</strong>在二叉树中搜索会很快，但是在堆中搜索会很慢。在堆中搜索不是第一优先级，因为使用堆的目的是将最大（或者最小）的节点放在最前面，从而快速的进行相关插入、删除操作。</p>
+<p>堆代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Heap</span>&lt;<span class="title">T</span> <span class="keyword">extends</span> <span class="title">Comparable</span>&lt;<span class="title">T</span>&gt;&gt; </span>&#123;</span><br><span class="line">    <span class="comment">//存储堆中的元素</span></span><br><span class="line">    <span class="keyword">private</span> T[] items;</span><br><span class="line">    <span class="comment">//记录堆中元素的个数</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> N;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Heap</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.items= (T[]) <span class="keyword">new</span> Comparable[capacity+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">this</span>.N=<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//判断堆中索引i处的元素是否小于索引j处的元素</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">less</span><span class="params">(<span class="keyword">int</span> i,<span class="keyword">int</span> j)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> items[i].compareTo(items[j])&lt;<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//交换堆中i索引和j索引处的值</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">exch</span><span class="params">(<span class="keyword">int</span> i,<span class="keyword">int</span> j)</span></span>&#123;</span><br><span class="line">        T temp = items[i];</span><br><span class="line">        items[i] = items[j];</span><br><span class="line">        items[j] = temp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//往堆中插入一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(T t)</span></span>&#123;</span><br><span class="line">        items[++N]=t;</span><br><span class="line">        swim(N);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//使用上浮算法，使索引k处的元素能在堆中处于一个正确的位置</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">swim</span><span class="params">(<span class="keyword">int</span> k)</span></span>&#123;</span><br><span class="line">        <span class="comment">//通过循环，不断的比较当前结点的值和其父结点的值，如果发现父结点的值比当前结点的值小，则交换位置</span></span><br><span class="line">        <span class="keyword">while</span>(k&gt;<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="comment">//比较当前结点和其父结点</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (less(k/<span class="number">2</span>,k))&#123;</span><br><span class="line">                exch(k/<span class="number">2</span>,k);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            k = k/<span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//删除堆中最大的元素,并返回这个最大元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">delMax</span><span class="params">()</span></span>&#123;</span><br><span class="line">        T max = items[<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">        <span class="comment">//交换索引1处的元素和最大索引处的元素，让完全二叉树中最右侧的元素变为临时根结点</span></span><br><span class="line">        exch(<span class="number">1</span>,N);</span><br><span class="line">        <span class="comment">//最大索引处的元素删除掉</span></span><br><span class="line">        items[N]=<span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">//元素个数-1</span></span><br><span class="line">        N--;</span><br><span class="line">        <span class="comment">//通过下沉调整堆，让堆重新有序</span></span><br><span class="line">        sink(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> max;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//使用下沉算法，使索引k处的元素能在堆中处于一个正确的位置</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">sink</span><span class="params">(<span class="keyword">int</span> k)</span></span>&#123;</span><br><span class="line">        <span class="comment">//通过循环不断的对比当前k结点和其左子结点2*k以及右子结点2k+1处中的较大值的元素大小，如果当前结点小，则需要交换位置</span></span><br><span class="line">        <span class="keyword">while</span>(<span class="number">2</span>*k&lt;=N)&#123;</span><br><span class="line">            <span class="comment">//获取当前结点的子结点中的较大结点</span></span><br><span class="line">            <span class="keyword">int</span> max;<span class="comment">//记录较大结点所在的索引</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="number">2</span>*k+<span class="number">1</span>&lt;=N)&#123;</span><br><span class="line">                <span class="keyword">if</span> (less(<span class="number">2</span>*k,<span class="number">2</span>*k+<span class="number">1</span>))&#123;</span><br><span class="line">                    max=<span class="number">2</span>*k+<span class="number">1</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    max=<span class="number">2</span>*k;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                max = <span class="number">2</span>*k;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">//比较当前结点和较大结点的值</span></span><br><span class="line">            <span class="keyword">if</span> (!less(k,max))&#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//交换k索引处的值和max索引处的值</span></span><br><span class="line">            exch(k,max);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//变换k的值</span></span><br><span class="line">            k = max;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Heap&lt;String&gt; heap = <span class="keyword">new</span> Heap&lt;String&gt;(<span class="number">20</span>);</span><br><span class="line">        heap.insert(<span class="string">"A"</span>);</span><br><span class="line">        heap.insert(<span class="string">"B"</span>);</span><br><span class="line">        heap.insert(<span class="string">"C"</span>);</span><br><span class="line">        heap.insert(<span class="string">"D"</span>);</span><br><span class="line">        heap.insert(<span class="string">"E"</span>);</span><br><span class="line">        heap.insert(<span class="string">"F"</span>);</span><br><span class="line">        heap.insert(<span class="string">"G"</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        String del;</span><br><span class="line">        <span class="keyword">while</span>((del=heap.delMax())!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            System.out.print(del+<span class="string">","</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>堆排序</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HeapSort</span> </span>&#123;</span><br><span class="line">    <span class="comment">//判断heap堆中索引i处的元素是否小于索引j处的元素</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span>  <span class="keyword">boolean</span> <span class="title">less</span><span class="params">(Comparable[] heap, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> heap[i].compareTo(heap[j])&lt;<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//交换heap堆中i索引和j索引处的值</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span>  <span class="keyword">void</span> <span class="title">exch</span><span class="params">(Comparable[] heap, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">        Comparable tmp = heap[i];</span><br><span class="line">        heap[i] = heap[j];</span><br><span class="line">        heap[j] = tmp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//根据原数组source，构造出堆heap</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">createHeap</span><span class="params">(Comparable[] source, Comparable[] heap)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//把source中的元素拷贝到heap中，heap中的元素就形成一个无序的堆</span></span><br><span class="line">        System.arraycopy(source,<span class="number">0</span>,heap,<span class="number">1</span>,source.length);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//对堆中的元素做下沉调整(从长度的一半处开始，往索引1处扫描)</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = (heap.length)/<span class="number">2</span>;i&gt;<span class="number">0</span>;i--)&#123;</span><br><span class="line">            sink(heap,i,heap.length-<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//对source数组中的数据从小到大排序</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span>  <span class="keyword">void</span> <span class="title">sort</span><span class="params">(Comparable[] source)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//构建堆</span></span><br><span class="line">        Comparable[] heap = <span class="keyword">new</span> Comparable[source.length+<span class="number">1</span>];</span><br><span class="line">        createHeap(source,heap);</span><br><span class="line">        <span class="comment">//定义一个变量，记录未排序的元素中最大的索引</span></span><br><span class="line">        <span class="keyword">int</span> N = heap.length-<span class="number">1</span>;</span><br><span class="line">        <span class="comment">//通过循环，交换1索引处的元素和排序的元素中最大的索引处的元素</span></span><br><span class="line">        <span class="keyword">while</span>(N!=<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="comment">//交换元素</span></span><br><span class="line">            exch(heap,<span class="number">1</span>,N);</span><br><span class="line">            <span class="comment">//排序交换后最大元素所在的索引，让它不要参与堆的下沉调整</span></span><br><span class="line">            N--;</span><br><span class="line">            <span class="comment">//需要对索引1处的元素进行对的下沉调整</span></span><br><span class="line">            sink(heap,<span class="number">1</span>, N);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//把heap中的数据复制到原数组source中</span></span><br><span class="line">        System.arraycopy(heap,<span class="number">1</span>,source,<span class="number">0</span>,source.length);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//在heap堆中，对target处的元素做下沉，范围是0~range</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sink</span><span class="params">(Comparable[] heap, <span class="keyword">int</span> target, <span class="keyword">int</span> range)</span></span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="number">2</span>*target&lt;=range)&#123;</span><br><span class="line">            <span class="comment">//1.找出当前结点的较大的子结点</span></span><br><span class="line">            <span class="keyword">int</span> max;</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">2</span>*target+<span class="number">1</span>&lt;=range)&#123;</span><br><span class="line">                <span class="keyword">if</span> (less(heap,<span class="number">2</span>*target,<span class="number">2</span>*target+<span class="number">1</span>))&#123;</span><br><span class="line">                    max = <span class="number">2</span>*target+<span class="number">1</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    max = <span class="number">2</span>*target;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                max = <span class="number">2</span>*target;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//2.比较当前结点的值和较大子结点的值</span></span><br><span class="line">            <span class="keyword">if</span> (!less(heap,target,max))&#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            exch(heap,target,max);</span><br><span class="line"></span><br><span class="line">            target = max;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/2021/03/01/leetcode/heap&heapSort/" data-id="cklrrlkdv000lth9b0tuhsxm2" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+    <a href="/2021/03/01/leetcode/lru/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          146、LRU 缓存机制
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/03/01/leetcode/买卖股票的最佳时机I、II、III、IV、含手续费、含冷冻期 -- 动态规划/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">买卖股票的最佳时机I、II、III、IV、含手续费、含冷冻期 -- 动态规划</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#堆属性"><span class="toc-number">1.</span> <span class="toc-text">堆属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#堆和普通树的区别"><span class="toc-number">2.</span> <span class="toc-text">堆和普通树的区别</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>
