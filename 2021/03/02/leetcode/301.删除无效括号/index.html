@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>301.删除无效括号 | 我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="https://leetcode-cn.com/problems/remove-invalid-parentheses 删除最小数量的无效括号，使得输入的字符串有效，返回所有可能的结果。 说明: 输入可能包含了除 ( 和 ) 以外的字符。 示例 1: ​        输入: “()())()”​        输出: [“()()()”, “(())()”] 示例 2: ​        输入:">
+<meta name="keywords" content="数据结构与算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="301.删除无效括号">
+<meta property="og:url" content="/2021/03/02/leetcode/301.删除无效括号/index.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="https://leetcode-cn.com/problems/remove-invalid-parentheses 删除最小数量的无效括号，使得输入的字符串有效，返回所有可能的结果。 说明: 输入可能包含了除 ( 和 ) 以外的字符。 示例 1: ​        输入: “()())()”​        输出: [“()()()”, “(())()”] 示例 2: ​        输入:">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2021-03-02T02:54:20.404Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="301.删除无效括号">
+<meta name="twitter:description" content="https://leetcode-cn.com/problems/remove-invalid-parentheses 删除最小数量的无效括号，使得输入的字符串有效，返回所有可能的结果。 说明: 输入可能包含了除 ( 和 ) 以外的字符。 示例 1: ​        输入: “()())()”​        输出: [“()()()”, “(())()”] 示例 2: ​        输入:">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-leetcode/301.删除无效括号" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/03/02/leetcode/301.删除无效括号/" class="article-date">
+  <time datetime="2021-03-02T02:48:21.000Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      301.删除无效括号
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <p><a href="https://leetcode-cn.com/problems/remove-invalid-parentheses" target="_blank" rel="noopener">https://leetcode-cn.com/problems/remove-invalid-parentheses</a></p>
+<p>删除最小数量的无效括号，使得输入的字符串有效，返回所有可能的结果。</p>
+<p>说明: 输入可能包含了除 ( 和 ) 以外的字符。</p>
+<p>示例 1:</p>
+<p>​        输入: “()())()”<br>​        输出: [“()()()”, “(())()”]</p>
+<p>示例 2:</p>
+<p>​        输入: “(a)())()”<br>​        输出: [“(a)()()”, “(a())()”]</p>
+<p>示例 3:</p>
+<p>​        输入: “)(“<br>​        输出: [“”]</p>
+<p>使用回溯+剪枝方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> len;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">char</span>[] charArray;</span><br><span class="line">        <span class="keyword">private</span> Set&lt;String&gt; validExpressions = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">removeInvalidParentheses</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.len = s.length();</span><br><span class="line">            <span class="keyword">this</span>.charArray = s.toCharArray();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 第 1 步：遍历一次，计算多余的左右括号</span></span><br><span class="line">            <span class="keyword">int</span> leftRemove = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> rightRemove = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (charArray[i] == <span class="string">'('</span>) &#123;</span><br><span class="line">                    leftRemove++;</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (charArray[i] == <span class="string">')'</span>) &#123;</span><br><span class="line">                    <span class="comment">// 遇到右括号的时候，须要根据已经存在的左括号数量决定</span></span><br><span class="line">                    <span class="keyword">if</span> (leftRemove == <span class="number">0</span>) &#123;</span><br><span class="line">                        rightRemove++;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (leftRemove &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                        <span class="comment">// 关键：一个右括号出现可以抵销之前遇到的左括号</span></span><br><span class="line">                        leftRemove--;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 第 2 步：回溯算法，尝试每一种可能的删除操作</span></span><br><span class="line">            StringBuilder path = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">            dfs(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, leftRemove, rightRemove, path);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;(<span class="keyword">this</span>.validExpressions);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> index       当前遍历到的下标</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> leftCount   已经遍历到的左括号的个数</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> rightCount  已经遍历到的右括号的个数</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> leftRemove  最少应该删除的左括号的个数</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> rightRemove 最少应该删除的右括号的个数</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> path        一个可能的结果</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> index, <span class="keyword">int</span> leftCount, <span class="keyword">int</span> rightCount, <span class="keyword">int</span> leftRemove, <span class="keyword">int</span> rightRemove, StringBuilder path)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (index == len) &#123;</span><br><span class="line">                <span class="keyword">if</span> (leftRemove == <span class="number">0</span> &amp;&amp; rightRemove == <span class="number">0</span>) &#123;</span><br><span class="line">                    validExpressions.add(path.toString());</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">char</span> character = charArray[index];</span><br><span class="line">            <span class="comment">// 可能的操作 1：删除当前遍历到的字符</span></span><br><span class="line">            <span class="keyword">if</span> (character == <span class="string">'('</span> &amp;&amp; leftRemove &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="comment">// 由于 leftRemove &gt; 0，并且当前遇到的是左括号，因此可以尝试删除当前遇到的左括号</span></span><br><span class="line">                dfs(index + <span class="number">1</span>, leftCount, rightCount, leftRemove - <span class="number">1</span>, rightRemove, path);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (character == <span class="string">')'</span> &amp;&amp; rightRemove &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="comment">// 由于 rightRemove &gt; 0，并且当前遇到的是右括号，因此可以尝试删除当前遇到的右括号</span></span><br><span class="line">                dfs(index + <span class="number">1</span>, leftCount, rightCount, leftRemove, rightRemove - <span class="number">1</span>, path);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 可能的操作 2：保留当前遍历到的字符</span></span><br><span class="line">            path.append(character);</span><br><span class="line">            <span class="keyword">if</span> (character != <span class="string">'('</span> &amp;&amp; character != <span class="string">')'</span>) &#123;</span><br><span class="line">                <span class="comment">// 如果不是括号，继续深度优先遍历</span></span><br><span class="line">                dfs(index + <span class="number">1</span>, leftCount, rightCount, leftRemove, rightRemove, path);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (character == <span class="string">'('</span>) &#123;</span><br><span class="line">                <span class="comment">// 考虑左括号</span></span><br><span class="line">                dfs(index + <span class="number">1</span>, leftCount + <span class="number">1</span>, rightCount, leftRemove, rightRemove, path);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (leftCount &gt; rightCount) &#123;<span class="comment">//这里不能是 character == ')'， 还有可能是字母</span></span><br><span class="line">                <span class="comment">// 考虑右括号</span></span><br><span class="line">                dfs(index + <span class="number">1</span>, leftCount, rightCount + <span class="number">1</span>, leftRemove, rightRemove, path);</span><br><span class="line">            &#125;</span><br><span class="line">            path.deleteCharAt(path.length() - <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/2021/03/02/leetcode/301.删除无效括号/" data-id="cklrf4548000bzx9b1ky3qcww" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2021/03/01/leetcode/lru/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">146、LRU 缓存机制</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title recent-posts">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/03/02/leetcode/301.删除无效括号/">301.删除无效括号</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/01/leetcode/lru/">146、LRU 缓存机制</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/01/leetcode/买卖股票的最佳时机I、II、III、IV、含手续费、含冷冻期 -- 动态规划/">买卖股票的最佳时机I、II、III、IV、含手续费、含冷冻期 -- 动态规划</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/26/java/synchronized/synchronized/">synchronized</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/26/技术栈/">java技术</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>
