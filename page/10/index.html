@@ -3,19 +3,15 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-  <title>tcp三次握手、四次挥手 | 我的博客</title>
+  <title>我的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="tcp">
-<meta property="og:type" content="article">
-<meta property="og:title" content="tcp三次握手、四次挥手">
-<meta property="og:url" content="/2019/07/12/http/tcp/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/page/10/index.html">
 <meta property="og:site_name" content="我的博客">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="/2019/07/12/http/tcp/tcp.jpeg">
-<meta property="og:updated_time" content="2021-02-18T11:03:12.438Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tcp三次握手、四次挥手">
-<meta name="twitter:image" content="/2019/07/12/http/tcp/tcp.jpeg">
+<meta name="twitter:title" content="我的博客">
   
   
 <!--    <link rel="icon" href="/favicon.ico">-->
@@ -62,10 +58,12 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-http/tcp" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main">
+  
+    <article id="post-zookeeper/zookeeper_expiryQueue" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/07/12/http/tcp/" class="article-date">
-  <time datetime="2019-07-12T04:28:35.000Z" itemprop="datePublished">2019-07-12</time>
+    <a href="/2019/07/11/zookeeper/zookeeper_expiryQueue/" class="article-date">
+  <time datetime="2019-07-11T04:28:35.000Z" itemprop="datePublished">2019-07-11</time>
 </a>
     
   </div>
@@ -75,8 +73,8 @@
       <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
-      tcp三次握手、四次挥手
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/07/11/zookeeper/zookeeper_expiryQueue/">zookeeper之ExpiryQueue</a>
     </h1>
   
 
@@ -86,99 +84,127 @@
       
         <!-- Table of Contents -->
         
-        <p><img src="/2019/07/12/http/tcp/tcp.jpeg" alt="dddd"></p>
+        <p>zookeeper之ExpiryQueue</p>
+<pre><code>ExpiryQueue是在SessionTrackerImpl中使用的，主要是维护zk中session的队列
+了解ExpiryQueue的实现
 
+//ExpiryQueue&lt;SessionImpl&gt; sessionExpiryQueue;
+
+//elemMap保存的是SessionImpl--&gt;过期时间
+private final ConcurrentHashMap&lt;E, Long&gt; elemMap = new ConcurrentHashMap&lt;E, Long&gt;();
+
+//expiryMap保存的是 过期时间--&gt;SessionImpl集合
+private final ConcurrentHashMap&lt;Long, Set&lt;E&gt;&gt; expiryMap = new ConcurrentHashMap&lt;Long, Set&lt;E&gt;&gt;();
+
+****elemMap和expiryMap是利用空间换时间，方便根据SessionImpl 和 过期时间相互查找****</code></pre><p>ExpiryQueue的remove方法</p>
+<pre><code>ExpiryQueue的实现相当于一个缓存，想起之前面试的一个题目：实现一个缓存fifo,缓存的value可以有过期时间/无过
+期时间，缓存大小一定，当put时，如果缓存满了(达到缓存上线)，优先剔除最近要失效的key-value，如果key都不过
+期，优先剔除最先进来的key，直到能放下新的key-value。这个题可以用ConcurrentHashMap缓存，TreeSet(有序集
+合)过期时间排序，或者二分查找。
+**从这里感觉算法的重要性。时间复杂度、空间复杂度在实际工作中得以应用。**
+
+public Long remove(E elem) {
+     //快速根据SessionImpl获取过期的时间
+    Long expiryTime = elemMap.remove(elem);
+    if (expiryTime != null) {
+        Set&lt;E&gt; set = expiryMap.get(expiryTime);
+        if (set != null) {
+                //从expiryMap中删除
+            set.remove(elem);
+        }
+    }
+    return expiryTime;
+}</code></pre><p>ExpiryQueue的update方法</p>
+<pre><code>public Long update(E elem, int timeout) {
+    Long prevExpiryTime = elemMap.get(elem);
+    long now = Time.currentElapsedTime();
+    Long newExpiryTime = roundToNextInterval(now + timeout);
+
+    if (newExpiryTime.equals(prevExpiryTime)) {
+        // No change, so nothing to update
+        return null;
+    }
+
+    // First add the elem to the new expiry time bucket in expiryMap.
+    Set&lt;E&gt; set = expiryMap.get(newExpiryTime);
+    //**如果elemMap中不存在，放入到elemMap中
+    if (set == null) {
+        // Construct a ConcurrentHashSet using a ConcurrentHashMap
+        set = Collections.newSetFromMap(
+            new ConcurrentHashMap&lt;E, Boolean&gt;());
+        // Put the new set in the map, but only if another thread
+        // hasn&apos;t beaten us to it
+        Set&lt;E&gt; existingSet = expiryMap.putIfAbsent(newExpiryTime, set);
+        if (existingSet != null) {
+            set = existingSet;
+        }
+    }
+    set.add(elem);
+
+    // Map the elem to the new expiry time. If a different previous
+    // mapping was present, clean up the previous expiry bucket.
+    prevExpiryTime = elemMap.put(elem, newExpiryTime);
+    if (prevExpiryTime != null &amp;&amp; !newExpiryTime.equals(prevExpiryTime)) {
+        Set&lt;E&gt; prevSet = expiryMap.get(prevExpiryTime);
+        if (prevSet != null) {
+            prevSet.remove(elem);
+        }
+    }
+    return newExpiryTime;
+}</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2019/07/12/http/tcp/" data-id="cklru1eh40007wp9bu9vfs98e" class="article-share-link">分享</a>
+      <a data-url="/2019/07/11/zookeeper/zookeeper_expiryQueue/" data-id="cklru1ehp001iwp9bz9l7ihni" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcp/">tcp</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
 
     </footer>
   </div>
   
+</article>
+ 
+
+
+  
+    <article id="post-java/jvm指令" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/07/11/java/jvm指令/" class="article-date">
+  <time datetime="2019-07-11T03:35:52.538Z" itemprop="datePublished">2019-07-11</time>
+</a>
     
- <script src="/jquery/jquery.min.js"></script>
-  <div id="random_posts">
-    <h2>推荐文章</h2>
-    <div class="random_posts_ul">
-      <script>
-          var random_count =4
-          var site = {BASE_URI:'/'};
-          function load_random_posts(obj) {
-              var arr=site.posts;
-              if (!obj) return;
-              // var count = $(obj).attr('data-count') || 6;
-              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
-              arr = arr.slice(0, random_count);
-              var html = '<ul>';
-            
-              for(var j=0;j<arr.length;j++){
-                var item=arr[j];
-                html += '<li><strong>' + 
-                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
-                (item.title || item.uri) + '</a></strong>';
-                if(item.excerpt){
-                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
-                }
-                html +='</li>';
-                
-              }
-              $(obj).html(html + '</ul>');
-          }
-          $('.random_posts_ul').each(function () {
-              var c = this;
-              if (!site.posts || !site.posts.length){
-                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
-              } 
-               else{
-                load_random_posts(c);
-              }
-          });
-      </script>
-    </div>
   </div>
-
+  <div class="article-inner">
     
-<nav id="article-nav">
-  
-    <a href="/2019/07/12/redis/redis-info信息/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
-      <div class="article-nav-title">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
         
-          redis info信息
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2019/07/12/java/java多线程竞拍/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">阿里云面试题-多线程竞拍</div>
-    </a>
-  
-</nav>
+        <p>jvm基本指令</p>
 
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/2019/07/11/java/jvm指令/" data-id="cklru1eh6000bwp9bq3rzx3e1" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
   
 </article>
  
-     
-  <div class="comments" id="comments">
-    
-     
-       
-      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
-    
-       
-      
-      
-  </div>
- 
+
+
   
 
+
+  <nav id="page-nav">
+    <a class="extend prev" rel="prev" href="/page/9/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span>
+  </nav>
 </section>
            
     <aside id="sidebar">
