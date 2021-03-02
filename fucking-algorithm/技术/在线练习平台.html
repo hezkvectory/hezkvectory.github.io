@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在线刷题学习平台        相关推荐：  区间调度之区间合并问题 别再说你不懂Linux内存管理了，10张图给你安排的明明白白  ———– 虽说我没事就喜欢喷应试教育，但我也从应试教育中发现了一个窍门：如果能够以刷题的形式学习某项技能，效率和效果是最佳的。对于技术的学习，我经常面临的困境是，理论知识知道的不少，但是有的场景实在无法模拟，缺少亲自动手实践的机会，如果能有一本带标准答案的习题册让我">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/技术/在线练习平台.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="在线刷题学习平台        相关推荐：  区间调度之区间合并问题 别再说你不懂Linux内存管理了，10张图给你安排的明明白白  ———– 虽说我没事就喜欢喷应试教育，但我也从应试教育中发现了一个窍门：如果能够以刷题的形式学习某项技能，效率和效果是最佳的。对于技术的学习，我经常面临的困境是，理论知识知道的不少，但是有的场景实在无法模拟，缺少亲自动手实践的机会，如果能有一本带标准答案的习题册让我">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/技术/在线练习平台.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/1.png">
+<meta property="og:image" content="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/2.png">
+<meta property="og:image" content="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/3.png">
+<meta property="og:image" content="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/4.png">
+<meta property="og:image" content="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/5.png">
+<meta property="og:image" content="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/6.png">
+<meta property="og:image" content="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/9.png">
+<meta property="og:image" content="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/10.png">
+<meta property="og:image" content="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/11.png">
+<meta property="og:image" content="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/7.png">
+<meta property="og:image" content="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/8.png">
+<meta property="og:image" content="/fucking-algorithm/技术/在线练习平台.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.860Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="在线刷题学习平台        相关推荐：  区间调度之区间合并问题 别再说你不懂Linux内存管理了，10张图给你安排的明明白白  ———– 虽说我没事就喜欢喷应试教育，但我也从应试教育中发现了一个窍门：如果能够以刷题的形式学习某项技能，效率和效果是最佳的。对于技术的学习，我经常面临的困境是，理论知识知道的不少，但是有的场景实在无法模拟，缺少亲自动手实践的机会，如果能有一本带标准答案的习题册让我">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/技术/在线练习平台.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.860Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="在线刷题学习平台"><a href="#在线刷题学习平台" class="headerlink" title="在线刷题学习平台"></a>在线刷题学习平台</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/技术/在线练习平台.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">区间调度之区间合并问题</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">别再说你不懂Linux内存管理了，10张图给你安排的明明白白</a></li>
+</ul>
+<p><strong>———–</strong></p>
+<p>虽说我没事就喜欢喷应试教育，但我也从应试教育中发现了一个窍门：如果能够以刷题的形式学习某项技能，效率和效果是最佳的。对于技术的学习，我经常面临的困境是，<strong>理论知识知道的不少，但是有的场景实在无法模拟，缺少亲自动手实践的机会</strong>，如果能有一本带标准答案的习题册让我刷刷就好了。</p>
+<p>所以在学习新技术时，我首先会去搜索是否有在线刷题平台，你还别说，有的大神真就做了很不错的在线练习平台，下面就介绍几个平台，分别是学习 Git、SQL、正则表达式的在线练习平台。</p>
+<h3 id="一、练习-Git"><a href="#一、练习-Git" class="headerlink" title="一、练习 Git"></a>一、练习 Git</h3><p>这是个叫做 Learning Git Branching 的项目，是我一定要推荐的：</p>
+<p><img src="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/1.png" alt></p>
+<p>正如对话框中的自我介绍，这确实也是我至今发现的<strong>最好</strong>的 Git 动画教程，没有之一。</p>
+<p>想当年我用 Git 就会 <code>add .</code>，<code>clone</code>，<code>push</code>，<code>pull</code>，<code>commit</code> 几个命令，其他的命令完全不会，Git 就是一个下载器，Github 就是个资源网站加免费图床，命令能不能达成目的都是靠运气。什么版本控制，我根本搞不懂，也懒得去看那一堆乱七八糟的文档。</p>
+<p>这个网站的教程不是给你举那种修改文件的细节例子，而是将每次 <code>commit</code> 都抽象成树的节点，<strong>用动画闯关的形式</strong>，让你自由使用 Git 命令完成目标：</p>
+<p><img src="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/2.png" alt></p>
+<p>所有 Git 分支都被可视化了，你只要在左侧的命令行输入 Git 命令，分支会进行相应的变化，只要达成任务目标，你就过关啦！网站还会记录你的命令数，试试能不能以最少的命令数过关！</p>
+<p><img src="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/3.png" alt></p>
+<p>我一开始以为这个教程只包含本地 Git 仓库的版本管理，<strong>后来我惊奇地发现它还有远程仓库的操作教程</strong>！</p>
+<p><img src="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/4.png" alt></p>
+<p><img src="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/5.png" alt></p>
+<p>真的跟玩游戏一样，难度设计合理，流畅度很好，我一玩都停不下来了，几小时就打通了，哈哈哈！</p>
+<p><img src="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/6.png" alt></p>
+<p>总之，这个教程很适合初学和进阶，如果你觉得自己对 Git 的掌握还不太好，用 Git 命令还是靠碰运气，就可以玩玩这个教程，相信能够让你更熟练地使用 Git。</p>
+<p>它是一个开源项目，Github 项目地址：</p>
+<p><a href="https://github.com/pcottle/learnGitBranching" target="_blank" rel="noopener">https://github.com/pcottle/learnGitBranching</a></p>
+<p>教程网站地址：</p>
+<p><a href="https://learngitbranching.js.org" target="_blank" rel="noopener">https://learngitbranching.js.org</a></p>
+<h3 id="二、练习正则表达式"><a href="#二、练习正则表达式" class="headerlink" title="二、练习正则表达式"></a>二、练习正则表达式</h3><p><strong>正则表达式是个非常强有力的工具</strong>，可以说计算机中的一切数据都是字符，借助正则表达式这种模式匹配工具，操作计算机可以说是如虎添翼。</p>
+<p>我这里要推荐两个网站，一个是练习平台，一个是测试正则表达式的平台。</p>
+<p>先说练习平台，叫做 RegexOne：</p>
+<p><img src="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/9.png" alt></p>
+<p>前面有基本教程，后面有一些常见的正则表达式题目，比如判断邮箱、URL、电话号，或者抽取日志的关键信息等等。</p>
+<p>只要写出符合要求的正则表达式，就可以进入下一个问题，关键是每道题还有标准答案，可以点击下面的 solution 按钮查看：</p>
+<p><img src="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/10.png" alt></p>
+<p>RegexOne 网址：</p>
+<p><a href="https://regexone.com/" target="_blank" rel="noopener">https://regexone.com/</a></p>
+<p>再说测试工具，是个叫做 RegExr 的 Github 项目，这是它的网站：</p>
+<p><img src="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/11.png" alt></p>
+<p>可以看见，输入文本和正则模式串后，<strong>网站会给正则表达式添加好看且容易辨认的样式，自动在文本中搜索模式串，高亮显示匹配的字符串，并且还会显示每个分组捕获的字符串</strong>。</p>
+<p>这个网站可以配合前面的正则练习平台使用，在这里尝试各种表达式，成功匹配之后粘贴过去。</p>
+<p>RegExr 网址：</p>
+<p><a href="https://regexr.com/" target="_blank" rel="noopener">https://regexr.com/</a></p>
+<h3 id="三、练习-SQL"><a href="#三、练习-SQL" class="headerlink" title="三、练习 SQL"></a>三、练习 SQL</h3><p>这是一个叫做 SQLZOO 的网站，左侧是所有的练习内容：</p>
+<p><img src="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/7.png" alt></p>
+<p>SQLZOO 是一款很好用的 SQL 练习平台，英文不难理解，可以直接看英文版，但是也可以切换繁体中文，比较友好。</p>
+<p>这里都是比较常用的 SQL 命令，给你一个需求，你写 SQL 语句实现正确的查询结果。<strong>最重要的是，这里不仅对每个命令的用法有详细解释，每个专题后面还有选择题（quiz），而且有判题系统，甚至有的比较难的题目还有视频讲解</strong>：</p>
+<p><img src="/fucking-algorithm/技术/在线练习平台.htm/pictures/online/8.png" alt></p>
+<p>至于难度，循序渐进，即便对新手也很友好，靠后的问题确实比较有技巧性，相信这是热爱思维挑战的人喜欢的！LeetCode 也有 SQL 相关的题目，不过难度一般比较大，我觉得 SQLZOO 刷完基础 SQL 命令再去 LeetCode 刷比较合适。</p>
+<p>网站地址：</p>
+<p><a href="https://sqlzoo.net/" target="_blank" rel="noopener">https://sqlzoo.net/</a></p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/技术/在线练习平台.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/技术/在线练习平台.html" data-id="cklrh5z9y0019ro9bvtr8ra5d" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#在线刷题学习平台"><span class="toc-number">1.</span> <span class="toc-text">在线刷题学习平台</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、练习-Git"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、练习 Git</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、练习正则表达式"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、练习正则表达式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、练习-SQL"><span class="toc-number">1.0.3.</span> <span class="toc-text">三、练习 SQL</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

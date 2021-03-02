@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="动态规划答疑篇        相关推荐：  搜索引擎背后的经典数据结构和算法 动态规划之四键键盘  ———– 这篇文章就给你讲明白两个问题： 1、到底什么才叫「最优子结构」，和动态规划什么关系。 2、为什么动态规划遍历 dp 数组的方式五花八门，有的正着遍历，有的倒着遍历，有的斜着遍历。 一、最优子结构详解「最优子结构」是某些问题的一种特定性质，并不是动态规划问题专有的。也就是说，很多问题其实都具">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/动态规划系列/最优子结构.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="动态规划答疑篇        相关推荐：  搜索引擎背后的经典数据结构和算法 动态规划之四键键盘  ———– 这篇文章就给你讲明白两个问题： 1、到底什么才叫「最优子结构」，和动态规划什么关系。 2、为什么动态规划遍历 dp 数组的方式五花八门，有的正着遍历，有的倒着遍历，有的斜着遍历。 一、最优子结构详解「最优子结构」是某些问题的一种特定性质，并不是动态规划问题专有的。也就是说，很多问题其实都具">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/最优子结构.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/最优子结构.htm/pictures/%E6%9C%80%E4%BC%98%E5%AD%90%E7%BB%93%E6%9E%84/1.jpg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/最优子结构.htm/pictures/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E5%BA%8F%E5%88%97/4.jpg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/最优子结构.htm/pictures/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E5%BA%8F%E5%88%97/5.jpg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/最优子结构.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.856Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="动态规划答疑篇        相关推荐：  搜索引擎背后的经典数据结构和算法 动态规划之四键键盘  ———– 这篇文章就给你讲明白两个问题： 1、到底什么才叫「最优子结构」，和动态规划什么关系。 2、为什么动态规划遍历 dp 数组的方式五花八门，有的正着遍历，有的倒着遍历，有的斜着遍历。 一、最优子结构详解「最优子结构」是某些问题的一种特定性质，并不是动态规划问题专有的。也就是说，很多问题其实都具">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/动态规划系列/最优子结构.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.856Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="动态规划答疑篇"><a href="#动态规划答疑篇" class="headerlink" title="动态规划答疑篇"></a>动态规划答疑篇</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/动态规划系列/最优子结构.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">搜索引擎背后的经典数据结构和算法</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">动态规划之四键键盘</a></li>
+</ul>
+<p><strong>———–</strong></p>
+<p>这篇文章就给你讲明白两个问题：</p>
+<p>1、到底什么才叫「最优子结构」，和动态规划什么关系。</p>
+<p>2、为什么动态规划遍历 <code>dp</code> 数组的方式五花八门，有的正着遍历，有的倒着遍历，有的斜着遍历。</p>
+<h3 id="一、最优子结构详解"><a href="#一、最优子结构详解" class="headerlink" title="一、最优子结构详解"></a>一、最优子结构详解</h3><p>「最优子结构」是某些问题的一种特定性质，并不是动态规划问题专有的。也就是说，很多问题其实都具有最优子结构，只是其中大部分不具有重叠子问题，所以我们不把它们归为动态规划系列问题而已。</p>
+<p>我先举个很容易理解的例子：假设你们学校有 10 个班，你已经计算出了每个班的最高考试成绩。那么现在我要求你计算全校最高的成绩，你会不会算？当然会，而且你不用重新遍历全校学生的分数进行比较，而是只要在这 10 个最高成绩中取最大的就是全校的最高成绩。</p>
+<p>我给你提出的这个问题就<strong>符合最优子结构</strong>：可以从子问题的最优结果推出更大规模问题的最优结果。让你算<strong>每个班</strong>的最优成绩就是子问题，你知道所有子问题的答案后，就可以借此推出<strong>全校</strong>学生的最优成绩这个规模更大的问题的答案。</p>
+<p>你看，这么简单的问题都有最优子结构性质，只是因为显然没有重叠子问题，所以我们简单地求最值肯定用不出动态规划。</p>
+<p>再举个例子：假设你们学校有 10 个班，你已知每个班的最大分数差（最高分和最低分的差值）。那么现在我让你计算全校学生中的最大分数差，你会不会算？可以想办法算，但是肯定不能通过已知的这 10 个班的最大分数差推到出来。因为这 10 个班的最大分数差不一定就包含全校学生的最大分数差，比如全校的最大分数差可能是 3 班的最高分和 6 班的最低分之差。</p>
+<p>这次我给你提出的问题就<strong>不符合最优子结构</strong>，因为你没办通过每个班的最优值推出全校的最优值，没办法通过子问题的最优值推出规模更大的问题的最优值。前文「动态规划详解」说过，想满足最优子结，子问题之间必须互相独立。全校的最大分数差可能出现在两个班之间，显然子问题不独立，所以这个问题本身不符合最优子结构。</p>
+<p><strong>那么遇到这种最优子结构失效情况，怎么办？策略是：改造问题</strong>。对于最大分数差这个问题，我们不是没办法利用已知的每个班的分数差吗，那我只能这样写一段暴力代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span> (Student a : school) &#123;</span><br><span class="line">    <span class="keyword">for</span> (Student b : school) &#123;</span><br><span class="line">        <span class="keyword">if</span> (a is b) <span class="keyword">continue</span>;</span><br><span class="line">        result = max(result, |a.score - b.score|);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> result;</span><br></pre></td></tr></table></figure>
+
+<p>改造问题，也就是把问题等价转化：最大分数差，不就等价于最高分数和最低分数的差么，那不就是要求最高和最低分数么，不就是我们讨论的第一个问题么，不就具有最优子结构了么？那现在改变思路，借助最优子结构解决最值问题，再回过头解决最大分数差问题，是不是就高效多了？</p>
+<p>当然，上面这个例子太简单了，不过请读者回顾一下，我们做动态规划问题，是不是一直在求各种最值，本质跟我们举的例子没啥区别，无非需要处理一下重叠子问题。</p>
+<p>前文不<a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">同定义不同解法</a> 和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">高楼扔鸡蛋进阶</a> 就展示了如何改造问题，不同的最优子结构，可能导致不同的解法和效率。</p>
+<p>再举个常见但也十分简单的例子，求一棵二叉树的最大值，不难吧（简单起见，假设节点中的值都是非负数）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">maxVal</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> left = maxVal(root.left);</span><br><span class="line">    <span class="keyword">int</span> right = maxVal(root.right);</span><br><span class="line">    <span class="keyword">return</span> max(root.val, left, right);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>你看这个问题也符合最优子结构，以 <code>root</code> 为根的树的最大值，可以通过两边子树（子问题）的最大值推导出来，结合刚才学校和班级的例子，很容易理解吧。</p>
+<p>当然这也不是动态规划问题，旨在说明，最优子结构并不是动态规划独有的一种性质，能求最值的问题大部分都具有这个性质；<strong>但反过来，最优子结构性质作为动态规划问题的必要条件，一定是让你求最值的</strong>，以后碰到那种恶心人的最值题，思路往动态规划想就对了，这就是套路。</p>
+<p>动态规划不就是从最简单的 base case 往后推导吗，可以想象成一个链式反应，以小博大。但只有符合最优子结构的问题，才有发生这种链式反应的性质。</p>
+<p>找最优子结构的过程，其实就是证明状态转移方程正确性的过程，方程符合最优子结构就可以写暴力解了，写出暴力解就可以看出有没有重叠子问题了，有则优化，无则 OK。这也是套路，经常刷题的朋友应该能体会。</p>
+<p>这里就不举那些正宗动态规划的例子了，读者可以翻翻历史文章，看看状态转移是如何遵循最优子结构的，这个话题就聊到这，下面再来看另外个动态规划迷惑行为。</p>
+<h3 id="二、dp-数组的遍历方向"><a href="#二、dp-数组的遍历方向" class="headerlink" title="二、dp 数组的遍历方向"></a>二、dp 数组的遍历方向</h3><p>我相信读者做动态规问题时，肯定会对 <code>dp</code> 数组的遍历顺序有些头疼。我们拿二维 <code>dp</code> 数组来举例，有时候我们是正向遍历：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[m][n];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; i++)</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; j++)</span><br><span class="line">        <span class="comment">// 计算 dp[i][j]</span></span><br></pre></td></tr></table></figure>
+
+<p>有时候我们反向遍历：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = m - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = n - <span class="number">1</span>; j &gt;= <span class="number">0</span>; j--)</span><br><span class="line">        <span class="comment">// 计算 dp[i][j]</span></span><br></pre></td></tr></table></figure>
+
+<p>有时候可能会斜向遍历：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 斜着遍历数组</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> l = <span class="number">2</span>; l &lt;= n; l++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= n - l; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> j = l + i - <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// 计算 dp[i][j]</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>甚至更让人迷惑的是，有时候发现正向反向遍历都可以得到正确答案，比如我们在「团灭股票问题」中有的地方就正反皆可。</p>
+<p>那么，如果仔细观察的话可以发现其中的原因的。你只要把住两点就行了：</p>
+<p><strong>1、遍历的过程中，所需的状态必须是已经计算出来的</strong>。</p>
+<p><strong>2、遍历的终点必须是存储结果的那个位置</strong>。</p>
+<p>下面来距离解释上面两个原则是什么意思。</p>
+<p>比如编辑距离这个经典的问题，详解见前文「编辑距离详解」，我们通过对 <code>dp</code> 数组的定义，确定了 base case 是 <code>dp[..][0]</code> 和 <code>dp[0][..]</code>，最终答案是 <code>dp[m][n]</code>；而且我们通过状态转移方程知道 <code>dp[i][j]</code> 需要从 <code>dp[i-1][j]</code>, <code>dp[i][j-1]</code>, <code>dp[i-1][j-1]</code> 转移而来，如下图：</p>
+<p><img src="/fucking-algorithm/动态规划系列/最优子结构.htm/pictures/%E6%9C%80%E4%BC%98%E5%AD%90%E7%BB%93%E6%9E%84/1.jpg" alt></p>
+<p>那么，参考刚才说的两条原则，你该怎么遍历 <code>dp</code> 数组？肯定是正向遍历：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; m; i++)</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; n; j++)</span><br><span class="line">        <span class="comment">// 通过 dp[i-1][j], dp[i][j - 1], dp[i-1][j-1]</span></span><br><span class="line">        <span class="comment">// 计算 dp[i][j]</span></span><br></pre></td></tr></table></figure>
+
+<p>因为，这样每一步迭代的左边、上边、左上边的位置都是 base case 或者之前计算过的，而且最终结束在我们想要的答案 <code>dp[m][n]</code>。</p>
+<p>再举一例，回文子序列问题，详见前文「子序列问题模板」，我们通过过对 <code>dp</code> 数组的定义，确定了 base case 处在中间的对角线，<code>dp[i][j]</code> 需要从 <code>dp[i+1][j]</code>, <code>dp[i][j-1]</code>, <code>dp[i+1][j-1]</code> 转移而来，想要求的最终答案是 <code>dp[0][n-1]</code>，如下图：</p>
+<p><img src="/fucking-algorithm/动态规划系列/最优子结构.htm/pictures/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E5%BA%8F%E5%88%97/4.jpg" alt></p>
+<p>这种情况根据刚才的两个原则，就可以有两种正确的遍历方式：</p>
+<p><img src="/fucking-algorithm/动态规划系列/最优子结构.htm/pictures/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E5%BA%8F%E5%88%97/5.jpg" alt></p>
+<p>要么从左至右斜着遍历，要么从下向上从左到右遍历，这样才能保证每次 <code>dp[i][j]</code> 的左边、下边、左下边已经计算完毕，得到正确结果。</p>
+<p>现在，你应该理解了这两个原则，主要就是看 base case 和最终结果的存储位置，保证遍历过程中使用的数据都是计算完毕的就行，有时候确实存在多种方法可以得到正确答案，可根据个人口味自行选择。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/动态规划系列/最优子结构.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/动态规划系列/最优子结构.html" data-id="cklrh5za3001pro9bit2yf14q" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#动态规划答疑篇"><span class="toc-number">1.</span> <span class="toc-text">动态规划答疑篇</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、最优子结构详解"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、最优子结构详解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、dp-数组的遍历方向"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、dp 数组的遍历方向</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="如何高效判断回文链表        相关推荐：  如何高效进行模幂运算 一文学会递归解题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 234.回文链表 ———– 我们之前有两篇文章写了回文串和回文序列相关的问题。 寻找回文串的核心思想是从中心向两端扩展： 12345678910string palindrome(string&amp;amp; s, int l, i">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/高频面试系列/判断回文链表.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="如何高效判断回文链表        相关推荐：  如何高效进行模幂运算 一文学会递归解题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 234.回文链表 ———– 我们之前有两篇文章写了回文串和回文序列相关的问题。 寻找回文串的核心思想是从中心向两端扩展： 12345678910string palindrome(string&amp;amp; s, int l, i">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/判断回文链表.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/判断回文链表.htm/pictures/%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/1.gif">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/判断回文链表.htm/pictures/%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/1.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/判断回文链表.htm/pictures/%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/2.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/判断回文链表.htm/pictures/%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/3.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/判断回文链表.htm/pictures/kgroup/8.gif">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/判断回文链表.htm/pictures/%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/4.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/判断回文链表.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.875Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="如何高效判断回文链表        相关推荐：  如何高效进行模幂运算 一文学会递归解题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 234.回文链表 ———– 我们之前有两篇文章写了回文串和回文序列相关的问题。 寻找回文串的核心思想是从中心向两端扩展： 12345678910string palindrome(string&amp;amp; s, int l, i">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/高频面试系列/判断回文链表.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.875Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="如何高效判断回文链表"><a href="#如何高效判断回文链表" class="headerlink" title="如何高效判断回文链表"></a>如何高效判断回文链表</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/高频面试系列/判断回文链表.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">如何高效进行模幂运算</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">一文学会递归解题</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/palindrome-linked-list" target="_blank" rel="noopener">234.回文链表</a></p>
+<p><strong>———–</strong></p>
+<p>我们之前有两篇文章写了回文串和回文序列相关的问题。</p>
+<p><strong>寻找</strong>回文串的核心思想是从中心向两端扩展：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">string</span> <span class="title">palindrome</span><span class="params">(<span class="built_in">string</span>&amp; s, <span class="keyword">int</span> l, <span class="keyword">int</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 防止索引越界</span></span><br><span class="line">    <span class="keyword">while</span> (l &gt;= <span class="number">0</span> &amp;&amp; r &lt; s.size()</span><br><span class="line">            &amp;&amp; s[l] == s[r]) &#123;</span><br><span class="line">        <span class="comment">// 向两边展开</span></span><br><span class="line">        l--; r++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 返回以 s[l] 和 s[r] 为中心的最长回文串</span></span><br><span class="line">    <span class="keyword">return</span> s.substr(l + <span class="number">1</span>, r - l - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因为回文串长度可能为奇数也可能是偶数，长度为奇数时只存在一个中心点，而长度为偶数时存在两个中心点，所以上面这个函数需要传入<code>l</code>和<code>r</code>。</p>
+<p>而<strong>判断</strong>一个字符串是不是回文串就简单很多，不需要考虑奇偶情况，只需要「双指针技巧」，从两端向中间逼近即可：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">isPalindrome</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> left = <span class="number">0</span>, right = s.length - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (left &lt; right) &#123;</span><br><span class="line">        <span class="keyword">if</span> (s[left] != s[right])</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        left++; right--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上代码很好理解吧，<strong>因为回文串是对称的，所以正着读和倒着读应该是一样的，这一特点是解决回文串问题的关键</strong>。</p>
+<p>下面扩展这一最简单的情况，来解决：如何判断一个「单链表」是不是回文。</p>
+<h3 id="一、判断回文单链表"><a href="#一、判断回文单链表" class="headerlink" title="一、判断回文单链表"></a>一、判断回文单链表</h3><p>输入一个单链表的头结点，判断这个链表中的数字是不是回文：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 单链表节点的定义：</span></span><br><span class="line"><span class="comment"> * public class ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode next;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">isPalindrome</span><span class="params">(ListNode head)</span></span>;</span><br><span class="line"></span><br><span class="line">输入: <span class="number">1</span>-&gt;<span class="number">2</span>-&gt;<span class="keyword">null</span></span><br><span class="line">输出: <span class="keyword">false</span></span><br><span class="line"></span><br><span class="line">输入: <span class="number">1</span>-&gt;<span class="number">2</span>-&gt;<span class="number">2</span>-&gt;<span class="number">1</span>-&gt;<span class="keyword">null</span></span><br><span class="line">输出: <span class="keyword">true</span></span><br></pre></td></tr></table></figure>
+
+<p>这道题的关键在于，单链表无法倒着遍历，无法使用双指针技巧。那么最简单的办法就是，把原始链表反转存入一条新的链表，然后比较这两条链表是否相同。关于如何反转链表，可以参见前文「递归操作链表」。</p>
+<p>其实，<strong>借助二叉树后序遍历的思路，不需要显式反转原始链表也可以倒序遍历链表</strong>，下面来具体聊聊。</p>
+<p>对于二叉树的几种遍历方式，我们再熟悉不过了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">traverse</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 前序遍历代码</span></span><br><span class="line">    traverse(root.left);</span><br><span class="line">    <span class="comment">// 中序遍历代码</span></span><br><span class="line">    traverse(root.right);</span><br><span class="line">    <span class="comment">// 后序遍历代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在「学习数据结构的框架思维」中说过，链表兼具递归结构，树结构不过是链表的衍生。那么，<strong>链表其实也可以有前序遍历和后序遍历</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">traverse</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 前序遍历代码</span></span><br><span class="line">    traverse(head.next);</span><br><span class="line">    <span class="comment">// 后序遍历代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个框架有什么指导意义呢？如果我想正序打印链表中的<code>val</code>值，可以在前序遍历位置写代码；反之，如果想倒序遍历链表，就可以在后序遍历位置操作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 倒序打印单链表中的元素值 */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">traverse</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (head == <span class="keyword">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    traverse(head.next);</span><br><span class="line">    <span class="comment">// 后序遍历代码</span></span><br><span class="line">    print(head.val);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>说到这了，其实可以稍作修改，模仿双指针实现回文判断的功能：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 左侧指针</span></span><br><span class="line">ListNode left;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">isPalindrome</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">    left = head;</span><br><span class="line">    <span class="keyword">return</span> traverse(head);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">traverse</span><span class="params">(ListNode right)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (right == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">boolean</span> res = traverse(right.next);</span><br><span class="line">    <span class="comment">// 后序遍历代码</span></span><br><span class="line">    res = res &amp;&amp; (right.val == left.val);</span><br><span class="line">    left = left.next;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这么做的核心逻辑是什么呢？<strong>实际上就是把链表节点放入一个栈，然后再拿出来，这时候元素顺序就是反的</strong>，只不过我们利用的是递归函数的堆栈而已。</p>
+<p><img src="/fucking-algorithm/高频面试系列/判断回文链表.htm/pictures/%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/1.gif" alt></p>
+<p>当然，无论造一条反转链表还是利用后续遍历，算法的时间和空间复杂度都是 O(N)。下面我们想想，能不能不用额外的空间，解决这个问题呢？</p>
+<h3 id="二、优化空间复杂度"><a href="#二、优化空间复杂度" class="headerlink" title="二、优化空间复杂度"></a>二、优化空间复杂度</h3><p>更好的思路是这样的：</p>
+<p><strong>1、先通过「双指针技巧」中的快慢指针来找到链表的中点</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ListNode slow, fast;</span><br><span class="line">slow = fast = head;</span><br><span class="line"><span class="keyword">while</span> (fast != <span class="keyword">null</span> &amp;&amp; fast.next != <span class="keyword">null</span>) &#123;</span><br><span class="line">    slow = slow.next;</span><br><span class="line">    fast = fast.next.next;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// slow 指针现在指向链表中点</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/fucking-algorithm/高频面试系列/判断回文链表.htm/pictures/%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/1.jpg" alt></p>
+<p><strong>2、如果<code>fast</code>指针没有指向<code>null</code>，说明链表长度为奇数，<code>slow</code>还要再前进一步</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (fast != <span class="keyword">null</span>)</span><br><span class="line">    slow = slow.next;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/fucking-algorithm/高频面试系列/判断回文链表.htm/pictures/%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/2.jpg" alt></p>
+<p><strong>3、从<code>slow</code>开始反转后面的链表，现在就可以开始比较回文串了</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ListNode left = head;</span><br><span class="line">ListNode right = reverse(slow);</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> (right != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (left.val != right.val)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    left = left.next;</span><br><span class="line">    right = right.next;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> <span class="keyword">true</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/fucking-algorithm/高频面试系列/判断回文链表.htm/pictures/%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/3.jpg" alt></p>
+<p>至此，把上面 3 段代码合在一起就高效地解决这个问题了，其中<code>reverse</code>函数很容易实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ListNode <span class="title">reverse</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">    ListNode pre = <span class="keyword">null</span>, cur = head;</span><br><span class="line">    <span class="keyword">while</span> (cur != <span class="keyword">null</span>) &#123;</span><br><span class="line">        ListNode next = cur.next;</span><br><span class="line">        cur.next = pre;</span><br><span class="line">        pre = cur;</span><br><span class="line">        cur = next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> pre;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/fucking-algorithm/高频面试系列/判断回文链表.htm/pictures/kgroup/8.gif" alt></p>
+<p>算法总体的时间复杂度 O(N)，空间复杂度 O(1)，已经是最优的了。</p>
+<p>我知道肯定有读者会问：这种解法虽然高效，但破坏了输入链表的原始结构，能不能避免这个瑕疵呢？</p>
+<p>其实这个问题很好解决，关键在于得到<code>p, q</code>这两个指针位置：</p>
+<p><img src="/fucking-algorithm/高频面试系列/判断回文链表.htm/pictures/%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/4.jpg" alt></p>
+<p>这样，只要在函数 return 之前加一段代码即可恢复原先链表顺序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p.next = reverse(q);</span><br></pre></td></tr></table></figure>
+
+<p>篇幅所限，我就不写了，读者可以自己尝试一下。</p>
+<h3 id="三、最后总结"><a href="#三、最后总结" class="headerlink" title="三、最后总结"></a>三、最后总结</h3><p>首先，寻找回文串是从中间向两端扩展，判断回文串是从两端向中间收缩。对于单链表，无法直接倒序遍历，可以造一条新的反转链表，可以利用链表的后序遍历，也可以用栈结构倒序处理单链表。</p>
+<p>具体到回文链表的判断问题，由于回文的特殊性，可以不完全反转链表，而是仅仅反转部分链表，将空间复杂度降到 O(1)。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/高频面试系列/判断回文链表.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/高频面试系列/判断回文链表.html" data-id="cklrh5zac002aro9bqyhvfy9m" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#如何高效判断回文链表"><span class="toc-number">1.</span> <span class="toc-text">如何高效判断回文链表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、判断回文单链表"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、判断回文单链表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、优化空间复杂度"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、优化空间复杂度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、最后总结"><span class="toc-number">1.0.3.</span> <span class="toc-text">三、最后总结</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

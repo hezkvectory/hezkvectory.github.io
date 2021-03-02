@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="二叉搜索树操作集锦        相关推荐：  特殊数据结构：单调队列 一行代码就能解决的算法题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 100.相同的树 450.删除二叉搜索树中的节点 701.二叉搜索树中的插入操作 700.二叉搜索树中的搜索 98.验证二叉搜索树 ———– 通过之前的文章框架思维，二叉树的遍历框架应该已经印到你的脑子里了，这篇文章就">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/数据结构系列/二叉搜索树操作集锦.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="二叉搜索树操作集锦        相关推荐：  特殊数据结构：单调队列 一行代码就能解决的算法题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 100.相同的树 450.删除二叉搜索树中的节点 701.二叉搜索树中的插入操作 700.二叉搜索树中的搜索 98.验证二叉搜索树 ———– 通过之前的文章框架思维，二叉树的遍历框架应该已经印到你的脑子里了，这篇文章就">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/二叉搜索树操作集锦.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/二叉搜索树操作集锦.htm/pictures/BST/BST_example.png">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/二叉搜索树操作集锦.htm/pictures/BST/%E5%81%87BST.png">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/二叉搜索树操作集锦.htm/pictures/BST/bst_deletion_case_1.png">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/二叉搜索树操作集锦.htm/pictures/BST/bst_deletion_case_2.png">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/二叉搜索树操作集锦.htm/pictures/BST/bst_deletion_case_3.png">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/二叉搜索树操作集锦.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.861Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="二叉搜索树操作集锦        相关推荐：  特殊数据结构：单调队列 一行代码就能解决的算法题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 100.相同的树 450.删除二叉搜索树中的节点 701.二叉搜索树中的插入操作 700.二叉搜索树中的搜索 98.验证二叉搜索树 ———– 通过之前的文章框架思维，二叉树的遍历框架应该已经印到你的脑子里了，这篇文章就">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/数据结构系列/二叉搜索树操作集锦.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.861Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="二叉搜索树操作集锦"><a href="#二叉搜索树操作集锦" class="headerlink" title="二叉搜索树操作集锦"></a>二叉搜索树操作集锦</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/数据结构系列/二叉搜索树操作集锦.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">特殊数据结构：单调队列</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">一行代码就能解决的算法题</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/same-tree" target="_blank" rel="noopener">100.相同的树</a></p>
+<p><a href="https://leetcode-cn.com/problems/delete-node-in-a-bst" target="_blank" rel="noopener">450.删除二叉搜索树中的节点</a></p>
+<p><a href="https://leetcode-cn.com/problems/insert-into-a-binary-search-tree" target="_blank" rel="noopener">701.二叉搜索树中的插入操作</a></p>
+<p><a href="https://leetcode-cn.com/problems/search-in-a-binary-search-tree" target="_blank" rel="noopener">700.二叉搜索树中的搜索</a></p>
+<p><a href="https://leetcode-cn.com/problems/validate-binary-search-tree" target="_blank" rel="noopener">98.验证二叉搜索树</a></p>
+<p><strong>———–</strong></p>
+<p>通过之前的文章<a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">框架思维</a>，二叉树的遍历框架应该已经印到你的脑子里了，这篇文章就来实操一下，看看框架思维是怎么灵活运用，秒杀一切二叉树问题的。</p>
+<p>二叉树算法的设计的总路线：明确一个节点要做的事情，然后剩下的事抛给框架。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">traverse</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// root 需要做什么？在这做。</span></span><br><span class="line">    <span class="comment">// 其他的不用 root 操心，抛给框架</span></span><br><span class="line">    traverse(root.left);</span><br><span class="line">    traverse(root.right);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>举两个简单的例子体会一下这个思路，热热身。</p>
+<p><strong>1. 如何把二叉树所有的节点中的值加一？</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">plusOne</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    root.val += <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    plusOne(root.left);</span><br><span class="line">    plusOne(root.right);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>2. 如何判断两棵二叉树是否完全相同？</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">isSameTree</span><span class="params">(TreeNode root1, TreeNode root2)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 都为空的话，显然相同</span></span><br><span class="line">    <span class="keyword">if</span> (root1 == <span class="keyword">null</span> &amp;&amp; root2 == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    <span class="comment">// 一个为空，一个非空，显然不同</span></span><br><span class="line">    <span class="keyword">if</span> (root1 == <span class="keyword">null</span> || root2 == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    <span class="comment">// 两个都非空，但 val 不一样也不行</span></span><br><span class="line">    <span class="keyword">if</span> (root1.val != root2.val) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// root1 和 root2 该比的都比完了</span></span><br><span class="line">    <span class="keyword">return</span> isSameTree(root1.left, root2.left)</span><br><span class="line">        &amp;&amp; isSameTree(root1.right, root2.right);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>借助框架，上面这两个例子不难理解吧？如果可以理解，那么所有二叉树算法你都能解决。</p>
+<p>二叉搜索树（Binary Search Tree，简称 BST）是一种很常用的的二叉树。它的定义是：一个二叉树中，任意节点的值要大于等于左子树所有节点的值，且要小于等于右边子树的所有节点的值。</p>
+<p>如下就是一个符合定义的 BST：</p>
+<p><img src="/fucking-algorithm/数据结构系列/二叉搜索树操作集锦.htm/pictures/BST/BST_example.png" alt="BST"></p>
+<p>下面实现 BST 的基础操作：判断 BST 的合法性、增、删、查。其中“删”和“判断合法性”略微复杂。</p>
+<p><strong>零、判断 BST 的合法性</strong></p>
+<p>这里是有坑的哦，我们按照刚才的思路，每个节点自己要做的事不就是比较自己和左右孩子吗？看起来应该这样写代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">isValidBST</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">if</span> (root.left != <span class="keyword">null</span> &amp;&amp; root.val &lt;= root.left.val) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">if</span> (root.right != <span class="keyword">null</span> &amp;&amp; root.val &gt;= root.right.val) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> isValidBST(root.left)</span><br><span class="line">        &amp;&amp; isValidBST(root.right);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是这个算法出现了错误，BST 的每个节点应该要小于右边子树的所有节点，下面这个二叉树显然不是 BST，但是我们的算法会把它判定为 BST。</p>
+<p><img src="/fucking-algorithm/数据结构系列/二叉搜索树操作集锦.htm/pictures/BST/%E5%81%87BST.png" alt="notBST"></p>
+<p>出现错误，不要慌张，框架没有错，一定是某个细节问题没注意到。我们重新看一下 BST 的定义，root 需要做的不只是和左右子节点比较，而是要整个左子树和右子树所有节点比较。怎么办，鞭长莫及啊！</p>
+<p>这种情况，我们可以使用辅助函数，增加函数参数列表，在参数中携带额外信息，请看正确的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">isValidBST</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> isValidBST(root, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">isValidBST</span><span class="params">(TreeNode root, TreeNode min, TreeNode max)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">if</span> (min != <span class="keyword">null</span> &amp;&amp; root.val &lt;= min.val) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">if</span> (max != <span class="keyword">null</span> &amp;&amp; root.val &gt;= max.val) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">return</span> isValidBST(root.left, min, root) </span><br><span class="line">        &amp;&amp; isValidBST(root.right, root, max);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>一、在 BST 中查找一个数是否存在</strong></p>
+<p>根据我们的指导思想，可以这样写代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">isInBST</span><span class="params">(TreeNode root, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">if</span> (root.val == target) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> isInBST(root.left, target)</span><br><span class="line">        || isInBST(root.right, target);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样写完全正确，充分证明了你的框架性思维已经养成。现在你可以考虑一点细节问题了：如何充分利用信息，把 BST 这个“左小右大”的特性用上？</p>
+<p>很简单，其实不需要递归地搜索两边，类似二分查找思想，根据 target 和 root.val 的大小比较，就能排除一边。我们把上面的思路稍稍改动：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">isInBST</span><span class="params">(TreeNode root, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">if</span> (root.val == target)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">if</span> (root.val &lt; target) </span><br><span class="line">        <span class="keyword">return</span> isInBST(root.right, target);</span><br><span class="line">    <span class="keyword">if</span> (root.val &gt; target)</span><br><span class="line">        <span class="keyword">return</span> isInBST(root.left, target);</span><br><span class="line">    <span class="comment">// root 该做的事做完了，顺带把框架也完成了，妙</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>于是，我们对原始框架进行改造，抽象出一套<strong>针对 BST 的遍历框架</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">BST</span><span class="params">(TreeNode root, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root.val == target)</span><br><span class="line">        <span class="comment">// 找到目标，做点什么</span></span><br><span class="line">    <span class="keyword">if</span> (root.val &lt; target) </span><br><span class="line">        BST(root.right, target);</span><br><span class="line">    <span class="keyword">if</span> (root.val &gt; target)</span><br><span class="line">        BST(root.left, target);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>二、在 BST 中插入一个数</strong></p>
+<p>对数据结构的操作无非遍历 + 访问，遍历就是“找”，访问就是“改”。具体到这个问题，插入一个数，就是先找到插入位置，然后进行插入操作。</p>
+<p>上一个问题，我们总结了 BST 中的遍历框架，就是“找”的问题。直接套框架，加上“改”的操作即可。一旦涉及“改”，函数就要返回 TreeNode 类型，并且对递归调用的返回值进行接收。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">TreeNode <span class="title">insertIntoBST</span><span class="params">(TreeNode root, <span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 找到空位置插入新节点</span></span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">new</span> TreeNode(val);</span><br><span class="line">    <span class="comment">// if (root.val == val)</span></span><br><span class="line">    <span class="comment">//     BST 中一般不会插入已存在元素</span></span><br><span class="line">    <span class="keyword">if</span> (root.val &lt; val) </span><br><span class="line">        root.right = insertIntoBST(root.right, val);</span><br><span class="line">    <span class="keyword">if</span> (root.val &gt; val) </span><br><span class="line">        root.left = insertIntoBST(root.left, val);</span><br><span class="line">    <span class="keyword">return</span> root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>三、在 BST 中删除一个数</strong></p>
+<p>这个问题稍微复杂，不过你有框架指导，难不住你。跟插入操作类似，先“找”再“改”，先把框架写出来再说：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">TreeNode <span class="title">deleteNode</span><span class="params">(TreeNode root, <span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root.val == key) &#123;</span><br><span class="line">        <span class="comment">// 找到啦，进行删除</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (root.val &gt; key) &#123;</span><br><span class="line">        root.left = deleteNode(root.left, key);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (root.val &lt; key) &#123;</span><br><span class="line">        root.right = deleteNode(root.right, key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>找到目标节点了，比方说是节点 A，如何删除这个节点，这是难点。因为删除节点的同时不能破坏 BST 的性质。有三种情况，用图片来说明。</p>
+<p>情况 1：A 恰好是末端节点，两个子节点都为空，那么它可以当场去世了。</p>
+<p>图片来自 LeetCode<br><img src="/fucking-algorithm/数据结构系列/二叉搜索树操作集锦.htm/pictures/BST/bst_deletion_case_1.png" alt="1"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (root.left == <span class="keyword">null</span> &amp;&amp; root.right == <span class="keyword">null</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
+
+<p>情况 2：A 只有一个非空子节点，那么它要让这个孩子接替自己的位置。</p>
+<p>图片来自 LeetCode<br><img src="/fucking-algorithm/数据结构系列/二叉搜索树操作集锦.htm/pictures/BST/bst_deletion_case_2.png" alt="2"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 排除了情况 1 之后</span></span><br><span class="line"><span class="keyword">if</span> (root.left == <span class="keyword">null</span>) <span class="keyword">return</span> root.right;</span><br><span class="line"><span class="keyword">if</span> (root.right == <span class="keyword">null</span>) <span class="keyword">return</span> root.left;</span><br></pre></td></tr></table></figure>
+
+<p>情况 3：A 有两个子节点，麻烦了，为了不破坏 BST 的性质，A 必须找到左子树中最大的那个节点，或者右子树中最小的那个节点来接替自己。我们以第二种方式讲解。</p>
+<p>图片来自 LeetCode<br><img src="/fucking-algorithm/数据结构系列/二叉搜索树操作集锦.htm/pictures/BST/bst_deletion_case_3.png" alt="2"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (root.left != <span class="keyword">null</span> &amp;&amp; root.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 找到右子树的最小节点</span></span><br><span class="line">    TreeNode minNode = getMin(root.right);</span><br><span class="line">    <span class="comment">// 把 root 改成 minNode</span></span><br><span class="line">    root.val = minNode.val;</span><br><span class="line">    <span class="comment">// 转而去删除 minNode</span></span><br><span class="line">    root.right = deleteNode(root.right, minNode.val);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>三种情况分析完毕，填入框架，简化一下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">TreeNode <span class="title">deleteNode</span><span class="params">(TreeNode root, <span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (root.val == key) &#123;</span><br><span class="line">        <span class="comment">// 这两个 if 把情况 1 和 2 都正确处理了</span></span><br><span class="line">        <span class="keyword">if</span> (root.left == <span class="keyword">null</span>) <span class="keyword">return</span> root.right;</span><br><span class="line">        <span class="keyword">if</span> (root.right == <span class="keyword">null</span>) <span class="keyword">return</span> root.left;</span><br><span class="line">        <span class="comment">// 处理情况 3</span></span><br><span class="line">        TreeNode minNode = getMin(root.right);</span><br><span class="line">        root.val = minNode.val;</span><br><span class="line">        root.right = deleteNode(root.right, minNode.val);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (root.val &gt; key) &#123;</span><br><span class="line">        root.left = deleteNode(root.left, key);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (root.val &lt; key) &#123;</span><br><span class="line">        root.right = deleteNode(root.right, key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> root;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">TreeNode <span class="title">getMin</span><span class="params">(TreeNode node)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// BST 最左边的就是最小的</span></span><br><span class="line">    <span class="keyword">while</span> (node.left != <span class="keyword">null</span>) node = node.left;</span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>删除操作就完成了。注意一下，这个删除操作并不完美，因为我们一般不会通过 root.val = minNode.val 修改节点内部的值来交换节点，而是通过一系列略微复杂的链表操作交换 root 和 minNode 两个节点。因为具体应用中，val 域可能会很大，修改起来很耗时，而链表操作无非改一改指针，而不会去碰内部数据。</p>
+<p>但这里忽略这个细节，旨在突出 BST 基本操作的共性，以及借助框架逐层细化问题的思维方式。</p>
+<p><strong>四、最后总结</strong></p>
+<p>通过这篇文章，你学会了如下几个技巧：</p>
+<ol>
+<li><p>二叉树算法设计的总路线：把当前节点要做的事做好，其他的交给递归框架，不用当前节点操心。</p>
+</li>
+<li><p>如果当前节点会对下面的子节点有整体影响，可以通过辅助函数增长参数列表，借助参数传递信息。</p>
+</li>
+<li><p>在二叉树框架之上，扩展出一套 BST 遍历框架：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">BST</span><span class="params">(TreeNode root, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root.val == target)</span><br><span class="line">        <span class="comment">// 找到目标，做点什么</span></span><br><span class="line">    <span class="keyword">if</span> (root.val &lt; target) </span><br><span class="line">        BST(root.right, target);</span><br><span class="line">    <span class="keyword">if</span> (root.val &gt; target)</span><br><span class="line">        BST(root.left, target);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>掌握了 BST 的基本操作。</p>
+</li>
+</ol>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/数据结构系列/二叉搜索树操作集锦.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======<br><a href="https://www.linkedin.com/in/dekun-ma-036a9b198/" target="_blank" rel="noopener">dekunma</a>提供第98题C++代码：  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * struct TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode *left;</span></span><br><span class="line"><span class="comment"> *     TreeNode *right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isValidBST</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 用helper method求解</span></span><br><span class="line">        <span class="keyword">return</span> isValidBST(root, <span class="literal">nullptr</span>, <span class="literal">nullptr</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isValidBST</span><span class="params">(TreeNode* root, TreeNode* min, TreeNode* max)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// base case, root为nullptr</span></span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 不符合BST的条件</span></span><br><span class="line">        <span class="keyword">if</span> (min &amp;&amp; root-&gt;val &lt;= min-&gt;val) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span> (max &amp;&amp; root-&gt;val &gt;= max-&gt;val) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 向左右子树分别递归求解</span></span><br><span class="line">        <span class="keyword">return</span> isValidBST(root-&gt;left, min, root) </span><br><span class="line">            &amp;&amp; isValidBST(root-&gt;right, root, max);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/数据结构系列/二叉搜索树操作集锦.html" data-id="cklrh5za6001xro9brei4sznb" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#二叉搜索树操作集锦"><span class="toc-number">1.</span> <span class="toc-text">二叉搜索树操作集锦</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

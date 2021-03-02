@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="如何去除有序数组的重复元素我们知道对于数组来说，在尾部插入、删除元素是比较高效的，时间复杂度是 O(1)，但是如果在中间或者开头插入、删除元素，就会涉及数据的搬移，时间复杂度为 O(N)，效率较低。 所以对于一般处理数组的算法问题，我们要尽可能只对数组尾部的元素进行操作，以避免额外的时间复杂度。 这篇文章讲讲如何对一个有序数组去重，先看下题目：  显然，由于数组已经排序，所以重复的元素一定连在一起">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/高频面试系列/如何去除有序数组的重复元素.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="如何去除有序数组的重复元素我们知道对于数组来说，在尾部插入、删除元素是比较高效的，时间复杂度是 O(1)，但是如果在中间或者开头插入、删除元素，就会涉及数据的搬移，时间复杂度为 O(N)，效率较低。 所以对于一般处理数组的算法问题，我们要尽可能只对数组尾部的元素进行操作，以避免额外的时间复杂度。 这篇文章讲讲如何对一个有序数组去重，先看下题目：  显然，由于数组已经排序，所以重复的元素一定连在一起">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/如何去除有序数组的重复元素.htm/pictures/%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D/title.png">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/如何去除有序数组的重复元素.htm/pictures/%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D/1.gif">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/如何去除有序数组的重复元素.htm/pictures/%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D/2.gif">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/如何去除有序数组的重复元素.htm/pictures/labuladong.png">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/如何去除有序数组的重复元素.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.876Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="如何去除有序数组的重复元素我们知道对于数组来说，在尾部插入、删除元素是比较高效的，时间复杂度是 O(1)，但是如果在中间或者开头插入、删除元素，就会涉及数据的搬移，时间复杂度为 O(N)，效率较低。 所以对于一般处理数组的算法问题，我们要尽可能只对数组尾部的元素进行操作，以避免额外的时间复杂度。 这篇文章讲讲如何对一个有序数组去重，先看下题目：  显然，由于数组已经排序，所以重复的元素一定连在一起">
+<meta name="twitter:image" content="/fucking-algorithm/高频面试系列/如何去除有序数组的重复元素.htm/pictures/%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D/title.png">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/高频面试系列/如何去除有序数组的重复元素.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.876Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="如何去除有序数组的重复元素"><a href="#如何去除有序数组的重复元素" class="headerlink" title="如何去除有序数组的重复元素"></a>如何去除有序数组的重复元素</h1><p>我们知道对于数组来说，在尾部插入、删除元素是比较高效的，时间复杂度是 O(1)，但是如果在中间或者开头插入、删除元素，就会涉及数据的搬移，时间复杂度为 O(N)，效率较低。</p>
+<p>所以对于一般处理数组的算法问题，我们要尽可能只对数组尾部的元素进行操作，以避免额外的时间复杂度。</p>
+<p>这篇文章讲讲如何对一个有序数组去重，先看下题目：</p>
+<p><img src="/fucking-algorithm/高频面试系列/如何去除有序数组的重复元素.htm/pictures/%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D/title.png" alt></p>
+<p>显然，由于数组已经排序，所以重复的元素一定连在一起，找出它们并不难，但如果毎找到一个重复元素就立即删除它，就是在数组中间进行删除操作，整个时间复杂度是会达到 O(N^2)。而且题目要求我们原地修改，也就是说不能用辅助数组，空间复杂度得是 O(1)。</p>
+<p>其实，<strong>对于数组相关的算法问题，有一个通用的技巧：要尽量避免在中间删除元素，那我就先想办法把这个元素换到最后去</strong>。这样的话，最终待删除的元素都拖在数组尾部，一个一个 pop 掉就行了，每次操作的时间复杂度也就降低到 O(1) 了。</p>
+<p>按照这个思路呢，又可以衍生出解决类似需求的通用方式：双指针技巧。具体一点说，应该是快慢指针。</p>
+<p>我们让慢指针 <code>slow</code> 走左后面，快指针 <code>fast</code> 走在前面探路，找到一个不重复的元素就告诉 <code>slow</code> 并让 <code>slow</code> 前进一步。这样当 <code>fast</code> 指针遍历完整个数组 <code>nums</code> 后，<strong><code>nums[0..slow]</code> 就是不重复元素，之后的所有元素都是重复元素</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">removeDuplicates</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = nums.length;</span><br><span class="line">    <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> slow = <span class="number">0</span>, fast = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (fast &lt; n) &#123;</span><br><span class="line">        <span class="keyword">if</span> (nums[fast] != nums[slow]) &#123;</span><br><span class="line">            slow++;</span><br><span class="line">            <span class="comment">// 维护 nums[0..slow] 无重复</span></span><br><span class="line">            nums[slow] = nums[fast];</span><br><span class="line">        &#125;</span><br><span class="line">        fast++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 长度为索引 + 1</span></span><br><span class="line">    <span class="keyword">return</span> slow + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>看下算法执行的过程：</p>
+<p><img src="/fucking-algorithm/高频面试系列/如何去除有序数组的重复元素.htm/pictures/%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D/1.gif" alt></p>
+<p>再简单扩展一下，如果给你一个有序链表，如何去重呢？其实和数组是一模一样的，唯一的区别是把数组赋值操作变成操作指针而已：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ListNode <span class="title">deleteDuplicates</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (head == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    ListNode slow = head, fast = head.next;</span><br><span class="line">    <span class="keyword">while</span> (fast != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (fast.val != slow.val) &#123;</span><br><span class="line">            <span class="comment">// nums[slow] = nums[fast];</span></span><br><span class="line">            slow.next = fast;</span><br><span class="line">            <span class="comment">// slow++;</span></span><br><span class="line">            slow = slow.next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// fast++</span></span><br><span class="line">        fast = fast.next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 断开与后面重复元素的连接</span></span><br><span class="line">    slow.next = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">return</span> head;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/fucking-algorithm/高频面试系列/如何去除有序数组的重复元素.htm/pictures/%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E5%8E%BB%E9%87%8D/2.gif" alt></p>
+<p><strong>致力于把算法讲清楚！欢迎关注我的微信公众号 labuladong，查看更多通俗易懂的文章</strong>：</p>
+<p><img src="/fucking-algorithm/高频面试系列/如何去除有序数组的重复元素.htm/pictures/labuladong.png" alt="labuladong"></p>
+<p><a href="https://www.github.com/eric496" target="_blank" rel="noopener">eric wang</a> 提供有序数组 Python3 代码 </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">removeDuplicates</span><span class="params">(self, nums: List[int])</span> -&gt; int:</span></span><br><span class="line">    n = len(nums)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> n == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    </span><br><span class="line">    slow, fast = <span class="number">0</span>, <span class="number">1</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> fast &lt; n:</span><br><span class="line">        <span class="keyword">if</span> nums[fast] != nums[slow]:</span><br><span class="line">            slow += <span class="number">1</span></span><br><span class="line">            nums[slow] = nums[fast]</span><br><span class="line">            </span><br><span class="line">        fast += <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> slow + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p><a href="https://www.github.com/eric496" target="_blank" rel="noopener">eric wang</a> 提供有序链表 Python3 代码 </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">deleteDuplicates</span><span class="params">(self, head: ListNode)</span> -&gt; ListNode:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> head:</span><br><span class="line">        <span class="keyword">return</span> head</span><br><span class="line">    </span><br><span class="line">    slow, fast = head, head.next</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> fast:</span><br><span class="line">        <span class="keyword">if</span> fast.val != slow.val:</span><br><span class="line">            slow.next = fast</span><br><span class="line">            slow = slow.next</span><br><span class="line">            </span><br><span class="line">        fast = fast.next</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 断开与后面重复元素的连接   </span></span><br><span class="line">    slow.next = <span class="literal">None</span></span><br><span class="line">    <span class="keyword">return</span> head</span><br></pre></td></tr></table></figure>
+
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/高频面试系列/如何去除有序数组的重复元素.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/高频面试系列/如何去除有序数组的重复元素.html" data-id="cklrh5zac002cro9bw7hxrqe7" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#如何去除有序数组的重复元素"><span class="toc-number">1.</span> <span class="toc-text">如何去除有序数组的重复元素</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

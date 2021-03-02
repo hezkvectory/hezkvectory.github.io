@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="设计Twitter        相关推荐：  面试官：你说对MySQL事务很熟？那我问你10个问题 一行代码就能解决的算法题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 355.设计推特 ———– 「design Twitter」是 LeetCode 上第 355 道题目，不仅题目本身很有意思，而且把合并多个有序链表的算法和面向对象设计（OO design">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/数据结构系列/设计Twitter.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="设计Twitter        相关推荐：  面试官：你说对MySQL事务很熟？那我问你10个问题 一行代码就能解决的算法题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 355.设计推特 ———– 「design Twitter」是 LeetCode 上第 355 道题目，不仅题目本身很有意思，而且把合并多个有序链表的算法和面向对象设计（OO design">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/设计Twitter.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/设计Twitter.htm/pictures/%E8%AE%BE%E8%AE%A1Twitter/tweet.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/设计Twitter.htm/pictures/%E8%AE%BE%E8%AE%A1Twitter/user.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/设计Twitter.htm/pictures/%E8%AE%BE%E8%AE%A1Twitter/merge.gif">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/设计Twitter.htm/pictures/%E8%AE%BE%E8%AE%A1Twitter/design.png">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/设计Twitter.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.863Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="设计Twitter        相关推荐：  面试官：你说对MySQL事务很熟？那我问你10个问题 一行代码就能解决的算法题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 355.设计推特 ———– 「design Twitter」是 LeetCode 上第 355 道题目，不仅题目本身很有意思，而且把合并多个有序链表的算法和面向对象设计（OO design">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/数据结构系列/设计Twitter.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.863Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="设计Twitter"><a href="#设计Twitter" class="headerlink" title="设计Twitter"></a>设计Twitter</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/数据结构系列/设计Twitter.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">面试官：你说对MySQL事务很熟？那我问你10个问题</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">一行代码就能解决的算法题</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/design-twitter" target="_blank" rel="noopener">355.设计推特</a></p>
+<p><strong>———–</strong></p>
+<p>「design Twitter」是 LeetCode 上第 355 道题目，不仅题目本身很有意思，而且把合并多个有序链表的算法和面向对象设计（OO design）结合起来了，很有实际意义，本文就带大家来看看这道题。</p>
+<p>至于 Twitter 的什么功能跟算法有关系，等我们描述一下题目要求就知道了。</p>
+<h3 id="一、题目及应用场景简介"><a href="#一、题目及应用场景简介" class="headerlink" title="一、题目及应用场景简介"></a>一、题目及应用场景简介</h3><p>Twitter 和微博功能差不多，我们主要要实现这样几个 API：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Twitter</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** user 发表一条 tweet 动态 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postTweet</span><span class="params">(<span class="keyword">int</span> userId, <span class="keyword">int</span> tweetId)</span> </span>&#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** 返回该 user 关注的人（包括他自己）最近的动态 id，</span></span><br><span class="line"><span class="comment">    最多 10 条，而且这些动态必须按从新到旧的时间线顺序排列。*/</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">getNewsFeed</span><span class="params">(<span class="keyword">int</span> userId)</span> </span>&#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** follower 关注 followee，如果 Id 不存在则新建 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">follow</span><span class="params">(<span class="keyword">int</span> followerId, <span class="keyword">int</span> followeeId)</span> </span>&#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** follower 取关 followee，如果 Id 不存在则什么都不做 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unfollow</span><span class="params">(<span class="keyword">int</span> followerId, <span class="keyword">int</span> followeeId)</span> </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>举个具体的例子，方便大家理解 API 的具体用法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Twitter twitter = <span class="keyword">new</span> Twitter();</span><br><span class="line"></span><br><span class="line">twitter.postTweet(<span class="number">1</span>, <span class="number">5</span>);</span><br><span class="line"><span class="comment">// 用户 1 发送了一条新推文 5</span></span><br><span class="line"></span><br><span class="line">twitter.getNewsFeed(<span class="number">1</span>);</span><br><span class="line"><span class="comment">// return [5]，因为自己是关注自己的</span></span><br><span class="line"></span><br><span class="line">twitter.follow(<span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line"><span class="comment">// 用户 1 关注了用户 2</span></span><br><span class="line"></span><br><span class="line">twitter.postTweet(<span class="number">2</span>, <span class="number">6</span>);</span><br><span class="line"><span class="comment">// 用户2发送了一个新推文 (id = 6)</span></span><br><span class="line"></span><br><span class="line">twitter.getNewsFeed(<span class="number">1</span>);</span><br><span class="line"><span class="comment">// return [6, 5]</span></span><br><span class="line"><span class="comment">// 解释：用户 1 关注了自己和用户 2，所以返回他们的最近推文</span></span><br><span class="line"><span class="comment">// 而且 6 必须在 5 之前，因为 6 是最近发送的</span></span><br><span class="line"></span><br><span class="line">twitter.unfollow(<span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line"><span class="comment">// 用户 1 取消关注了用户 2</span></span><br><span class="line"></span><br><span class="line">twitter.getNewsFeed(<span class="number">1</span>);</span><br><span class="line"><span class="comment">// return [5]</span></span><br></pre></td></tr></table></figure>
+
+<p>这个场景在我们的现实生活中非常常见。拿朋友圈举例，比如我刚加到女神的微信，然后我去刷新一下我的朋友圈动态，那么女神的动态就会出现在我的动态列表，而且会和其他动态按时间排好序。只不过 Twitter 是单向关注，微信好友相当于双向关注。除非，被屏蔽…</p>
+<p>这几个 API 中大部分都很好实现，最核心的功能难点应该是 <code>getNewsFeed</code>，因为返回的结果必须在时间上有序，但问题是用户的关注是动态变化的，怎么办？</p>
+<p><strong>这里就涉及到算法了</strong>：如果我们把每个用户各自的推文存储在链表里，每个链表节点存储文章 id 和一个时间戳 time（记录发帖时间以便比较），而且这个链表是按 time 有序的，那么如果某个用户关注了 k 个用户，我们就可以用合并 k 个有序链表的算法合并出有序的推文列表，正确地 <code>getNewsFeed</code> 了！</p>
+<p>具体的算法等会讲解。不过，就算我们掌握了算法，应该如何编程表示用户 user 和推文动态 tweet 才能把算法流畅地用出来呢？<strong>这就涉及简单的面向对象设计了</strong>，下面我们来由浅入深，一步一步进行设计。</p>
+<h3 id="二、面向对象设计"><a href="#二、面向对象设计" class="headerlink" title="二、面向对象设计"></a>二、面向对象设计</h3><p>根据刚才的分析，我们需要一个 User 类，储存 user 信息，还需要一个 Tweet 类，储存推文信息，并且要作为链表的节点。所以我们先搭建一下整体的框架：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Twitter</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> timestamp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Tweet</span> </span>&#123;&#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 还有那几个 API 方法 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postTweet</span><span class="params">(<span class="keyword">int</span> userId, <span class="keyword">int</span> tweetId)</span> </span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">getNewsFeed</span><span class="params">(<span class="keyword">int</span> userId)</span> </span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">follow</span><span class="params">(<span class="keyword">int</span> followerId, <span class="keyword">int</span> followeeId)</span> </span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unfollow</span><span class="params">(<span class="keyword">int</span> followerId, <span class="keyword">int</span> followeeId)</span> </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>之所以要把 Tweet 和 User 类放到 Twitter 类里面，是因为 Tweet 类必须要用到一个全局时间戳 timestamp，而 User 类又需要用到 Tweet 类记录用户发送的推文，所以它们都作为内部类。不过为了清晰和简洁，下文会把每个内部类和 API 方法单独拿出来实现。</p>
+<p><strong>1、Tweet 类的实现</strong></p>
+<p>根据前面的分析，Tweet 类很容易实现：每个 Tweet 实例需要记录自己的 tweetId 和发表时间 time，而且作为链表节点，要有一个指向下一个节点的 next 指针。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Tweet</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> time;</span><br><span class="line">    <span class="keyword">private</span> Tweet next;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 需要传入推文内容（id）和发文时间</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Tweet</span><span class="params">(<span class="keyword">int</span> id, <span class="keyword">int</span> time)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">        <span class="keyword">this</span>.time = time;</span><br><span class="line">        <span class="keyword">this</span>.next = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/fucking-algorithm/数据结构系列/设计Twitter.htm/pictures/%E8%AE%BE%E8%AE%A1Twitter/tweet.jpg" alt="tweet"></p>
+<p><strong>2、User 类的实现</strong></p>
+<p>我们根据实际场景想一想，一个用户需要存储的信息有 userId，关注列表，以及该用户发过的推文列表。其中关注列表应该用集合（Hash Set）这种数据结构来存，因为不能重复，而且需要快速查找；推文列表应该由链表这种数据结构储存，以便于进行有序合并的操作。画个图理解一下：</p>
+<p><img src="/fucking-algorithm/数据结构系列/设计Twitter.htm/pictures/%E8%AE%BE%E8%AE%A1Twitter/user.jpg" alt="User"></p>
+<p>除此之外，根据面向对象的设计原则，「关注」「取关」和「发文」应该是 User 的行为，况且关注列表和推文列表也存储在 User 类中，所以我们也应该给 User 添加 follow，unfollow 和 post 这几个方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// static int timestamp = 0</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">public</span> Set&lt;Integer&gt; followed;</span><br><span class="line">    <span class="comment">// 用户发表的推文链表头结点</span></span><br><span class="line">    <span class="keyword">public</span> Tweet head;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(<span class="keyword">int</span> userId)</span> </span>&#123;</span><br><span class="line">        followed = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">        <span class="keyword">this</span>.id = userId;</span><br><span class="line">        <span class="keyword">this</span>.head = <span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">// 关注一下自己</span></span><br><span class="line">        follow(id);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">follow</span><span class="params">(<span class="keyword">int</span> userId)</span> </span>&#123;</span><br><span class="line">        followed.add(userId);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unfollow</span><span class="params">(<span class="keyword">int</span> userId)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 不可以取关自己</span></span><br><span class="line">        <span class="keyword">if</span> (userId != <span class="keyword">this</span>.id)</span><br><span class="line">            followed.remove(userId);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">post</span><span class="params">(<span class="keyword">int</span> tweetId)</span> </span>&#123;</span><br><span class="line">        Tweet twt = <span class="keyword">new</span> Tweet(tweetId, timestamp);</span><br><span class="line">        timestamp++;</span><br><span class="line">        <span class="comment">// 将新建的推文插入链表头</span></span><br><span class="line">        <span class="comment">// 越靠前的推文 time 值越大</span></span><br><span class="line">        twt.next = head;</span><br><span class="line">        head = twt;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>3、几个 API 方法的实现</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Twitter</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> timestamp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Tweet</span> </span>&#123;...&#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;...&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 我们需要一个映射将 userId 和 User 对象对应起来</span></span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;Integer, User&gt; userMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** user 发表一条 tweet 动态 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postTweet</span><span class="params">(<span class="keyword">int</span> userId, <span class="keyword">int</span> tweetId)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 若 userId 不存在，则新建</span></span><br><span class="line">        <span class="keyword">if</span> (!userMap.containsKey(userId))</span><br><span class="line">            userMap.put(userId, <span class="keyword">new</span> User(userId));</span><br><span class="line">        User u = userMap.get(userId);</span><br><span class="line">        u.post(tweetId);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** follower 关注 followee */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">follow</span><span class="params">(<span class="keyword">int</span> followerId, <span class="keyword">int</span> followeeId)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 若 follower 不存在，则新建</span></span><br><span class="line">		<span class="keyword">if</span>(!userMap.containsKey(followerId))&#123;</span><br><span class="line">			User u = <span class="keyword">new</span> User(followerId);</span><br><span class="line">			userMap.put(followerId, u);</span><br><span class="line">		&#125;</span><br><span class="line">        <span class="comment">// 若 followee 不存在，则新建</span></span><br><span class="line">		<span class="keyword">if</span>(!userMap.containsKey(followeeId))&#123;</span><br><span class="line">			User u = <span class="keyword">new</span> User(followeeId);</span><br><span class="line">			userMap.put(followeeId, u);</span><br><span class="line">		&#125;</span><br><span class="line">		userMap.get(followerId).follow(followeeId);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** follower 取关 followee，如果 Id 不存在则什么都不做 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unfollow</span><span class="params">(<span class="keyword">int</span> followerId, <span class="keyword">int</span> followeeId)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (userMap.containsKey(followerId)) &#123;</span><br><span class="line">            User flwer = userMap.get(followerId);</span><br><span class="line">            flwer.unfollow(followeeId);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** 返回该 user 关注的人（包括他自己）最近的动态 id，</span></span><br><span class="line"><span class="comment">    最多 10 条，而且这些动态必须按从新到旧的时间线顺序排列。*/</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">getNewsFeed</span><span class="params">(<span class="keyword">int</span> userId)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 需要理解算法，见下文</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="三、算法设计"><a href="#三、算法设计" class="headerlink" title="三、算法设计"></a>三、算法设计</h3><p>实现合并 k 个有序链表的算法需要用到优先级队列（Priority Queue），这种数据结构是「二叉堆」最重要的应用，你可以理解为它可以对插入的元素自动排序。乱序的元素插入其中就被放到了正确的位置，可以按照从小到大（或从大到小）有序地取出元素。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">PriorityQueue pq</span><br><span class="line"><span class="comment"># 乱序插入</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> &#123;<span class="number">2</span>,<span class="number">4</span>,<span class="number">1</span>,<span class="number">9</span>,<span class="number">6</span>&#125;:</span><br><span class="line">    pq.add(i)</span><br><span class="line"><span class="keyword">while</span> pq <span class="keyword">not</span> empty:</span><br><span class="line">    <span class="comment"># 每次取出第一个（最小）元素</span></span><br><span class="line">    print(pq.pop())</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出有序：1,2,4,6,9</span></span><br></pre></td></tr></table></figure>
+
+<p>借助这种牛逼的数据结构支持，我们就很容易实现这个核心功能了。注意我们把优先级队列设为按 time 属性<strong>从大到小降序排列</strong>，因为 time 越大意味着时间越近，应该排在前面：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">getNewsFeed</span><span class="params">(<span class="keyword">int</span> userId)</span> </span>&#123;</span><br><span class="line">    List&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">if</span> (!userMap.containsKey(userId)) <span class="keyword">return</span> res;</span><br><span class="line">    <span class="comment">// 关注列表的用户 Id</span></span><br><span class="line">    Set&lt;Integer&gt; users = userMap.get(userId).followed;</span><br><span class="line">    <span class="comment">// 自动通过 time 属性从大到小排序，容量为 users 的大小</span></span><br><span class="line">    PriorityQueue&lt;Tweet&gt; pq = </span><br><span class="line">        <span class="keyword">new</span> PriorityQueue&lt;&gt;(users.size(), (a, b)-&gt;(b.time - a.time));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 先将所有链表头节点插入优先级队列</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> id : users) &#123;</span><br><span class="line">        Tweet twt = userMap.get(id).head;</span><br><span class="line">        <span class="keyword">if</span> (twt == <span class="keyword">null</span>) <span class="keyword">continue</span>;</span><br><span class="line">        pq.add(twt);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (!pq.isEmpty()) &#123;</span><br><span class="line">        <span class="comment">// 最多返回 10 条就够了</span></span><br><span class="line">        <span class="keyword">if</span> (res.size() == <span class="number">10</span>) <span class="keyword">break</span>;</span><br><span class="line">        <span class="comment">// 弹出 time 值最大的（最近发表的）</span></span><br><span class="line">        Tweet twt = pq.poll();</span><br><span class="line">        res.add(twt.id);</span><br><span class="line">        <span class="comment">// 将下一篇 Tweet 插入进行排序</span></span><br><span class="line">        <span class="keyword">if</span> (twt.next != <span class="keyword">null</span>) </span><br><span class="line">            pq.add(twt.next);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个过程是这样的，下面是我制作的一个 GIF 图描述合并链表的过程。假设有三个 Tweet 链表按 time 属性降序排列，我们把他们降序合并添加到 res 中。注意图中链表节点中的数字是 time 属性，不是 id 属性：</p>
+<p><img src="/fucking-algorithm/数据结构系列/设计Twitter.htm/pictures/%E8%AE%BE%E8%AE%A1Twitter/merge.gif" alt="gif"></p>
+<p>至此，这道一个极其简化的 Twitter 时间线功能就设计完毕了。</p>
+<h3 id="四、最后总结"><a href="#四、最后总结" class="headerlink" title="四、最后总结"></a>四、最后总结</h3><p>本文运用简单的面向对象技巧和合并 k 个有序链表的算法设计了一套简化的时间线功能，这个功能其实广泛地运用在许多社交应用中。</p>
+<p>我们先合理地设计出 User 和 Tweet 两个类，然后基于这个设计之上运用算法解决了最重要的一个功能。可见实际应用中的算法并不是孤立存在的，需要和其他知识混合运用，才能发挥实际价值。</p>
+<p>当然，实际应用中的社交 App 数据量是巨大的，考虑到数据库的读写性能，我们的设计可能承受不住流量压力，还是有些太简化了。而且实际的应用都是一个极其庞大的工程，比如下图，是 Twitter 这样的社交网站大致的系统结构：</p>
+<p><img src="/fucking-algorithm/数据结构系列/设计Twitter.htm/pictures/%E8%AE%BE%E8%AE%A1Twitter/design.png" alt="design"></p>
+<p>我们解决的问题应该只能算 Timeline Service 模块的一小部分，功能越多，系统的复杂性可能是指数级增长的。所以说合理的顶层设计十分重要，其作用是远超某一个算法的。</p>
+<p>最后，Github 上有一个优秀的开源项目，专门收集了很多大型系统设计的案例和解析，而且有中文版本，上面这个图也出自该项目。对系统设计感兴趣的读者可以点击 <a href="https://github.com/donnemartin/system-design-primer" target="_blank" rel="noopener">这里</a> 查看。</p>
+<p>PS：本文前两张图片和 GIF 是我第一次尝试用平板的绘图软件制作的，花了很多时间，尤其是 GIF 图，需要一帧一帧制作。如果本文内容对你有帮助，点个赞分个享，鼓励一下我呗！</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/数据结构系列/设计Twitter.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/数据结构系列/设计Twitter.html" data-id="cklrh5za80021ro9b6j1ohaip" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#设计Twitter"><span class="toc-number">1.</span> <span class="toc-text">设计Twitter</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、题目及应用场景简介"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、题目及应用场景简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、面向对象设计"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、面向对象设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、算法设计"><span class="toc-number">1.0.3.</span> <span class="toc-text">三、算法设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#四、最后总结"><span class="toc-number">1.0.4.</span> <span class="toc-text">四、最后总结</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

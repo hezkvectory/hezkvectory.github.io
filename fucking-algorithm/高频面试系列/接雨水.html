@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="接雨水问题详解        相关推荐：  手把手带你刷二叉树（第三期） 45张图解：IP基础知识全家桶  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 42.接雨水 ———– 接雨水这道题目挺有意思，在面试题中出现频率还挺高的，本文就来步步优化，讲解一下这道题。 先看一下题目：  就是用一个数组表示一个条形图，问你这个条形图最多能接多少水。 1int trap">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/高频面试系列/接雨水.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="接雨水问题详解        相关推荐：  手把手带你刷二叉树（第三期） 45张图解：IP基础知识全家桶  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 42.接雨水 ———– 接雨水这道题目挺有意思，在面试题中出现频率还挺高的，本文就来步步优化，讲解一下这道题。 先看一下题目：  就是用一个数组表示一个条形图，问你这个条形图最多能接多少水。 1int trap">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/接雨水.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/接雨水.htm/pictures/%E6%8E%A5%E9%9B%A8%E6%B0%B4/title.png">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/接雨水.htm/pictures/%E6%8E%A5%E9%9B%A8%E6%B0%B4/0.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/接雨水.htm/pictures/%E6%8E%A5%E9%9B%A8%E6%B0%B4/1.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/接雨水.htm/pictures/%E6%8E%A5%E9%9B%A8%E6%B0%B4/2.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/接雨水.htm/pictures/%E6%8E%A5%E9%9B%A8%E6%B0%B4/3.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/接雨水.htm/pictures/%E6%8E%A5%E9%9B%A8%E6%B0%B4/4.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/接雨水.htm/pictures/%E6%8E%A5%E9%9B%A8%E6%B0%B4/5.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/接雨水.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.878Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="接雨水问题详解        相关推荐：  手把手带你刷二叉树（第三期） 45张图解：IP基础知识全家桶  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 42.接雨水 ———– 接雨水这道题目挺有意思，在面试题中出现频率还挺高的，本文就来步步优化，讲解一下这道题。 先看一下题目：  就是用一个数组表示一个条形图，问你这个条形图最多能接多少水。 1int trap">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/高频面试系列/接雨水.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.878Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="接雨水问题详解"><a href="#接雨水问题详解" class="headerlink" title="接雨水问题详解"></a>接雨水问题详解</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/高频面试系列/接雨水.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">手把手带你刷二叉树（第三期）</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">45张图解：IP基础知识全家桶</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/trapping-rain-water" target="_blank" rel="noopener">42.接雨水</a></p>
+<p><strong>———–</strong></p>
+<p>接雨水这道题目挺有意思，在面试题中出现频率还挺高的，本文就来步步优化，讲解一下这道题。</p>
+<p>先看一下题目：</p>
+<p><img src="/fucking-algorithm/高频面试系列/接雨水.htm/pictures/%E6%8E%A5%E9%9B%A8%E6%B0%B4/title.png" alt></p>
+<p>就是用一个数组表示一个条形图，问你这个条形图最多能接多少水。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="keyword">int</span>[] height)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>下面就来由浅入深介绍暴力解法 -&gt; 备忘录解法 -&gt; 双指针解法，在 O(N) 时间 O(1) 空间内解决这个问题。</p>
+<h3 id="一、核心思路"><a href="#一、核心思路" class="headerlink" title="一、核心思路"></a>一、核心思路</h3><p>所以对于这种问题，我们不要想整体，而应该去想局部；就像之前的文章写的动态规划问题处理字符串问题，不要考虑如何处理整个字符串，而是去思考应该如何处理每一个字符。</p>
+<p>这么一想，可以发现这道题的思路其实很简单。具体来说，仅仅对于位置 <code>i</code>，能装下多少水呢？</p>
+<p><img src="/fucking-algorithm/高频面试系列/接雨水.htm/pictures/%E6%8E%A5%E9%9B%A8%E6%B0%B4/0.jpg" alt></p>
+<p>能装 2 格水，因为 <code>height[i]</code> 的高度为 0，而这里最多能盛 2 格水，2-0=2。</p>
+<p>为什么位置 <code>i</code> 最多能盛 2 格水呢？因为，位置 <code>i</code> 能达到的水柱高度和其左边的最高柱子、右边的最高柱子有关，我们分别称这两个柱子高度为 <code>l_max</code> 和 <code>r_max</code>；<strong>位置 i 最大的水柱高度就是 <code>min(l_max, r_max)</code>。</strong></p>
+<p>更进一步，对于位置 <code>i</code>，能够装的水为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">water[i] = min(</span><br><span class="line">               <span class="comment"># 左边最高的柱子</span></span><br><span class="line">               max(height[<span class="number">0.</span>.i]),  </span><br><span class="line">               <span class="comment"># 右边最高的柱子</span></span><br><span class="line">               max(height[i..end]) </span><br><span class="line">            ) - height[i]</span><br></pre></td></tr></table></figure>
+
+<p><img src="/fucking-algorithm/高频面试系列/接雨水.htm/pictures/%E6%8E%A5%E9%9B%A8%E6%B0%B4/1.jpg" alt></p>
+<p><img src="/fucking-algorithm/高频面试系列/接雨水.htm/pictures/%E6%8E%A5%E9%9B%A8%E6%B0%B4/2.jpg" alt></p>
+<p>这就是本问题的核心思路，我们可以简单写一个暴力算法：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; height)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = height.size();</span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> l_max = <span class="number">0</span>, r_max = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// 找右边最高的柱子</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = i; j &lt; n; j++)</span><br><span class="line">            r_max = max(r_max, height[j]);</span><br><span class="line">        <span class="comment">// 找左边最高的柱子</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = i; j &gt;= <span class="number">0</span>; j--)</span><br><span class="line">            l_max = max(l_max, height[j]);</span><br><span class="line">        <span class="comment">// 如果自己就是最高的话，</span></span><br><span class="line">        <span class="comment">// l_max == r_max == height[i]</span></span><br><span class="line">        res += min(l_max, r_max) - height[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有之前的思路，这个解法应该是很直接粗暴的，时间复杂度 O(N^2)，空间复杂度 O(1)。但是很明显这种计算 <code>r_max</code> 和 <code>l_max</code> 的方式非常笨拙，一般的优化方法就是备忘录。</p>
+<h3 id="二、备忘录优化"><a href="#二、备忘录优化" class="headerlink" title="二、备忘录优化"></a>二、备忘录优化</h3><p>之前的暴力解法，不是在每个位置 <code>i</code> 都要计算 <code>r_max</code> 和 <code>l_max</code> 吗？我们直接把结果都提前计算出来，别傻不拉几的每次都遍历，这时间复杂度不就降下来了嘛。</p>
+<p><strong>我们开两个数组 <code>r_max</code> 和 <code>l_max</code> 充当备忘录，<code>l_max[i]</code> 表示位置 <code>i</code> 左边最高的柱子高度，<code>r_max[i]</code> 表示位置 <code>i</code> 右边最高的柱子高度</strong>。预先把这两个数组计算好，避免重复计算：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; height)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (height.empty()) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> n = height.size();</span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 数组充当备忘录</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; l_max(n), r_max(n);</span><br><span class="line">    <span class="comment">// 初始化 base case</span></span><br><span class="line">    l_max[<span class="number">0</span>] = height[<span class="number">0</span>];</span><br><span class="line">    r_max[n - <span class="number">1</span>] = height[n - <span class="number">1</span>];</span><br><span class="line">    <span class="comment">// 从左向右计算 l_max</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; i++)</span><br><span class="line">        l_max[i] = max(height[i], l_max[i - <span class="number">1</span>]);</span><br><span class="line">    <span class="comment">// 从右向左计算 r_max</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = n - <span class="number">2</span>; i &gt;= <span class="number">0</span>; i--) </span><br><span class="line">        r_max[i] = max(height[i], r_max[i + <span class="number">1</span>]);</span><br><span class="line">    <span class="comment">// 计算答案</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n - <span class="number">1</span>; i++) </span><br><span class="line">        res += min(l_max[i], r_max[i]) - height[i];</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个优化其实和暴力解法思路差不多，就是避免了重复计算，把时间复杂度降低为 O(N)，已经是最优了，但是空间复杂度是 O(N)。下面来看一个精妙一些的解法，能够把空间复杂度降低到 O(1)。</p>
+<h3 id="三、双指针解法"><a href="#三、双指针解法" class="headerlink" title="三、双指针解法"></a>三、双指针解法</h3><p>这种解法的思路是完全相同的，但在实现手法上非常巧妙，我们这次也不要用备忘录提前计算了，而是用双指针<strong>边走边算</strong>，节省下空间复杂度。</p>
+<p>首先，看一部分代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; height)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = height.size();</span><br><span class="line">    <span class="keyword">int</span> left = <span class="number">0</span>, right = n - <span class="number">1</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> l_max = height[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">int</span> r_max = height[n - <span class="number">1</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> (left &lt;= right) &#123;</span><br><span class="line">        l_max = max(l_max, height[left]);</span><br><span class="line">        r_max = max(r_max, height[right]);</span><br><span class="line">        left++; right--;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于这部分代码，请问 <code>l_max</code> 和 <code>r_max</code> 分别表示什么意义呢？</p>
+<p>很容易理解，<strong><code>l_max</code> 是 <code>height[0..left]</code> 中最高柱子的高度，<code>r_max</code> 是 <code>height[right..end]</code> 的最高柱子的高度</strong>。</p>
+<p>明白了这一点，直接看解法：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; height)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (height.empty()) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> n = height.size();</span><br><span class="line">    <span class="keyword">int</span> left = <span class="number">0</span>, right = n - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> l_max = height[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">int</span> r_max = height[n - <span class="number">1</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> (left &lt;= right) &#123;</span><br><span class="line">        l_max = max(l_max, height[left]);</span><br><span class="line">        r_max = max(r_max, height[right]);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// res += min(l_max, r_max) - height[i]</span></span><br><span class="line">        <span class="keyword">if</span> (l_max &lt; r_max) &#123;</span><br><span class="line">            res += l_max - height[left];</span><br><span class="line">            left++; </span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            res += r_max - height[right];</span><br><span class="line">            right--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>你看，其中的核心思想和之前一模一样，换汤不换药。但是细心的读者可能会发现次解法还是有点细节差异：</p>
+<p>之前的备忘录解法，<code>l_max[i]</code> 和 <code>r_max[i]</code> 分别代表 <code>height[0..i]</code> 和 <code>height[i..end]</code> 的最高柱子高度。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">res += min(l_max[i], r_max[i]) - height[i];</span><br></pre></td></tr></table></figure>
+
+<p><img src="/fucking-algorithm/高频面试系列/接雨水.htm/pictures/%E6%8E%A5%E9%9B%A8%E6%B0%B4/3.jpg" alt></p>
+<p>但是双指针解法中，<code>l_max</code> 和 <code>r_max</code> 代表的是 <code>height[0..left]</code> 和 <code>height[right..end]</code> 的最高柱子高度。比如这段代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (l_max &lt; r_max) &#123;</span><br><span class="line">    res += l_max - height[left];</span><br><span class="line">    left++; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/fucking-algorithm/高频面试系列/接雨水.htm/pictures/%E6%8E%A5%E9%9B%A8%E6%B0%B4/4.jpg" alt></p>
+<p>此时的 <code>l_max</code> 是 <code>left</code> 指针左边的最高柱子，但是 <code>r_max</code> 并不一定是 <code>left</code> 指针右边最高的柱子，这真的可以得到正确答案吗？</p>
+<p>其实这个问题要这么思考，我们只在乎 <code>min(l_max, r_max)</code>。<strong>对于上图的情况，我们已经知道 <code>l_max &lt; r_max</code> 了，至于这个 <code>r_max</code> 是不是右边最大的，不重要。重要的是 <code>height[i]</code> 能够装的水只和较低的 <code>l_max</code> 之差有关</strong>：</p>
+<p><img src="/fucking-algorithm/高频面试系列/接雨水.htm/pictures/%E6%8E%A5%E9%9B%A8%E6%B0%B4/5.jpg" alt></p>
+<p>这样，接雨水问题就解决了。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/高频面试系列/接雨水.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+<p><a href="https://github.com/FanFan0919" target="_blank" rel="noopener">Yifan Zhang</a> 提供 java 代码</p>
+<p><strong>双指针解法</strong>：时间复杂度 O(N)，空间复杂度 O(1)</p>
+<p>对cpp版本的解法有非常微小的优化。<br>因为我们每次循环只会选 left 或者 right 处的柱子来计算，因此我们并不需要在每次循环中同时更新<code>maxLeft</code>和<code>maxRight</code>。<br>我们可以先比较 <code>maxLeft</code> 和 <code>maxRight</code>，决定这次选择计算的柱子是 <code>height[left]</code> 或者 <code>height[right]</code> 后再更新对应的 <code>maxLeft</code> 或 <code>maxRight</code>。<br>当然这并不会在时间上带来什么优化，只是提供一种思路。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="keyword">int</span>[] height)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (height == <span class="keyword">null</span> || height.length == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>, right = height.length - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> maxLeft = height[left], maxRight = height[right];</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span> (left &lt; right) &#123;</span><br><span class="line">            <span class="comment">// 比较 maxLeft 和 maxRight，决定这次计算 left 还是 right 处的柱子</span></span><br><span class="line">            <span class="keyword">if</span> (maxLeft &lt; maxRight) &#123;</span><br><span class="line">                left++;</span><br><span class="line">                maxLeft = Math.max(maxLeft, height[left]);  <span class="comment">// update maxLeft</span></span><br><span class="line">                res += maxLeft - height[left];</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                right--;</span><br><span class="line">                maxRight = Math.max(maxRight, height[right]);   <span class="comment">// update maxRight</span></span><br><span class="line">                res += maxRight - height[right];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>附上暴力解法以及备忘录解法的 java 代码</p>
+<p><strong>暴力解法</strong>：时间复杂度 O(N^2)，空间复杂度 O(1)  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="keyword">int</span>[] height)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (height == <span class="keyword">null</span> || height.length == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> n = height.length;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// 跳过最左边和最右边的柱子，从第二个柱子开始</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n - <span class="number">1</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> maxLeft = <span class="number">0</span>, maxRight = <span class="number">0</span>;</span><br><span class="line">            <span class="comment">// 找右边最高的柱子</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i; j &lt; n; j++) &#123;</span><br><span class="line">                maxRight = Math.max(maxRight, height[j]);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 找左边最高的柱子</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i; j &gt;= <span class="number">0</span>; j--) &#123;</span><br><span class="line">                maxLeft = Math.max(maxLeft, height[j]);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 如果自己就是最高的话，</span></span><br><span class="line">            <span class="comment">// maxLeft == maxRight == height[i]</span></span><br><span class="line">            res += Math.min(maxLeft, maxRight) - height[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>备忘录解法</strong>：时间复杂度 O(N)，空间复杂度 O(N)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">trap</span><span class="params">(<span class="keyword">int</span>[] height)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (height == <span class="keyword">null</span> || height.length == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> n = height.length;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// 数组充当备忘录</span></span><br><span class="line">        <span class="keyword">int</span>[] maxLeft = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">        <span class="keyword">int</span>[] maxRight = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">        <span class="comment">// 初始化 base case </span></span><br><span class="line">        maxLeft[<span class="number">0</span>] = height[<span class="number">0</span>];</span><br><span class="line">        maxRight[n - <span class="number">1</span>] = height[n - <span class="number">1</span>];</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 从左向右计算 maxLeft</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; i++) &#123;</span><br><span class="line">            maxLeft[i] = Math.max(maxLeft[i - <span class="number">1</span>], height[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 从右向左计算 maxRight</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = n - <span class="number">2</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">            maxRight[i] = Math.max(maxRight[i + <span class="number">1</span>], height[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 计算答案</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; i++) &#123;</span><br><span class="line">            res += Math.min(maxLeft[i], maxRight[i]) - height[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/高频面试系列/接雨水.html" data-id="cklrh5zaf002hro9bdh3qauoc" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#接雨水问题详解"><span class="toc-number">1.</span> <span class="toc-text">接雨水问题详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、核心思路"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、核心思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、备忘录优化"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、备忘录优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、双指针解法"><span class="toc-number">1.0.3.</span> <span class="toc-text">三、双指针解法</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

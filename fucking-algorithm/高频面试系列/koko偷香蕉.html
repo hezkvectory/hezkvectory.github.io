@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="如何运用二分查找算法        相关推荐：  如何运用贪心思想玩跳跃游戏 如何寻找最长回文子串  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 875.爱吃香蕉的珂珂 1011.在D天内送达包裹的能力 ———– 二分查找到底有能运用在哪里？ 最常见的就是教科书上的例子，在有序数组中搜索给定的某个目标值的索引。再推广一点，如果目标值存在重复，修改版的二分查找可">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/高频面试系列/koko偷香蕉.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="如何运用二分查找算法        相关推荐：  如何运用贪心思想玩跳跃游戏 如何寻找最长回文子串  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 875.爱吃香蕉的珂珂 1011.在D天内送达包裹的能力 ———– 二分查找到底有能运用在哪里？ 最常见的就是教科书上的例子，在有序数组中搜索给定的某个目标值的索引。再推广一点，如果目标值存在重复，修改版的二分查找可">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/koko偷香蕉.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/koko偷香蕉.htm/pictures/%E4%BA%8C%E5%88%86%E5%BA%94%E7%94%A8/title1.png">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/koko偷香蕉.htm/pictures/%E4%BA%8C%E5%88%86%E5%BA%94%E7%94%A8/title2.png">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/koko偷香蕉.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.874Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="如何运用二分查找算法        相关推荐：  如何运用贪心思想玩跳跃游戏 如何寻找最长回文子串  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 875.爱吃香蕉的珂珂 1011.在D天内送达包裹的能力 ———– 二分查找到底有能运用在哪里？ 最常见的就是教科书上的例子，在有序数组中搜索给定的某个目标值的索引。再推广一点，如果目标值存在重复，修改版的二分查找可">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/高频面试系列/koko偷香蕉.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.874Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="如何运用二分查找算法"><a href="#如何运用二分查找算法" class="headerlink" title="如何运用二分查找算法"></a>如何运用二分查找算法</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/高频面试系列/koko偷香蕉.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">如何运用贪心思想玩跳跃游戏</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">如何寻找最长回文子串</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/koko-eating-bananas" target="_blank" rel="noopener">875.爱吃香蕉的珂珂</a></p>
+<p><a href="https://leetcode-cn.com/problems/capacity-to-ship-packages-within-d-days" target="_blank" rel="noopener">1011.在D天内送达包裹的能力</a></p>
+<p><strong>———–</strong></p>
+<p>二分查找到底有能运用在哪里？</p>
+<p>最常见的就是教科书上的例子，在<strong>有序数组</strong>中搜索给定的某个目标值的索引。再推广一点，如果目标值存在重复，修改版的二分查找可以返回目标值的左侧边界索引或者右侧边界索引。</p>
+<p>PS：以上提到的三种二分查找算法形式在前文「二分查找详解」有代码详解，如果没看过强烈建议看看。</p>
+<p>抛开有序数组这个枯燥的数据结构，二分查找如何运用到实际的算法问题中呢？当搜索空间有序的时候，就可以通过二分搜索「剪枝」，大幅提升效率。</p>
+<p>说起来玄乎得很，本文先用一个具体的「Koko 吃香蕉」的问题来举个例子。</p>
+<h3 id="一、问题分析"><a href="#一、问题分析" class="headerlink" title="一、问题分析"></a>一、问题分析</h3><p><img src="/fucking-algorithm/高频面试系列/koko偷香蕉.htm/pictures/%E4%BA%8C%E5%88%86%E5%BA%94%E7%94%A8/title1.png" alt></p>
+<p>也就是说，Koko 每小时最多吃一堆香蕉，如果吃不下的话留到下一小时再吃；如果吃完了这一堆还有胃口，也只会等到下一小时才会吃下一堆。在这个条件下，让我们确定 Koko 吃香蕉的<strong>最小速度</strong>（根/小时）。</p>
+<p>如果直接给你这个情景，你能想到哪里能用到二分查找算法吗？如果没有见过类似的问题，恐怕是很难把这个问题和二分查找联系起来的。</p>
+<p>那么我们先抛开二分查找技巧，想想如何暴力解决这个问题呢？</p>
+<p>首先，算法要求的是「<code>H</code> 小时内吃完香蕉的最小速度」，我们不妨称为 <code>speed</code>，请问 <code>speed</code> 最大可能为多少，最少可能为多少呢？</p>
+<p>显然最少为 1，最大为 <code>max(piles)</code>，因为一小时最多只能吃一堆香蕉。那么暴力解法就很简单了，只要从 1 开始穷举到 <code>max(piles)</code>，一旦发现发现某个值可以在 <code>H</code> 小时内吃完所有香蕉，这个值就是最小速度：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">minEatingSpeed</span><span class="params">(<span class="keyword">int</span>[] piles, <span class="keyword">int</span> H)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// piles 数组的最大值</span></span><br><span class="line">    <span class="keyword">int</span> max = getMax(piles);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> speed = <span class="number">1</span>; speed &lt; max; speed++) &#123;</span><br><span class="line">    	<span class="comment">// 以 speed 是否能在 H 小时内吃完香蕉</span></span><br><span class="line">        <span class="keyword">if</span> (canFinish(piles, speed, H))</span><br><span class="line">            <span class="keyword">return</span> speed;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> max;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意这个 for 循环，就是在<strong>连续的空间线性搜索，这就是二分查找可以发挥作用的标志</strong>。由于我们要求的是最小速度，所以可以用一个<strong>搜索左侧边界的二分查找</strong>来代替线性搜索，提升效率：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">minEatingSpeed</span><span class="params">(<span class="keyword">int</span>[] piles, <span class="keyword">int</span> H)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 套用搜索左侧边界的算法框架</span></span><br><span class="line">    <span class="keyword">int</span> left = <span class="number">1</span>, right = getMax(piles) + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (left &lt; right) &#123;</span><br><span class="line">        <span class="comment">// 防止溢出</span></span><br><span class="line">        <span class="keyword">int</span> mid = left + (right - left) / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span> (canFinish(piles, mid, H)) &#123;</span><br><span class="line">            right = mid;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            left = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> left;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>PS：如果对于这个二分查找算法的细节问题有疑问，建议看下前文「二分查找详解」搜索左侧边界的算法模板，这里不展开了。</p>
+<p>剩下的辅助函数也很简单，可以一步步拆解实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 时间复杂度 O(N)</span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">canFinish</span><span class="params">(<span class="keyword">int</span>[] piles, <span class="keyword">int</span> speed, <span class="keyword">int</span> H)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> time = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> n : piles) &#123;</span><br><span class="line">        time += timeOf(n, speed);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> time &lt;= H;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">timeOf</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span> speed)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (n / speed) + ((n % speed &gt; <span class="number">0</span>) ? <span class="number">1</span> : <span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getMax</span><span class="params">(<span class="keyword">int</span>[] piles)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> max = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> n : piles)</span><br><span class="line">        max = Math.max(n, max);</span><br><span class="line">    <span class="keyword">return</span> max;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>至此，借助二分查找技巧，算法的时间复杂度为 O(NlogN)。</p>
+<h3 id="二、扩展延伸"><a href="#二、扩展延伸" class="headerlink" title="二、扩展延伸"></a>二、扩展延伸</h3><p>类似的，再看一道运输问题：</p>
+<p><img src="/fucking-algorithm/高频面试系列/koko偷香蕉.htm/pictures/%E4%BA%8C%E5%88%86%E5%BA%94%E7%94%A8/title2.png" alt></p>
+<p>要在 <code>D</code> 天内运输完所有货物，货物不可分割，如何确定运输的最小载重呢（下文称为 <code>cap</code>）？</p>
+<p>其实本质上和 Koko 吃香蕉的问题一样的，首先确定 <code>cap</code> 的最小值和最大值分别为 <code>max(weights)</code> 和 <code>sum(weights)</code>。</p>
+<p>我们要求<strong>最小载重</strong>，所以可以用搜索左侧边界的二分查找算法优化线性搜索：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 寻找左侧边界的二分查找</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">shipWithinDays</span><span class="params">(<span class="keyword">int</span>[] weights, <span class="keyword">int</span> D)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 载重可能的最小值</span></span><br><span class="line">    <span class="keyword">int</span> left = getMax(weights);</span><br><span class="line">	<span class="comment">// 载重可能的最大值 + 1</span></span><br><span class="line">    <span class="keyword">int</span> right = getSum(weights) + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (left &lt; right) &#123;</span><br><span class="line">        <span class="keyword">int</span> mid = left + (right - left) / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span> (canFinish(weights, D, mid)) &#123;</span><br><span class="line">            right = mid;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            left = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> left;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果载重为 cap，是否能在 D 天内运完货物？</span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">canFinish</span><span class="params">(<span class="keyword">int</span>[] w, <span class="keyword">int</span> D, <span class="keyword">int</span> cap)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> day = <span class="number">0</span>; day &lt; D; day++) &#123;</span><br><span class="line">        <span class="keyword">int</span> maxCap = cap;</span><br><span class="line">        <span class="keyword">while</span> ((maxCap -= w[i]) &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            i++;</span><br><span class="line">            <span class="keyword">if</span> (i == w.length)</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过这两个例子，你是否明白了二分查找在实际问题中的应用？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">    <span class="keyword">if</span> (isOK(i))</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br></pre></td></tr></table></figure>
+
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/高频面试系列/koko偷香蕉.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/高频面试系列/koko偷香蕉.html" data-id="cklrh5zaa0026ro9b4y026eb6" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#如何运用二分查找算法"><span class="toc-number">1.</span> <span class="toc-text">如何运用二分查找算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、问题分析"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、问题分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、扩展延伸"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、扩展延伸</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

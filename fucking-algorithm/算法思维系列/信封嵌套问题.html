@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="信封嵌套问题        相关推荐：  讲两道常考的阶乘算法题 状态压缩：对动态规划进行降维打击  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 354.俄罗斯套娃信封问题 ———– 很多算法问题都需要排序技巧，其难点不在于排序本身，而是需要巧妙地排序进行预处理，将算法问题进行转换，为之后的操作打下基础。 信封嵌套问题就需要先按特定的规则排序，之后就转换为一个">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/算法思维系列/信封嵌套问题.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="信封嵌套问题        相关推荐：  讲两道常考的阶乘算法题 状态压缩：对动态规划进行降维打击  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 354.俄罗斯套娃信封问题 ———– 很多算法问题都需要排序技巧，其难点不在于排序本身，而是需要巧妙地排序进行预处理，将算法问题进行转换，为之后的操作打下基础。 信封嵌套问题就需要先按特定的规则排序，之后就转换为一个">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/信封嵌套问题.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/信封嵌套问题.htm/pictures/%E4%BF%A1%E5%B0%81%E5%B5%8C%E5%A5%97/title.png">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/信封嵌套问题.htm/pictures/%E4%BF%A1%E5%B0%81%E5%B5%8C%E5%A5%97/0.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/信封嵌套问题.htm/pictures/%E4%BF%A1%E5%B0%81%E5%B5%8C%E5%A5%97/1.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/信封嵌套问题.htm/pictures/%E4%BF%A1%E5%B0%81%E5%B5%8C%E5%A5%97/2.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/信封嵌套问题.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.868Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="信封嵌套问题        相关推荐：  讲两道常考的阶乘算法题 状态压缩：对动态规划进行降维打击  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 354.俄罗斯套娃信封问题 ———– 很多算法问题都需要排序技巧，其难点不在于排序本身，而是需要巧妙地排序进行预处理，将算法问题进行转换，为之后的操作打下基础。 信封嵌套问题就需要先按特定的规则排序，之后就转换为一个">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/算法思维系列/信封嵌套问题.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.868Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="信封嵌套问题"><a href="#信封嵌套问题" class="headerlink" title="信封嵌套问题"></a>信封嵌套问题</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/算法思维系列/信封嵌套问题.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">讲两道常考的阶乘算法题</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">状态压缩：对动态规划进行降维打击</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/russian-doll-envelopes" target="_blank" rel="noopener">354.俄罗斯套娃信封问题</a></p>
+<p><strong>———–</strong></p>
+<p>很多算法问题都需要排序技巧，其难点不在于排序本身，而是需要巧妙地排序进行预处理，将算法问题进行转换，为之后的操作打下基础。</p>
+<p>信封嵌套问题就需要先按特定的规则排序，之后就转换为一个 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">最长递增子序列问题</a>，可以用前文 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">二分查找详解</a> 的技巧来解决了。</p>
+<h3 id="一、题目概述"><a href="#一、题目概述" class="headerlink" title="一、题目概述"></a>一、题目概述</h3><p>信封嵌套问题是个很有意思且经常出现在生活中的问题，先看下题目：</p>
+<p><img src="/fucking-algorithm/算法思维系列/信封嵌套问题.htm/pictures/%E4%BF%A1%E5%B0%81%E5%B5%8C%E5%A5%97/title.png" alt="title"></p>
+<p>这道题目其实是最长递增子序列（Longes Increasing Subsequence，简写为 LIS）的一个变种，因为很显然，每次合法的嵌套是大的套小的，相当于找一个最长递增的子序列，其长度就是最多能嵌套的信封个数。</p>
+<p>但是难点在于，标准的 LIS 算法只能在数组中寻找最长子序列，而我们的信封是由 <code>(w, h)</code> 这样的二维数对形式表示的，如何把 LIS 算法运用过来呢？</p>
+<p><img src="/fucking-algorithm/算法思维系列/信封嵌套问题.htm/pictures/%E4%BF%A1%E5%B0%81%E5%B5%8C%E5%A5%97/0.jpg" alt="0"></p>
+<p>读者也许会想，通过 <code>w × h</code> 计算面积，然后对面积进行标准的 LIS 算法。但是稍加思考就会发现这样不行，比如 <code>1 × 10</code> 大于 <code>3 × 3</code>，但是显然这样的两个信封是无法互相嵌套的。</p>
+<h3 id="二、解法"><a href="#二、解法" class="headerlink" title="二、解法"></a>二、解法</h3><p>这道题的解法是比较巧妙的：</p>
+<p><strong>先对宽度 <code>w</code> 进行升序排序，如果遇到 <code>w</code> 相同的情况，则按照高度 <code>h</code> 降序排序。之后把所有的 <code>h</code> 作为一个数组，在这个数组上计算 LIS 的长度就是答案。</strong></p>
+<p>画个图理解一下，先对这些数对进行排序：</p>
+<p><img src="/fucking-algorithm/算法思维系列/信封嵌套问题.htm/pictures/%E4%BF%A1%E5%B0%81%E5%B5%8C%E5%A5%97/1.jpg" alt="1"></p>
+<p>然后在 <code>h</code> 上寻找最长递增子序列：</p>
+<p><img src="/fucking-algorithm/算法思维系列/信封嵌套问题.htm/pictures/%E4%BF%A1%E5%B0%81%E5%B5%8C%E5%A5%97/2.jpg" alt="2"></p>
+<p>这个子序列就是最优的嵌套方案。</p>
+<p>这个解法的关键在于，对于宽度 <code>w</code> 相同的数对，要对其高度 <code>h</code> 进行降序排序。因为两个宽度相同的信封不能相互包含的，逆序排序保证在 <code>w</code> 相同的数对中最多只选取一个。</p>
+<p>下面看代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// envelopes = [[w, h], [w, h]...]</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxEnvelopes</span><span class="params">(<span class="keyword">int</span>[][] envelopes)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = envelopes.length;</span><br><span class="line">    <span class="comment">// 按宽度升序排列，如果宽度一样，则按高度降序排列</span></span><br><span class="line">    Arrays.sort(envelopes, <span class="keyword">new</span> Comparator&lt;<span class="keyword">int</span>[]&gt;() </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span>[] b)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> a[<span class="number">0</span>] == b[<span class="number">0</span>] ? </span><br><span class="line">                b[<span class="number">1</span>] - a[<span class="number">1</span>] : a[<span class="number">0</span>] - b[<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="comment">// 对高度数组寻找 LIS</span></span><br><span class="line">    <span class="keyword">int</span>[] height = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        height[i] = envelopes[i][<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> lengthOfLIS(height);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>关于最长递增子序列的寻找方法，在前文中详细介绍了动态规划解法,并用扑克牌游戏解释了二分查找解法，本文就不展开了，直接套用算法模板：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 返回 nums 中 LIS 的长度 */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLIS</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> piles = <span class="number">0</span>, n = nums.length;</span><br><span class="line">    <span class="keyword">int</span>[] top = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="comment">// 要处理的扑克牌</span></span><br><span class="line">        <span class="keyword">int</span> poker = nums[i];</span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>, right = piles;</span><br><span class="line">        <span class="comment">// 二分查找插入位置</span></span><br><span class="line">        <span class="keyword">while</span> (left &lt; right) &#123;</span><br><span class="line">            <span class="keyword">int</span> mid = (left + right) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> (top[mid] &gt;= poker)</span><br><span class="line">                right = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                left = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (left == piles) piles++;</span><br><span class="line">        <span class="comment">// 把这张牌放到牌堆顶</span></span><br><span class="line">        top[left] = poker;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 牌堆数就是 LIS 长度</span></span><br><span class="line">    <span class="keyword">return</span> piles;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>为了清晰，我将代码分为了两个函数， 你也可以合并，这样可以节省下 <code>height</code> 数组的空间。</p>
+<p>此算法的时间复杂度为 <code>O(NlogN)</code>，因为排序和计算 LIS 各需要 <code>O(NlogN)</code> 的时间。</p>
+<p>空间复杂度为 <code>O(N)</code>，因为计算 LIS 的函数中需要一个 <code>top</code> 数组。</p>
+<h3 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h3><p>这个问题是个 Hard 级别的题目，难就难在排序，正确地排序后此问题就被转化成了一个标准的 LIS 问题，容易解决一些。</p>
+<p>其实这种问题还可以拓展到三维，比如说现在不是让你嵌套信封，而是嵌套箱子，每个箱子有长宽高三个维度，请你算算最多能嵌套几个箱子？</p>
+<p>我们可能会这样想，先把前两个维度（长和宽）按信封嵌套的思路求一个嵌套序列，最后在这个序列的第三个维度（高度）找一下 LIS，应该能算出答案。</p>
+<p>实际上，这个思路是错误的。这类问题叫做「偏序问题」，上升到三维会使难度巨幅提升，需要借助一种高级数据结构「树状数组」，有兴趣的读者可以自行搜索。</p>
+<p>有很多算法问题都需要排序后进行处理，阿东正在进行整理总结。希望本文对你有帮助。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/算法思维系列/信封嵌套问题.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/算法思维系列/信封嵌套问题.html" data-id="cklrh5zaj002rro9bei8irbc6" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#信封嵌套问题"><span class="toc-number">1.</span> <span class="toc-text">信封嵌套问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、题目概述"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、题目概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、解法"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、解法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、总结"><span class="toc-number">1.0.3.</span> <span class="toc-text">三、总结</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

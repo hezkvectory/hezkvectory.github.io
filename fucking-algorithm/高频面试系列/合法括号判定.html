@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="如何判定括号合法性        相关推荐：  回溯算法解题套路框架 Linux shell 的实用小技巧  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 20.有效的括号 ———– 对括号的合法性判断是一个很常见且实用的问题，比如说我们写的代码，编辑器和编译器都会检查括号是否正确闭合。而且我们的代码可能会包含三种括号 [](){}，判断起来有一点难度。 本文就">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/高频面试系列/合法括号判定.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="如何判定括号合法性        相关推荐：  回溯算法解题套路框架 Linux shell 的实用小技巧  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 20.有效的括号 ———– 对括号的合法性判断是一个很常见且实用的问题，比如说我们写的代码，编辑器和编译器都会检查括号是否正确闭合。而且我们的代码可能会包含三种括号 [](){}，判断起来有一点难度。 本文就">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/合法括号判定.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/合法括号判定.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.876Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="如何判定括号合法性        相关推荐：  回溯算法解题套路框架 Linux shell 的实用小技巧  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 20.有效的括号 ———– 对括号的合法性判断是一个很常见且实用的问题，比如说我们写的代码，编辑器和编译器都会检查括号是否正确闭合。而且我们的代码可能会包含三种括号 [](){}，判断起来有一点难度。 本文就">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/高频面试系列/合法括号判定.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.876Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="如何判定括号合法性"><a href="#如何判定括号合法性" class="headerlink" title="如何判定括号合法性"></a>如何判定括号合法性</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/高频面试系列/合法括号判定.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">回溯算法解题套路框架</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">Linux shell 的实用小技巧</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/valid-parentheses" target="_blank" rel="noopener">20.有效的括号</a></p>
+<p><strong>———–</strong></p>
+<p>对括号的合法性判断是一个很常见且实用的问题，比如说我们写的代码，编辑器和编译器都会检查括号是否正确闭合。而且我们的代码可能会包含三种括号 <code>[](){}</code>，判断起来有一点难度。</p>
+<p>本文就来聊一道关于括号合法性判断的算法题，相信能加深你对<strong>栈</strong>这种数据结构的理解。</p>
+<p>题目很简单，输入一个字符串，其中包含 <code>[](){}</code> 六种括号，请你判断这个字符串组成的括号是否合法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Input: &quot;()[]&#123;&#125;&quot;</span><br><span class="line">Output: true</span><br><span class="line"></span><br><span class="line">Input: &quot;([)]&quot;</span><br><span class="line">Output: false</span><br><span class="line"></span><br><span class="line">Input: &quot;&#123;[]&#125;&quot;</span><br><span class="line">Output: true</span><br></pre></td></tr></table></figure>
+
+<p>解决这个问题之前，我们先降低难度，思考一下，<strong>如果只有一种括号 <code>()</code></strong>，应该如何判断字符串组成的括号是否合法呢？</p>
+<h3 id="一、处理一种括号"><a href="#一、处理一种括号" class="headerlink" title="一、处理一种括号"></a>一、处理一种括号</h3><p>字符串中只有圆括号，如果想让括号字符串合法，那么必须做到：</p>
+<p><strong>每个右括号 <code>)</code> 的左边必须有一个左括号 <code>(</code> 和它匹配</strong>。</p>
+<p>比如说字符串 <code>()))((</code> 中，中间的两个右括号<strong>左边</strong>就没有左括号匹配，所以这个括号组合是不合法的。</p>
+<p>那么根据这个思路，我们可以写出算法：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">isValid</span><span class="params">(<span class="built_in">string</span> str)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 待匹配的左括号数量</span></span><br><span class="line">    <span class="keyword">int</span> left = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">char</span> c : str) &#123;</span><br><span class="line">        <span class="keyword">if</span> (c == <span class="string">'('</span>)</span><br><span class="line">            left++;</span><br><span class="line">        <span class="keyword">else</span> <span class="comment">// 遇到右括号</span></span><br><span class="line">            left--;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (left &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> left == <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果只有圆括号，这样就能正确判断合法性。对于三种括号的情况，我一开始想模仿这个思路，定义三个变量 <code>left1</code>，<code>left2</code>，<code>left3</code> 分别处理每种括号，虽然要多写不少 if else 分支，但是似乎可以解决问题。</p>
+<p>但实际上直接照搬这种思路是不行的，比如说只有一个括号的情况下 <code>(())</code> 是合法的，但是多种括号的情况下， <code>[(])</code> 显然是不合法的。</p>
+<p>仅仅记录每种左括号出现的次数已经不能做出正确判断了，我们要加大存储的信息量，可以利用栈来模仿类似的思路。</p>
+<h3 id="二、处理多种括号"><a href="#二、处理多种括号" class="headerlink" title="二、处理多种括号"></a>二、处理多种括号</h3><p>栈是一种先进后出的数据结构，处理括号问题的时候尤其有用。</p>
+<p>我们这道题就用一个名为 <code>left</code> 的栈代替之前思路中的 <code>left</code> 变量，<strong>遇到左括号就入栈，遇到右括号就去栈中寻找最近的左括号，看是否匹配</strong>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">isValid</span><span class="params">(<span class="built_in">string</span> str)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">stack</span>&lt;<span class="keyword">char</span>&gt; left;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">char</span> c : str) &#123;</span><br><span class="line">        <span class="keyword">if</span> (c == <span class="string">'('</span> || c == <span class="string">'&#123;'</span> || c == <span class="string">'['</span>)</span><br><span class="line">            left.push(c);</span><br><span class="line">        <span class="keyword">else</span> <span class="comment">// 字符 c 是右括号</span></span><br><span class="line">            <span class="keyword">if</span> (!left.empty() &amp;&amp; leftOf(c) == left.top())</span><br><span class="line">                left.pop();</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="comment">// 和最近的左括号不匹配</span></span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 是否所有的左括号都被匹配了</span></span><br><span class="line">    <span class="keyword">return</span> left.empty();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span> <span class="title">leftOf</span><span class="params">(<span class="keyword">char</span> c)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (c == <span class="string">'&#125;'</span>) <span class="keyword">return</span> <span class="string">'&#123;'</span>;</span><br><span class="line">    <span class="keyword">if</span> (c == <span class="string">')'</span>) <span class="keyword">return</span> <span class="string">'('</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'['</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/高频面试系列/合法括号判定.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+<h3 id="Python3"><a href="#Python3" class="headerlink" title="Python3"></a>Python3</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">isValid</span><span class="params">(self, s: str)</span> -&gt; bool:</span></span><br><span class="line">    left = []</span><br><span class="line">    leftOf = &#123;</span><br><span class="line">        <span class="string">')'</span>:<span class="string">'('</span>,</span><br><span class="line">        <span class="string">']'</span>:<span class="string">'['</span>,</span><br><span class="line">        <span class="string">'&#125;'</span>:<span class="string">'&#123;'</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> s:</span><br><span class="line">        <span class="keyword">if</span> c <span class="keyword">in</span> <span class="string">'([&#123;'</span>:</span><br><span class="line">            left.append(c)</span><br><span class="line">        <span class="keyword">elif</span> left <span class="keyword">and</span> leftOf[c]==left[<span class="number">-1</span>]: <span class="comment"># 右括号 + left不为空 + 和最近左括号能匹配</span></span><br><span class="line">            left.pop()</span><br><span class="line">        <span class="keyword">else</span>: <span class="comment"># 右括号 + （left为空 / 和堆顶括号不匹配）</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        </span><br><span class="line">    <span class="comment"># left中所有左括号都被匹配则return True 反之False</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">not</span> left</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//基本思想：每次遇到左括号时都将相对应的右括号'）'，']'或'&#125;'推入堆栈</span></span><br><span class="line"><span class="comment">//如果在字符串中出现右括号，则需要检查堆栈是否为空，以及顶部元素是否与该右括号相同。如果不是，则该字符串无效。</span></span><br><span class="line"><span class="comment">//最后，我们还需要检查堆栈是否为空</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isValid</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">  Deque&lt;Character&gt; stack = <span class="keyword">new</span> ArrayDeque&lt;&gt;();</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">char</span> c : s.toCharArray())&#123;</span><br><span class="line">    <span class="comment">//是左括号就将相对应的右括号入栈</span></span><br><span class="line">    <span class="keyword">if</span>(c==<span class="string">'('</span>) &#123;</span><br><span class="line">      stack.offerLast(<span class="string">')'</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(c==<span class="string">'&#123;'</span>)&#123;</span><br><span class="line">      stack.offerLast(<span class="string">'&#125;'</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(c==<span class="string">'['</span>)&#123;</span><br><span class="line">      stack.offerLast(<span class="string">']'</span>);   </span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(stack.isEmpty() || stack.pollLast()!=c)&#123;<span class="comment">//出现右括号，检查堆栈是否为空，以及顶部元素是否与该右括号相同</span></span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> stack.isEmpty();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/高频面试系列/合法括号判定.html" data-id="cklrh5zac002bro9bheqk0uxy" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#如何判定括号合法性"><span class="toc-number">1.</span> <span class="toc-text">如何判定括号合法性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、处理一种括号"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、处理一种括号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、处理多种括号"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、处理多种括号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python3"><span class="toc-number">1.0.3.</span> <span class="toc-text">Python3</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

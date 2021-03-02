@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="区间调度问题之区间合并        相关推荐：  Git原理之最近公共祖先 洗牌算法  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 56.合并区间 ———– 上篇文章用贪心算法解决了区间调度问题：给你很多区间，让你求其中的最大不重叠子集。 其实对于区间相关的问题，还有很多其他类型，本文就来讲讲区间合并问题（Merge Interval）。 LeetCode">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/算法思维系列/区间调度问题之区间合并.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="区间调度问题之区间合并        相关推荐：  Git原理之最近公共祖先 洗牌算法  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 56.合并区间 ———– 上篇文章用贪心算法解决了区间调度问题：给你很多区间，让你求其中的最大不重叠子集。 其实对于区间相关的问题，还有很多其他类型，本文就来讲讲区间合并问题（Merge Interval）。 LeetCode">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/区间调度问题之区间合并.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/区间调度问题之区间合并.htm/pictures/mergeInterval/title.png">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/区间调度问题之区间合并.htm/pictures/mergeInterval/1.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/区间调度问题之区间合并.htm/pictures/mergeInterval/2.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/区间调度问题之区间合并.htm/pictures/mergeInterval/3.gif">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/区间调度问题之区间合并.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.869Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="区间调度问题之区间合并        相关推荐：  Git原理之最近公共祖先 洗牌算法  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 56.合并区间 ———– 上篇文章用贪心算法解决了区间调度问题：给你很多区间，让你求其中的最大不重叠子集。 其实对于区间相关的问题，还有很多其他类型，本文就来讲讲区间合并问题（Merge Interval）。 LeetCode">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/算法思维系列/区间调度问题之区间合并.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.869Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="区间调度问题之区间合并"><a href="#区间调度问题之区间合并" class="headerlink" title="区间调度问题之区间合并"></a>区间调度问题之区间合并</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/算法思维系列/区间调度问题之区间合并.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">Git原理之最近公共祖先</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">洗牌算法</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/merge-intervals" target="_blank" rel="noopener">56.合并区间</a></p>
+<p><strong>———–</strong></p>
+<p>上篇文章用贪心算法解决了区间调度问题：给你很多区间，让你求其中的最大不重叠子集。</p>
+<p>其实对于区间相关的问题，还有很多其他类型，本文就来讲讲区间合并问题（Merge Interval）。</p>
+<p>LeetCode 第 56 题就是一道相关问题，题目很好理解：</p>
+<p><img src="/fucking-algorithm/算法思维系列/区间调度问题之区间合并.htm/pictures/mergeInterval/title.png" alt="title"></p>
+<p>我们解决区间问题的一般思路是先排序，然后观察规律。</p>
+<h3 id="一、思路"><a href="#一、思路" class="headerlink" title="一、思路"></a>一、思路</h3><p>一个区间可以表示为 <code>[start, end]</code>，前文聊的区间调度问题，需要按 <code>end</code> 排序，以便满足贪心选择性质。而对于区间合并问题，其实按 <code>end</code> 和 <code>start</code> 排序都可以，不过为了清晰起见，我们选择按 <code>start</code> 排序。</p>
+<p><img src="/fucking-algorithm/算法思维系列/区间调度问题之区间合并.htm/pictures/mergeInterval/1.jpg" alt="1"></p>
+<p><strong>显然，对于几个相交区间合并后的结果区间 <code>x</code>，<code>x.start</code> 一定是这些相交区间中 <code>start</code> 最小的，<code>x.end</code> 一定是这些相交区间中 <code>end</code> 最大的。</strong></p>
+<p><img src="/fucking-algorithm/算法思维系列/区间调度问题之区间合并.htm/pictures/mergeInterval/2.jpg" alt="2"></p>
+<p>由于已经排了序，<code>x.start</code> 很好确定，求 <code>x.end</code> 也很容易，可以类比在数组中找最大值的过程：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> max_ele = arr[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; arr.length; i++) </span><br><span class="line">    max_ele = max(max_ele, arr[i]);</span><br><span class="line"><span class="keyword">return</span> max_ele;</span><br></pre></td></tr></table></figure>
+
+<h3 id="二、代码"><a href="#二、代码" class="headerlink" title="二、代码"></a>二、代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># intervals 形如 [[1,3],[2,6]...]</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">merge</span><span class="params">(intervals)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> intervals: <span class="keyword">return</span> []</span><br><span class="line">    <span class="comment"># 按区间的 start 升序排列</span></span><br><span class="line">    intervals.sort(key=<span class="keyword">lambda</span> intv: intv[<span class="number">0</span>])</span><br><span class="line">    res = []</span><br><span class="line">    res.append(intervals[<span class="number">0</span>])</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, len(intervals)):</span><br><span class="line">        curr = intervals[i]</span><br><span class="line">        <span class="comment"># res 中最后一个元素的引用</span></span><br><span class="line">        last = res[<span class="number">-1</span>]</span><br><span class="line">        <span class="keyword">if</span> curr[<span class="number">0</span>] &lt;= last[<span class="number">1</span>]:</span><br><span class="line">            <span class="comment"># 找到最大的 end</span></span><br><span class="line">            last[<span class="number">1</span>] = max(last[<span class="number">1</span>], curr[<span class="number">1</span>])</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># 处理下一个待合并区间</span></span><br><span class="line">            res.append(curr)</span><br><span class="line">    <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
+
+<p>看下动画就一目了然了：</p>
+<p><img src="/fucking-algorithm/算法思维系列/区间调度问题之区间合并.htm/pictures/mergeInterval/3.gif" alt="3"></p>
+<p>至此，区间合并问题就解决了。本文篇幅短小，因为区间合并只是区间问题的一个类型，后续还有一些区间问题。本想把所有问题类型都总结在一篇文章，但有读者反应，长文只会收藏不会看… 所以还是分成小短文吧，读者有什么看法可以在留言板留言交流。</p>
+<p>本文终，希望对你有帮助。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/算法思维系列/区间调度问题之区间合并.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/算法思维系列/区间调度问题之区间合并.html" data-id="cklrh5zam002wro9b9fbaox3x" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#区间调度问题之区间合并"><span class="toc-number">1.</span> <span class="toc-text">区间调度问题之区间合并</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、思路"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、代码"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、代码</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

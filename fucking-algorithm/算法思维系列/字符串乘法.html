@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="字符串乘法        相关推荐：  关于 Linux shell 你必须知道的 回溯算法解题套路框架  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 43.字符串相乘 ———– 对于比较小的数字，做运算可以直接使用编程语言提供的运算符，但是如果相乘的两个因数非常大，语言提供的数据类型可能就会溢出。一种替代方案就是，运算数以字符串的形式输入，然后模仿我们小学学">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/算法思维系列/字符串乘法.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="字符串乘法        相关推荐：  关于 Linux shell 你必须知道的 回溯算法解题套路框架  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 43.字符串相乘 ———– 对于比较小的数字，做运算可以直接使用编程语言提供的运算符，但是如果相乘的两个因数非常大，语言提供的数据类型可能就会溢出。一种替代方案就是，运算数以字符串的形式输入，然后模仿我们小学学">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/字符串乘法.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/字符串乘法.htm/pictures/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B9%98%E6%B3%95/title.png">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/字符串乘法.htm/pictures/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B9%98%E6%B3%95/1.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/字符串乘法.htm/pictures/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B9%98%E6%B3%95/2.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/字符串乘法.htm/pictures/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B9%98%E6%B3%95/3.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/字符串乘法.htm/pictures/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B9%98%E6%B3%95/4.gif">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/字符串乘法.htm/pictures/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B9%98%E6%B3%95/6.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/字符串乘法.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.870Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="字符串乘法        相关推荐：  关于 Linux shell 你必须知道的 回溯算法解题套路框架  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 43.字符串相乘 ———– 对于比较小的数字，做运算可以直接使用编程语言提供的运算符，但是如果相乘的两个因数非常大，语言提供的数据类型可能就会溢出。一种替代方案就是，运算数以字符串的形式输入，然后模仿我们小学学">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/算法思维系列/字符串乘法.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.870Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="字符串乘法"><a href="#字符串乘法" class="headerlink" title="字符串乘法"></a>字符串乘法</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/算法思维系列/字符串乘法.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">关于 Linux shell 你必须知道的</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">回溯算法解题套路框架</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/multiply-strings" target="_blank" rel="noopener">43.字符串相乘</a></p>
+<p><strong>———–</strong></p>
+<p>对于比较小的数字，做运算可以直接使用编程语言提供的运算符，但是如果相乘的两个因数非常大，语言提供的数据类型可能就会溢出。一种替代方案就是，运算数以字符串的形式输入，然后模仿我们小学学习的乘法算术过程计算出结果，并且也用字符串表示。</p>
+<p><img src="/fucking-algorithm/算法思维系列/字符串乘法.htm/pictures/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B9%98%E6%B3%95/title.png" alt></p>
+<p>需要注意的是，<code>num1</code> 和 <code>num2</code> 可以非常长，所以不可以把他们直接转成整型然后运算，唯一的思路就是模仿我们手算乘法。</p>
+<p>比如说我们手算 <code>123 × 45</code>，应该会这样计算：</p>
+<p><img src="/fucking-algorithm/算法思维系列/字符串乘法.htm/pictures/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B9%98%E6%B3%95/1.jpg" alt></p>
+<p>计算 <code>123 × 5</code>，再计算 <code>123 × 4</code>，最后错一位相加。这个流程恐怕小学生都可以熟练完成，但是你是否能<strong>把这个运算过程进一步机械化</strong>，写成一套算法指令让没有任何智商的计算机来执行呢？</p>
+<p>你看这个简单过程，其中涉及乘法进位，涉及错位相加，还涉及加法进位；而且还有一些不易察觉的问题，比如说两位数乘以两位数，结果可能是四位数，也可能是三位数，你怎么想出一个标准化的处理方式？这就是算法的魅力，如果没有计算机思维，简单的问题可能都没办法自动化处理。</p>
+<p>首先，我们这种手算方式还是太「高级」了，我们要再「低级」一点，<code>123 × 5</code> 和 <code>123 × 4</code> 的过程还可以进一步分解，最后再相加：</p>
+<p><img src="/fucking-algorithm/算法思维系列/字符串乘法.htm/pictures/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B9%98%E6%B3%95/2.jpg" alt></p>
+<p>现在 <code>123</code> 并不大，如果是个很大的数字的话，是无法直接计算乘积的。我们可以用一个数组在底下接收相加结果：</p>
+<p><img src="/fucking-algorithm/算法思维系列/字符串乘法.htm/pictures/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B9%98%E6%B3%95/3.jpg" alt></p>
+<p>整个计算过程大概是这样，<strong>有两个指针 <code>i，j</code> 在 <code>num1</code> 和 <code>num2</code> 上游走，计算乘积，同时将乘积叠加到 <code>res</code> 的正确位置</strong>：</p>
+<p><img src="/fucking-algorithm/算法思维系列/字符串乘法.htm/pictures/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B9%98%E6%B3%95/4.gif" alt></p>
+<p>现在还有一个关键问题，如何将乘积叠加到 <code>res</code> 的正确位置，或者说，如何通过 <code>i，j</code> 计算 <code>res</code> 的对应索引呢？</p>
+<p>其实，细心观察之后就发现，<strong><code>num1[i]</code> 和 <code>num2[j]</code> 的乘积对应的就是 <code>res[i+j]</code> 和 <code>res[i+j+1]</code> 这两个位置</strong>。</p>
+<p><img src="/fucking-algorithm/算法思维系列/字符串乘法.htm/pictures/%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B9%98%E6%B3%95/6.jpg" alt></p>
+<p>明白了这一点，就可以用代码模仿出这个计算过程了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">string <span class="title">multiply</span><span class="params">(string num1, string num2)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> m = num1.size(), n = num2.size();</span><br><span class="line">    <span class="comment">// 结果最多为 m + n 位数</span></span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">res</span><span class="params">(m + n, <span class="number">0</span>)</span></span>;</span><br><span class="line">    <span class="comment">// 从个位数开始逐位相乘</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = m - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--)</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = n - <span class="number">1</span>; j &gt;= <span class="number">0</span>; j--) &#123;</span><br><span class="line">            <span class="keyword">int</span> mul = (num1[i]-<span class="string">'0'</span>) * (num2[j]-<span class="string">'0'</span>);</span><br><span class="line">            <span class="comment">// 乘积在 res 对应的索引位置</span></span><br><span class="line">            <span class="keyword">int</span> p1 = i + j, p2 = i + j + <span class="number">1</span>;</span><br><span class="line">            <span class="comment">// 叠加到 res 上</span></span><br><span class="line">            <span class="keyword">int</span> sum = mul + res[p2];</span><br><span class="line">            res[p2] = sum % <span class="number">10</span>;</span><br><span class="line">            res[p1] += sum / <span class="number">10</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="comment">// 结果前缀可能存的 0（未使用的位）</span></span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (i &lt; res.size() &amp;&amp; res[i] == <span class="number">0</span>)</span><br><span class="line">        i++;</span><br><span class="line">    <span class="comment">// 将计算结果转化成字符串</span></span><br><span class="line">    string str;</span><br><span class="line">    <span class="keyword">for</span> (; i &lt; res.size(); i++)</span><br><span class="line">        str.push_back(<span class="string">'0'</span> + res[i]);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> str.size() == <span class="number">0</span> ? <span class="string">"0"</span> : str;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>至此，字符串乘法算法就完成了。</p>
+<p><strong>总结一下</strong>，我们习以为常的一些思维方式，在计算机看来是非常难以做到的。比如说我们习惯的算术流程并不复杂，但是如果让你再进一步，翻译成代码逻辑，并不简单。算法需要将计算流程再简化，通过边算边叠加的方式来得到结果。</p>
+<p>俗话教育我们，不要陷入思维定式，不要程序化，要发散思维，要创新。但我觉得程序化并不是坏事，可以大幅提高效率，减小失误率。算法不就是一套程序化的思维吗，只有程序化才能让计算机帮助我们解决复杂问题呀！</p>
+<p>也许算法就是一种<strong>寻找思维定式的思维</strong>吧，希望本文对你有帮助。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/算法思维系列/字符串乘法.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/算法思维系列/字符串乘法.html" data-id="cklrh5zap0030ro9bl7vbm55n" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#字符串乘法"><span class="toc-number">1.</span> <span class="toc-text">字符串乘法</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

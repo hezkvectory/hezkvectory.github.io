@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="回溯算法详解        相关推荐：  我写了首诗，把滑动窗口算法算法变成了默写题 经典动态规划：高楼扔鸡蛋（进阶）  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 46.全排列 51.N皇后 ———– 这篇文章是很久之前的一篇《回溯算法详解》的进阶版，之前那篇不够清楚，就不必看了，看这篇就行。把框架给你讲清楚，你会发现回溯算法问题都是一个套路。 废话不多说，">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/算法思维系列/回溯算法详解修订版.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="回溯算法详解        相关推荐：  我写了首诗，把滑动窗口算法算法变成了默写题 经典动态规划：高楼扔鸡蛋（进阶）  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 46.全排列 51.N皇后 ———– 这篇文章是很久之前的一篇《回溯算法详解》的进阶版，之前那篇不够清楚，就不必看了，看这篇就行。把框架给你讲清楚，你会发现回溯算法问题都是一个套路。 废话不多说，">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/回溯算法详解修订版.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/回溯算法详解修订版.htm/pictures/backtracking/1.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/回溯算法详解修订版.htm/pictures/backtracking/2.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/回溯算法详解修订版.htm/pictures/backtracking/3.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/回溯算法详解修订版.htm/pictures/backtracking/4.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/回溯算法详解修订版.htm/pictures/backtracking/5.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/回溯算法详解修订版.htm/pictures/backtracking/6.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/回溯算法详解修订版.htm/pictures/backtracking/7.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/回溯算法详解修订版.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.870Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="回溯算法详解        相关推荐：  我写了首诗，把滑动窗口算法算法变成了默写题 经典动态规划：高楼扔鸡蛋（进阶）  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 46.全排列 51.N皇后 ———– 这篇文章是很久之前的一篇《回溯算法详解》的进阶版，之前那篇不够清楚，就不必看了，看这篇就行。把框架给你讲清楚，你会发现回溯算法问题都是一个套路。 废话不多说，">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/算法思维系列/回溯算法详解修订版.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.870Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="回溯算法详解"><a href="#回溯算法详解" class="headerlink" title="回溯算法详解"></a>回溯算法详解</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/算法思维系列/回溯算法详解修订版.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">我写了首诗，把滑动窗口算法算法变成了默写题</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">经典动态规划：高楼扔鸡蛋（进阶）</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/permutations" target="_blank" rel="noopener">46.全排列</a></p>
+<p><a href="https://leetcode-cn.com/problems/n-queens" target="_blank" rel="noopener">51.N皇后</a></p>
+<p><strong>———–</strong></p>
+<p>这篇文章是很久之前的一篇《回溯算法详解》的进阶版，之前那篇不够清楚，就不必看了，看这篇就行。把框架给你讲清楚，你会发现回溯算法问题都是一个套路。</p>
+<p>废话不多说，直接上回溯算法框架。<strong>解决一个回溯问题，实际上就是一个决策树的遍历过程</strong>。你只需要思考 3 个问题：</p>
+<p>1、路径：也就是已经做出的选择。</p>
+<p>2、选择列表：也就是你当前可以做的选择。</p>
+<p>3、结束条件：也就是到达决策树底层，无法再做选择的条件。</p>
+<p>如果你不理解这三个词语的解释，没关系，我们后面会用「全排列」和「N 皇后问题」这两个经典的回溯算法问题来帮你理解这些词语是什么意思，现在你先留着印象。</p>
+<p>代码方面，回溯算法的框架：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">result = []</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">backtrack</span><span class="params">(路径, 选择列表)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> 满足结束条件:</span><br><span class="line">        result.add(路径)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> 选择 <span class="keyword">in</span> 选择列表:</span><br><span class="line">        做选择</span><br><span class="line">        backtrack(路径, 选择列表)</span><br><span class="line">        撤销选择</span><br></pre></td></tr></table></figure>
+
+<p><strong>其核心就是 for 循环里面的递归，在递归调用之前「做选择」，在递归调用之后「撤销选择」</strong>，特别简单。</p>
+<p>什么叫做选择和撤销选择呢，这个框架的底层原理是什么呢？下面我们就通过「全排列」这个问题来解开之前的疑惑，详细探究一下其中的奥妙！</p>
+<h3 id="一、全排列问题"><a href="#一、全排列问题" class="headerlink" title="一、全排列问题"></a>一、全排列问题</h3><p>我们在高中的时候就做过排列组合的数学题，我们也知道 <code>n</code> 个不重复的数，全排列共有 n! 个。</p>
+<p>PS：<strong>为了简单清晰起见，我们这次讨论的全排列问题不包含重复的数字</strong>。</p>
+<p>那么我们当时是怎么穷举全排列的呢？比方说给三个数 <code>[1,2,3]</code>，你肯定不会无规律地乱穷举，一般是这样：</p>
+<p>先固定第一位为 1，然后第二位可以是 2，那么第三位只能是 3；然后可以把第二位变成 3，第三位就只能是 2 了；然后就只能变化第一位，变成 2，然后再穷举后两位……</p>
+<p>其实这就是回溯算法，我们高中无师自通就会用，或者有的同学直接画出如下这棵回溯树：</p>
+<p><img src="/fucking-algorithm/算法思维系列/回溯算法详解修订版.htm/pictures/backtracking/1.jpg" alt></p>
+<p>只要从根遍历这棵树，记录路径上的数字，其实就是所有的全排列。<strong>我们不妨把这棵树称为回溯算法的「决策树」</strong>。</p>
+<p><strong>为啥说这是决策树呢，因为你在每个节点上其实都在做决策</strong>。比如说你站在下图的红色节点上：</p>
+<p><img src="/fucking-algorithm/算法思维系列/回溯算法详解修订版.htm/pictures/backtracking/2.jpg" alt></p>
+<p>你现在就在做决策，可以选择 1 那条树枝，也可以选择 3 那条树枝。为啥只能在 1 和 3 之中选择呢？因为 2 这个树枝在你身后，这个选择你之前做过了，而全排列是不允许重复使用数字的。</p>
+<p><strong>现在可以解答开头的几个名词：<code>[2]</code> 就是「路径」，记录你已经做过的选择；<code>[1,3]</code> 就是「选择列表」，表示你当前可以做出的选择；「结束条件」就是遍历到树的底层，在这里就是选择列表为空的时候</strong>。</p>
+<p>如果明白了这几个名词，<strong>可以把「路径」和「选择」列表作为决策树上每个节点的属性</strong>，比如下图列出了几个节点的属性：</p>
+<p><img src="/fucking-algorithm/算法思维系列/回溯算法详解修订版.htm/pictures/backtracking/3.jpg" alt></p>
+<p><strong>我们定义的 <code>backtrack</code> 函数其实就像一个指针，在这棵树上游走，同时要正确维护每个节点的属性，每当走到树的底层，其「路径」就是一个全排列</strong>。</p>
+<p>再进一步，如何遍历一棵树？这个应该不难吧。回忆一下之前「学习数据结构的框架思维」写过，各种搜索问题其实都是树的遍历问题，而多叉树的遍历框架就是这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">traverse</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (TreeNode child : root.childern)</span><br><span class="line">        <span class="comment">// 前序遍历需要的操作</span></span><br><span class="line">        traverse(child);</span><br><span class="line">        <span class="comment">// 后序遍历需要的操作</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而所谓的前序遍历和后序遍历，他们只是两个很有用的时间点，我给你画张图你就明白了：</p>
+<p><img src="/fucking-algorithm/算法思维系列/回溯算法详解修订版.htm/pictures/backtracking/4.jpg" alt></p>
+<p><strong>前序遍历的代码在进入某一个节点之前的那个时间点执行，后序遍历代码在离开某个节点之后的那个时间点执行</strong>。</p>
+<p>回想我们刚才说的，「路径」和「选择」是每个节点的属性，函数在树上游走要正确维护节点的属性，那么就要在这两个特殊时间点搞点动作：</p>
+<p><img src="/fucking-algorithm/算法思维系列/回溯算法详解修订版.htm/pictures/backtracking/5.jpg" alt></p>
+<p>现在，你是否理解了回溯算法的这段核心框架？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> 选择 <span class="keyword">in</span> 选择列表:</span><br><span class="line">    <span class="comment"># 做选择</span></span><br><span class="line">    将该选择从选择列表移除</span><br><span class="line">    路径.add(选择)</span><br><span class="line">    backtrack(路径, 选择列表)</span><br><span class="line">    <span class="comment"># 撤销选择</span></span><br><span class="line">    路径.remove(选择)</span><br><span class="line">    将该选择再加入选择列表</span><br></pre></td></tr></table></figure>
+
+<p><strong>我们只要在递归之前做出选择，在递归之后撤销刚才的选择</strong>，就能正确得到每个节点的选择列表和路径。</p>
+<p>下面，直接看全排列代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">List&lt;List&lt;Integer&gt;&gt; res = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 主函数，输入一组不重复的数字，返回它们的全排列 */</span></span><br><span class="line">List&lt;List&lt;Integer&gt;&gt; permute(<span class="keyword">int</span>[] nums) &#123;</span><br><span class="line">    <span class="comment">// 记录「路径」</span></span><br><span class="line">    LinkedList&lt;Integer&gt; track = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">    backtrack(nums, track);</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 路径：记录在 track 中</span></span><br><span class="line"><span class="comment">// 选择列表：nums 中不存在于 track 的那些元素</span></span><br><span class="line"><span class="comment">// 结束条件：nums 中的元素全都在 track 中出现</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">backtrack</span><span class="params">(<span class="keyword">int</span>[] nums, LinkedList&lt;Integer&gt; track)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 触发结束条件</span></span><br><span class="line">    <span class="keyword">if</span> (track.size() == nums.length) &#123;</span><br><span class="line">        res.add(<span class="keyword">new</span> LinkedList(track));</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">        <span class="comment">// 排除不合法的选择</span></span><br><span class="line">        <span class="keyword">if</span> (track.contains(nums[i]))</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        <span class="comment">// 做选择</span></span><br><span class="line">        track.add(nums[i]);</span><br><span class="line">        <span class="comment">// 进入下一层决策树</span></span><br><span class="line">        backtrack(nums, track);</span><br><span class="line">        <span class="comment">// 取消选择</span></span><br><span class="line">        track.removeLast();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们这里稍微做了些变通，没有显式记录「选择列表」，而是通过 <code>nums</code> 和 <code>track</code> 推导出当前的选择列表：</p>
+<p><img src="/fucking-algorithm/算法思维系列/回溯算法详解修订版.htm/pictures/backtracking/6.jpg" alt></p>
+<p>至此，我们就通过全排列问题详解了回溯算法的底层原理。当然，这个算法解决全排列不是很高效，应为对链表使用 <code>contains</code> 方法需要 O(N) 的时间复杂度。有更好的方法通过交换元素达到目的，但是难理解一些，这里就不写了，有兴趣可以自行搜索一下。</p>
+<p>但是必须说明的是，不管怎么优化，都符合回溯框架，而且时间复杂度都不可能低于 O(N!)，因为穷举整棵决策树是无法避免的。<strong>这也是回溯算法的一个特点，不像动态规划存在重叠子问题可以优化，回溯算法就是纯暴力穷举，复杂度一般都很高</strong>。</p>
+<p>明白了全排列问题，就可以直接套回溯算法框架了，下面简单看看 N 皇后问题。</p>
+<h3 id="二、N-皇后问题"><a href="#二、N-皇后问题" class="headerlink" title="二、N 皇后问题"></a>二、N 皇后问题</h3><p>这个问题很经典了，简单解释一下：给你一个 N×N 的棋盘，让你放置 N 个皇后，使得它们不能互相攻击。</p>
+<p>PS：皇后可以攻击同一行、同一列、左上左下右上右下四个方向的任意单位。</p>
+<p>这个问题本质上跟全排列问题差不多，决策树的每一层表示棋盘上的每一行；每个节点可以做出的选择是，在该行的任意一列放置一个皇后。</p>
+<p>直接套用框架:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&gt; res;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 输入棋盘边长 n，返回所有合法的放置 */</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&gt; solveNQueens(<span class="keyword">int</span> n) &#123;</span><br><span class="line">    <span class="comment">// '.' 表示空，'Q' 表示皇后，初始化空棋盘。</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; board(n, <span class="built_in">string</span>(n, <span class="string">'.'</span>));</span><br><span class="line">    backtrack(board, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 路径：board 中小于 row 的那些行都已经成功放置了皇后</span></span><br><span class="line"><span class="comment">// 选择列表：第 row 行的所有列都是放置皇后的选择</span></span><br><span class="line"><span class="comment">// 结束条件：row 超过 board 的最后一行</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">backtrack</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; board, <span class="keyword">int</span> row)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 触发结束条件</span></span><br><span class="line">    <span class="keyword">if</span> (row == board.size()) &#123;</span><br><span class="line">        res.push_back(board);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> n = board[row].size();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> col = <span class="number">0</span>; col &lt; n; col++) &#123;</span><br><span class="line">        <span class="comment">// 排除不合法选择</span></span><br><span class="line">        <span class="keyword">if</span> (!isValid(board, row, col)) </span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        <span class="comment">// 做选择</span></span><br><span class="line">        board[row][col] = <span class="string">'Q'</span>;</span><br><span class="line">        <span class="comment">// 进入下一行决策</span></span><br><span class="line">        backtrack(board, row + <span class="number">1</span>);</span><br><span class="line">        <span class="comment">// 撤销选择</span></span><br><span class="line">        board[row][col] = <span class="string">'.'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这部分主要代码，其实跟全排列问题差不多，<code>isValid</code> 函数的实现也很简单：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 是否可以在 board[row][col] 放置皇后？ */</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">isValid</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; board, <span class="keyword">int</span> row, <span class="keyword">int</span> col)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = board.size();</span><br><span class="line">    <span class="comment">// 检查列是否有皇后互相冲突</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (board[i][col] == <span class="string">'Q'</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 检查右上方是否有皇后互相冲突</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = row - <span class="number">1</span>, j = col + <span class="number">1</span>; </span><br><span class="line">            i &gt;= <span class="number">0</span> &amp;&amp; j &lt; n; i--, j++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (board[i][j] == <span class="string">'Q'</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 检查左上方是否有皇后互相冲突</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = row - <span class="number">1</span>, j = col - <span class="number">1</span>;</span><br><span class="line">            i &gt;= <span class="number">0</span> &amp;&amp; j &gt;= <span class="number">0</span>; i--, j--) &#123;</span><br><span class="line">        <span class="keyword">if</span> (board[i][j] == <span class="string">'Q'</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>函数 <code>backtrack</code> 依然像个在决策树上游走的指针，通过 <code>row</code> 和 <code>col</code> 就可以表示函数遍历到的位置，通过 <code>isValid</code> 函数可以将不符合条件的情况剪枝：</p>
+<p><img src="/fucking-algorithm/算法思维系列/回溯算法详解修订版.htm/pictures/backtracking/7.jpg" alt></p>
+<p>如果直接给你这么一大段解法代码，可能是懵逼的。但是现在明白了回溯算法的框架套路，还有啥难理解的呢？无非是改改做选择的方式，排除不合法选择的方式而已，只要框架存于心，你面对的只剩下小问题了。</p>
+<p>当 <code>N = 8</code> 时，就是八皇后问题，数学大佬高斯穷尽一生都没有数清楚八皇后问题到底有几种可能的放置方法，但是我们的算法只需要一秒就可以算出来所有可能的结果。</p>
+<p>不过真的不怪高斯。这个问题的复杂度确实非常高，看看我们的决策树，虽然有 <code>isValid</code> 函数剪枝，但是最坏时间复杂度仍然是 O(N^(N+1))，而且无法优化。如果 <code>N = 10</code> 的时候，计算就已经很耗时了。</p>
+<p><strong>有的时候，我们并不想得到所有合法的答案，只想要一个答案，怎么办呢</strong>？比如解数独的算法，找所有解法复杂度太高，只要找到一种解法就可以。</p>
+<p>其实特别简单，只要稍微修改一下回溯算法的代码即可：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 函数找到一个答案后就返回 true</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">backtrack</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; board, <span class="keyword">int</span> row)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 触发结束条件</span></span><br><span class="line">    <span class="keyword">if</span> (row == board.size()) &#123;</span><br><span class="line">        res.push_back(board);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> col = <span class="number">0</span>; col &lt; n; col++) &#123;</span><br><span class="line">        ...</span><br><span class="line">        board[row][col] = <span class="string">'Q'</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (backtrack(board, row + <span class="number">1</span>))</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        </span><br><span class="line">        board[row][col] = <span class="string">'.'</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样修改后，只要找到一个答案，for 循环的后续递归穷举都会被阻断。也许你可以在 N 皇后问题的代码框架上，稍加修改，写一个解数独的算法？</p>
+<h3 id="三、最后总结"><a href="#三、最后总结" class="headerlink" title="三、最后总结"></a>三、最后总结</h3><p>回溯算法就是个多叉树的遍历问题，关键就是在前序遍历和后序遍历的位置做一些操作，算法框架如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">backtrack</span><span class="params">(...)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> 选择 <span class="keyword">in</span> 选择列表:</span><br><span class="line">        做选择</span><br><span class="line">        backtrack(...)</span><br><span class="line">        撤销选择</span><br></pre></td></tr></table></figure>
+
+<p><strong>写 <code>backtrack</code> 函数时，需要维护走过的「路径」和当前可以做的「选择列表」，当触发「结束条件」时，将「路径」记入结果集</strong>。</p>
+<p>其实想想看，回溯算法和动态规划是不是有点像呢？我们在动态规划系列文章中多次强调，动态规划的三个需要明确的点就是「状态」「选择」和「base case」，是不是就对应着走过的「路径」，当前的「选择列表」和「结束条件」？</p>
+<p>某种程度上说，动态规划的暴力求解阶段就是回溯算法。只是有的问题具有重叠子问题性质，可以用 dp table 或者备忘录优化，将递归树大幅剪枝，这就变成了动态规划。而今天的两个问题，都没有重叠子问题，也就是回溯算法问题了，复杂度非常高是不可避免的。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/算法思维系列/回溯算法详解修订版.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/算法思维系列/回溯算法详解修订版.html" data-id="cklrh5zao002yro9bcwefyi9f" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#回溯算法详解"><span class="toc-number">1.</span> <span class="toc-text">回溯算法详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、全排列问题"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、全排列问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、N-皇后问题"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、N 皇后问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、最后总结"><span class="toc-number">1.0.3.</span> <span class="toc-text">三、最后总结</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

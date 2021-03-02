@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="动态规划之四键键盘        相关推荐：  如何高效寻找素数 动态规划解题套路框架  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 651.四键键盘 ———– PS：现在这到题好想变成会员题目了？我当时做的时候还是免费的。 四键键盘问题很有意思，而且可以明显感受到：对 dp 数组的不同定义需要完全不同的逻辑，从而产生完全不同的解法。 首先看一下题目：  如何">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/动态规划系列/动态规划之四键键盘.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="动态规划之四键键盘        相关推荐：  如何高效寻找素数 动态规划解题套路框架  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 651.四键键盘 ———– PS：现在这到题好想变成会员题目了？我当时做的时候还是免费的。 四键键盘问题很有意思，而且可以明显感受到：对 dp 数组的不同定义需要完全不同的逻辑，从而产生完全不同的解法。 首先看一下题目：  如何">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/动态规划之四键键盘.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/动态规划之四键键盘.htm/pictures/4keyboard/title.png">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/动态规划之四键键盘.htm/pictures/4keyboard/1.jpg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/动态规划之四键键盘.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.854Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="动态规划之四键键盘        相关推荐：  如何高效寻找素数 动态规划解题套路框架  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 651.四键键盘 ———– PS：现在这到题好想变成会员题目了？我当时做的时候还是免费的。 四键键盘问题很有意思，而且可以明显感受到：对 dp 数组的不同定义需要完全不同的逻辑，从而产生完全不同的解法。 首先看一下题目：  如何">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/动态规划系列/动态规划之四键键盘.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.854Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="动态规划之四键键盘"><a href="#动态规划之四键键盘" class="headerlink" title="动态规划之四键键盘"></a>动态规划之四键键盘</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/动态规划系列/动态规划之四键键盘.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">如何高效寻找素数</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">动态规划解题套路框架</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/4-keys-keyboard" target="_blank" rel="noopener">651.四键键盘</a></p>
+<p><strong>———–</strong></p>
+<p>PS：现在这到题好想变成会员题目了？我当时做的时候还是免费的。</p>
+<p>四键键盘问题很有意思，而且可以明显感受到：对 dp 数组的不同定义需要完全不同的逻辑，从而产生完全不同的解法。</p>
+<p>首先看一下题目：</p>
+<p><img src="/fucking-algorithm/动态规划系列/动态规划之四键键盘.htm/pictures/4keyboard/title.png" alt></p>
+<p>如何在 N 次敲击按钮后得到最多的 A？我们穷举呗，每次有对于每次按键，我们可以穷举四种可能，很明显就是一个动态规划问题。</p>
+<h3 id="第一种思路"><a href="#第一种思路" class="headerlink" title="第一种思路"></a>第一种思路</h3><p>这种思路会很容易理解，但是效率并不高，我们直接走流程：<strong>对于动态规划问题，首先要明白有哪些「状态」，有哪些「选择」</strong>。</p>
+<p>具体到这个问题，对于每次敲击按键，有哪些「选择」是很明显的：4 种，就是题目中提到的四个按键，分别是 <code>A</code>、<code>C-A</code>、<code>C-C</code>、<code>C-V</code>（<code>Ctrl</code> 简写为 <code>C</code>）。</p>
+<p>接下来，思考一下对于这个问题有哪些「状态」？<strong>或者换句话说，我们需要知道什么信息，才能将原问题分解为规模更小的子问题</strong>？</p>
+<p>你看我这样定义三个状态行不行：第一个状态是剩余的按键次数，用 <code>n</code> 表示；第二个状态是当前屏幕上字符 A 的数量，用 <code>a_num</code> 表示；第三个状态是剪切板中字符 A 的数量，用 <code>copy</code> 表示。</p>
+<p>如此定义「状态」，就可以知道 base case：当剩余次数 <code>n</code> 为 0 时，<code>a_num</code> 就是我们想要的答案。</p>
+<p>结合刚才说的 4 种「选择」，我们可以把这几种选择通过状态转移表示出来：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">dp(n - <span class="number">1</span>, a_num + <span class="number">1</span>, copy),    <span class="comment"># A</span></span><br><span class="line">解释：按下 A 键，屏幕上加一个字符</span><br><span class="line">同时消耗 <span class="number">1</span> 个操作数</span><br><span class="line"></span><br><span class="line">dp(n - <span class="number">1</span>, a_num + copy, copy), <span class="comment"># C-V</span></span><br><span class="line">解释：按下 C-V 粘贴，剪切板中的字符加入屏幕</span><br><span class="line">同时消耗 <span class="number">1</span> 个操作数</span><br><span class="line"></span><br><span class="line">dp(n - <span class="number">2</span>, a_num, a_num)        <span class="comment"># C-A C-C</span></span><br><span class="line">解释：全选和复制必然是联合使用的，</span><br><span class="line">剪切板中 A 的数量变为屏幕上 A 的数量</span><br><span class="line">同时消耗 <span class="number">2</span> 个操作数</span><br></pre></td></tr></table></figure>
+
+<p>这样可以看到问题的规模 <code>n</code> 在不断减小，肯定可以到达 <code>n = 0</code> 的 base case，所以这个思路是正确的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">maxA</span><span class="params">(N: int)</span> -&gt; int:</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 对于 (n, a_num, copy) 这个状态，</span></span><br><span class="line">    <span class="comment"># 屏幕上能最终最多能有 dp(n, a_num, copy) 个 A</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">dp</span><span class="params">(n, a_num, copy)</span>:</span></span><br><span class="line">        <span class="comment"># base case</span></span><br><span class="line">        <span class="keyword">if</span> n &lt;= <span class="number">0</span>: <span class="keyword">return</span> a_num;</span><br><span class="line">        <span class="comment"># 几种选择全试一遍，选择最大的结果</span></span><br><span class="line">        <span class="keyword">return</span> max(</span><br><span class="line">                dp(n - <span class="number">1</span>, a_num + <span class="number">1</span>, copy),    <span class="comment"># A</span></span><br><span class="line">                dp(n - <span class="number">1</span>, a_num + copy, copy), <span class="comment"># C-V</span></span><br><span class="line">                dp(n - <span class="number">2</span>, a_num, a_num)        <span class="comment"># C-A C-C</span></span><br><span class="line">            )</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 可以按 N 次按键，屏幕和剪切板里都还没有 A</span></span><br><span class="line">    <span class="keyword">return</span> dp(N, <span class="number">0</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这个解法应该很好理解，因为语义明确。下面就继续走流程，用备忘录消除一下重叠子问题：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">maxA</span><span class="params">(N: int)</span> -&gt; int:</span></span><br><span class="line">    <span class="comment"># 备忘录</span></span><br><span class="line">    memo = dict()</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">dp</span><span class="params">(n, a_num, copy)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> n &lt;= <span class="number">0</span>: <span class="keyword">return</span> a_num;</span><br><span class="line">        <span class="comment"># 避免计算重叠子问题</span></span><br><span class="line">        <span class="keyword">if</span> (n, a_num, copy) <span class="keyword">in</span> memo:</span><br><span class="line">            <span class="keyword">return</span> memo[(n, a_num, copy)]</span><br><span class="line"></span><br><span class="line">        memo[(n, a_num, copy)] = max(</span><br><span class="line">                <span class="comment"># 几种选择还是一样的</span></span><br><span class="line">            )</span><br><span class="line">        <span class="keyword">return</span> memo[(n, a_num, copy)]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> dp(N, <span class="number">0</span>, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这样优化代码之后，子问题虽然没有重复了，但数目仍然很多，在 LeetCode 提交会超时的。</p>
+<p>我们尝试分析一下这个算法的时间复杂度，就会发现不容易分析。我们可以把这个 dp 函数写成 dp 数组：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dp[n][a_num][copy]</span><br><span class="line"><span class="comment"># 状态的总数（时空复杂度）就是这个三维数组的体积</span></span><br></pre></td></tr></table></figure>
+
+<p>我们知道变量 <code>n</code> 最多为 <code>N</code>，但是 <code>a_num</code> 和 <code>copy</code> 最多为多少我们很难计算，复杂度起码也有 O(N^3) 把。所以这个算法并不好，复杂度太高，且已经无法优化了。</p>
+<p>这也就说明，我们这样定义「状态」是不太优秀的，下面我们换一种定义 dp 的思路。</p>
+<h3 id="第二种思路"><a href="#第二种思路" class="headerlink" title="第二种思路"></a>第二种思路</h3><p>这种思路稍微有点复杂，但是效率高。继续走流程，「选择」还是那 4 个，但是这次我们只定义一个「状态」，也就是剩余的敲击次数 <code>n</code>。</p>
+<p>这个算法基于这样一个事实，<strong>最优按键序列一定只有两种情况</strong>：</p>
+<p>要么一直按 <code>A</code>：A,A,…A（当 N 比较小时）。</p>
+<p>要么是这么一个形式：A,A,…C-A,C-C,C-V,C-V,…C-V（当 N 比较大时）。</p>
+<p>因为字符数量少（N 比较小）时，<code>C-A C-C C-V</code> 这一套操作的代价相对比较高，可能不如一个个按 <code>A</code>；而当 N 比较大时，后期 <code>C-V</code> 的收获肯定很大。这种情况下整个操作序列大致是：<strong>开头连按几个 <code>A</code>，然后 <code>C-A C-C</code> 组合再接若干 <code>C-V</code>，然后再 <code>C-A C-C</code> 接着若干 <code>C-V</code>，循环下去</strong>。</p>
+<p>换句话说，最后一次按键要么是 <code>A</code> 要么是 <code>C-V</code>。明确了这一点，可以通过这两种情况来设计算法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] dp = <span class="keyword">new</span> <span class="keyword">int</span>[N + <span class="number">1</span>];</span><br><span class="line"><span class="comment">// 定义：dp[i] 表示 i 次操作后最多能显示多少个 A</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= N; i++) </span><br><span class="line">    dp[i] = max(</span><br><span class="line">            这次按 A 键，</span><br><span class="line">            这次按 C-V</span><br><span class="line">        )</span><br></pre></td></tr></table></figure>
+
+<p>对于「按 <code>A</code> 键」这种情况，就是状态 <code>i - 1</code> 的屏幕上新增了一个 A 而已，很容易得到结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 按 A 键，就比上次多一个 A 而已</span></span><br><span class="line">dp[i] = dp[i - <span class="number">1</span>] + <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>但是，如果要按 <code>C-V</code>，还要考虑之前是在哪里 <code>C-A C-C</code> 的。</p>
+<p><strong>刚才说了，最优的操作序列一定是 <code>C-A C-C</code> 接着若干 <code>C-V</code>，所以我们用一个变量 <code>j</code> 作为若干 <code>C-V</code> 的起点</strong>。那么 <code>j</code> 之前的 2 个操作就应该是 <code>C-A C-C</code> 了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxA</span><span class="params">(<span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[] dp = <span class="keyword">new</span> <span class="keyword">int</span>[N + <span class="number">1</span>];</span><br><span class="line">    dp[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= N; i++) &#123;</span><br><span class="line">        <span class="comment">// 按 A 键</span></span><br><span class="line">        dp[i] = dp[i - <span class="number">1</span>] + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">2</span>; j &lt; i; j++) &#123;</span><br><span class="line">            <span class="comment">// 全选 &amp; 复制 dp[j-2]，连续粘贴 i - j 次</span></span><br><span class="line">            <span class="comment">// 屏幕上共 dp[j - 2] * (i - j + 1) 个 A</span></span><br><span class="line">            dp[i] = Math.max(dp[i], dp[j - <span class="number">2</span>] * (i - j + <span class="number">1</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// N 次按键之后最多有几个 A？</span></span><br><span class="line">    <span class="keyword">return</span> dp[N];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>j</code> 变量减 2 是给 <code>C-A C-C</code> 留下操作数，看个图就明白了：</p>
+<p><img src="/fucking-algorithm/动态规划系列/动态规划之四键键盘.htm/pictures/4keyboard/1.jpg" alt></p>
+<p>这样，此算法就完成了，时间复杂度 O(N^2)，空间复杂度 O(N)，这种解法应该是比较高效的了。</p>
+<h3 id="最后总结"><a href="#最后总结" class="headerlink" title="最后总结"></a>最后总结</h3><p>动态规划难就难在寻找状态转移，不同的定义可以产生不同的状态转移逻辑，虽然最后都能得到正确的结果，但是效率可能有巨大的差异。</p>
+<p>回顾第一种解法，重叠子问题已经消除了，但是效率还是低，到底低在哪里呢？抽象出递归框架：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dp</span><span class="params">(n, a_num, copy)</span>:</span></span><br><span class="line">    dp(n - <span class="number">1</span>, a_num + <span class="number">1</span>, copy),    <span class="comment"># A</span></span><br><span class="line">    dp(n - <span class="number">1</span>, a_num + copy, copy), <span class="comment"># C-V</span></span><br><span class="line">    dp(n - <span class="number">2</span>, a_num, a_num)        <span class="comment"># C-A C-C</span></span><br></pre></td></tr></table></figure>
+
+<p>看这个穷举逻辑，是有可能出现这样的操作序列 <code>C-A C-C，C-A C-C...</code> 或者 <code>C-V,C-V,...</code>。然这种操作序列的结果不是最优的，但是我们并没有想办法规避这些情况的发生，从而增加了很多没必要的子问题计算。</p>
+<p>回顾第二种解法，我们稍加思考就能想到，最优的序列应该是这种形式：<code>A,A..C-A,C-C,C-V,C-V..C-A,C-C,C-V..</code>。</p>
+<p>根据这个事实，我们重新定义了状态，重新寻找了状态转移，从逻辑上减少了无效的子问题个数，从而提高了算法的效率。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/动态规划系列/动态规划之四键键盘.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/动态规划系列/动态规划之四键键盘.html" data-id="cklrh5za1001iro9b8img72x5" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#动态规划之四键键盘"><span class="toc-number">1.</span> <span class="toc-text">动态规划之四键键盘</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#第一种思路"><span class="toc-number">1.0.1.</span> <span class="toc-text">第一种思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第二种思路"><span class="toc-number">1.0.2.</span> <span class="toc-text">第二种思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#最后总结"><span class="toc-number">1.0.3.</span> <span class="toc-text">最后总结</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

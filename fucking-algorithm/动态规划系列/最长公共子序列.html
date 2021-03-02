@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最长公共子序列        相关推荐：  回溯算法解题套路框架 经典动态规划：高楼扔鸡蛋（进阶）  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 1143.最长公共子序列 ———– 最长公共子序列（Longest Common Subsequence，简称 LCS）是一道非常经典的面试题目，因为它的解法是典型的二维动态规划，大部分比较困难的字符串问题都和这个问">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/动态规划系列/最长公共子序列.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="最长公共子序列        相关推荐：  回溯算法解题套路框架 经典动态规划：高楼扔鸡蛋（进阶）  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 1143.最长公共子序列 ———– 最长公共子序列（Longest Common Subsequence，简称 LCS）是一道非常经典的面试题目，因为它的解法是典型的二维动态规划，大部分比较困难的字符串问题都和这个问">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/最长公共子序列.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/最长公共子序列.htm/pictures/LCS/dp.png">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/最长公共子序列.htm/pictures/LCS/lcs.png">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/最长公共子序列.htm/pictures/LCS/1.png">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/最长公共子序列.htm/pictures/LCS/2.png">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/最长公共子序列.htm/pictures/LCS/3.png">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/最长公共子序列.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.857Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="最长公共子序列        相关推荐：  回溯算法解题套路框架 经典动态规划：高楼扔鸡蛋（进阶）  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 1143.最长公共子序列 ———– 最长公共子序列（Longest Common Subsequence，简称 LCS）是一道非常经典的面试题目，因为它的解法是典型的二维动态规划，大部分比较困难的字符串问题都和这个问">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/动态规划系列/最长公共子序列.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.857Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="最长公共子序列"><a href="#最长公共子序列" class="headerlink" title="最长公共子序列"></a>最长公共子序列</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/动态规划系列/最长公共子序列.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">回溯算法解题套路框架</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">经典动态规划：高楼扔鸡蛋（进阶）</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/longest-common-subsequence" target="_blank" rel="noopener">1143.最长公共子序列</a></p>
+<p><strong>———–</strong></p>
+<p>最长公共子序列（Longest Common Subsequence，简称 LCS）是一道非常经典的面试题目，因为它的解法是典型的二维动态规划，大部分比较困难的字符串问题都和这个问题一个套路，比如说编辑距离。而且，这个算法稍加改造就可以用于解决其他问题，所以说 LCS 算法是值得掌握的。</p>
+<p>题目就是让我们求两个字符串的 LCS 长度：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: str1 = &quot;abcde&quot;, str2 = &quot;ace&quot; </span><br><span class="line">输出: 3  </span><br><span class="line">解释: 最长公共子序列是 &quot;ace&quot;，它的长度是 3</span><br></pre></td></tr></table></figure>
+
+<p>肯定有读者会问，为啥这个问题就是动态规划来解决呢？因为子序列类型的问题，穷举出所有可能的结果都不容易，而动态规划算法做的就是穷举 + 剪枝，它俩天生一对儿。所以可以说只要涉及子序列问题，十有八九都需要动态规划来解决，往这方面考虑就对了。</p>
+<p>下面就来手把手分析一下，这道题目如何用动态规划技巧解决。</p>
+<h3 id="一、动态规划思路"><a href="#一、动态规划思路" class="headerlink" title="一、动态规划思路"></a>一、动态规划思路</h3><p><strong>第一步，一定要明确 <code>dp</code> 数组的含义</strong>。对于两个字符串的动态规划问题，套路是通用的。</p>
+<p>比如说对于字符串 <code>s1</code> 和 <code>s2</code>，一般来说都要构造一个这样的 DP table：</p>
+<p><img src="/fucking-algorithm/动态规划系列/最长公共子序列.htm/pictures/LCS/dp.png" alt></p>
+<p>为了方便理解此表，我们暂时认为索引是从 1 开始的，待会的代码中只要稍作调整即可。其中，<code>dp[i][j]</code> 的含义是：对于 <code>s1[1..i]</code> 和 <code>s2[1..j]</code>，它们的 LCS 长度是 <code>dp[i][j]</code>。</p>
+<p>比如上图的例子，d[2][4] 的含义就是：对于 <code>&quot;ac&quot;</code> 和 <code>&quot;babc&quot;</code>，它们的 LCS 长度是 2。我们最终想得到的答案应该是 <code>dp[3][6]</code>。</p>
+<p><strong>第二步，定义 base case。</strong></p>
+<p>我们专门让索引为 0 的行和列表示空串，<code>dp[0][..]</code> 和 <code>dp[..][0]</code> 都应该初始化为 0，这就是 base case。</p>
+<p>比如说，按照刚才 dp 数组的定义，<code>dp[0][3]=0</code> 的含义是：对于字符串 <code>&quot;&quot;</code> 和 <code>&quot;bab&quot;</code>，其 LCS 的长度为 0。因为有一个字符串是空串，它们的最长公共子序列的长度显然应该是 0。</p>
+<p><strong>第三步，找状态转移方程。</strong></p>
+<p>这是动态规划最难的一步，不过好在这种字符串问题的套路都差不多，权且借这道题来聊聊处理这类问题的思路。</p>
+<p>状态转移说简单些就是做选择，比如说这个问题，是求 <code>s1</code> 和 <code>s2</code> 的最长公共子序列，不妨称这个子序列为 <code>lcs</code>。那么对于 <code>s1</code> 和 <code>s2</code> 中的每个字符，有什么选择？很简单，两种选择，要么在 <code>lcs</code> 中，要么不在。</p>
+<p><img src="/fucking-algorithm/动态规划系列/最长公共子序列.htm/pictures/LCS/lcs.png" alt></p>
+<p>这个「在」和「不在」就是选择，关键是，应该如何选择呢？这个需要动点脑筋：如果某个字符应该在 <code>lcs</code> 中，那么这个字符肯定同时存在于 <code>s1</code> 和 <code>s2</code> 中，因为 <code>lcs</code> 是最长<strong>公共</strong>子序列嘛。所以本题的思路是这样：</p>
+<p>用两个指针 <code>i</code> 和 <code>j</code> 从后往前遍历 <code>s1</code> 和 <code>s2</code>，如果 <code>s1[i]==s2[j]</code>，那么这个字符<strong>一定在 <code>lcs</code> 中</strong>；否则的话，<code>s1[i]</code> 和 <code>s2[j]</code> 这两个字符<strong>至少有一个不在 <code>lcs</code> 中</strong>，需要丢弃一个。先看一下递归解法，比较容易理解：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">longestCommonSubsequence</span><span class="params">(str1, str2)</span> -&gt; int:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">dp</span><span class="params">(i, j)</span>:</span></span><br><span class="line">        <span class="comment"># 空串的 base case</span></span><br><span class="line">        <span class="keyword">if</span> i == <span class="number">-1</span> <span class="keyword">or</span> j == <span class="number">-1</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        <span class="keyword">if</span> str1[i] == str2[j]:</span><br><span class="line">            <span class="comment"># 这边找到一个 lcs 的元素，继续往前找</span></span><br><span class="line">            <span class="keyword">return</span> dp(i - <span class="number">1</span>, j - <span class="number">1</span>) + <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># 谁能让 lcs 最长，就听谁的</span></span><br><span class="line">            <span class="keyword">return</span> max(dp(i<span class="number">-1</span>, j), dp(i, j<span class="number">-1</span>))</span><br><span class="line">        </span><br><span class="line">    <span class="comment"># i 和 j 初始化为最后一个索引</span></span><br><span class="line">    <span class="keyword">return</span> dp(len(str1)<span class="number">-1</span>, len(str2)<span class="number">-1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>对于第一种情况，找到一个 <code>lcs</code> 中的字符，同时将 <code>i</code> <code>j</code> 向前移动一位，并给 <code>lcs</code> 的长度加一；对于后者，则尝试两种情况，取更大的结果。</p>
+<p>其实这段代码就是暴力解法，我们可以通过备忘录或者 DP table 来优化时间复杂度，比如通过前文描述的 DP table 来解决：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">longestCommonSubsequence</span><span class="params">(str1, str2)</span> -&gt; int:</span></span><br><span class="line">    m, n = len(str1), len(str2)</span><br><span class="line">    <span class="comment"># 构建 DP table 和 base case</span></span><br><span class="line">    dp = [[<span class="number">0</span>] * (n + <span class="number">1</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> range(m + <span class="number">1</span>)]</span><br><span class="line">    <span class="comment"># 进行状态转移</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, m + <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, n + <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> str1[i - <span class="number">1</span>] == str2[j - <span class="number">1</span>]:</span><br><span class="line">                <span class="comment"># 找到一个 lcs 中的字符</span></span><br><span class="line">                dp[i][j] = <span class="number">1</span> + dp[i<span class="number">-1</span>][j<span class="number">-1</span>]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                dp[i][j] = max(dp[i<span class="number">-1</span>][j], dp[i][j<span class="number">-1</span>])</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> dp[<span class="number">-1</span>][<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
+
+<h3 id="二、疑难解答"><a href="#二、疑难解答" class="headerlink" title="二、疑难解答"></a>二、疑难解答</h3><p>对于 <code>s1[i]</code> 和 <code>s2[j]</code> 不相等的情况，<strong>至少有一个</strong>字符不在 <code>lcs</code> 中，会不会两个字符都不在呢？比如下面这种情况：</p>
+<p><img src="/fucking-algorithm/动态规划系列/最长公共子序列.htm/pictures/LCS/1.png" alt></p>
+<p>所以代码是不是应该考虑这种情况，改成这样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> str1[i - <span class="number">1</span>] == str2[j - <span class="number">1</span>]:</span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    dp[i][j] = max(dp[i<span class="number">-1</span>][j], </span><br><span class="line">                   dp[i][j<span class="number">-1</span>],</span><br><span class="line">                   dp[i<span class="number">-1</span>][j<span class="number">-1</span>])</span><br></pre></td></tr></table></figure>
+
+<p>我一开始也有这种怀疑，其实可以这样改，也能得到正确答案，但是多此一举，因为 <code>dp[i-1][j-1]</code> 永远是三者中最小的，max 根本不可能取到它。</p>
+<p>原因在于我们对 dp 数组的定义：对于 <code>s1[1..i]</code> 和 <code>s2[1..j]</code>，它们的 LCS 长度是 <code>dp[i][j]</code>。</p>
+<p><img src="/fucking-algorithm/动态规划系列/最长公共子序列.htm/pictures/LCS/2.png" alt></p>
+<p>这样一看，显然 <code>dp[i-1][j-1]</code> 对应的 <code>lcs</code> 长度不可能比前两种情况大，所以没有必要参与比较。</p>
+<h3 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h3><p>对于两个字符串的动态规划问题，一般来说都是像本文一样定义 DP table，因为这样定义有一个好处，就是容易写出状态转移方程，<code>dp[i][j]</code> 的状态可以通过之前的状态推导出来：</p>
+<p><img src="/fucking-algorithm/动态规划系列/最长公共子序列.htm/pictures/LCS/3.png" alt></p>
+<p>找状态转移方程的方法是，思考每个状态有哪些「选择」，只要我们能用正确的逻辑做出正确的选择，算法就能够正确运行。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/动态规划系列/最长公共子序列.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+<p><a href="https://github.com/Edwenc" target="_blank" rel="noopener">Edwenc</a> 提供 C++ 代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">longestCommonSubsequence</span><span class="params">(<span class="built_in">string</span> text1, <span class="built_in">string</span> text2)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//  先计算两条字符串的长度</span></span><br><span class="line">        <span class="keyword">int</span> m = text1.size();</span><br><span class="line">        <span class="keyword">int</span> n = text2.size();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//  构建dp矩阵  默认初始值0</span></span><br><span class="line">	<span class="comment">//  这里会多扩建一边和一列  </span></span><br><span class="line"> 	<span class="comment">//  因为dp[i][j]的含义是：对于 s1[1..i] 和 s2[1..j]，它们的LCS长度是 dp[i][j]。</span></span><br><span class="line">	<span class="comment">//  所以当i或者j为零时  LCS的长度默认为0</span></span><br><span class="line">        <span class="built_in">vector</span>&lt; <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; &gt; dp ( m+<span class="number">1</span> , <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; ( n+<span class="number">1</span> , <span class="number">0</span> ) );</span><br><span class="line"></span><br><span class="line">        <span class="comment">//  状态转移</span></span><br><span class="line">	<span class="comment">//  i、j都从1开始遍历  因为下面的操作中都会-1  相当于从0开始  </span></span><br><span class="line">        <span class="keyword">for</span> ( <span class="keyword">int</span> i=<span class="number">1</span> ; i&lt;m+<span class="number">1</span> ; i++ )&#123;</span><br><span class="line">            <span class="keyword">for</span> ( <span class="keyword">int</span> j=<span class="number">1</span> ; j&lt;n+<span class="number">1</span> ; j++ )&#123;</span><br><span class="line">                <span class="comment">//  如果text1和text2相同</span></span><br><span class="line">                <span class="comment">//  就在它们的前一位基础上加一</span></span><br><span class="line">                <span class="comment">//  如果不同  只能在之前的两者中去最大</span></span><br><span class="line">                dp[i][j] = (text1[i<span class="number">-1</span>] == text2[j<span class="number">-1</span>]) ? dp[i<span class="number">-1</span>][j<span class="number">-1</span>] + <span class="number">1</span> : max( dp[i<span class="number">-1</span>][j] , dp[i][j<span class="number">-1</span>] );</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//  返回最终右下角的值</span></span><br><span class="line">        <span class="keyword">return</span> dp[m][n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://github.com/Shawn-Hx" target="_blank" rel="noopener">Shawn</a> 提供 Java 代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">longestCommonSubsequence</span><span class="params">(String text1, String text2)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 字符串转为char数组以加快访问速度</span></span><br><span class="line">	<span class="keyword">char</span>[] str1 = text1.toCharArray();</span><br><span class="line">	<span class="keyword">char</span>[] str2 = text2.toCharArray();</span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> m = str1.length, n = str2.length;</span><br><span class="line">	<span class="comment">// 构建dp table，初始值默认为0</span></span><br><span class="line">	<span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[m + <span class="number">1</span>][n + <span class="number">1</span>];</span><br><span class="line">	<span class="comment">// 状态转移</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= m; i++)</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= n; j++)</span><br><span class="line">			<span class="keyword">if</span> (str1[i - <span class="number">1</span>] == str2[j - <span class="number">1</span>])</span><br><span class="line">				<span class="comment">// 找到LCS中的字符</span></span><br><span class="line">				dp[i][j] = dp[i-<span class="number">1</span>][j-<span class="number">1</span>] + <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				dp[i][j] = Math.max(dp[i-<span class="number">1</span>][j], dp[i][j-<span class="number">1</span>]);</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> dp[m][n];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/动态规划系列/最长公共子序列.html" data-id="cklrh5za4001qro9bw0yl90ic" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#最长公共子序列"><span class="toc-number">1.</span> <span class="toc-text">最长公共子序列</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、动态规划思路"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、动态规划思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、疑难解答"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、疑难解答</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、总结"><span class="toc-number">1.0.3.</span> <span class="toc-text">三、总结</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

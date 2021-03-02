@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="如何调度考生的座位        相关推荐：  一个方法团灭 LeetCode 股票买卖问题 Linux shell 的实用小技巧  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 855.考场就座 ———– 这是 LeetCode 第 855 题，有趣且具有一定技巧性。这种题目并不像动态规划这类算法拼智商，而是看你对常用数据结构的理解和写代码的水平，个人认为值得">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/高频面试系列/座位调度.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="如何调度考生的座位        相关推荐：  一个方法团灭 LeetCode 股票买卖问题 Linux shell 的实用小技巧  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 855.考场就座 ———– 这是 LeetCode 第 855 题，有趣且具有一定技巧性。这种题目并不像动态规划这类算法拼智商，而是看你对常用数据结构的理解和写代码的水平，个人认为值得">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/座位调度.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/座位调度.htm/pictures/%E5%BA%A7%E4%BD%8D%E8%B0%83%E5%BA%A6/1.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/座位调度.htm/pictures/%E5%BA%A7%E4%BD%8D%E8%B0%83%E5%BA%A6/2.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/座位调度.htm/pictures/%E5%BA%A7%E4%BD%8D%E8%B0%83%E5%BA%A6/3.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/座位调度.htm/pictures/%E5%BA%A7%E4%BD%8D%E8%B0%83%E5%BA%A6/4.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/座位调度.htm/pictures/%E5%BA%A7%E4%BD%8D%E8%B0%83%E5%BA%A6/5.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/座位调度.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.877Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="如何调度考生的座位        相关推荐：  一个方法团灭 LeetCode 股票买卖问题 Linux shell 的实用小技巧  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 855.考场就座 ———– 这是 LeetCode 第 855 题，有趣且具有一定技巧性。这种题目并不像动态规划这类算法拼智商，而是看你对常用数据结构的理解和写代码的水平，个人认为值得">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/高频面试系列/座位调度.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.877Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="如何调度考生的座位"><a href="#如何调度考生的座位" class="headerlink" title="如何调度考生的座位"></a>如何调度考生的座位</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/高频面试系列/座位调度.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">一个方法团灭 LeetCode 股票买卖问题</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">Linux shell 的实用小技巧</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/exam-room" target="_blank" rel="noopener">855.考场就座</a></p>
+<p><strong>———–</strong></p>
+<p>这是 LeetCode 第 855 题，有趣且具有一定技巧性。这种题目并不像动态规划这类算法拼智商，而是看你对常用数据结构的理解和写代码的水平，个人认为值得重视和学习。</p>
+<p>另外说句题外话，很多读者都问，算法框架是如何总结出来的，其实框架反而是慢慢从细节里抠出来的。希望大家看了我们的文章之后，最好能抽时间把相关的问题亲自做一做，纸上得来终觉浅，绝知此事要躬行嘛。</p>
+<p>先来描述一下题目：假设有一个考场，考场有一排共 <code>N</code> 个座位，索引分别是 <code>[0..N-1]</code>，考生会<strong>陆续</strong>进入考场考试，并且可能在<strong>任何时候</strong>离开考场。</p>
+<p>你作为考官，要安排考生们的座位，满足：<strong>每当一个学生进入时，你需要最大化他和最近其他人的距离；如果有多个这样的座位，安排到他到索引最小的那个座位</strong>。这很符合实际情况对吧，</p>
+<p>也就是请你实现下面这样一个类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ExamRoom</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 构造函数，传入座位总数 N</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ExamRoom</span><span class="params">(<span class="keyword">int</span> N)</span></span>;</span><br><span class="line">    <span class="comment">// 来了一名考生，返回你给他分配的座位</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">seat</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="comment">// 坐在 p 位置的考生离开了</span></span><br><span class="line">    <span class="comment">// 可以认为 p 位置一定坐有考生</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">leave</span><span class="params">(<span class="keyword">int</span> p)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>比方说考场有 5 个座位，分别是 <code>[0..4]</code>：</p>
+<p>第一名考生进入时（调用 <code>seat()</code>），坐在任何位置都行，但是要给他安排索引最小的位置，也就是返回位置 0。</p>
+<p>第二名学生进入时（再调用 <code>seat()</code>），要和旁边的人距离最远，也就是返回位置 4。</p>
+<p>第三名学生进入时，要和旁边的人距离最远，应该做到中间，也就是座位 2。</p>
+<p>如果再进一名学生，他可以坐在座位 1 或者 3，取较小的索引 1。</p>
+<p>以此类推。</p>
+<p>刚才所说的情况，没有调用 <code>leave</code> 函数，不过读者肯定能够发现规律：</p>
+<p><strong>如果将每两个相邻的考生看做线段的两端点，新安排考生就是找最长的线段，然后让该考生在中间把这个线段「二分」，中点就是给他分配的座位。<code>leave(p)</code> 其实就是去除端点 <code>p</code>，使得相邻两个线段合并为一个</strong>。</p>
+<p>核心思路很简单对吧，所以这个问题实际上实在考察你对数据结构的理解。对于上述这个逻辑，你用什么数据结构来实现呢？</p>
+<h3 id="一、思路分析"><a href="#一、思路分析" class="headerlink" title="一、思路分析"></a>一、思路分析</h3><p>根据上述思路，首先需要把坐在教室的学生抽象成线段，我们可以简单的用一个大小为 2 的数组表示。</p>
+<p>另外，思路需要我们找到「最长」的线段，还需要去除线段，增加线段。</p>
+<p><strong>但凡遇到在动态过程中取最值的要求，肯定要使用有序数据结构，我们常用的数据结构就是二叉堆和平衡二叉搜索树了</strong>。二叉堆实现的优先级队列取最值的时间复杂度是 O(logN)，但是只能删除最大值。平衡二叉树也可以取最值，也可以修改、删除任意一个值，而且时间复杂度都是 O(logN)。</p>
+<p>综上，二叉堆不能满足 <code>leave</code> 操作，应该使用平衡二叉树。所以这里我们会用到 Java 的一种数据结构 <code>TreeSet</code>，这是一种有序数据结构，底层由红黑树维护有序性。</p>
+<p>这里顺便提一下，一说到集合（Set）或者映射（Map），有的读者可能就想当然的认为是哈希集合（HashSet）或者哈希表（HashMap），这样理解是有点问题的。</p>
+<p>因为哈希集合/映射底层是由哈希函数和数组实现的，特性是遍历无固定顺序，但是操作效率高，时间复杂度为 O(1)。</p>
+<p>而集合/映射还可以依赖其他底层数据结构，常见的就是红黑树（一种平衡二叉搜索树），特性是自动维护其中元素的顺序，操作效率是 O(logN)。这种一般称为「有序集合/映射」。</p>
+<p>我们使用的 <code>TreeSet</code> 就是一个有序集合，目的就是为了保持线段长度的有序性，快速查找最大线段，快速删除和插入。</p>
+<h3 id="二、简化问题"><a href="#二、简化问题" class="headerlink" title="二、简化问题"></a>二、简化问题</h3><p>首先，如果有多个可选座位，需要选择索引最小的座位对吧？<strong>我们先简化一下问题，暂时不管这个要求</strong>，实现上述思路。</p>
+<p>这个问题还用到一个常用的编程技巧，就是使用一个「虚拟线段」让算法正确启动，这就和链表相关的算法需要「虚拟头结点」一个道理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将端点 p 映射到以 p 为左端点的线段</span></span><br><span class="line"><span class="keyword">private</span> Map&lt;Integer, <span class="keyword">int</span>[]&gt; startMap;</span><br><span class="line"><span class="comment">// 将端点 p 映射到以 p 为右端点的线段</span></span><br><span class="line"><span class="keyword">private</span> Map&lt;Integer, <span class="keyword">int</span>[]&gt; endMap;</span><br><span class="line"><span class="comment">// 根据线段长度从小到大存放所有线段</span></span><br><span class="line"><span class="keyword">private</span> TreeSet&lt;<span class="keyword">int</span>[]&gt; pq;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> N;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ExamRoom</span><span class="params">(<span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.N = N;</span><br><span class="line">    startMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    endMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    pq = <span class="keyword">new</span> TreeSet&lt;&gt;((a, b) -&gt; &#123;</span><br><span class="line">        <span class="comment">// 算出两个线段的长度</span></span><br><span class="line">        <span class="keyword">int</span> distA = distance(a);</span><br><span class="line">        <span class="keyword">int</span> distB = distance(b);</span><br><span class="line">        <span class="comment">// 长度更长的更大，排后面</span></span><br><span class="line">        <span class="keyword">return</span> distA - distB;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="comment">// 在有序集合中先放一个虚拟线段</span></span><br><span class="line">    addInterval(<span class="keyword">new</span> <span class="keyword">int</span>[] &#123;-<span class="number">1</span>, N&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 去除一个线段 */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">removeInterval</span><span class="params">(<span class="keyword">int</span>[] intv)</span> </span>&#123;</span><br><span class="line">    pq.remove(intv);</span><br><span class="line">    startMap.remove(intv[<span class="number">0</span>]);</span><br><span class="line">    endMap.remove(intv[<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 增加一个线段 */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">addInterval</span><span class="params">(<span class="keyword">int</span>[] intv)</span> </span>&#123;</span><br><span class="line">    pq.add(intv);</span><br><span class="line">    startMap.put(intv[<span class="number">0</span>], intv);</span><br><span class="line">    endMap.put(intv[<span class="number">1</span>], intv);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 计算一个线段的长度 */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">distance</span><span class="params">(<span class="keyword">int</span>[] intv)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> intv[<span class="number">1</span>] - intv[<span class="number">0</span>] - <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>「虚拟线段」其实就是为了将所有座位表示为一个线段：</p>
+<p><img src="/fucking-algorithm/高频面试系列/座位调度.htm/pictures/%E5%BA%A7%E4%BD%8D%E8%B0%83%E5%BA%A6/1.jpg" alt></p>
+<p>有了上述铺垫，主要 API <code>seat</code> 和 <code>leave</code> 就可以写了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">seat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 从有序集合拿出最长的线段</span></span><br><span class="line">    <span class="keyword">int</span>[] longest = pq.last();</span><br><span class="line">    <span class="keyword">int</span> x = longest[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">int</span> y = longest[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">int</span> seat;</span><br><span class="line">    <span class="keyword">if</span> (x == -<span class="number">1</span>) &#123; <span class="comment">// 情况一</span></span><br><span class="line">        seat = <span class="number">0</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (y == N) &#123; <span class="comment">// 情况二</span></span><br><span class="line">        seat = N - <span class="number">1</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123; <span class="comment">// 情况三</span></span><br><span class="line">        seat = (y - x) / <span class="number">2</span> + x;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 将最长的线段分成两段</span></span><br><span class="line">    <span class="keyword">int</span>[] left = <span class="keyword">new</span> <span class="keyword">int</span>[] &#123;x, seat&#125;;</span><br><span class="line">    <span class="keyword">int</span>[] right = <span class="keyword">new</span> <span class="keyword">int</span>[] &#123;seat, y&#125;;</span><br><span class="line">    removeInterval(longest);</span><br><span class="line">    addInterval(left);</span><br><span class="line">    addInterval(right);</span><br><span class="line">    <span class="keyword">return</span> seat;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">leave</span><span class="params">(<span class="keyword">int</span> p)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 将 p 左右的线段找出来</span></span><br><span class="line">    <span class="keyword">int</span>[] right = startMap.get(p);</span><br><span class="line">    <span class="keyword">int</span>[] left = endMap.get(p);</span><br><span class="line">    <span class="comment">// 合并两个线段成为一个线段</span></span><br><span class="line">    <span class="keyword">int</span>[] merged = <span class="keyword">new</span> <span class="keyword">int</span>[] &#123;left[<span class="number">0</span>], right[<span class="number">1</span>]&#125;;</span><br><span class="line">    removeInterval(left);</span><br><span class="line">    removeInterval(right);</span><br><span class="line">    addInterval(merged);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/fucking-algorithm/高频面试系列/座位调度.htm/pictures/%E5%BA%A7%E4%BD%8D%E8%B0%83%E5%BA%A6/2.jpg" alt="三种情况"></p>
+<p>至此，算法就基本实现了，代码虽多，但思路很简单：找最长的线段，从中间分隔成两段，中点就是 <code>seat()</code> 的返回值；找 <code>p</code> 的左右线段，合并成一个线段，这就是 <code>leave(p)</code> 的逻辑。</p>
+<h3 id="三、进阶问题"><a href="#三、进阶问题" class="headerlink" title="三、进阶问题"></a>三、进阶问题</h3><p>但是，题目要求多个选择时选择索引最小的那个座位，我们刚才忽略了这个问题。比如下面这种情况会出错：</p>
+<p><img src="/fucking-algorithm/高频面试系列/座位调度.htm/pictures/%E5%BA%A7%E4%BD%8D%E8%B0%83%E5%BA%A6/3.jpg" alt></p>
+<p>现在有序集合里有线段 <code>[0,4]</code> 和 <code>[4,9]</code>，那么最长线段 <code>longest</code> 就是后者，按照 <code>seat</code> 的逻辑，就会分割 <code>[4,9]</code>，也就是返回座位 6。但正确答案应该是座位 2，因为 2 和 6 都满足最大化相邻考生距离的条件，二者应该取较小的。</p>
+<p><img src="/fucking-algorithm/高频面试系列/座位调度.htm/pictures/%E5%BA%A7%E4%BD%8D%E8%B0%83%E5%BA%A6/4.jpg" alt></p>
+<p><strong>遇到题目的这种要求，解决方式就是修改有序数据结构的排序方式</strong>。具体到这个问题，就是修改 <code>TreeMap</code> 的比较函数逻辑：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">pq = <span class="keyword">new</span> TreeSet&lt;&gt;((a, b) -&gt; &#123;</span><br><span class="line">    <span class="keyword">int</span> distA = distance(a);</span><br><span class="line">    <span class="keyword">int</span> distB = distance(b);</span><br><span class="line">    <span class="comment">// 如果长度相同，就比较索引</span></span><br><span class="line">    <span class="keyword">if</span> (distA == distB)</span><br><span class="line">        <span class="keyword">return</span> b[<span class="number">0</span>] - a[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">return</span> distA - distB;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>除此之外，还要改变 <code>distance</code> 函数，<strong>不能简单地让它计算一个线段两个端点间的长度，而是让它计算该线段中点和端点之间的长度</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">distance</span><span class="params">(<span class="keyword">int</span>[] intv)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x = intv[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">int</span> y = intv[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">if</span> (x == -<span class="number">1</span>) <span class="keyword">return</span> y;</span><br><span class="line">    <span class="keyword">if</span> (y == N) <span class="keyword">return</span> N - <span class="number">1</span> - x;</span><br><span class="line">    <span class="comment">// 中点和端点之间的长度</span></span><br><span class="line">    <span class="keyword">return</span> (y - x) / <span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/fucking-algorithm/高频面试系列/座位调度.htm/pictures/%E5%BA%A7%E4%BD%8D%E8%B0%83%E5%BA%A6/5.jpg" alt></p>
+<p>这样，<code>[0,4]</code> 和 <code>[4,9]</code> 的 <code>distance</code> 值就相等了，算法会比较二者的索引，取较小的线段进行分割。到这里，这道算法题目算是完全解决了。</p>
+<h3 id="四、最后总结"><a href="#四、最后总结" class="headerlink" title="四、最后总结"></a>四、最后总结</h3><p>本文聊的这个问题其实并不算难，虽然看起来代码很多。核心问题就是考察有序数据结构的理解和使用，来梳理一下。</p>
+<p>处理动态问题一般都会用到有序数据结构，比如平衡二叉搜索树和二叉堆，二者的时间复杂度差不多，但前者支持的操作更多。</p>
+<p>既然平衡二叉搜索树这么好用，还用二叉堆干嘛呢？因为二叉堆底层就是数组，实现简单啊，详见旧文「二叉堆详解」。你实现个红黑树试试？操作复杂，而且消耗的空间相对来说会多一些。具体问题，还是要选择恰当的数据结构来解决。</p>
+<p>希望本文对大家有帮助。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/高频面试系列/座位调度.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/高频面试系列/座位调度.html" data-id="cklrh5zad002ero9bkq8l355o" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#如何调度考生的座位"><span class="toc-number">1.</span> <span class="toc-text">如何调度考生的座位</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、思路分析"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、思路分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、简化问题"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、简化问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、进阶问题"><span class="toc-number">1.0.3.</span> <span class="toc-text">三、进阶问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#四、最后总结"><span class="toc-number">1.0.4.</span> <span class="toc-text">四、最后总结</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="随机算法之水塘抽样算法        相关推荐：  一文看懂 session 和 cookie 算法就像搭乐高：带你手撸 LFU 算法  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 382.链表随机节点 398.随机数索引 ———– 我最近在 LeetCode 上做到两道非常有意思的题目，382 和 398 题，关于水塘抽样算法（Reservoir Sampl">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/高频面试系列/水塘抽样.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="随机算法之水塘抽样算法        相关推荐：  一文看懂 session 和 cookie 算法就像搭乐高：带你手撸 LFU 算法  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 382.链表随机节点 398.随机数索引 ———– 我最近在 LeetCode 上做到两道非常有意思的题目，382 和 398 题，关于水塘抽样算法（Reservoir Sampl">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/水塘抽样.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/水塘抽样.htm/pictures/%E6%B0%B4%E5%A1%98%E6%8A%BD%E6%A0%B7/formula1.png">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/水塘抽样.htm/pictures/%E6%B0%B4%E5%A1%98%E6%8A%BD%E6%A0%B7/formula2.png">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/水塘抽样.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.878Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="随机算法之水塘抽样算法        相关推荐：  一文看懂 session 和 cookie 算法就像搭乐高：带你手撸 LFU 算法  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 382.链表随机节点 398.随机数索引 ———– 我最近在 LeetCode 上做到两道非常有意思的题目，382 和 398 题，关于水塘抽样算法（Reservoir Sampl">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/高频面试系列/水塘抽样.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.878Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="随机算法之水塘抽样算法"><a href="#随机算法之水塘抽样算法" class="headerlink" title="随机算法之水塘抽样算法"></a>随机算法之水塘抽样算法</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/高频面试系列/水塘抽样.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">一文看懂 session 和 cookie</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">算法就像搭乐高：带你手撸 LFU 算法</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/linked-list-random-node" target="_blank" rel="noopener">382.链表随机节点</a></p>
+<p><a href="https://leetcode-cn.com/problems/random-pick-index" target="_blank" rel="noopener">398.随机数索引</a></p>
+<p><strong>———–</strong></p>
+<p>我最近在 LeetCode 上做到两道非常有意思的题目，382 和 398 题，关于水塘抽样算法（Reservoir Sampling），本质上是一种随机概率算法，解法应该说会者不难，难者不会。</p>
+<p>我第一次见到这个算法问题是谷歌的一道算法题：给你一个<strong>未知长度</strong>的链表，请你设计一个算法，<strong>只能遍历一次</strong>，随机地返回链表中的一个节点。</p>
+<p>这里说的随机是均匀随机（uniform random），也就是说，如果有 <code>n</code> 个元素，每个元素被选中的概率都是 <code>1/n</code>，不可以有统计意义上的偏差。</p>
+<p>一般的想法就是，我先遍历一遍链表，得到链表的总长度 <code>n</code>，再生成一个 <code>[1,n]</code> 之间的随机数为索引，然后找到索引对应的节点，不就是一个随机的节点了吗？</p>
+<p>但题目说了，只能遍历一次，意味着这种思路不可行。题目还可以再泛化，给一个未知长度的序列，如何在其中随机地选择 <code>k</code> 个元素？想要解决这个问题，就需要著名的水塘抽样算法了。</p>
+<h3 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h3><p><strong>先解决只抽取一个元素的问题</strong>，这个问题的难点在于，随机选择是「动态」的，比如说你现在你有 5 个元素，你已经随机选取了其中的某个元素 <code>a</code> 作为结果，但是现在再给你一个新元素 <code>b</code>，你应该留着 <code>a</code> 还是将 <code>b</code> 作为结果呢，以什么逻辑选择 <code>a</code> 和 <code>b</code> 呢，怎么证明你的选择方法在概率上是公平的呢？</p>
+<p><strong>先说结论，当你遇到第 <code>i</code> 个元素时，应该有 <code>1/i</code> 的概率选择该元素，<code>1 - 1/i</code> 的概率保持原有的选择</strong>。看代码容易理解这个思路：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 返回链表中一个随机节点的值 */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getRandom</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">    Random r = <span class="keyword">new</span> Random();</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>, res = <span class="number">0</span>;</span><br><span class="line">    ListNode p = head;</span><br><span class="line">    <span class="comment">// while 循环遍历链表</span></span><br><span class="line">    <span class="keyword">while</span> (p != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">// 生成一个 [0, i) 之间的整数</span></span><br><span class="line">        <span class="comment">// 这个整数等于 0 的概率就是 1/i</span></span><br><span class="line">        <span class="keyword">if</span> (r.nextInt(++i) == <span class="number">0</span>) &#123;</span><br><span class="line">            res = p.val;</span><br><span class="line">        &#125;</span><br><span class="line">        p = p.next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于概率算法，代码往往都是很浅显的，但是这种问题的关键在于证明，你的算法为什么是对的？为什么每次以 <code>1/i</code> 的概率更新结果就可以保证结果是平均随机（uniform random）？</p>
+<p><strong>证明</strong>：假设总共有 <code>n</code> 个元素，我们要的随机性无非就是每个元素被选择的概率都是 <code>1/n</code> 对吧，那么对于第 <code>i</code> 个元素，它被选择的概率就是：</p>
+<!-- $$
+\begin{aligned}
+    &\frac{1}{i} \times (1 - \frac{1}{i+1}) \times (1 - \frac{1}{i+2}) \times ... \times (1 - \frac{1}{n}) \\
+    = &\frac{1}{i} \times \frac{i}{i+1} \times \frac{i+1}{i+2} \times ... \times \frac{n-1}{n} \\
+    = &\frac{1}{n}
+\end{aligned}
+$$ -->
+
+<p><img src="/fucking-algorithm/高频面试系列/水塘抽样.htm/pictures/%E6%B0%B4%E5%A1%98%E6%8A%BD%E6%A0%B7/formula1.png" alt></p>
+<p>第 <code>i</code> 个元素被选择的概率是 <code>1/i</code>，第 <code>i+1</code> 次不被替换的概率是 <code>1 - 1/(i+1)</code>，以此类推，相乘就是第 <code>i</code> 个元素最终被选中的概率，就是 <code>1/n</code>。</p>
+<p>因此，该算法的逻辑是正确的。</p>
+<p><strong>同理，如果要随机选择 <code>k</code> 个数，只要在第 <code>i</code> 个元素处以 <code>k/i</code> 的概率选择该元素，以 <code>1 - k/i</code> 的概率保持原有选择即可</strong>。代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 返回链表中 k 个随机节点的值 */</span></span><br><span class="line"><span class="keyword">int</span>[] getRandom(ListNode head, <span class="keyword">int</span> k) &#123;</span><br><span class="line">    Random r = <span class="keyword">new</span> Random();</span><br><span class="line">    <span class="keyword">int</span>[] res = <span class="keyword">new</span> <span class="keyword">int</span>[k];</span><br><span class="line">    ListNode p = head;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 前 k 个元素先默认选上</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; k &amp;&amp; p != <span class="keyword">null</span>; j++) &#123;</span><br><span class="line">        res[j] = p.val;</span><br><span class="line">        p = p.next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> i = k;</span><br><span class="line">    <span class="comment">// while 循环遍历链表</span></span><br><span class="line">    <span class="keyword">while</span> (p != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">// 生成一个 [0, i) 之间的整数</span></span><br><span class="line">        <span class="keyword">int</span> j = r.nextInt(++i);</span><br><span class="line">        <span class="comment">// 这个整数小于 k 的概率就是 k/i</span></span><br><span class="line">        <span class="keyword">if</span> (j &lt; k) &#123;</span><br><span class="line">            res[j] = p.val;</span><br><span class="line">        &#125;</span><br><span class="line">        p = p.next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于数学证明，和上面区别不大：</p>
+<!-- $$
+\begin{aligned}
+    &\frac{k}{i} \times (1 - \frac{k}{i+1} \times \frac{1}{k}) \times (1 - \frac{k}{i+2} \times \frac{1}{k}) \times ... \times (1 - \frac{k}{n} \times \frac{1}{k}) \\
+    = &\frac{k}{i} \times (1 - \frac{1}{i+1}) \times (1 - \frac{1}{i+2}) \times ... \times (1 - \frac{1}{n}) \\
+    = &\frac{k}{i} \times \frac{i}{i+1} \times \frac{i+1}{i+2} \times ... \times \frac{n-1}{n} \\
+    = &\frac{k}{n}
+\end{aligned}
+$$ -->
+
+<p><img src="/fucking-algorithm/高频面试系列/水塘抽样.htm/pictures/%E6%B0%B4%E5%A1%98%E6%8A%BD%E6%A0%B7/formula2.png" alt></p>
+<p>因为虽然每次更新选择的概率增大了 <code>k</code> 倍，但是选到具体第 <code>i</code> 个元素的概率还是要乘 <code>1/k</code>，也就回到了上一个推导。</p>
+<h3 id="拓展延伸"><a href="#拓展延伸" class="headerlink" title="拓展延伸"></a>拓展延伸</h3><p>以上的抽样算法时间复杂度是 O(n)，但不是最优的方法，更优化的算法基于几何分布（geometric distribution），时间复杂度为 O(k + klog(n/k))。由于涉及的数学知识比较多，这里就不列出了，有兴趣的读者可以自行搜索一下。</p>
+<p>还有一种思路是基于「Fisher–Yates 洗牌算法」的。随机抽取 <code>k</code> 个元素，等价于对所有元素洗牌，然后选取前 <code>k</code> 个。只不过，洗牌算法需要对元素的随机访问，所以只能对数组这类支持随机存储的数据结构有效。</p>
+<p>另外有一种思路也比较有启发意义：给每一个元素关联一个随机数，然后把每个元素插入一个容量为 <code>k</code> 的二叉堆（优先级队列）按照配对的随机数进行排序，最后剩下的 <code>k</code> 个元素也是随机的。</p>
+<p>这个方案看起来似乎有点多此一举，因为插入二叉堆需要 O(logk) 的时间复杂度，所以整个抽样算法就需要 O(nlogk) 的复杂度，还不如我们最开始的算法。但是，这种思路可以指导我们解决<strong>加权随机抽样算法</strong>，权重越高，被随机选中的概率相应增大，这种情况在现实生活中是很常见的，比如你不往游戏里充钱，就永远抽不到皮肤。</p>
+<p>最后，我想说随机算法虽然不多，但其实很有技巧的，读者不妨思考两个常见且看起来很简单的问题：</p>
+<p>1、如何对带有权重的样本进行加权随机抽取？比如给你一个数组 <code>w</code>，每个元素 <code>w[i]</code> 代表权重，请你写一个算法，按照权重随机抽取索引。比如 <code>w = [1,99]</code>，算法抽到索引 0 的概率是 1%，抽到索引 1 的概率是 99%。</p>
+<p>2、实现一个生成器类，构造函数传入一个很长的数组，请你实现 <code>randomGet</code> 方法，每次调用随机返回数组中的一个元素，多次调用不能重复返回相同索引的元素。要求不能对该数组进行任何形式的修改，且操作的时间复杂度是 O(1)。</p>
+<p>这两个问题都是比较困难的，以后有时间我会写一写相关的文章。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/高频面试系列/水塘抽样.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/高频面试系列/水塘抽样.html" data-id="cklrh5zag002kro9boxmlszuk" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#随机算法之水塘抽样算法"><span class="toc-number">1.</span> <span class="toc-text">随机算法之水塘抽样算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#算法实现"><span class="toc-number">1.0.1.</span> <span class="toc-text">算法实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#拓展延伸"><span class="toc-number">1.0.2.</span> <span class="toc-text">拓展延伸</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

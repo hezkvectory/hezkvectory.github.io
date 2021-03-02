@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="经典动态规划问题：高楼扔鸡蛋（进阶）        相关推荐：  手把手带你刷二叉树（第二期） 状态压缩：对动态规划进行降维打击  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 887.鸡蛋掉落 ———– 上篇文章聊了高楼扔鸡蛋问题，讲了一种效率不是很高，但是较为容易理解的动态规划解法。后台很多读者问如何更高效地解决这个问题，今天就谈两种思路，来优化一下这个问题">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/动态规划系列/高楼扔鸡蛋进阶.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="经典动态规划问题：高楼扔鸡蛋（进阶）        相关推荐：  手把手带你刷二叉树（第二期） 状态压缩：对动态规划进行降维打击  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 887.鸡蛋掉落 ———– 上篇文章聊了高楼扔鸡蛋问题，讲了一种效率不是很高，但是较为容易理解的动态规划解法。后台很多读者问如何更高效地解决这个问题，今天就谈两种思路，来优化一下这个问题">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/高楼扔鸡蛋进阶.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/高楼扔鸡蛋进阶.htm/pictures/%E6%89%94%E9%B8%A1%E8%9B%8B/formula1.png">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/高楼扔鸡蛋进阶.htm/pictures/%E6%89%94%E9%B8%A1%E8%9B%8B/2.jpg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/高楼扔鸡蛋进阶.htm/pictures/%E6%89%94%E9%B8%A1%E8%9B%8B/1.jpg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/高楼扔鸡蛋进阶.htm/pictures/%E6%89%94%E9%B8%A1%E8%9B%8B/3.jpg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/高楼扔鸡蛋进阶.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.858Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="经典动态规划问题：高楼扔鸡蛋（进阶）        相关推荐：  手把手带你刷二叉树（第二期） 状态压缩：对动态规划进行降维打击  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 887.鸡蛋掉落 ———– 上篇文章聊了高楼扔鸡蛋问题，讲了一种效率不是很高，但是较为容易理解的动态规划解法。后台很多读者问如何更高效地解决这个问题，今天就谈两种思路，来优化一下这个问题">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/动态规划系列/高楼扔鸡蛋进阶.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.858Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="经典动态规划问题：高楼扔鸡蛋（进阶）"><a href="#经典动态规划问题：高楼扔鸡蛋（进阶）" class="headerlink" title="经典动态规划问题：高楼扔鸡蛋（进阶）"></a>经典动态规划问题：高楼扔鸡蛋（进阶）</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/动态规划系列/高楼扔鸡蛋进阶.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">手把手带你刷二叉树（第二期）</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">状态压缩：对动态规划进行降维打击</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/super-egg-drop/" target="_blank" rel="noopener">887.鸡蛋掉落</a></p>
+<p><strong>———–</strong></p>
+<p>上篇文章聊了高楼扔鸡蛋问题，讲了一种效率不是很高，但是较为容易理解的动态规划解法。后台很多读者问如何更高效地解决这个问题，今天就谈两种思路，来优化一下这个问题，分别是二分查找优化和重新定义状态转移。</p>
+<p>如果还不知道高楼扔鸡蛋问题的读者可以看下「经典动态规划：高楼扔鸡蛋」，那篇文章详解了题目的含义和基本的动态规划解题思路，请确保理解前文，因为今天的优化都是基于这个基本解法的。</p>
+<p>二分搜索的优化思路也许是我们可以尽力尝试写出的，而修改状态转移的解法可能是不容易想到的，可以借此见识一下动态规划算法设计的玄妙，当做思维拓展。</p>
+<h3 id="二分搜索优化"><a href="#二分搜索优化" class="headerlink" title="二分搜索优化"></a>二分搜索优化</h3><p>之前提到过这个解法，核心是因为状态转移方程的单调性，这里可以具体展开看看。</p>
+<p>首先简述一下原始动态规划的思路：</p>
+<p>1、暴力穷举尝试在所有楼层 <code>1 &lt;= i &lt;= N</code> 扔鸡蛋，每次选择尝试次数<strong>最少</strong>的那一层；</p>
+<p>2、每次扔鸡蛋有两种可能，要么碎，要么没碎；</p>
+<p>3、如果鸡蛋碎了，<code>F</code> 应该在第 <code>i</code> 层下面，否则，<code>F</code> 应该在第 <code>i</code> 层上面；</p>
+<p>4、鸡蛋是碎了还是没碎，取决于哪种情况下尝试次数<strong>更多</strong>，因为我们想求的是最坏情况下的结果。</p>
+<p>核心的状态转移代码是这段：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 当前状态为 K 个鸡蛋，面对 N 层楼</span></span><br><span class="line"><span class="comment"># 返回这个状态下的最优结果</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dp</span><span class="params">(K, N)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> <span class="number">1</span> &lt;= i &lt;= N:</span><br><span class="line">        <span class="comment"># 最坏情况下的最少扔鸡蛋次数</span></span><br><span class="line">        res = min(res, </span><br><span class="line">                  max( </span><br><span class="line">                        dp(K - <span class="number">1</span>, i - <span class="number">1</span>), <span class="comment"># 碎</span></span><br><span class="line">                        dp(K, N - i)      <span class="comment"># 没碎</span></span><br><span class="line">                     ) + <span class="number">1</span> <span class="comment"># 在第 i 楼扔了一次</span></span><br><span class="line">                 )</span><br><span class="line">    <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
+
+<p>这个 for 循环就是下面这个状态转移方程的具体代码实现：</p>
+<!-- $$ dp(K, N) = \min_{0 <= i <= N}\{\max\{dp(K - 1, i - 1), dp(K, N - i)\} + 1\}$$ -->
+
+<p><img src="/fucking-algorithm/动态规划系列/高楼扔鸡蛋进阶.htm/pic/../pictures/%E6%89%94%E9%B8%A1%E8%9B%8B/formula1.png" alt></p>
+<p>如果能够理解这个状态转移方程，那么就很容易理解二分查找的优化思路。</p>
+<p>首先我们根据 <code>dp(K, N)</code> 数组的定义（有 <code>K</code> 个鸡蛋面对 <code>N</code> 层楼，最少需要扔几次），<strong>很容易知道 <code>K</code> 固定时，这个函数随着 <code>N</code> 的增加一定是单调递增的</strong>，无论你策略多聪明，楼层增加测试次数一定要增加。</p>
+<p>那么注意 <code>dp(K - 1, i - 1)</code> 和 <code>dp(K, N - i)</code> 这两个函数，其中 <code>i</code> 是从 1 到 <code>N</code> 单增的，如果我们固定 <code>K</code> 和 <code>N</code>，<strong>把这两个函数看做关于 <code>i</code> 的函数，前者随着 <code>i</code> 的增加应该也是单调递增的，而后者随着 <code>i</code> 的增加应该是单调递减的</strong>：</p>
+<p><img src="/fucking-algorithm/动态规划系列/高楼扔鸡蛋进阶.htm/pictures/%E6%89%94%E9%B8%A1%E8%9B%8B/2.jpg" alt></p>
+<p>这时候求二者的较大值，再求这些最大值之中的最小值，其实就是求这两条直线交点，也就是红色折线的最低点嘛。</p>
+<p>我们前文「二分查找只能用来查找元素吗」讲过，二分查找的运用很广泛，形如下面这种形式的 for 循环代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (isOK(i))</span><br><span class="line">        <span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>都很有可能可以运用二分查找来优化线性搜索的复杂度，回顾这两个 <code>dp</code> 函数的曲线，我们要找的最低点其实就是这种情况：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= N; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (dp(K - <span class="number">1</span>, i - <span class="number">1</span>) == dp(K, N - i))</span><br><span class="line">        <span class="keyword">return</span> dp(K, N - i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>熟悉二分搜索的同学肯定敏感地想到了，这不就是相当于求 Valley（山谷）值嘛，可以用二分查找来快速寻找这个点的，直接看代码吧，整体的思路还是一样，只是加快了搜索速度：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">superEggDrop</span><span class="params">(self, K: int, N: int)</span> -&gt; int:</span></span><br><span class="line">        </span><br><span class="line">    memo = dict()</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">dp</span><span class="params">(K, N)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> K == <span class="number">1</span>: <span class="keyword">return</span> N</span><br><span class="line">        <span class="keyword">if</span> N == <span class="number">0</span>: <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        <span class="keyword">if</span> (K, N) <span class="keyword">in</span> memo:</span><br><span class="line">            <span class="keyword">return</span> memo[(K, N)]</span><br><span class="line">                            </span><br><span class="line">        <span class="comment"># for 1 &lt;= i &lt;= N:</span></span><br><span class="line">        <span class="comment">#     res = min(res, </span></span><br><span class="line">        <span class="comment">#             max( </span></span><br><span class="line">        <span class="comment">#                 dp(K - 1, i - 1), </span></span><br><span class="line">        <span class="comment">#                 dp(K, N - i)      </span></span><br><span class="line">        <span class="comment">#                 ) + 1 </span></span><br><span class="line">        <span class="comment">#             )</span></span><br><span class="line"></span><br><span class="line">        res = float(<span class="string">'INF'</span>)</span><br><span class="line">        <span class="comment"># 用二分搜索代替线性搜索</span></span><br><span class="line">        lo, hi = <span class="number">1</span>, N</span><br><span class="line">        <span class="keyword">while</span> lo &lt;= hi:</span><br><span class="line">            mid = (lo + hi) // <span class="number">2</span></span><br><span class="line">            broken = dp(K - <span class="number">1</span>, mid - <span class="number">1</span>) <span class="comment"># 碎</span></span><br><span class="line">            not_broken = dp(K, N - mid) <span class="comment"># 没碎</span></span><br><span class="line">            <span class="comment"># res = min(max(碎，没碎) + 1)</span></span><br><span class="line">            <span class="keyword">if</span> broken &gt; not_broken:</span><br><span class="line">                hi = mid - <span class="number">1</span></span><br><span class="line">                res = min(res, broken + <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                lo = mid + <span class="number">1</span></span><br><span class="line">                res = min(res, not_broken + <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        memo[(K, N)] = res</span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> dp(K, N)</span><br></pre></td></tr></table></figure>
+
+<p>这个算法的时间复杂度是多少呢？<strong>动态规划算法的时间复杂度就是子问题个数 × 函数本身的复杂度</strong>。</p>
+<p>函数本身的复杂度就是忽略递归部分的复杂度，这里 <code>dp</code> 函数中用了一个二分搜索，所以函数本身的复杂度是 O(logN)。</p>
+<p>子问题个数也就是不同状态组合的总数，显然是两个状态的乘积，也就是 O(KN)。</p>
+<p>所以算法的总时间复杂度是 O(K*N*logN), 空间复杂度 O(KN)。效率上比之前的算法 O(KN^2) 要高效一些。</p>
+<h3 id="重新定义状态转移"><a href="#重新定义状态转移" class="headerlink" title="重新定义状态转移"></a>重新定义状态转移</h3><p>前文「不同定义有不同解法」就提过，找动态规划的状态转移本就是见仁见智，比较玄学的事情，不同的状态定义可以衍生出不同的解法，其解法和复杂程度都可能有巨大差异。这里就是一个很好的例子。</p>
+<p>再回顾一下我们之前定义的 <code>dp</code> 数组含义：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dp</span><span class="params">(k, n)</span> -&gt; int</span></span><br><span class="line"><span class="function"># 当前状态为 k 个鸡蛋，面对 n 层楼</span></span><br><span class="line"><span class="function"># 返回这个状态下最少的扔鸡蛋次数</span></span><br></pre></td></tr></table></figure>
+
+<p>用 dp 数组表示的话也是一样的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dp[k][n] = m</span><br><span class="line"><span class="comment"># 当前状态为 k 个鸡蛋，面对 n 层楼</span></span><br><span class="line"><span class="comment"># 这个状态下最少的扔鸡蛋次数为 m</span></span><br></pre></td></tr></table></figure>
+
+<p>按照这个定义，就是<strong>确定当前的鸡蛋个数和面对的楼层数，就知道最小扔鸡蛋次数</strong>。最终我们想要的答案就是 <code>dp(K, N)</code> 的结果。</p>
+<p>这种思路下，肯定要穷举所有可能的扔法的，用二分搜索优化也只是做了「剪枝」，减小了搜索空间，但本质思路没有变，还是穷举。</p>
+<p>现在，我们稍微修改 <code>dp</code> 数组的定义，<strong>确定当前的鸡蛋个数和最多允许的扔鸡蛋次数，就知道能够确定 <code>F</code> 的最高楼层数</strong>。具体来说是这个意思：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">dp[k][m] = n</span><br><span class="line"><span class="comment"># 当前有 k 个鸡蛋，可以尝试扔 m 次鸡蛋</span></span><br><span class="line"><span class="comment"># 这个状态下，最坏情况下最多能确切测试一栋 n 层的楼</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 比如说 dp[1][7] = 7 表示：</span></span><br><span class="line"><span class="comment"># 现在有 1 个鸡蛋，允许你扔 7 次;</span></span><br><span class="line"><span class="comment"># 这个状态下最多给你 7 层楼，</span></span><br><span class="line"><span class="comment"># 使得你可以确定楼层 F 使得鸡蛋恰好摔不碎</span></span><br><span class="line"><span class="comment"># （一层一层线性探查嘛）</span></span><br></pre></td></tr></table></figure>
+
+<p>这其实就是我们原始思路的一个「反向」版本，我们先不管这种思路的状态转移怎么写，先来思考一下这种定义之下，最终想求的答案是什么？</p>
+<p>我们最终要求的其实是扔鸡蛋次数 <code>m</code>，但是这时候 <code>m</code> 在状态之中而不是 <code>dp</code> 数组的结果，可以这样处理：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">superEggDrop</span><span class="params">(<span class="keyword">int</span> K, <span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> m = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (dp[K][m] &lt; N) &#123;</span><br><span class="line">        m++;</span><br><span class="line">        <span class="comment">// 状态转移...</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> m;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>题目不是<strong>给你 <code>K</code> 鸡蛋，<code>N</code> 层楼，让你求最坏情况下最少的测试次数 <code>m</code></strong> 吗？<code>while</code> 循环结束的条件是 <code>dp[K][m] == N</code>，也就是<strong>给你 <code>K</code> 个鸡蛋，测试 <code>m</code> 次，最坏情况下最多能测试 <code>N</code> 层楼</strong>。</p>
+<p>注意看这两段描述，是完全一样的！所以说这样组织代码是正确的，关键就是状态转移方程怎么找呢？还得从我们原始的思路开始讲。之前的解法配了这样图帮助大家理解状态转移思路：</p>
+<p><img src="/fucking-algorithm/动态规划系列/高楼扔鸡蛋进阶.htm/pictures/%E6%89%94%E9%B8%A1%E8%9B%8B/1.jpg" alt></p>
+<p>这个图描述的仅仅是某一个楼层 <code>i</code>，原始解法还得线性或者二分扫描所有楼层，要求最大值、最小值。但是现在这种 <code>dp</code> 定义根本不需要这些了，基于下面两个事实：</p>
+<p><strong>1、无论你在哪层楼扔鸡蛋，鸡蛋只可能摔碎或者没摔碎，碎了的话就测楼下，没碎的话就测楼上</strong>。</p>
+<p><strong>2、无论你上楼还是下楼，总的楼层数 = 楼上的楼层数 + 楼下的楼层数 + 1（当前这层楼）</strong>。</p>
+<p>根据这个特点，可以写出下面的状态转移方程：</p>
+<p><code>dp[k][m] = dp[k][m - 1] + dp[k - 1][m - 1] + 1</code></p>
+<p><strong><code>dp[k][m - 1]</code> 就是楼上的楼层数</strong>，因为鸡蛋个数 <code>k</code> 不变，也就是鸡蛋没碎，扔鸡蛋次数 <code>m</code> 减一；</p>
+<p><strong><code>dp[k - 1][m - 1]</code> 就是楼下的楼层数</strong>，因为鸡蛋个数 <code>k</code> 减一，也就是鸡蛋碎了，同时扔鸡蛋次数 <code>m</code> 减一。</p>
+<p>PS：这个 <code>m</code> 为什么要减一而不是加一？之前定义得很清楚，这个 <code>m</code> 是一个允许的次数上界，而不是扔了几次。</p>
+<p><img src="/fucking-algorithm/动态规划系列/高楼扔鸡蛋进阶.htm/pictures/%E6%89%94%E9%B8%A1%E8%9B%8B/3.jpg" alt></p>
+<p>至此，整个思路就完成了，只要把状态转移方程填进框架即可：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">superEggDrop</span><span class="params">(<span class="keyword">int</span> K, <span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// m 最多不会超过 N 次（线性扫描）</span></span><br><span class="line">    <span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[K + <span class="number">1</span>][N + <span class="number">1</span>];</span><br><span class="line">    <span class="comment">// base case:</span></span><br><span class="line">    <span class="comment">// dp[0][..] = 0</span></span><br><span class="line">    <span class="comment">// dp[..][0] = 0</span></span><br><span class="line">    <span class="comment">// Java 默认初始化数组都为 0</span></span><br><span class="line">    <span class="keyword">int</span> m = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (dp[K][m] &lt; N) &#123;</span><br><span class="line">        m++;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">1</span>; k &lt;= K; k++)</span><br><span class="line">            dp[k][m] = dp[k][m - <span class="number">1</span>] + dp[k - <span class="number">1</span>][m - <span class="number">1</span>] + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> m;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果你还觉得这段代码有点难以理解，其实它就等同于这样写：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> m = <span class="number">1</span>; dp[K][m] &lt; N; m++)</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">1</span>; k &lt;= K; k++)</span><br><span class="line">        dp[k][m] = dp[k][m - <span class="number">1</span>] + dp[k - <span class="number">1</span>][m - <span class="number">1</span>] + <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>看到这种代码形式就熟悉多了吧，因为我们要求的不是 <code>dp</code> 数组里的值，而是某个符合条件的索引 <code>m</code>，所以用 <code>while</code> 循环来找到这个 <code>m</code> 而已。</p>
+<p>这个算法的时间复杂度是多少？很明显就是两个嵌套循环的复杂度 O(KN)。</p>
+<p>另外注意到 <code>dp[m][k]</code> 转移只和左边和左上的两个状态有关，所以很容易优化成一维 <code>dp</code> 数组，这里就不写了。</p>
+<h3 id="还可以再优化"><a href="#还可以再优化" class="headerlink" title="还可以再优化"></a>还可以再优化</h3><p>再往下就要用一些数学方法了，不具体展开，就简单提一下思路吧。</p>
+<p>在刚才的思路之上，<strong>注意函数 <code>dp(m, k)</code> 是随着 <code>m</code> 单增的，因为鸡蛋个数 <code>k</code> 不变时，允许的测试次数越多，可测试的楼层就越高</strong>。</p>
+<p>这里又可以借助二分搜索算法快速逼近 <code>dp[K][m] == N</code> 这个终止条件，时间复杂度进一步下降为 O(KlogN)，我们可以设 <code>g(k, m) =</code>……</p>
+<p>算了算了，打住吧。我觉得我们能够写出 O(K*N*logN) 的二分优化算法就行了，后面的这些解法呢，听个响鼓个掌就行了，把欲望限制在能力的范围之内才能拥有快乐！</p>
+<p>不过可以肯定的是，根据二分搜索代替线性扫描 <code>m</code> 的取值，代码的大致框架肯定是修改穷举 <code>m</code> 的 for 循环：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 把线性搜索改成二分搜索</span></span><br><span class="line"><span class="comment">// for (int m = 1; dp[K][m] &lt; N; m++)</span></span><br><span class="line"><span class="keyword">int</span> lo = <span class="number">1</span>, hi = N;</span><br><span class="line"><span class="keyword">while</span> (lo &lt; hi) &#123;</span><br><span class="line">    <span class="keyword">int</span> mid = (lo + hi) / <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">if</span> (... &lt; N) &#123;</span><br><span class="line">        lo = ...</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        hi = ...</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">1</span>; k &lt;= K; k++)</span><br><span class="line">        <span class="comment">// 状态转移方程</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>简单总结一下吧，第一个二分优化是利用了 <code>dp</code> 函数的单调性，用二分查找技巧快速搜索答案；第二种优化是巧妙地修改了状态转移方程，简化了求解了流程，但相应的，解题逻辑比较难以想到；后续还可以用一些数学方法和二分搜索进一步优化第二种解法，不过看了看镜子中的发量，算了。</p>
+<p>本文终，希望对你有一点启发。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/动态规划系列/高楼扔鸡蛋进阶.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/动态规划系列/高楼扔鸡蛋进阶.html" data-id="cklrh5za5001tro9b62d3z6lr" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#经典动态规划问题：高楼扔鸡蛋（进阶）"><span class="toc-number">1.</span> <span class="toc-text">经典动态规划问题：高楼扔鸡蛋（进阶）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#二分搜索优化"><span class="toc-number">1.0.1.</span> <span class="toc-text">二分搜索优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#重新定义状态转移"><span class="toc-number">1.0.2.</span> <span class="toc-text">重新定义状态转移</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#还可以再优化"><span class="toc-number">1.0.3.</span> <span class="toc-text">还可以再优化</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

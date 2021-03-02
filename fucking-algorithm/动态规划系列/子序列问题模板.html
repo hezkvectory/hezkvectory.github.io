@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="动态规划之子序列问题解题模板        相关推荐：  洗牌算法 twoSum问题的核心思想  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 516.最长回文子序列 ———– 子序列问题是常见的算法问题，而且并不好解决。 首先，子序列问题本身就相对子串、子数组更困难一些，因为前者是不连续的序列，而后两者是连续的，就算穷举你都不一定会，更别说求解相关的算法问题了">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/动态规划系列/子序列问题模板.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="动态规划之子序列问题解题模板        相关推荐：  洗牌算法 twoSum问题的核心思想  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 516.最长回文子序列 ———– 子序列问题是常见的算法问题，而且并不好解决。 首先，子序列问题本身就相对子串、子数组更困难一些，因为前者是不连续的序列，而后两者是连续的，就算穷举你都不一定会，更别说求解相关的算法问题了">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/子序列问题模板.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/子序列问题模板.htm/pictures/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E5%BA%8F%E5%88%97/title.jpg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/子序列问题模板.htm/pictures/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E5%BA%8F%E5%88%97/1.jpg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/子序列问题模板.htm/pictures/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E5%BA%8F%E5%88%97/2.jpg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/子序列问题模板.htm/pictures/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E5%BA%8F%E5%88%97/3.jpg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/子序列问题模板.htm/pictures/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E5%BA%8F%E5%88%97/4.jpg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/子序列问题模板.htm/pictures/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E5%BA%8F%E5%88%97/5.jpg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/子序列问题模板.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.856Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="动态规划之子序列问题解题模板        相关推荐：  洗牌算法 twoSum问题的核心思想  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 516.最长回文子序列 ———– 子序列问题是常见的算法问题，而且并不好解决。 首先，子序列问题本身就相对子串、子数组更困难一些，因为前者是不连续的序列，而后两者是连续的，就算穷举你都不一定会，更别说求解相关的算法问题了">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/动态规划系列/子序列问题模板.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.856Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="动态规划之子序列问题解题模板"><a href="#动态规划之子序列问题解题模板" class="headerlink" title="动态规划之子序列问题解题模板"></a>动态规划之子序列问题解题模板</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/动态规划系列/子序列问题模板.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">洗牌算法</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">twoSum问题的核心思想</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/longest-palindromic-subsequence" target="_blank" rel="noopener">516.最长回文子序列</a></p>
+<p><strong>———–</strong></p>
+<p>子序列问题是常见的算法问题，而且并不好解决。</p>
+<p>首先，子序列问题本身就相对子串、子数组更困难一些，因为前者是不连续的序列，而后两者是连续的，就算穷举你都不一定会，更别说求解相关的算法问题了。</p>
+<p>而且，子序列问题很可能涉及到两个字符串，比如前文「最长公共子序列」，如果没有一定的处理经验，真的不容易想出来。所以本文就来扒一扒子序列问题的套路，其实就有两种模板，相关问题只要往这两种思路上想，十拿九稳。</p>
+<p>一般来说，这类问题都是让你求一个<strong>最长子序列</strong>，因为最短子序列就是一个字符嘛，没啥可问的。一旦涉及到子序列和最值，那几乎可以肯定，<strong>考察的是动态规划技巧，时间复杂度一般都是 O(n^2)</strong>。</p>
+<p>原因很简单，你想想一个字符串，它的子序列有多少种可能？起码是指数级的吧，这种情况下，不用动态规划技巧，还想怎么着？</p>
+<p>既然要用动态规划，那就要定义 dp 数组，找状态转移关系。我们说的两种思路模板，就是 dp 数组的定义思路。不同的问题可能需要不同的 dp 数组定义来解决。</p>
+<h3 id="一、两种思路"><a href="#一、两种思路" class="headerlink" title="一、两种思路"></a>一、两种思路</h3><p><strong>1、第一种思路模板是一个一维的 dp 数组</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> n = array.length;</span><br><span class="line"><span class="keyword">int</span>[] dp = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++) &#123;</span><br><span class="line">        dp[i] = 最值(dp[i], dp[j] + ...)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>举个我们写过的例子「最长递增子序列」，在这个思路中 dp 数组的定义是：</p>
+<p><strong>在子数组 <code>array[0..i]</code> 中，我们要求的子序列（最长递增子序列）的长度是 <code>dp[i]</code></strong>。</p>
+<p>为啥最长递增子序列需要这种思路呢？前文说得很清楚了，因为这样符合归纳法，可以找到状态转移的关系，这里就不具体展开了。</p>
+<p><strong>2、第二种思路模板是一个二维的 dp 数组</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> n = arr.length;</span><br><span class="line"><span class="keyword">int</span>[][] dp = <span class="keyword">new</span> dp[n][n];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (arr[i] == arr[j]) </span><br><span class="line">            dp[i][j] = dp[i][j] + ...</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            dp[i][j] = 最值(...)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种思路运用相对更多一些，尤其是涉及两个字符串/数组的子序列，比如前文讲的「最长公共子序列」。本思路中 dp 数组含义又分为「只涉及一个字符串」和「涉及两个字符串」两种情况。</p>
+<p><strong>2.1 涉及两个字符串/数组时</strong>（比如最长公共子序列），dp 数组的含义如下：</p>
+<p><strong>在子数组 <code>arr1[0..i]</code> 和子数组 <code>arr2[0..j]</code> 中，我们要求的子序列（最长公共子序列）长度为 <code>dp[i][j]</code></strong>。</p>
+<p><strong>2.2 只涉及一个字符串/数组时</strong>（比如本文要讲的最长回文子序列），dp 数组的含义如下：</p>
+<p><strong>在子数组 <code>array[i..j]</code> 中，我们要求的子序列（最长回文子序列）的长度为 <code>dp[i][j]</code></strong>。</p>
+<p>第一种情况可以参考这两篇旧文：「编辑距离」「公共子序列」</p>
+<p>下面就借最长回文子序列这个问题，详解一下第二种情况下如何使用动态规划。</p>
+<h3 id="二、最长回文子序列"><a href="#二、最长回文子序列" class="headerlink" title="二、最长回文子序列"></a>二、最长回文子序列</h3><p>之前解决了「最长回文子串」的问题，这次提升难度，求最长回文子序列的长度：</p>
+<p><img src="/fucking-algorithm/动态规划系列/子序列问题模板.htm/pictures/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E5%BA%8F%E5%88%97/title.jpg" alt></p>
+<p>我们说这个问题对 dp 数组的定义是：<strong>在子串 <code>s[i..j]</code> 中，最长回文子序列的长度为 <code>dp[i][j]</code></strong>。一定要记住这个定义才能理解算法。</p>
+<p>为啥这个问题要这样定义二维的 dp 数组呢？我们前文多次提到，<strong>找状态转移需要归纳思维，说白了就是如何从已知的结果推出未知的部分</strong>，这样定义容易归纳，容易发现状态转移关系。</p>
+<p>具体来说，如果我们想求 <code>dp[i][j]</code>，假设你知道了子问题 <code>dp[i+1][j-1]</code> 的结果（<code>s[i+1..j-1]</code> 中最长回文子序列的长度），你是否能想办法算出 <code>dp[i][j]</code> 的值（<code>s[i..j]</code> 中，最长回文子序列的长度）呢？</p>
+<p><img src="/fucking-algorithm/动态规划系列/子序列问题模板.htm/pictures/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E5%BA%8F%E5%88%97/1.jpg" alt></p>
+<p>可以！这取决于 <code>s[i]</code> 和 <code>s[j]</code> 的字符：</p>
+<p><strong>如果它俩相等</strong>，那么它俩加上 <code>s[i+1..j-1]</code> 中的最长回文子序列就是 <code>s[i..j]</code> 的最长回文子序列：</p>
+<p><img src="/fucking-algorithm/动态规划系列/子序列问题模板.htm/pictures/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E5%BA%8F%E5%88%97/2.jpg" alt></p>
+<p><strong>如果它俩不相等</strong>，说明它俩<strong>不可能同时</strong>出现在 <code>s[i..j]</code> 的最长回文子序列中，那么把它俩<strong>分别</strong>加入 <code>s[i+1..j-1]</code> 中，看看哪个子串产生的回文子序列更长即可：</p>
+<p><img src="/fucking-algorithm/动态规划系列/子序列问题模板.htm/pictures/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E5%BA%8F%E5%88%97/3.jpg" alt></p>
+<p>以上两种情况写成代码就是这样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (s[i] == s[j])</span><br><span class="line">    <span class="comment">// 它俩一定在最长回文子序列中</span></span><br><span class="line">    dp[i][j] = dp[i + <span class="number">1</span>][j - <span class="number">1</span>] + <span class="number">2</span>;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="comment">// s[i+1..j] 和 s[i..j-1] 谁的回文子序列更长？</span></span><br><span class="line">    dp[i][j] = max(dp[i + <span class="number">1</span>][j], dp[i][j - <span class="number">1</span>]);</span><br></pre></td></tr></table></figure>
+
+<p>至此，状态转移方程就写出来了，根据 dp 数组的定义，我们要求的就是 <code>dp[0][n - 1]</code>，也就是整个 <code>s</code> 的最长回文子序列的长度。</p>
+<h3 id="三、代码实现"><a href="#三、代码实现" class="headerlink" title="三、代码实现"></a>三、代码实现</h3><p>首先明确一下 base case，如果只有一个字符，显然最长回文子序列长度是 1，也就是 <code>dp[i][j] = 1 (i == j)</code>。</p>
+<p>因为 <code>i</code> 肯定小于等于 <code>j</code>，所以对于那些 <code>i &gt; j</code> 的位置，根本不存在什么子序列，应该初始化为 0。</p>
+<p>另外，看看刚才写的状态转移方程，想求 <code>dp[i][j]</code> 需要知道 <code>dp[i+1][j-1]</code>，<code>dp[i+1][j]</code>，<code>dp[i][j-1]</code> 这三个位置；再看看我们确定的 base case，填入 dp 数组之后是这样：</p>
+<p><img src="/fucking-algorithm/动态规划系列/子序列问题模板.htm/pictures/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E5%BA%8F%E5%88%97/4.jpg" alt></p>
+<p><strong>为了保证每次计算 <code>dp[i][j]</code>，左下右方向的位置已经被计算出来，只能斜着遍历或者反着遍历</strong>：</p>
+<p><img src="/fucking-algorithm/动态规划系列/子序列问题模板.htm/pictures/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E5%BA%8F%E5%88%97/5.jpg" alt></p>
+<p>我选择反着遍历，代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">longestPalindromeSubseq</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = s.size();</span><br><span class="line">    <span class="comment">// dp 数组全部初始化为 0</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; dp(n, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n, <span class="number">0</span>));</span><br><span class="line">    <span class="comment">// base case</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        dp[i][i] = <span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 反着遍历保证正确的状态转移</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = n - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="comment">// 状态转移方程</span></span><br><span class="line">            <span class="keyword">if</span> (s[i] == s[j])</span><br><span class="line">                dp[i][j] = dp[i + <span class="number">1</span>][j - <span class="number">1</span>] + <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                dp[i][j] = max(dp[i + <span class="number">1</span>][j], dp[i][j - <span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 整个 s 的最长回文子串长度</span></span><br><span class="line">    <span class="keyword">return</span> dp[<span class="number">0</span>][n - <span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>至此，最长回文子序列的问题就解决了。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，labuladong 带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/动态规划系列/子序列问题模板.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/动态规划系列/子序列问题模板.html" data-id="cklrh5za2001nro9bt0omrv1c" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#动态规划之子序列问题解题模板"><span class="toc-number">1.</span> <span class="toc-text">动态规划之子序列问题解题模板</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、两种思路"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、两种思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、最长回文子序列"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、最长回文子序列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、代码实现"><span class="toc-number">1.0.3.</span> <span class="toc-text">三、代码实现</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

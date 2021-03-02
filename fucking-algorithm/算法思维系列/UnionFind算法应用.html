@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Union-Find算法应用        相关推荐：  手把手带你刷二叉树（第一期） 二分查找详解  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 130.被围绕的区域 990.等式方程的可满足性 ———– 上篇文章很多读者对于 Union-Find 算法的应用表示很感兴趣，这篇文章就拿几道 LeetCode 题目来讲讲这个算法的巧妙用法。 首先，复习一下，U">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/算法思维系列/UnionFind算法应用.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="Union-Find算法应用        相关推荐：  手把手带你刷二叉树（第一期） 二分查找详解  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 130.被围绕的区域 990.等式方程的可满足性 ———– 上篇文章很多读者对于 Union-Find 算法的应用表示很感兴趣，这篇文章就拿几道 LeetCode 题目来讲讲这个算法的巧妙用法。 首先，复习一下，U">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/UnionFind算法应用.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/UnionFind算法应用.htm/pictures/unionfind%E5%BA%94%E7%94%A8/1.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/UnionFind算法应用.htm/pictures/unionfind%E5%BA%94%E7%94%A8/2.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/UnionFind算法应用.htm/pictures/unionfind%E5%BA%94%E7%94%A8/3.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/UnionFind算法应用.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.865Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="Union-Find算法应用        相关推荐：  手把手带你刷二叉树（第一期） 二分查找详解  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 130.被围绕的区域 990.等式方程的可满足性 ———– 上篇文章很多读者对于 Union-Find 算法的应用表示很感兴趣，这篇文章就拿几道 LeetCode 题目来讲讲这个算法的巧妙用法。 首先，复习一下，U">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/算法思维系列/UnionFind算法应用.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.865Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="Union-Find算法应用"><a href="#Union-Find算法应用" class="headerlink" title="Union-Find算法应用"></a>Union-Find算法应用</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/算法思维系列/UnionFind算法应用.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">手把手带你刷二叉树（第一期）</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">二分查找详解</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/surrounded-regions" target="_blank" rel="noopener">130.被围绕的区域</a></p>
+<p><a href="https://leetcode-cn.com/problems/surrounded-regions" target="_blank" rel="noopener">990.等式方程的可满足性</a></p>
+<p><strong>———–</strong></p>
+<p>上篇文章很多读者对于 Union-Find 算法的应用表示很感兴趣，这篇文章就拿几道 LeetCode 题目来讲讲这个算法的巧妙用法。</p>
+<p>首先，复习一下，Union-Find 算法解决的是图的动态连通性问题，这个算法本身不难，能不能应用出来主要是看你抽象问题的能力，是否能够把原始问题抽象成一个有关图论的问题。</p>
+<p>先复习一下上篇文章写的算法代码，回答读者提出的几个问题：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UF</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 记录连通分量个数</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> count;</span><br><span class="line">    <span class="comment">// 存储若干棵树</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] parent;</span><br><span class="line">    <span class="comment">// 记录树的“重量”</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] size;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UF</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.count = n;</span><br><span class="line">        parent = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">        size = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">            parent[i] = i;</span><br><span class="line">            size[i] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/* 将 p 和 q 连通 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> rootP = find(p);</span><br><span class="line">        <span class="keyword">int</span> rootQ = find(q);</span><br><span class="line">        <span class="keyword">if</span> (rootP == rootQ)</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 小树接到大树下面，较平衡</span></span><br><span class="line">        <span class="keyword">if</span> (size[rootP] &gt; size[rootQ]) &#123;</span><br><span class="line">            parent[rootQ] = rootP;</span><br><span class="line">            size[rootP] += size[rootQ];</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            parent[rootP] = rootQ;</span><br><span class="line">            size[rootQ] += size[rootP];</span><br><span class="line">        &#125;</span><br><span class="line">        count--;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 判断 p 和 q 是否互相连通 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">connected</span><span class="params">(<span class="keyword">int</span> p, <span class="keyword">int</span> q)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> rootP = find(p);</span><br><span class="line">        <span class="keyword">int</span> rootQ = find(q);</span><br><span class="line">        <span class="comment">// 处于同一棵树上的节点，相互连通</span></span><br><span class="line">        <span class="keyword">return</span> rootP == rootQ;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 返回节点 x 的根节点 */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (parent[x] != x) &#123;</span><br><span class="line">            <span class="comment">// 进行路径压缩</span></span><br><span class="line">            parent[x] = parent[parent[x]];</span><br><span class="line">            x = parent[x];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">count</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> count;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>算法的关键点有 3 个：</p>
+<p>1、用 <code>parent</code> 数组记录每个节点的父节点，相当于指向父节点的指针，所以 <code>parent</code> 数组内实际存储着一个森林（若干棵多叉树）。</p>
+<p>2、用 <code>size</code> 数组记录着每棵树的重量，目的是让 <code>union</code> 后树依然拥有平衡性，而不会退化成链表，影响操作效率。</p>
+<p>3、在 <code>find</code> 函数中进行路径压缩，保证任意树的高度保持在常数，使得 <code>union</code> 和 <code>connected</code> API 时间复杂度为 O(1)。</p>
+<p>有的读者问，<strong>既然有了路径压缩，<code>size</code> 数组的重量平衡还需要吗</strong>？这个问题很有意思，因为路径压缩保证了树高为常数（不超过 3），那么树就算不平衡，高度也是常数，基本没什么影响。</p>
+<p>我认为，论时间复杂度的话，确实，不需要重量平衡也是 O(1)。但是如果加上 <code>size</code> 数组辅助，效率还是略微高一些，比如下面这种情况：</p>
+<p><img src="/fucking-algorithm/算法思维系列/UnionFind算法应用.htm/pictures/unionfind%E5%BA%94%E7%94%A8/1.jpg" alt></p>
+<p>如果带有重量平衡优化，一定会得到情况一，而不带重量优化，可能出现情况二。高度为 3 时才会触发路径压缩那个 <code>while</code> 循环，所以情况一根本不会触发路径压缩，而情况二会多执行很多次路径压缩，将第三层节点压缩到第二层。</p>
+<p>也就是说，去掉重量平衡，虽然对于单个的 <code>find</code> 函数调用，时间复杂度依然是 O(1)，但是对于 API 调用的整个过程，效率会有一定的下降。当然，好处就是减少了一些空间，不过对于 Big O 表示法来说，时空复杂度都没变。</p>
+<p>下面言归正传，来看看这个算法有什么实际应用。</p>
+<h3 id="一、DFS-的替代方案"><a href="#一、DFS-的替代方案" class="headerlink" title="一、DFS 的替代方案"></a>一、DFS 的替代方案</h3><p>很多使用 DFS 深度优先算法解决的问题，也可以用 Union-Find 算法解决。</p>
+<p>比如第 130 题，被围绕的区域：给你一个 M×N 的二维矩阵，其中包含字符 <code>X</code> 和 <code>O</code>，让你找到矩阵中<strong>四面</strong>被 <code>X</code> 围住的 <code>O</code>，并且把它们替换成 <code>X</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">solve</span><span class="params">(<span class="keyword">char</span>[][] board)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>注意哦，必须是四面被围的 <code>O</code> 才能被换成 <code>X</code>，也就是说边角上的 <code>O</code> 一定不会被围，进一步，与边角上的 <code>O</code> 相连的 <code>O</code> 也不会被 <code>X</code> 围四面，也不会被替换。</p>
+<p><img src="/fucking-algorithm/算法思维系列/UnionFind算法应用.htm/pictures/unionfind%E5%BA%94%E7%94%A8/2.jpg" alt></p>
+<p>PS：这让我想起小时候玩的棋类游戏「黑白棋」，只要你用两个棋子把对方的棋子夹在中间，对方的子就被替换成你的子。可见，占据四角的棋子是无敌的，与其相连的边棋子也是无敌的（无法被夹掉）。</p>
+<p>解决这个问题的传统方法也不困难，先用 for 循环遍历棋盘的<strong>四边</strong>，用 DFS 算法把那些与边界相连的 <code>O</code> 换成一个特殊字符，比如 <code>#</code>；然后再遍历整个棋盘，把剩下的 <code>O</code> 换成 <code>X</code>，把 <code>#</code> 恢复成 <code>O</code>。这样就能完成题目的要求，时间复杂度 O(MN)。</p>
+<p>这个问题也可以用 Union-Find 算法解决，虽然实现复杂一些，甚至效率也略低，但这是使用 Union-Find 算法的通用思想，值得一学。</p>
+<p><strong>你可以把那些不需要被替换的 <code>O</code> 看成一个拥有独门绝技的门派，它们有一个共同祖师爷叫 <code>dummy</code>，这些 <code>O</code> 和 <code>dummy</code> 互相连通，而那些需要被替换的 <code>O</code> 与 <code>dummy</code> 不连通</strong>。</p>
+<p><img src="/fucking-algorithm/算法思维系列/UnionFind算法应用.htm/pictures/unionfind%E5%BA%94%E7%94%A8/3.jpg" alt></p>
+<p>这就是 Union-Find 的核心思路，明白这个图，就很容易看懂代码了。</p>
+<p>首先要解决的是，根据我们的实现，Union-Find 底层用的是一维数组，构造函数需要传入这个数组的大小，而题目给的是一个二维棋盘。</p>
+<p>这个很简单，二维坐标 <code>(x,y)</code> 可以转换成 <code>x * n + y</code> 这个数（<code>m</code> 是棋盘的行数，<code>n</code> 是棋盘的列数）。敲黑板，<strong>这是将二维坐标映射到一维的常用技巧</strong>。</p>
+<p>其次，我们之前描述的「祖师爷」是虚构的，需要给他老人家留个位置。索引 <code>[0.. m*n-1]</code> 都是棋盘内坐标的一维映射，那就让这个虚拟的 <code>dummy</code> 节点占据索引 <code>m * n</code> 好了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">solve</span><span class="params">(<span class="keyword">char</span>[][] board)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (board.length == <span class="number">0</span>) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> m = board.length;</span><br><span class="line">    <span class="keyword">int</span> n = board[<span class="number">0</span>].length;</span><br><span class="line">    <span class="comment">// 给 dummy 留一个额外位置</span></span><br><span class="line">    UF uf = <span class="keyword">new</span> UF(m * n + <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">int</span> dummy = m * n;</span><br><span class="line">    <span class="comment">// 将首列和末列的 O 与 dummy 连通</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (board[i][<span class="number">0</span>] == <span class="string">'O'</span>)</span><br><span class="line">            uf.union(i * n, dummy);</span><br><span class="line">        <span class="keyword">if</span> (board[i][n - <span class="number">1</span>] == <span class="string">'O'</span>)</span><br><span class="line">            uf.union(i * n + n - <span class="number">1</span>, dummy);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 将首行和末行的 O 与 dummy 连通</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (board[<span class="number">0</span>][j] == <span class="string">'O'</span>)</span><br><span class="line">            uf.union(j, dummy);</span><br><span class="line">        <span class="keyword">if</span> (board[m - <span class="number">1</span>][j] == <span class="string">'O'</span>)</span><br><span class="line">            uf.union(n * (m - <span class="number">1</span>) + j, dummy);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 方向数组 d 是上下左右搜索的常用手法</span></span><br><span class="line">    <span class="keyword">int</span>[][] d = <span class="keyword">new</span> <span class="keyword">int</span>[][]&#123;&#123;<span class="number">1</span>,<span class="number">0</span>&#125;, &#123;<span class="number">0</span>,<span class="number">1</span>&#125;, &#123;<span class="number">0</span>,-<span class="number">1</span>&#125;, &#123;-<span class="number">1</span>,<span class="number">0</span>&#125;&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; m - <span class="number">1</span>; i++) </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; n - <span class="number">1</span>; j++) </span><br><span class="line">            <span class="keyword">if</span> (board[i][j] == <span class="string">'O'</span>)</span><br><span class="line">                <span class="comment">// 将此 O 与上下左右的 O 连通</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; <span class="number">4</span>; k++) &#123;</span><br><span class="line">                    <span class="keyword">int</span> x = i + d[k][<span class="number">0</span>];</span><br><span class="line">                    <span class="keyword">int</span> y = j + d[k][<span class="number">1</span>];</span><br><span class="line">                    <span class="keyword">if</span> (board[x][y] == <span class="string">'O'</span>)</span><br><span class="line">                        uf.union(x * n + y, i * n + j);</span><br><span class="line">                &#125;</span><br><span class="line">    <span class="comment">// 所有不和 dummy 连通的 O，都要被替换</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; m - <span class="number">1</span>; i++) </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; n - <span class="number">1</span>; j++) </span><br><span class="line">            <span class="keyword">if</span> (!uf.connected(dummy, i * n + j))</span><br><span class="line">                board[i][j] = <span class="string">'X'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码很长，其实就是刚才的思路实现，只有和边界 <code>O</code> 相连的 <code>O</code> 才具有和 <code>dummy</code> 的连通性，他们不会被替换。</p>
+<p>说实话，Union-Find 算法解决这个简单的问题有点杀鸡用牛刀，它可以解决更复杂，更具有技巧性的问题，<strong>主要思路是适时增加虚拟节点，想办法让元素「分门别类」，建立动态连通关系</strong>。</p>
+<h3 id="二、判定合法等式"><a href="#二、判定合法等式" class="headerlink" title="二、判定合法等式"></a>二、判定合法等式</h3><p>这个问题用 Union-Find 算法就显得十分优美了。题目是这样：</p>
+<p>给你一个数组 <code>equations</code>，装着若干字符串表示的算式。每个算式 <code>equations[i]</code> 长度都是 4，而且只有这两种情况：<code>a==b</code> 或者 <code>a!=b</code>，其中 <code>a,b</code> 可以是任意小写字母。你写一个算法，如果 <code>equations</code> 中所有算式都不会互相冲突，返回 true，否则返回 false。</p>
+<p>比如说，输入 <code>[&quot;a==b&quot;,&quot;b!=c&quot;,&quot;c==a&quot;]</code>，算法返回 false，因为这三个算式不可能同时正确。</p>
+<p>再比如，输入 <code>[&quot;c==c&quot;,&quot;b==d&quot;,&quot;x!=z&quot;]</code>，算法返回 true，因为这三个算式并不会造成逻辑冲突。</p>
+<p>我们前文说过，动态连通性其实就是一种等价关系，具有「自反性」「传递性」和「对称性」，其实 <code>==</code> 关系也是一种等价关系，具有这些性质。所以这个问题用 Union-Find 算法就很自然。</p>
+<p>核心思想是，<strong>将 <code>equations</code> 中的算式根据 <code>==</code> 和 <code>!=</code> 分成两部分，先处理 <code>==</code> 算式，使得他们通过相等关系各自勾结成门派；然后处理 <code>!=</code> 算式，检查不等关系是否破坏了相等关系的连通性</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">equationsPossible</span><span class="params">(String[] equations)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 26 个英文字母</span></span><br><span class="line">    UF uf = <span class="keyword">new</span> UF(<span class="number">26</span>);</span><br><span class="line">    <span class="comment">// 先让相等的字母形成连通分量</span></span><br><span class="line">    <span class="keyword">for</span> (String eq : equations) &#123;</span><br><span class="line">        <span class="keyword">if</span> (eq.charAt(<span class="number">1</span>) == <span class="string">'='</span>) &#123;</span><br><span class="line">            <span class="keyword">char</span> x = eq.charAt(<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">char</span> y = eq.charAt(<span class="number">3</span>);</span><br><span class="line">            uf.union(x - <span class="string">'a'</span>, y - <span class="string">'a'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 检查不等关系是否打破相等关系的连通性</span></span><br><span class="line">    <span class="keyword">for</span> (String eq : equations) &#123;</span><br><span class="line">        <span class="keyword">if</span> (eq.charAt(<span class="number">1</span>) == <span class="string">'!'</span>) &#123;</span><br><span class="line">            <span class="keyword">char</span> x = eq.charAt(<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">char</span> y = eq.charAt(<span class="number">3</span>);</span><br><span class="line">            <span class="comment">// 如果相等关系成立，就是逻辑冲突</span></span><br><span class="line">            <span class="keyword">if</span> (uf.connected(x - <span class="string">'a'</span>, y - <span class="string">'a'</span>))</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>至此，这道判断算式合法性的问题就解决了，借助 Union-Find 算法，是不是很简单呢？</p>
+<h3 id="三、简单总结"><a href="#三、简单总结" class="headerlink" title="三、简单总结"></a>三、简单总结</h3><p>使用 Union-Find 算法，主要是如何把原问题转化成图的动态连通性问题。对于算式合法性问题，可以直接利用等价关系，对于棋盘包围问题，则是利用一个虚拟节点，营造出动态连通特性。</p>
+<p>另外，将二维数组映射到一维数组，利用方向数组 <code>d</code> 来简化代码量，都是在写算法时常用的一些小技巧，如果没见过可以注意一下。</p>
+<p>很多更复杂的 DFS 算法问题，都可以利用 Union-Find 算法更漂亮的解决。LeetCode 上 Union-Find 相关的问题也就二十多道，有兴趣的读者可以去做一做。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/算法思维系列/UnionFind算法应用.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/算法思维系列/UnionFind算法应用.html" data-id="cklrh5zah002nro9bvgubnmqf" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Union-Find算法应用"><span class="toc-number">1.</span> <span class="toc-text">Union-Find算法应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、DFS-的替代方案"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、DFS 的替代方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、判定合法等式"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、判定合法等式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、简单总结"><span class="toc-number">1.0.3.</span> <span class="toc-text">三、简单总结</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

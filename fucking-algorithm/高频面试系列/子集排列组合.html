@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="回溯算法团灭子集、排列、组合问题        相关推荐：  回溯算法解题套路框架 twoSum问题的核心思想  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 78.子集 46.全排列 77.组合 ———– 今天就来聊三道考察频率高，而且容易让人搞混的算法问题，分别是求子集（subset），求排列（permutation），求组合（combination）。 这">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/高频面试系列/子集排列组合.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="回溯算法团灭子集、排列、组合问题        相关推荐：  回溯算法解题套路框架 twoSum问题的核心思想  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 78.子集 46.全排列 77.组合 ———– 今天就来聊三道考察频率高，而且容易让人搞混的算法问题，分别是求子集（subset），求排列（permutation），求组合（combination）。 这">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/子集排列组合.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/子集排列组合.htm/pictures/%E5%AD%90%E9%9B%86/1.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/子集排列组合.htm/pictures/%E5%AD%90%E9%9B%86/2.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/子集排列组合.htm/pictures/%E5%AD%90%E9%9B%86/3.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/子集排列组合.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.876Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="回溯算法团灭子集、排列、组合问题        相关推荐：  回溯算法解题套路框架 twoSum问题的核心思想  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 78.子集 46.全排列 77.组合 ———– 今天就来聊三道考察频率高，而且容易让人搞混的算法问题，分别是求子集（subset），求排列（permutation），求组合（combination）。 这">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/高频面试系列/子集排列组合.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.876Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="回溯算法团灭子集、排列、组合问题"><a href="#回溯算法团灭子集、排列、组合问题" class="headerlink" title="回溯算法团灭子集、排列、组合问题"></a>回溯算法团灭子集、排列、组合问题</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/高频面试系列/子集排列组合.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">回溯算法解题套路框架</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">twoSum问题的核心思想</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/subsets" target="_blank" rel="noopener">78.子集</a></p>
+<p><a href="https://leetcode-cn.com/problems/permutations" target="_blank" rel="noopener">46.全排列</a></p>
+<p><a href="https://leetcode-cn.com/problems/combinations" target="_blank" rel="noopener">77.组合</a></p>
+<p><strong>———–</strong></p>
+<p>今天就来聊三道考察频率高，而且容易让人搞混的算法问题，分别是求子集（subset），求排列（permutation），求组合（combination）。</p>
+<p>这几个问题都可以用回溯算法模板解决，同时子集问题还可以用数学归纳思想解决。读者可以记住这几个问题的回溯套路，就不怕搞不清了。</p>
+<h3 id="一、子集"><a href="#一、子集" class="headerlink" title="一、子集"></a>一、子集</h3><p>问题很简单，输入一个<strong>不包含重复数字</strong>的数组，要求算法输出这些数字的所有子集。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; subsets(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums);</span><br></pre></td></tr></table></figure>
+
+<p>比如输入 <code>nums = [1,2,3]</code>，你的算法应输出 8 个子集，包含空集和本身，顺序可以不同：</p>
+<p>[ [],[1],[2],[3],[1,3],[2,3],[1,2],[1,2,3] ]</p>
+<p><strong>第一个解法是利用数学归纳的思想</strong>：假设我现在知道了规模更小的子问题的结果，如何推导出当前问题的结果呢？</p>
+<p>具体来说就是，现在让你求 <code>[1,2,3]</code> 的子集，如果你知道了 <code>[1,2]</code> 的子集，是否可以推导出 <code>[1,2,3]</code> 的子集呢？先把  <code>[1,2]</code> 的子集写出来瞅瞅：</p>
+<p>[ [],[1],[2],[1,2] ]</p>
+<p>你会发现这样一个规律：</p>
+<p>subset(<code>[1,2,3]</code>) - subset(<code>[1,2]</code>)</p>
+<p>= [3],[1,3],[2,3],[1,2,3]</p>
+<p>而这个结果，就是把 sebset(<code>[1,2]</code>) 的结果中每个集合再添加上 3。</p>
+<p>换句话说，如果 <code>A = subset([1,2])</code> ，那么：</p>
+<p>subset(<code>[1,2,3]</code>)</p>
+<p>= A + [A[i].add(3) for i = 1..len(A)]</p>
+<p>这就是一个典型的递归结构嘛，<code>[1,2,3]</code> 的子集可以由 <code>[1,2]</code> 追加得出，<code>[1,2]</code> 的子集可以由 <code>[1]</code> 追加得出，base case 显然就是当输入集合为空集时，输出子集也就是一个空集。</p>
+<p>翻译成代码就很容易理解了：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; subsets(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums) &#123;</span><br><span class="line">    <span class="comment">// base case，返回一个空集</span></span><br><span class="line">    <span class="keyword">if</span> (nums.empty()) <span class="keyword">return</span> &#123;&#123;&#125;&#125;;</span><br><span class="line">    <span class="comment">// 把最后一个元素拿出来</span></span><br><span class="line">    <span class="keyword">int</span> n = nums.back();</span><br><span class="line">    nums.pop_back();</span><br><span class="line">    <span class="comment">// 先递归算出前面元素的所有子集</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res = subsets(nums);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> size = res.size();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">        <span class="comment">// 然后在之前的结果之上追加</span></span><br><span class="line">        res.push_back(res[i]);</span><br><span class="line">        res.back().push_back(n);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>这个问题的时间复杂度计算比较容易坑人</strong>。我们之前说的计算递归算法时间复杂度的方法，是找到递归深度，然后乘以每次递归中迭代的次数。对于这个问题，递归深度显然是 N，但我们发现每次递归 for 循环的迭代次数取决于 <code>res</code> 的长度，并不是固定的。</p>
+<p>根据刚才的思路，<code>res</code> 的长度应该是每次递归都翻倍，所以说总的迭代次数应该是 2^N。或者不用这么麻烦，你想想一个大小为 N 的集合的子集总共有几个？2^N 个对吧，所以说至少要对 <code>res</code> 添加 2^N 次元素。</p>
+<p>那么算法的时间复杂度就是 O(2^N) 吗？还是不对，2^N 个子集是 <code>push_back</code> 添加进 <code>res</code> 的，所以要考虑 <code>push_back</code> 这个操作的效率：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">    res.push_back(res[i]); <span class="comment">// O(N)</span></span><br><span class="line">    res.back().push_back(n); <span class="comment">// O(1)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因为 <code>res[i]</code> 也是一个数组呀，<code>push_back</code> 是把 <code>res[i]</code> copy 一份然后添加到数组的最后，所以一次操作的时间是 O(N)。</p>
+<p>综上，总的时间复杂度就是 O(N*2^N)，还是比较耗时的。</p>
+<p>空间复杂度的话，如果不计算储存返回结果所用的空间的，只需要 O(N) 的递归堆栈空间。如果计算 <code>res</code> 所需的空间，应该是 O(N*2^N)。</p>
+<p><strong>第二种通用方法就是回溯算法</strong>。旧文「回溯算法详解」写过回溯算法的模板：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">result = []</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">backtrack</span><span class="params">(路径, 选择列表)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> 满足结束条件:</span><br><span class="line">        result.add(路径)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="keyword">for</span> 选择 <span class="keyword">in</span> 选择列表:</span><br><span class="line">        做选择</span><br><span class="line">        backtrack(路径, 选择列表)</span><br><span class="line">        撤销选择</span><br></pre></td></tr></table></figure>
+
+<p>只要改造回溯算法的模板就行了：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; res;</span><br><span class="line"></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; subsets(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums) &#123;</span><br><span class="line">    <span class="comment">// 记录走过的路径</span></span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; track;</span><br><span class="line">    backtrack(nums, <span class="number">0</span>, track);</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">backtrack</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> start, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; track)</span> </span>&#123;</span><br><span class="line">    res.push_back(track);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = start; i &lt; nums.size(); i++) &#123;</span><br><span class="line">        <span class="comment">// 做选择</span></span><br><span class="line">        track.push_back(nums[i]);</span><br><span class="line">        <span class="comment">// 回溯</span></span><br><span class="line">        backtrack(nums, i + <span class="number">1</span>, track);</span><br><span class="line">        <span class="comment">// 撤销选择</span></span><br><span class="line">        track.pop_back();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看见，对 <code>res</code> 更新的位置处在前序遍历，也就是说，<strong><code>res</code> 就是树上的所有节点</strong>：</p>
+<p><img src="/fucking-algorithm/高频面试系列/子集排列组合.htm/pictures/%E5%AD%90%E9%9B%86/1.jpg" alt></p>
+<h3 id="二、组合"><a href="#二、组合" class="headerlink" title="二、组合"></a>二、组合</h3><p>输入两个数字 <code>n, k</code>，算法输出 <code>[1..n]</code> 中 k 个数字的所有组合。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; combine(<span class="keyword">int</span> n, <span class="keyword">int</span> k);</span><br></pre></td></tr></table></figure>
+
+<p>比如输入 <code>n = 4, k = 2</code>，输出如下结果，顺序无所谓，但是不能包含重复（按照组合的定义，<code>[1,2]</code> 和 <code>[2,1]</code> 也算重复）：</p>
+<p>[<br>  [1,2],<br>  [1,3],<br>  [1,4],<br>  [2,3],<br>  [2,4],<br>  [3,4]<br>]</p>
+<p>这也是典型的回溯算法，<code>k</code> 限制了树的高度，<code>n</code> 限制了树的宽度，继续套我们以前讲过的回溯算法模板框架就行了：</p>
+<p><img src="/fucking-algorithm/高频面试系列/子集排列组合.htm/pictures/%E5%AD%90%E9%9B%86/2.jpg" alt></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;res;</span><br><span class="line"></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; combine(<span class="keyword">int</span> n, <span class="keyword">int</span> k) &#123;</span><br><span class="line">    <span class="keyword">if</span> (k &lt;= <span class="number">0</span> || n &lt;= <span class="number">0</span>) <span class="keyword">return</span> res;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; track;</span><br><span class="line">    backtrack(n, k, <span class="number">1</span>, track);</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">backtrack</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span> k, <span class="keyword">int</span> start, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; track)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 到达树的底部</span></span><br><span class="line">    <span class="keyword">if</span> (k == track.size()) &#123;</span><br><span class="line">        res.push_back(track);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 注意 i 从 start 开始递增</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = start; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="comment">// 做选择</span></span><br><span class="line">        track.push_back(i);</span><br><span class="line">        backtrack(n, k, i + <span class="number">1</span>, track);</span><br><span class="line">        <span class="comment">// 撤销选择</span></span><br><span class="line">        track.pop_back();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>backtrack</code> 函数和计算子集的差不多，区别在于，更新 <code>res</code> 的时机是树到达底端时。</p>
+<h3 id="三、排列"><a href="#三、排列" class="headerlink" title="三、排列"></a>三、排列</h3><p>输入一个<strong>不包含重复数字</strong>的数组 <code>nums</code>，返回这些数字的全部排列。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; permute(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums);</span><br></pre></td></tr></table></figure>
+
+<p>比如说输入数组 <code>[1,2,3]</code>，输出结果应该如下，顺序无所谓，不能有重复：</p>
+<p>[<br>  [1,2,3],<br>  [1,3,2],<br>  [2,1,3],<br>  [2,3,1],<br>  [3,1,2],<br>  [3,2,1]<br>]</p>
+<p>「回溯算法详解」中就是拿这个问题来解释回溯模板的。这里又列出这个问题，是将「排列」和「组合」这两个回溯算法的代码拿出来对比。</p>
+<p>首先画出回溯树来看一看：</p>
+<p><img src="/fucking-algorithm/高频面试系列/子集排列组合.htm/pictures/%E5%AD%90%E9%9B%86/3.jpg" alt></p>
+<p>我们当时使用 Java 代码写的解法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">List&lt;List&lt;Integer&gt;&gt; res = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 主函数，输入一组不重复的数字，返回它们的全排列 */</span></span><br><span class="line">List&lt;List&lt;Integer&gt;&gt; permute(<span class="keyword">int</span>[] nums) &#123;</span><br><span class="line">    <span class="comment">// 记录「路径」</span></span><br><span class="line">    LinkedList&lt;Integer&gt; track = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">    backtrack(nums, track);</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">backtrack</span><span class="params">(<span class="keyword">int</span>[] nums, LinkedList&lt;Integer&gt; track)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 触发结束条件</span></span><br><span class="line">    <span class="keyword">if</span> (track.size() == nums.length) &#123;</span><br><span class="line">        res.add(<span class="keyword">new</span> LinkedList(track));</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">        <span class="comment">// 排除不合法的选择</span></span><br><span class="line">        <span class="keyword">if</span> (track.contains(nums[i]))</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        <span class="comment">// 做选择</span></span><br><span class="line">        track.add(nums[i]);</span><br><span class="line">        <span class="comment">// 进入下一层决策树</span></span><br><span class="line">        backtrack(nums, track);</span><br><span class="line">        <span class="comment">// 取消选择</span></span><br><span class="line">        track.removeLast();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>回溯模板依然没有变，但是根据排列问题和组合问题画出的树来看，排列问题的树比较对称，而组合问题的树越靠右节点越少。</p>
+<p>在代码中的体现就是，排列问题每次通过 <code>contains</code> 方法来排除在 <code>track</code> 中已经选择过的数字；而组合问题通过传入一个 <code>start</code> 参数，来排除 <code>start</code> 索引之前的数字。</p>
+<p><strong>以上，就是排列组合和子集三个问题的解法，总结一下</strong>：</p>
+<p>子集问题可以利用数学归纳思想，假设已知一个规模较小的问题的结果，思考如何推导出原问题的结果。也可以用回溯算法，要用 <code>start</code> 参数排除已选择的数字。</p>
+<p>组合问题利用的是回溯思想，结果可以表示成树结构，我们只要套用回溯算法模板即可，关键点在于要用一个 <code>start</code> 排除已经选择过的数字。</p>
+<p>排列问题是回溯思想，也可以表示成树结构套用算法模板，关键点在于使用 <code>contains</code> 方法排除已经选择的数字，前文有详细分析，这里主要是和组合问题作对比。</p>
+<p>记住这几种树的形状，就足以应对大部分回溯算法问题了，无非就是 <code>start</code> 或者 <code>contains</code> 剪枝，也没啥别的技巧了。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/高频面试系列/子集排列组合.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/高频面试系列/子集排列组合.html" data-id="cklrh5zad002dro9bx2yz1u3o" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#回溯算法团灭子集、排列、组合问题"><span class="toc-number">1.</span> <span class="toc-text">回溯算法团灭子集、排列、组合问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、子集"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、子集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、组合"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、组合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、排列"><span class="toc-number">1.0.3.</span> <span class="toc-text">三、排列</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

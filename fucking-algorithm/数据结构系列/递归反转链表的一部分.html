@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="递归反转链表的一部分        相关推荐：  特殊数据结构：单调队列 回溯算法最佳实践：括号生成  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 92.反转链表II ———– 反转单链表的迭代实现不是一个困难的事情，但是递归实现就有点难度了，如果再加一点难度，让你仅仅反转单链表中的一部分，你是否能够递归实现呢？ 本文就来由浅入深，step by step 地">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/数据结构系列/递归反转链表的一部分.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="递归反转链表的一部分        相关推荐：  特殊数据结构：单调队列 回溯算法最佳实践：括号生成  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 92.反转链表II ———– 反转单链表的迭代实现不是一个困难的事情，但是递归实现就有点难度了，如果再加一点难度，让你仅仅反转单链表中的一部分，你是否能够递归实现呢？ 本文就来由浅入深，step by step 地">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/递归反转链表的一部分.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/递归反转链表的一部分.htm/pictures/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/title.png">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/递归反转链表的一部分.htm/pictures/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/1.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/递归反转链表的一部分.htm/pictures/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/2.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/递归反转链表的一部分.htm/pictures/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/3.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/递归反转链表的一部分.htm/pictures/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/4.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/递归反转链表的一部分.htm/pictures/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/5.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/递归反转链表的一部分.htm/pictures/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/6.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/递归反转链表的一部分.htm/pictures/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/7.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/递归反转链表的一部分.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.863Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="递归反转链表的一部分        相关推荐：  特殊数据结构：单调队列 回溯算法最佳实践：括号生成  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 92.反转链表II ———– 反转单链表的迭代实现不是一个困难的事情，但是递归实现就有点难度了，如果再加一点难度，让你仅仅反转单链表中的一部分，你是否能够递归实现呢？ 本文就来由浅入深，step by step 地">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/数据结构系列/递归反转链表的一部分.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.863Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="递归反转链表的一部分"><a href="#递归反转链表的一部分" class="headerlink" title="递归反转链表的一部分"></a>递归反转链表的一部分</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/数据结构系列/递归反转链表的一部分.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">特殊数据结构：单调队列</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">回溯算法最佳实践：括号生成</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/reverse-linked-list-ii/" target="_blank" rel="noopener">92.反转链表II</a></p>
+<p><strong>———–</strong></p>
+<p>反转单链表的迭代实现不是一个困难的事情，但是递归实现就有点难度了，如果再加一点难度，让你仅仅反转单链表中的一部分，你是否能<strong>够递归实现</strong>呢？</p>
+<p>本文就来由浅入深，step by step 地解决这个问题。如果你还不会递归地反转单链表也没关系，<strong>本文会从递归反转整个单链表开始拓展</strong>，只要你明白单链表的结构，相信你能够有所收获。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 单链表节点的结构</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ListNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> val;</span><br><span class="line">    ListNode next;</span><br><span class="line">    ListNode(<span class="keyword">int</span> x) &#123; val = x; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>什么叫反转单链表的一部分呢，就是给你一个索引区间，让你把单链表中这部分元素反转，其他部分不变：</p>
+<p><img src="/fucking-algorithm/数据结构系列/递归反转链表的一部分.htm/pictures/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/title.png" alt></p>
+<p><strong>注意这里的索引是从 1 开始的</strong>。迭代的思路大概是：先用一个 for 循环找到第 <code>m</code> 个位置，然后再用一个 for 循环将 <code>m</code> 和 <code>n</code> 之间的元素反转。但是我们的递归解法不用一个 for 循环，纯递归实现反转。</p>
+<p>迭代实现思路看起来虽然简单，但是细节问题很多的，反而不容易写对。相反，递归实现就很简洁优美，下面就由浅入深，先从反转整个单链表说起。</p>
+<h3 id="一、递归反转整个链表"><a href="#一、递归反转整个链表" class="headerlink" title="一、递归反转整个链表"></a>一、递归反转整个链表</h3><p>这个算法可能很多读者都听说过，这里详细介绍一下，先直接看实现代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ListNode <span class="title">reverse</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (head.next == <span class="keyword">null</span>) <span class="keyword">return</span> head;</span><br><span class="line">    ListNode last = reverse(head.next);</span><br><span class="line">    head.next.next = head;</span><br><span class="line">    head.next = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">return</span> last;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>看起来是不是感觉不知所云，完全不能理解这样为什么能够反转链表？这就对了，这个算法常常拿来显示递归的巧妙和优美，我们下面来详细解释一下这段代码。</p>
+<p><strong>对于递归算法，最重要的就是明确递归函数的定义</strong>。具体来说，我们的 <code>reverse</code> 函数定义是这样的：</p>
+<p><strong>输入一个节点 <code>head</code>，将「以 <code>head</code> 为起点」的链表反转，并返回反转之后的头结点</strong>。</p>
+<p>明白了函数的定义，在来看这个问题。比如说我们想反转这个链表：</p>
+<p><img src="/fucking-algorithm/数据结构系列/递归反转链表的一部分.htm/pictures/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/1.jpg" alt></p>
+<p>那么输入 <code>reverse(head)</code> 后，会在这里进行递归：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ListNode last = reverse(head.next);</span><br></pre></td></tr></table></figure>
+
+<p>不要跳进递归（你的脑袋能压几个栈呀？），而是要根据刚才的函数定义，来弄清楚这段代码会产生什么结果：</p>
+<p><img src="/fucking-algorithm/数据结构系列/递归反转链表的一部分.htm/pictures/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/2.jpg" alt></p>
+<p>这个 <code>reverse(head.next)</code> 执行完成后，整个链表就成了这样：</p>
+<p><img src="/fucking-algorithm/数据结构系列/递归反转链表的一部分.htm/pictures/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/3.jpg" alt></p>
+<p>并且根据函数定义，<code>reverse</code> 函数会返回反转之后的头结点，我们用变量 <code>last</code> 接收了。</p>
+<p>现在再来看下面的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">head.next.next = head;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/fucking-algorithm/数据结构系列/递归反转链表的一部分.htm/pictures/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/4.jpg" alt></p>
+<p>接下来：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">head.next = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">return</span> last;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/fucking-algorithm/数据结构系列/递归反转链表的一部分.htm/pictures/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/5.jpg" alt></p>
+<p>神不神奇，这样整个链表就反转过来了！递归代码就是这么简洁优雅，不过其中有两个地方需要注意：</p>
+<p>1、递归函数要有 base case，也就是这句：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (head.next == <span class="keyword">null</span>) <span class="keyword">return</span> head;</span><br></pre></td></tr></table></figure>
+
+<p>意思是如果链表只有一个节点的时候反转也是它自己，直接返回即可。</p>
+<p>2、当链表递归反转之后，新的头结点是 <code>last</code>，而之前的 <code>head</code> 变成了最后一个节点，别忘了链表的末尾要指向 null：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">head.next = <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
+
+<p>理解了这两点后，我们就可以进一步深入了，接下来的问题其实都是在这个算法上的扩展。</p>
+<h3 id="二、反转链表前-N-个节点"><a href="#二、反转链表前-N-个节点" class="headerlink" title="二、反转链表前 N 个节点"></a>二、反转链表前 N 个节点</h3><p>这次我们实现一个这样的函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将链表的前 n 个节点反转（n &lt;= 链表长度）</span></span><br><span class="line"><span class="function">ListNode <span class="title">reverseN</span><span class="params">(ListNode head, <span class="keyword">int</span> n)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>比如说对于下图链表，执行 <code>reverseN(head, 3)</code>：</p>
+<p><img src="/fucking-algorithm/数据结构系列/递归反转链表的一部分.htm/pictures/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/6.jpg" alt></p>
+<p>解决思路和反转整个链表差不多，只要稍加修改即可：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">ListNode successor = <span class="keyword">null</span>; <span class="comment">// 后驱节点</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 反转以 head 为起点的 n 个节点，返回新的头结点</span></span><br><span class="line"><span class="function">ListNode <span class="title">reverseN</span><span class="params">(ListNode head, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n == <span class="number">1</span>) &#123; </span><br><span class="line">        <span class="comment">// 记录第 n + 1 个节点</span></span><br><span class="line">        successor = head.next;</span><br><span class="line">        <span class="keyword">return</span> head;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 以 head.next 为起点，需要反转前 n - 1 个节点</span></span><br><span class="line">    ListNode last = reverseN(head.next, n - <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    head.next.next = head;</span><br><span class="line">    <span class="comment">// 让反转之后的 head 节点和后面的节点连起来</span></span><br><span class="line">    head.next = successor;</span><br><span class="line">    <span class="keyword">return</span> last;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>具体的区别：</p>
+<p>1、base case 变为 <code>n == 1</code>，反转一个元素，就是它本身，同时<strong>要记录后驱节点</strong>。</p>
+<p>2、刚才我们直接把 <code>head.next</code> 设置为 null，因为整个链表反转后原来的 <code>head</code> 变成了整个链表的最后一个节点。但现在 <code>head</code> 节点在递归反转之后不一定是最后一个节点了，所以要记录后驱 <code>successor</code>（第 n + 1 个节点），反转之后将 <code>head</code> 连接上。</p>
+<p><img src="/fucking-algorithm/数据结构系列/递归反转链表的一部分.htm/pictures/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/7.jpg" alt></p>
+<p>OK，如果这个函数你也能看懂，就离实现「反转一部分链表」不远了。</p>
+<h3 id="三、反转链表的一部分"><a href="#三、反转链表的一部分" class="headerlink" title="三、反转链表的一部分"></a>三、反转链表的一部分</h3><p>现在解决我们最开始提出的问题，给一个索引区间 <code>[m,n]</code>（索引从 1 开始），仅仅反转区间中的链表元素。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ListNode <span class="title">reverseBetween</span><span class="params">(ListNode head, <span class="keyword">int</span> m, <span class="keyword">int</span> n)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>首先，如果 <code>m == 1</code>，就相当于反转链表开头的 <code>n</code> 个元素嘛，也就是我们刚才实现的功能：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ListNode <span class="title">reverseBetween</span><span class="params">(ListNode head, <span class="keyword">int</span> m, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// base case</span></span><br><span class="line">    <span class="keyword">if</span> (m == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">// 相当于反转前 n 个元素</span></span><br><span class="line">        <span class="keyword">return</span> reverseN(head, n);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果 <code>m != 1</code> 怎么办？如果我们把 <code>head</code> 的索引视为 1，那么我们是想从第 <code>m</code> 个元素开始反转对吧；如果把 <code>head.next</code> 的索引视为 1 呢？那么相对于 <code>head.next</code>，反转的区间应该是从第 <code>m - 1</code> 个元素开始的；那么对于 <code>head.next.next</code> 呢……</p>
+<p>区别于迭代思想，这就是递归思想，所以我们可以完成代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ListNode <span class="title">reverseBetween</span><span class="params">(ListNode head, <span class="keyword">int</span> m, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// base case</span></span><br><span class="line">    <span class="keyword">if</span> (m == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> reverseN(head, n);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 前进到反转的起点触发 base case</span></span><br><span class="line">    head.next = reverseBetween(head.next, m - <span class="number">1</span>, n - <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> head;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>至此，我们的最终大 BOSS 就被解决了。</p>
+<h3 id="四、最后总结"><a href="#四、最后总结" class="headerlink" title="四、最后总结"></a>四、最后总结</h3><p>递归的思想相对迭代思想，稍微有点难以理解，处理的技巧是：不要跳进递归，而是利用明确的定义来实现算法逻辑。</p>
+<p>处理看起来比较困难的问题，可以尝试化整为零，把一些简单的解法进行修改，解决困难的问题。</p>
+<p>值得一提的是，递归操作链表并不高效。和迭代解法相比，虽然时间复杂度都是 O(N)，但是迭代解法的空间复杂度是 O(1)，而递归解法需要堆栈，空间复杂度是 O(N)。所以递归操作链表可以作为对递归算法的练习或者拿去和小伙伴装逼，但是考虑效率的话还是使用迭代算法更好。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/数据结构系列/递归反转链表的一部分.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/数据结构系列/递归反转链表的一部分.html" data-id="cklrh5za80022ro9bzbmj0eh7" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#递归反转链表的一部分"><span class="toc-number">1.</span> <span class="toc-text">递归反转链表的一部分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、递归反转整个链表"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、递归反转整个链表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、反转链表前-N-个节点"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、反转链表前 N 个节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、反转链表的一部分"><span class="toc-number">1.0.3.</span> <span class="toc-text">三、反转链表的一部分</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#四、最后总结"><span class="toc-number">1.0.4.</span> <span class="toc-text">四、最后总结</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

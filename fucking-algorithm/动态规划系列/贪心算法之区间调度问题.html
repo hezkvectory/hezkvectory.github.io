@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="贪心算法之区间调度问题        相关推荐：  如何判定括号合法性 一文解决三道区间问题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 435. 无重叠区间 452.用最少数量的箭引爆气球 ———– 什么是贪心算法呢？贪心算法可以认为是动态规划算法的一个特例，相比动态规划，使用贪心算法需要满足更多的条件（贪心选择性质），但是效率比动态规划要高。 比如说一个">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/动态规划系列/贪心算法之区间调度问题.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="贪心算法之区间调度问题        相关推荐：  如何判定括号合法性 一文解决三道区间问题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 435. 无重叠区间 452.用最少数量的箭引爆气球 ———– 什么是贪心算法呢？贪心算法可以认为是动态规划算法的一个特例，相比动态规划，使用贪心算法需要满足更多的条件（贪心选择性质），但是效率比动态规划要高。 比如说一个">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/贪心算法之区间调度问题.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/贪心算法之区间调度问题.htm/pictures/interval/1.gif">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/贪心算法之区间调度问题.htm/pictures/interval/2.jpg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/贪心算法之区间调度问题.htm/pictures/interval/title1.png">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/贪心算法之区间调度问题.htm/pictures/interval/title2.png">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/贪心算法之区间调度问题.htm/pictures/interval/3.jpg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/贪心算法之区间调度问题.htm/pictures/interval/4.jpg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/贪心算法之区间调度问题.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.857Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="贪心算法之区间调度问题        相关推荐：  如何判定括号合法性 一文解决三道区间问题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 435. 无重叠区间 452.用最少数量的箭引爆气球 ———– 什么是贪心算法呢？贪心算法可以认为是动态规划算法的一个特例，相比动态规划，使用贪心算法需要满足更多的条件（贪心选择性质），但是效率比动态规划要高。 比如说一个">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/动态规划系列/贪心算法之区间调度问题.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.857Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="贪心算法之区间调度问题"><a href="#贪心算法之区间调度问题" class="headerlink" title="贪心算法之区间调度问题"></a>贪心算法之区间调度问题</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/动态规划系列/贪心算法之区间调度问题.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">如何判定括号合法性</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">一文解决三道区间问题</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/non-overlapping-intervals/" target="_blank" rel="noopener">435. 无重叠区间</a></p>
+<p><a href="https://leetcode-cn.com/problems/minimum-number-of-arrows-to-burst-balloons" target="_blank" rel="noopener">452.用最少数量的箭引爆气球</a></p>
+<p><strong>———–</strong></p>
+<p>什么是贪心算法呢？贪心算法可以认为是动态规划算法的一个特例，相比动态规划，使用贪心算法需要满足更多的条件（贪心选择性质），但是效率比动态规划要高。</p>
+<p>比如说一个算法问题使用暴力解法需要指数级时间，如果能使用动态规划消除重叠子问题，就可以降到多项式级别的时间，如果满足贪心选择性质，那么可以进一步降低时间复杂度，达到线性级别的。</p>
+<p>什么是贪心选择性质呢，简单说就是：每一步都做出一个局部最优的选择，最终的结果就是全局最优。注意哦，这是一种特殊性质，其实只有一部分问题拥有这个性质。</p>
+<p>比如你面前放着 100 张人民币，你只能拿十张，怎么才能拿最多的面额？显然每次选择剩下钞票中面值最大的一张，最后你的选择一定是最优的。</p>
+<p>然而，大部分问题明显不具有贪心选择性质。比如打斗地主，对手出对儿三，按照贪心策略，你应该出尽可能小的牌刚好压制住对方，但现实情况我们甚至可能会出王炸。这种情况就不能用贪心算法，而得使用动态规划解决，参见前文「动态规划解决博弈问题」。</p>
+<h3 id="一、问题概述"><a href="#一、问题概述" class="headerlink" title="一、问题概述"></a>一、问题概述</h3><p>言归正传，本文解决一个很经典的贪心算法问题 Interval Scheduling（区间调度问题）。给你很多形如 <code>[start, end]</code> 的闭区间，请你设计一个算法，<strong>算出这些区间中最多有几个互不相交的区间</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">intervalSchedule</span><span class="params">(<span class="keyword">int</span>[][] intvs)</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>举个例子，<code>intvs = [[1,3], [2,4], [3,6]]</code>，这些区间最多有 2 个区间互不相交，即 <code>[[1,3], [3,6]]</code>，你的算法应该返回 2。注意边界相同并不算相交。</p>
+<p>这个问题在生活中的应用广泛，比如你今天有好几个活动，每个活动都可以用区间 <code>[start, end]</code> 表示开始和结束的时间，请问你今天<strong>最多能参加几个活动呢？</strong>显然你一个人不能同时参加两个活动，所以说这个问题就是求这些时间区间的最大不相交子集。</p>
+<h3 id="二、贪心解法"><a href="#二、贪心解法" class="headerlink" title="二、贪心解法"></a>二、贪心解法</h3><p>这个问题有许多看起来不错的贪心思路，却都不能得到正确答案。比如说：</p>
+<p>也许我们可以每次选择可选区间中开始最早的那个？但是可能存在某些区间开始很早，但是很长，使得我们错误地错过了一些短的区间。或者我们每次选择可选区间中最短的那个？或者选择出现冲突最少的那个区间？这些方案都能很容易举出反例，不是正确的方案。</p>
+<p>正确的思路其实很简单，可以分为以下三步：</p>
+<ol>
+<li>从区间集合 intvs 中选择一个区间 x，这个 x 是在当前所有区间中<strong>结束最早的</strong>（end 最小）。</li>
+<li>把所有与 x 区间相交的区间从区间集合 intvs 中删除。</li>
+<li>重复步骤 1 和 2，直到 intvs 为空为止。之前选出的那些 x 就是最大不相交子集。</li>
+</ol>
+<p>把这个思路实现成算法的话，可以按每个区间的 <code>end</code> 数值升序排序，因为这样处理之后实现步骤 1 和步骤 2 都方便很多:</p>
+<p><img src="/fucking-algorithm/动态规划系列/贪心算法之区间调度问题.htm/pictures/interval/1.gif" alt="1"></p>
+<p>现在来实现算法，对于步骤 1，由于我们预先按照 <code>end</code> 排了序，所以选择 x 是很容易的。关键在于，如何去除与 x 相交的区间，选择下一轮循环的 x 呢？</p>
+<p><strong>由于我们事先排了序</strong>，不难发现所有与 x 相交的区间必然会与 x 的 <code>end</code> 相交；如果一个区间不想与 x 的 <code>end</code> 相交，它的 <code>start</code> 必须要大于（或等于）x 的 <code>end</code>：</p>
+<p><img src="/fucking-algorithm/动态规划系列/贪心算法之区间调度问题.htm/pictures/interval/2.jpg" alt="2"></p>
+<p>看下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">intervalSchedule</span><span class="params">(<span class="keyword">int</span>[][] intvs)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (intvs.length == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 按 end 升序排序</span></span><br><span class="line">    Arrays.sort(intvs, <span class="keyword">new</span> Comparator&lt;<span class="keyword">int</span>[]&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span>[] b)</span> </span>&#123;</span><br><span class="line">            <span class="comment">// 这里不能使用 a[1] - b[1]，要注意溢出问题</span></span><br><span class="line">            <span class="keyword">if</span> (a[<span class="number">1</span>] &lt; b[<span class="number">1</span>])</span><br><span class="line">                <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (a[<span class="number">1</span>] &gt; b[<span class="number">1</span>])</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="comment">// 至少有一个区间不相交</span></span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 排序后，第一个区间就是 x</span></span><br><span class="line">    <span class="keyword">int</span> x_end = intvs[<span class="number">0</span>][<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span>[] interval : intvs) &#123;</span><br><span class="line">        <span class="keyword">int</span> start = interval[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">if</span> (start &gt;= x_end) &#123;</span><br><span class="line">            <span class="comment">// 找到下一个选择的区间了</span></span><br><span class="line">            count++;</span><br><span class="line">            x_end = interval[<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="三、应用举例"><a href="#三、应用举例" class="headerlink" title="三、应用举例"></a>三、应用举例</h3><p>下面举例几道 LeetCode 题目应用一下区间调度算法。</p>
+<p>第 435 题，无重叠区间：</p>
+<p><img src="/fucking-algorithm/动态规划系列/贪心算法之区间调度问题.htm/pictures/interval/title1.png" alt="title1"></p>
+<p>我们已经会求最多有几个区间不会重叠了，那么剩下的不就是至少需要去除的区间吗？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">eraseOverlapIntervals</span><span class="params">(<span class="keyword">int</span>[][] intervals)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = intervals.length;</span><br><span class="line">    <span class="keyword">return</span> n - intervalSchedule(intervals);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第 452 题，用最少的箭头射爆气球：</p>
+<p><img src="/fucking-algorithm/动态规划系列/贪心算法之区间调度问题.htm/pictures/interval/title2.png" alt="title2"></p>
+<p>其实稍微思考一下，这个问题和区间调度算法一模一样！如果最多有 <code>n</code> 个不重叠的区间，那么就至少需要 <code>n</code> 个箭头穿透所有区间：</p>
+<p><img src="/fucking-algorithm/动态规划系列/贪心算法之区间调度问题.htm/pictures/interval/3.jpg" alt="3"></p>
+<p>只是有一点不一样，在 <code>intervalSchedule</code> 算法中，如果两个区间的边界触碰，不算重叠；而按照这道题目的描述，箭头如果碰到气球的边界气球也会爆炸，所以说相当于区间的边界触碰也算重叠：</p>
+<p><img src="/fucking-algorithm/动态规划系列/贪心算法之区间调度问题.htm/pictures/interval/4.jpg" alt="4"></p>
+<p>所以只要将之前的算法稍作修改，就是这道题目的答案：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">findMinArrowShots</span><span class="params">(<span class="keyword">int</span>[][] intvs)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span>[] interval : intvs) &#123;</span><br><span class="line">        <span class="keyword">int</span> start = interval[<span class="number">0</span>];</span><br><span class="line">        <span class="comment">// 把 &gt;= 改成 &gt; 就行了</span></span><br><span class="line">        <span class="keyword">if</span> (start &gt; x_end) &#123;</span><br><span class="line">            count++;</span><br><span class="line">            x_end = interval[<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/动态规划系列/贪心算法之区间调度问题.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/动态规划系列/贪心算法之区间调度问题.html" data-id="cklrh5za4001rro9bcnpvti0w" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#贪心算法之区间调度问题"><span class="toc-number">1.</span> <span class="toc-text">贪心算法之区间调度问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、问题概述"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、问题概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、贪心解法"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、贪心解法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、应用举例"><span class="toc-number">1.0.3.</span> <span class="toc-text">三、应用举例</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

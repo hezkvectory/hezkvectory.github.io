@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="烧饼排序        相关推荐：  手把手带你刷二叉树（第三期） Union-Find算法应用  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 969.煎饼排序 ———– 烧饼排序是个很有意思的实际问题：假设盘子上有 n 块面积大小不一的烧饼，你如何用一把锅铲进行若干次翻转，让这些烧饼的大小有序（小的在上，大的在下）？  设想一下用锅铲翻转一堆烧饼的情景，其实">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/算法思维系列/烧饼排序.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="烧饼排序        相关推荐：  手把手带你刷二叉树（第三期） Union-Find算法应用  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 969.煎饼排序 ———– 烧饼排序是个很有意思的实际问题：假设盘子上有 n 块面积大小不一的烧饼，你如何用一把锅铲进行若干次翻转，让这些烧饼的大小有序（小的在上，大的在下）？  设想一下用锅铲翻转一堆烧饼的情景，其实">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/烧饼排序.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/烧饼排序.htm/pictures/pancakeSort/1.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/烧饼排序.htm/pictures/pancakeSort/2.png">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/烧饼排序.htm/pictures/pancakeSort/title.png">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/烧饼排序.htm/pictures/pancakeSort/3.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/烧饼排序.htm/pictures/pancakeSort/4.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/烧饼排序.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.872Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="烧饼排序        相关推荐：  手把手带你刷二叉树（第三期） Union-Find算法应用  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 969.煎饼排序 ———– 烧饼排序是个很有意思的实际问题：假设盘子上有 n 块面积大小不一的烧饼，你如何用一把锅铲进行若干次翻转，让这些烧饼的大小有序（小的在上，大的在下）？  设想一下用锅铲翻转一堆烧饼的情景，其实">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/算法思维系列/烧饼排序.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.872Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="烧饼排序"><a href="#烧饼排序" class="headerlink" title="烧饼排序"></a>烧饼排序</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/算法思维系列/烧饼排序.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">手把手带你刷二叉树（第三期）</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">Union-Find算法应用</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/pancake-sorting" target="_blank" rel="noopener">969.煎饼排序</a></p>
+<p><strong>———–</strong></p>
+<p>烧饼排序是个很有意思的实际问题：假设盘子上有 <code>n</code> 块<strong>面积大小不一</strong>的烧饼，你如何用一把锅铲进行若干次翻转，让这些烧饼的大小有序（小的在上，大的在下）？</p>
+<p><img src="/fucking-algorithm/算法思维系列/烧饼排序.htm/pictures/pancakeSort/1.jpg" alt></p>
+<p>设想一下用锅铲翻转一堆烧饼的情景，其实是有一点限制的，我们每次只能将最上面的若干块饼子翻转：</p>
+<p><img src="/fucking-algorithm/算法思维系列/烧饼排序.htm/pictures/pancakeSort/2.png" alt></p>
+<p>我们的问题是，<strong>如何使用算法得到一个翻转序列，使得烧饼堆变得有序</strong>？</p>
+<p>首先，需要把这个问题抽象，用数组来表示烧饼堆：</p>
+<p><img src="/fucking-algorithm/算法思维系列/烧饼排序.htm/pictures/pancakeSort/title.png" alt></p>
+<p>如何解决这个问题呢？其实类似上篇文章 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">递归反转链表的一部分</a>，这也是需要<strong>递归思想</strong>的。</p>
+<h3 id="一、思路分析"><a href="#一、思路分析" class="headerlink" title="一、思路分析"></a>一、思路分析</h3><p>为什么说这个问题有递归性质呢？比如说我们需要实现这样一个函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cakes 是一堆烧饼，函数会将前 n 个烧饼排序</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span>[] cakes, <span class="keyword">int</span> n)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>如果我们找到了前 <code>n</code> 个烧饼中最大的那个，然后设法将这个饼子翻转到最底下：</p>
+<p><img src="/fucking-algorithm/算法思维系列/烧饼排序.htm/pictures/pancakeSort/3.jpg" alt></p>
+<p>那么，原问题的规模就可以减小，递归调用 <code>pancakeSort(A, n-1)</code> 即可：</p>
+<p><img src="/fucking-algorithm/算法思维系列/烧饼排序.htm/pictures/pancakeSort/4.jpg" alt></p>
+<p>接下来，对于上面的这 <code>n - 1</code> 块饼，如何排序呢？还是先从中找到最大的一块饼，然后把这块饼放到底下，再递归调用 <code>pancakeSort(A, n-1-1)</code>……</p>
+<p>你看，这就是递归性质，总结一下思路就是：</p>
+<p>1、找到 <code>n</code> 个饼中最大的那个。</p>
+<p>2、把这个最大的饼移到最底下。</p>
+<p>3、递归调用 <code>pancakeSort(A, n - 1)</code>。</p>
+<p>base case：<code>n == 1</code> 时，排序 1 个饼时不需要翻转。</p>
+<p>那么，最后剩下个问题，<strong>如何设法将某块烧饼翻到最后呢</strong>？</p>
+<p>其实很简单，比如第 3 块饼是最大的，我们想把它换到最后，也就是换到第 <code>n</code> 块。可以这样操作：</p>
+<p>1、用锅铲将前 3 块饼翻转一下，这样最大的饼就翻到了最上面。</p>
+<p>2、用锅铲将前 <code>n</code> 块饼全部翻转，这样最大的饼就翻到了第 <code>n</code> 块，也就是最后一块。</p>
+<p>以上两个流程理解之后，基本就可以写出解法了，不过题目要求我们写出具体的反转操作序列，这也很简单，只要在每次翻转烧饼时记录下来就行了。    </p>
+<h3 id="二、代码实现"><a href="#二、代码实现" class="headerlink" title="二、代码实现"></a>二、代码实现</h3><p>只要把上述的思路用代码实现即可，唯一需要注意的是，数组索引从 0 开始，而我们要返回的结果是从 1 开始算的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 记录反转操作序列</span></span><br><span class="line">LinkedList&lt;Integer&gt; res = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="function">List&lt;Integer&gt; <span class="title">pancakeSort</span><span class="params">(<span class="keyword">int</span>[] cakes)</span> </span>&#123;</span><br><span class="line">    sort(cakes, cakes.length);</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span>[] cakes, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// base case</span></span><br><span class="line">    <span class="keyword">if</span> (n == <span class="number">1</span>) <span class="keyword">return</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 寻找最大饼的索引</span></span><br><span class="line">    <span class="keyword">int</span> maxCake = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> maxCakeIndex = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        <span class="keyword">if</span> (cakes[i] &gt; maxCake) &#123;</span><br><span class="line">            maxCakeIndex = i;</span><br><span class="line">            maxCake = cakes[i];</span><br><span class="line">        &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 第一次翻转，将最大饼翻到最上面</span></span><br><span class="line">    reverse(cakes, <span class="number">0</span>, maxCakeIndex);</span><br><span class="line">    res.add(maxCakeIndex + <span class="number">1</span>);</span><br><span class="line">    <span class="comment">// 第二次翻转，将最大饼翻到最下面</span></span><br><span class="line">    reverse(cakes, <span class="number">0</span>, n - <span class="number">1</span>);</span><br><span class="line">    res.add(n);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 递归调用</span></span><br><span class="line">    sort(cakes, n - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">reverse</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (i &lt; j) &#123;</span><br><span class="line">        <span class="keyword">int</span> temp = arr[i];</span><br><span class="line">        arr[i] = arr[j];</span><br><span class="line">        arr[j] = temp;</span><br><span class="line">        i++; j--;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过刚才的详细解释，这段代码应该是很清晰了。</p>
+<p>算法的时间复杂度很容易计算，因为递归调用的次数是 <code>n</code>，每次递归调用都需要一次 for 循环，时间复杂度是 O(n)，所以总的复杂度是 O(n^2)。</p>
+<p><strong>最后，我们可以思考一个问题​</strong>：按照我们这个思路，得出的操作序列长度应该为​ <code>2(n - 1)</code>，因为每次递归都要进行 2 次翻转并记录操作，总共有 <code>n</code> 层递归，但由于 base case 直接返回结果，不进行翻转，所以最终的操作序列长度应该是固定的 <code>2(n - 1)</code>。</p>
+<p>显然，这个结果不是最优的（最短的），比如说一堆煎饼 <code>[3,2,4,1]</code>，我们的算法得到的翻转序列是 <code>[3,4,2,3,1,2]</code>，但是最快捷的翻转方法应该是 <code>[2,3,4]</code>：</p>
+<p>初始状态 ：[3,2,4,1]<br>翻前 2 个：[2,3,4,1]<br>翻前 3 个：[4,3,2,1]<br>翻前 4 个：[1,2,3,4]</p>
+<p>如果要求你的算法计算排序烧饼的<strong>最短</strong>操作序列，你该如何计算呢？或者说，解决这种求最优解法的问题，核心思路什么，一定需要使用什么算法技巧呢？</p>
+<p>不妨分享一下你的思考。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/算法思维系列/烧饼排序.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/算法思维系列/烧饼排序.html" data-id="cklrh5zaq0033ro9bfj4brwjz" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#烧饼排序"><span class="toc-number">1.</span> <span class="toc-text">烧饼排序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、思路分析"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、思路分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、代码实现"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、代码实现</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

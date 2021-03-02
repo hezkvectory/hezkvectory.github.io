@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="动态规划设计：最长递增子序列        相关推荐：  动态规划设计：最大子数组 一文学会递归解题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 300.最长上升子序列 ———– 也许有读者看了前文 动态规划详解，学会了动态规划的套路：找到了问题的「状态」，明确了 dp 数组/函数的含义，定义了 base case；但是不知道如何确定「选择」，也就是不到状态">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="动态规划设计：最长递增子序列        相关推荐：  动态规划设计：最大子数组 一文学会递归解题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 300.最长上升子序列 ———– 也许有读者看了前文 动态规划详解，学会了动态规划的套路：找到了问题的「状态」，明确了 dp 数组/函数的含义，定义了 base case；但是不知道如何确定「选择」，也就是不到状态">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/title.png">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/1.jpeg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/2.jpeg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/gif1.gif">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/3.jpeg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/gif2.gif">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/poker1.jpeg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/poker2.jpeg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/poker3.jpeg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/poker4.jpeg">
+<meta property="og:image" content="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.855Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="动态规划设计：最长递增子序列        相关推荐：  动态规划设计：最大子数组 一文学会递归解题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 300.最长上升子序列 ———– 也许有读者看了前文 动态规划详解，学会了动态规划的套路：找到了问题的「状态」，明确了 dp 数组/函数的含义，定义了 base case；但是不知道如何确定「选择」，也就是不到状态">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.855Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="动态规划设计：最长递增子序列"><a href="#动态规划设计：最长递增子序列" class="headerlink" title="动态规划设计：最长递增子序列"></a>动态规划设计：最长递增子序列</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">动态规划设计：最大子数组</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">一文学会递归解题</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/longest-increasing-subsequence" target="_blank" rel="noopener">300.最长上升子序列</a></p>
+<p><strong>———–</strong></p>
+<p>也许有读者看了前文 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">动态规划详解</a>，学会了动态规划的套路：找到了问题的「状态」，明确了 <code>dp</code> 数组/函数的含义，定义了 base case；但是不知道如何确定「选择」，也就是不到状态转移的关系，依然写不出动态规划解法，怎么办？</p>
+<p>不要担心，动态规划的难点本来就在于寻找正确的状态转移方程，本文就借助经典的「最长递增子序列问题」来讲一讲设计动态规划的通用技巧：<strong>数学归纳思想</strong>。</p>
+<p>最长递增子序列（Longest Increasing Subsequence，简写 LIS）是非常经典的一个算法问题，比较容易想到的是动态规划解法，时间复杂度 O(N^2)，我们借这个问题来由浅入深讲解如何找状态转移方程，如何写出动态规划解法。比较难想到的是利用二分查找，时间复杂度是 O(NlogN)，我们通过一种简单的纸牌游戏来辅助理解这种巧妙的解法。</p>
+<p>先看一下题目，很容易理解：</p>
+<p><img src="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/title.png" alt="title"></p>
+<p>注意「子序列」和「子串」这两个名词的区别，子串一定是连续的，而子序列不一定是连续的。下面先来设计动态规划算法解决这个问题。</p>
+<h3 id="一、动态规划解法"><a href="#一、动态规划解法" class="headerlink" title="一、动态规划解法"></a>一、动态规划解法</h3><p>动态规划的核心设计思想是数学归纳法。</p>
+<p>相信大家对数学归纳法都不陌生，高中就学过，而且思路很简单。比如我们想证明一个数学结论，那么<strong>我们先假设这个结论在 <code>k&lt;n</code> 时成立，然后根据这个假设，想办法推导证明出 <code>k=n</code> 的时候此结论也成立</strong>。如果能够证明出来，那么就说明这个结论对于 <code>k</code> 等于任何数都成立。</p>
+<p>类似的，我们设计动态规划算法，不是需要一个 dp 数组吗？我们可以假设 <code>dp[0...i-1]</code> 都已经被算出来了，然后问自己：怎么通过这些结果算出 <code>dp[i]</code>？</p>
+<p>直接拿最长递增子序列这个问题举例你就明白了。不过，首先要定义清楚 dp 数组的含义，即 <code>dp[i]</code> 的值到底代表着什么？</p>
+<p><strong>我们的定义是这样的：<code>dp[i]</code> 表示以 <code>nums[i]</code> 这个数结尾的最长递增子序列的长度。</strong></p>
+<p>PS：为什么这样定义呢？这是解决子序列问题的一个套路，后文<a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">动态规划之子序列问题解题模板</a> 总结了几种常见套路。你读完本章所有的动态规划问题，就会发现 <code>dp</code> 数组的定义方法也就那几种。</p>
+<p>根据这个定义，我们就可以推出 base case：<code>dp[i]</code> 初始值为 1，因为以 <code>nums[i]</code> 结尾的最长递增子序列起码要包含它自己。</p>
+<p>举两个例子：</p>
+<p><img src="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/1.jpeg" alt="1"></p>
+<p><img src="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/2.jpeg" alt="2"></p>
+<p>算法演进的过程是这样的，：</p>
+<p><img src="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/gif1.gif" alt="gif1"></p>
+<p>根据这个定义，我们的最终结果（子序列的最大长度）应该是 dp 数组中的最大值。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; dp.size(); i++) &#123;</span><br><span class="line">    res = Math.max(res, dp[i]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> res;</span><br></pre></td></tr></table></figure>
+
+<p>读者也许会问，刚才的算法演进过程中每个 <code>dp[i]</code> 的结果是我们肉眼看出来的，我们应该怎么设计算法逻辑来正确计算每个 <code>dp[i]</code> 呢？</p>
+<p>这就是动态规划的重头戏了，要思考如何设计算法逻辑进行状态转移，才能正确运行呢？这里就可以使用数学归纳的思想：</p>
+<p><strong>假设我们已经知道了 <code>dp[0..4]</code> 的所有结果，我们如何通过这些已知结果推出 <code>dp[5]</code> 呢</strong>？</p>
+<p><img src="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/3.jpeg" alt="3"></p>
+<p>根据刚才我们对 <code>dp</code> 数组的定义，现在想求 <code>dp[5]</code> 的值，也就是想求以 <code>nums[5]</code> 为结尾的最长递增子序列。</p>
+<p><strong><code>nums[5] = 3</code>，既然是递增子序列，我们只要找到前面那些结尾比 3 小的子序列，然后把 3 接到最后，就可以形成一个新的递增子序列，而且这个新的子序列长度加一</strong>。</p>
+<p>显然，可能形成很多种新的子序列，但是我们只选择最长的那一个，把最长子序列的长度作为 <code>dp[5]</code> 的值即可。</p>
+<p><img src="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/gif2.gif" alt="gif2"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (nums[i] &gt; nums[j]) </span><br><span class="line">        dp[i] = Math.max(dp[i], dp[j] + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当 <code>i = 5</code> 时，这段代码的逻辑就可以算出 <code>dp[5]</code>。其实到这里，这道算法题我们就基本做完了。</p>
+<p>读者也许会问，我们刚才只是算了 <code>dp[5]</code> 呀，<code>dp[4]</code>, <code>dp[3]</code> 这些怎么算呢？类似数学归纳法，你已经可以算出 <code>dp[5]</code> 了，其他的就都可以算出来：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (nums[i] &gt; nums[j]) </span><br><span class="line">            dp[i] = Math.max(dp[i], dp[j] + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结合我们刚才说的 base case，下面我们看一下完整代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLIS</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[] dp = <span class="keyword">new</span> <span class="keyword">int</span>[nums.length];</span><br><span class="line">    <span class="comment">// base case：dp 数组全都初始化为 1</span></span><br><span class="line">    Arrays.fill(dp, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (nums[i] &gt; nums[j]) </span><br><span class="line">                dp[i] = Math.max(dp[i], dp[j] + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; dp.length; i++) &#123;</span><br><span class="line">        res = Math.max(res, dp[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>至此，这道题就解决了，时间复杂度 O(N^2)。总结一下如何找到动态规划的状态转移关系：</p>
+<p>1、明确 <code>dp</code> 数组所存数据的含义。这一步对于任何动态规划问题都很重要，如果不得当或者不够清晰，会阻碍之后的步骤。</p>
+<p>2、根据 <code>dp</code> 数组的定义，运用数学归纳法的思想，假设 <code>dp[0...i-1]</code> 都已知，想办法求出 <code>dp[i]</code>，一旦这一步完成，整个题目基本就解决了。</p>
+<p>但如果无法完成这一步，很可能就是 <code>dp</code> 数组的定义不够恰当，需要重新定义 <code>dp</code> 数组的含义；或者可能是 <code>dp</code> 数组存储的信息还不够，不足以推出下一步的答案，需要把 <code>dp</code> 数组扩大成二维数组甚至三维数组。</p>
+<h3 id="二、二分查找解法"><a href="#二、二分查找解法" class="headerlink" title="二、二分查找解法"></a>二、二分查找解法</h3><p>这个解法的时间复杂度为 O(NlogN)，但是说实话，正常人基本想不到这种解法（也许玩过某些纸牌游戏的人可以想出来）。所以大家了解一下就好，正常情况下能够给出动态规划解法就已经很不错了。</p>
+<p>根据题目的意思，我都很难想象这个问题竟然能和二分查找扯上关系。其实最长递增子序列和一种叫做 patience game 的纸牌游戏有关，甚至有一种排序方法就叫做 patience sorting（耐心排序）。</p>
+<p>为了简单起见，后文跳过所有数学证明，通过一个简化的例子来理解一下算法思路。</p>
+<p>首先，给你一排扑克牌，我们像遍历数组那样从左到右一张一张处理这些扑克牌，最终要把这些牌分成若干堆。</p>
+<p><img src="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/poker1.jpeg" alt="poker1"></p>
+<p><strong>处理这些扑克牌要遵循以下规则</strong>：</p>
+<p>只能把点数小的牌压到点数比它大的牌上；如果当前牌点数较大没有可以放置的堆，则新建一个堆，把这张牌放进去；如果当前牌有多个堆可供选择，则选择最左边的那一堆放置。</p>
+<p>比如说上述的扑克牌最终会被分成这样 5 堆（我们认为纸牌 A 的牌面是最大的，纸牌 2 的牌面是最小的）。</p>
+<p><img src="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/poker2.jpeg" alt="poker2"></p>
+<p>为什么遇到多个可选择堆的时候要放到最左边的堆上呢？因为这样可以保证牌堆顶的牌有序（2, 4, 7, 8, Q），证明略。</p>
+<p><img src="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/poker3.jpeg" alt="poker3"></p>
+<p>按照上述规则执行，可以算出最长递增子序列，牌的堆数就是最长递增子序列的长度，证明略。</p>
+<p><img src="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/poker4.jpeg" alt="LIS"></p>
+<p>我们只要把处理扑克牌的过程编程写出来即可。每次处理一张扑克牌不是要找一个合适的牌堆顶来放吗，牌堆顶的牌不是<strong>有序</strong>吗，这就能用到二分查找了：用二分查找来搜索当前牌应放置的位置。</p>
+<p>PS：旧文<a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">二分查找算法详解</a>详细介绍了二分查找的细节及变体，这里就完美应用上了，如果没读过强烈建议阅读。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLIS</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[] top = <span class="keyword">new</span> <span class="keyword">int</span>[nums.length];</span><br><span class="line">    <span class="comment">// 牌堆数初始化为 0</span></span><br><span class="line">    <span class="keyword">int</span> piles = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">        <span class="comment">// 要处理的扑克牌</span></span><br><span class="line">        <span class="keyword">int</span> poker = nums[i];</span><br><span class="line"></span><br><span class="line">        <span class="comment">/***** 搜索左侧边界的二分查找 *****/</span></span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>, right = piles;</span><br><span class="line">        <span class="keyword">while</span> (left &lt; right) &#123;</span><br><span class="line">            <span class="keyword">int</span> mid = (left + right) / <span class="number">2</span>;</span><br><span class="line">            <span class="keyword">if</span> (top[mid] &gt; poker) &#123;</span><br><span class="line">                right = mid;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (top[mid] &lt; poker) &#123;</span><br><span class="line">                left = mid + <span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                right = mid;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/*********************************/</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 没找到合适的牌堆，新建一堆</span></span><br><span class="line">        <span class="keyword">if</span> (left == piles) piles++;</span><br><span class="line">        <span class="comment">// 把这张牌放到牌堆顶</span></span><br><span class="line">        top[left] = poker;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 牌堆数就是 LIS 长度</span></span><br><span class="line">    <span class="keyword">return</span> piles;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>至此，二分查找的解法也讲解完毕。</p>
+<p>这个解法确实很难想到。首先涉及数学证明，谁能想到按照这些规则执行，就能得到最长递增子序列呢？其次还有二分查找的运用，要是对二分查找的细节不清楚，给了思路也很难写对。</p>
+<p>所以，这个方法作为思维拓展好了。但动态规划的设计方法应该完全理解：假设之前的答案已知，利用数学归纳的思想正确进行状态的推演转移，最终得到答案。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+<figure class="highlight python"><figcaption><span>动态规划</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">lengthOfLIS</span><span class="params">(self, nums: List[int])</span> -&gt; int:</span></span><br><span class="line">        n = len(nums)</span><br><span class="line">        f = [<span class="number">1</span>] * (n)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(i):</span><br><span class="line">                <span class="keyword">if</span> nums[j]  &lt; nums[i]:</span><br><span class="line">                    f[i] = max(f[i], f[j] + <span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        res = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">            res = max(res, f[i])</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>二分查找</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">lengthOfLIS</span><span class="params">(self, nums: List[int])</span> -&gt; int:</span></span><br><span class="line">        stack = []</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">find_index</span><span class="params">(num)</span>:</span></span><br><span class="line">            l, r = <span class="number">0</span>, len(stack)</span><br><span class="line">            <span class="keyword">while</span> l &lt; r:</span><br><span class="line">                mid = l + r &gt;&gt; <span class="number">1</span></span><br><span class="line">                <span class="keyword">if</span> stack[mid] &gt;= num:</span><br><span class="line">                    r = mid </span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    l = mid + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> r</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> stack <span class="keyword">or</span> num &gt; stack[<span class="number">-1</span>]:</span><br><span class="line">                stack.append(num)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                position = find_index(num)</span><br><span class="line">                stack[position] = num</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> len(stack)</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://github.com/KianKw/" target="_blank" rel="noopener">Kian</a> 提供 C++ 代码</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">lengthOfLIS</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="comment">/* len 为牌的数量 */</span></span><br><span class="line">        <span class="keyword">int</span> len = nums.size();</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; top(len, <span class="number">0</span>);</span><br><span class="line">        <span class="comment">/* 牌堆数初始化为0 */</span></span><br><span class="line">        <span class="keyword">int</span> piles = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">            <span class="comment">/* nums[i] 为要处理的扑克牌 */</span></span><br><span class="line">            <span class="keyword">int</span> poker = nums[i];</span><br><span class="line"></span><br><span class="line">            <span class="comment">/***** 搜索左侧边界的二分查找 *****/</span></span><br><span class="line">            <span class="keyword">int</span> left = <span class="number">0</span>, right = piles;</span><br><span class="line">            <span class="keyword">while</span> (left &lt; right) &#123;</span><br><span class="line">                <span class="keyword">int</span> mid = left + (right - left) / <span class="number">2</span>;</span><br><span class="line">                <span class="keyword">if</span> (top[mid] &gt; poker) &#123;</span><br><span class="line">                    right = mid;</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (top[mid] &lt; poker) &#123;</span><br><span class="line">                    left = mid + <span class="number">1</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (top[mid] == poker) &#123;</span><br><span class="line">                    right = mid;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">/*********************************/</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">/* 没找到合适的牌堆，新建一堆 */</span></span><br><span class="line">            <span class="keyword">if</span> (left == piles)</span><br><span class="line">                piles++;</span><br><span class="line">            <span class="comment">/* 把这张牌放到牌堆顶 */</span></span><br><span class="line">            top[left] = poker;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/* 牌堆数就是 LIS 长度 */</span></span><br><span class="line">        <span class="keyword">return</span> piles;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/动态规划系列/动态规划设计：最长递增子序列.html" data-id="cklrh5za1001kro9b773ffzci" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#动态规划设计：最长递增子序列"><span class="toc-number">1.</span> <span class="toc-text">动态规划设计：最长递增子序列</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、动态规划解法"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、动态规划解法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、二分查找解法"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、二分查找解法</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

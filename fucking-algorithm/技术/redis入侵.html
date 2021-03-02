@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Redis 入侵        相关推荐：  烧饼排序 动态规划之正则表达  ———– 好吧，我也做了回标题党，像我这么细心的同学，怎么可能让服务器被入侵呢？ 其实是这样的，昨天我和一个朋友聊天，他说他自己有一台云服务器运行了 Redis 数据库，有一天突然发现数据库里的数据全没了，只剩下一个奇奇怪怪的键值对，其中值看起来像一个 RSA 公钥的字符串，他以为是误操作删库了，幸好自己的服务器里没啥重">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/技术/redis入侵.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="Redis 入侵        相关推荐：  烧饼排序 动态规划之正则表达  ———– 好吧，我也做了回标题党，像我这么细心的同学，怎么可能让服务器被入侵呢？ 其实是这样的，昨天我和一个朋友聊天，他说他自己有一台云服务器运行了 Redis 数据库，有一天突然发现数据库里的数据全没了，只剩下一个奇奇怪怪的键值对，其中值看起来像一个 RSA 公钥的字符串，他以为是误操作删库了，幸好自己的服务器里没啥重">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/技术/redis入侵.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/技术/redis入侵.htm/pictures/redis%E5%85%A5%E4%BE%B5/1.png">
+<meta property="og:image" content="/fucking-algorithm/技术/redis入侵.htm/pictures/redis%E5%85%A5%E4%BE%B5/2.png">
+<meta property="og:image" content="/fucking-algorithm/技术/redis入侵.htm/pictures/redis%E5%85%A5%E4%BE%B5/3.png">
+<meta property="og:image" content="/fucking-algorithm/技术/redis入侵.htm/pictures/redis%E5%85%A5%E4%BE%B5/4.png">
+<meta property="og:image" content="/fucking-algorithm/技术/redis入侵.htm/pictures/redis%E5%85%A5%E4%BE%B5/5.png">
+<meta property="og:image" content="/fucking-algorithm/技术/redis入侵.htm/pictures/redis%E5%85%A5%E4%BE%B5/6.png">
+<meta property="og:image" content="/fucking-algorithm/技术/redis入侵.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.859Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="Redis 入侵        相关推荐：  烧饼排序 动态规划之正则表达  ———– 好吧，我也做了回标题党，像我这么细心的同学，怎么可能让服务器被入侵呢？ 其实是这样的，昨天我和一个朋友聊天，他说他自己有一台云服务器运行了 Redis 数据库，有一天突然发现数据库里的数据全没了，只剩下一个奇奇怪怪的键值对，其中值看起来像一个 RSA 公钥的字符串，他以为是误操作删库了，幸好自己的服务器里没啥重">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/技术/redis入侵.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.859Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="Redis-入侵"><a href="#Redis-入侵" class="headerlink" title="Redis 入侵"></a>Redis 入侵</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/技术/redis入侵.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">烧饼排序</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">动态规划之正则表达</a></li>
+</ul>
+<p><strong>———–</strong></p>
+<p>好吧，我也做了回标题党，像我这么细心的同学，怎么可能让服务器被入侵呢？</p>
+<p>其实是这样的，昨天我和一个朋友聊天，他说他自己有一台云服务器运行了 Redis 数据库，有一天突然发现数据库里的<strong>数据全没了</strong>，只剩下一个奇奇怪怪的键值对，其中值看起来像一个 RSA 公钥的字符串，他以为是误操作删库了，幸好自己的服务器里没啥重要的数据，也就没在意。</p>
+<p>经过一番攀谈交心了解到，他跑了一个比较古老已经停止维护的开源项目，安装的旧版本的 Redis，而且他对 Linux 的使用不是很熟练。我就知道，他的服务器已经被攻陷了，想到也许还会有不少像我这位朋友的人，不重视操作系统的权限、防火墙的设置和数据库的保护，我就写一篇文章简单看看这种情况出现的原因，以及如何防范。</p>
+<p>PS：这种手法现在已经行不通了，因为新版本 Redis 都增加了 protect mode，增加了安全性，我们只能在本地简单模拟一下，就别乱试了。</p>
+<h3 id="事件经过"><a href="#事件经过" class="headerlink" title="事件经过"></a>事件经过</h3><p>其实这种攻击手法都是 2015 年的事了，那时候 Redis 的安全保护机制比较差，只能靠运维人员来合理配置以保证数据库的安全。有段时间，全球几万个 Redis 节点遭到了攻击，出现了上述奇怪的现象，所有数据被清空，只剩一个键叫 <code>crackit</code>，它的值形似 RSA 公钥的字符串。</p>
+<p>后来查证，攻击者利用 Redis 动态设置配置和数据持久化的功能，把自己的 RSA 公钥写入到了被攻击服务器的 <code>/root/.ssh/authored_keys</code> 这个文件，从而可以用私钥直接登录对方的 root 用户，侵入对方系统。</p>
+<p>沦陷的服务器安全防护做的很不好，具体如下：</p>
+<p>1、Redis 的端口是默认端口，而且可以从公网访问。</p>
+<p>2、Redis 还没设密码。</p>
+<p>3、Redis 进程是由 root 用户启动的。</p>
+<p>以上每个点都是比较危险的，合在一起，那真是很致命了。且不说别人把公钥写到你的系统里，就说连上你的数据库然后删库，那损失都够大了。那么具体的流程是什么呢，下面我在本地回环地址上简单演示一下。</p>
+<h3 id="本地演示"><a href="#本地演示" class="headerlink" title="本地演示"></a>本地演示</h3><p>Redis 监听的默认端口是 6379，我们设置它接收网卡 127.0.0.1 的连接，这样我从本地肯定可以连接 Redis，以此模拟「从公网可以访问 Redis」这一条件。</p>
+<p>现在我是名叫 fdl 的普通用户，我想用 ssh 登录我系统上的 root 用户，要输入 root 的密码，我不知道，所以没办法登录。</p>
+<p>除了密码登录之外，还可以使用 RSA 密钥对登录，但是必须要把我的公钥存到 root 的家目录中 <code>/root/.ssh/authored_keys</code>。我们知道 <code>/root</code> 目录的权限设置是不允许任何其他用户闯入读写的：</p>
+<p><img src="/fucking-algorithm/技术/redis入侵.htm/pictures/redis%E5%85%A5%E4%BE%B5/1.png" alt></p>
+<p>但是，我发现自己竟然可以直接访问 Redis：</p>
+<p><img src="/fucking-algorithm/技术/redis入侵.htm/pictures/redis%E5%85%A5%E4%BE%B5/2.png" alt></p>
+<p>如果 Redis 是以 root 的身份运行的，那么我就可以通过操作 Redis，让它把我的公钥写到 root 的家目录中。Redis 有一种持久化方式是生成 RDB 文件，其中会包含原始数据。</p>
+<p>我露出了邪恶的微笑，先把 Redis 中的数据全部清空，然后把我的 RSA 公钥写到数据库里，这里在开头和结尾加换行符目的是避免 RDB 文件生成过程中损坏到公钥字符串：</p>
+<p><img src="/fucking-algorithm/技术/redis入侵.htm/pictures/redis%E5%85%A5%E4%BE%B5/3.png" alt></p>
+<p>命令 Redis 把生成的数据文件保存到 <code>/root/.ssh/</code> 中的 <code>authored_keys</code> 文件中：</p>
+<p><img src="/fucking-algorithm/技术/redis入侵.htm/pictures/redis%E5%85%A5%E4%BE%B5/4.png" alt></p>
+<p>现在，root 的家目录中已经包含了我们的 RSA 公钥，我们现在可以通过密钥对登录进 root 了：</p>
+<p><img src="/fucking-algorithm/技术/redis入侵.htm/pictures/redis%E5%85%A5%E4%BE%B5/5.png" alt></p>
+<p>看一下刚才写入 root 家的公钥：</p>
+<p><img src="/fucking-algorithm/技术/redis入侵.htm/pictures/redis%E5%85%A5%E4%BE%B5/6.png" alt></p>
+<p>乱码是 GDB 文件的某种编码吧，但是中间的公钥被完整保存了，而且 ssh 登录程序竟然也识别了这段被乱码包围的公钥！</p>
+<p>至此，拥有了 root 权限，就可以为所欲为了。。。</p>
+<h3 id="吸取教训"><a href="#吸取教训" class="headerlink" title="吸取教训"></a>吸取教训</h3><p>虽然现在基本不会受到这种攻击（新版本的 Redis 没有密码时默认不对外网开放），但是对于系统的安全性是每个人都应该重视的。</p>
+<p>我们自己折腾东西，用个低配云服务器，为了省事儿一般也不认真配置防火墙，数据库不设密码或者设成 admin、root 这样简单的密码，反正也没啥数据。这样肯定不是个好习惯。</p>
+<p>现在我们的计算机系统越来越完善，每个成熟的项目都由最优秀的一帮人维护，从技术上说应该算是无懈可击了，那么唯一可能出问题的地方就在于使用它们的人。</p>
+<p>就像经常看到有人的 QQ 被盗，我相信盗号的人肯定不是跑到腾讯的数据库里盗号，肯定是 QQ 号主安全防范意识差，在哪个钓鱼网站输入了自己的账号密码，导致被盗。我基本没见过微信被盗的，可能是微信弱化密码登录，改用二维码扫描登录的原因。这应该也算是一种安全方面的考量吧，毕竟微信是有支付功能的。</p>
+<p>上面这种骗局对于技术人来说，看看 url，浏览器分析一下网络包就很容易识别出来，但是你还别不信，一般人真的搞不明白怎么识别钓鱼网站和官方网站。就像我真没想到都 2020 年了，还有人在找 Redis 的这个漏洞，而且还有人中招。。。</p>
+<p>那么说回 Redis 数据库的使用，在官网上明确写出了安全防护的建议，我简单总结一下吧：</p>
+<p>1、不要用 root 用户启动 Redis Server，而且一定要设置密码，而且密码不要太短，否则容易被暴力破解。</p>
+<p>2、配置服务器防火墙和 Redis 的 config 文件，尽量不要让 Redis 与外界接触。</p>
+<p>3、利用 rename 功能伪装 flushall 这种危险命令，以防被删库，丢失数据。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/技术/redis入侵.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/技术/redis入侵.html" data-id="cklrh5z9x0018ro9b8jobm7kf" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Redis-入侵"><span class="toc-number">1.</span> <span class="toc-text">Redis 入侵</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#事件经过"><span class="toc-number">1.0.1.</span> <span class="toc-text">事件经过</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#本地演示"><span class="toc-number">1.0.2.</span> <span class="toc-text">本地演示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#吸取教训"><span class="toc-number">1.0.3.</span> <span class="toc-text">吸取教训</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="拆解复杂问题：实现计算器        相关推荐：  特殊数据结构：单调队列 一行代码就能解决的算法题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 224.基本计算器 227.基本计算器II 772.基本计算器III ———– 我们最终要实现的计算器功能如下： 1、输入一个字符串，可以包含+ - * /、数字、括号以及空格，你的算法返回运算结果。 2、要符合">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/数据结构系列/实现计算器.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="拆解复杂问题：实现计算器        相关推荐：  特殊数据结构：单调队列 一行代码就能解决的算法题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 224.基本计算器 227.基本计算器II 772.基本计算器III ———– 我们最终要实现的计算器功能如下： 1、输入一个字符串，可以包含+ - * /、数字、括号以及空格，你的算法返回运算结果。 2、要符合">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/实现计算器.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/实现计算器.htm/pictures/calculator/1.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/实现计算器.htm/pictures/calculator/2.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/实现计算器.htm/pictures/calculator/3.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/实现计算器.htm/pictures/calculator/4.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/实现计算器.htm/pictures/calculator/5.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/实现计算器.htm/pictures/calculator/6.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/实现计算器.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.863Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="拆解复杂问题：实现计算器        相关推荐：  特殊数据结构：单调队列 一行代码就能解决的算法题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 224.基本计算器 227.基本计算器II 772.基本计算器III ———– 我们最终要实现的计算器功能如下： 1、输入一个字符串，可以包含+ - * /、数字、括号以及空格，你的算法返回运算结果。 2、要符合">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/数据结构系列/实现计算器.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.863Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="拆解复杂问题：实现计算器"><a href="#拆解复杂问题：实现计算器" class="headerlink" title="拆解复杂问题：实现计算器"></a>拆解复杂问题：实现计算器</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/数据结构系列/实现计算器.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">特殊数据结构：单调队列</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">一行代码就能解决的算法题</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/basic-calculator" target="_blank" rel="noopener">224.基本计算器</a></p>
+<p><a href="https://leetcode-cn.com/problems/basic-calculator-ii" target="_blank" rel="noopener">227.基本计算器II</a></p>
+<p><a href="https://leetcode-cn.com/problems/basic-calculator-iii" target="_blank" rel="noopener">772.基本计算器III</a></p>
+<p><strong>———–</strong></p>
+<p>我们最终要实现的计算器功能如下：</p>
+<p>1、输入一个字符串，可以包含<code>+ - * /</code>、数字、括号以及空格，你的算法返回运算结果。</p>
+<p>2、要符合运算法则，括号的优先级最高，先乘除后加减。</p>
+<p>3、除号是整数除法，无论正负都向 0 取整（5/2=2，-5/2=-2）。</p>
+<p>4、可以假定输入的算式一定合法，且计算过程不会出现整型溢出，不会出现除数为 0 的意外情况。</p>
+<p>比如输入如下字符串，算法会返回 9：</p>
+<p><code>3 * (2-6 /(3 -7))</code></p>
+<p>可以看到，这就已经非常接近我们实际生活中使用的计算器了，虽然我们以前肯定都用过计算器，但是如果简单思考一下其算法实现，就会大惊失色：</p>
+<p>1、按照常理处理括号，要先计算最内层的括号，然后向外慢慢化简。这个过程我们手算都容易出错，何况写成算法呢！</p>
+<p>2、要做到先乘除，后加减，这一点教会小朋友还不算难，但教给计算机恐怕有点困难。</p>
+<p>3、要处理空格。我们为了美观，习惯性在数字和运算符之间打个空格，但是计算之中得想办法忽略这些空格。</p>
+<p>我记得很多大学数据结构的教材上，在讲栈这种数据结构的时候，应该都会用计算器举例，但是有一说一，讲的真的垃圾，不知道多少未来的计算机科学家就被这种简单的数据结构劝退了。</p>
+<p>那么本文就来聊聊怎么实现上述一个功能完备的计算器功能，<strong>关键在于层层拆解问题，化整为零，逐个击破</strong>，相信这种思维方式能帮大家解决各种复杂问题。</p>
+<p>下面就来拆解，从最简单的一个问题开始。</p>
+<h3 id="一、字符串转整数"><a href="#一、字符串转整数" class="headerlink" title="一、字符串转整数"></a>一、字符串转整数</h3><p>是的，就是这么一个简单的问题，首先告诉我，怎么把一个字符串形式的<strong>正</strong>整数，转化成 int 型？</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> s = <span class="string">"458"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> n = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.size(); i++) &#123;</span><br><span class="line">    <span class="keyword">char</span> c = s[i];</span><br><span class="line">    n = <span class="number">10</span> * n + (c - <span class="string">'0'</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// n 现在就等于 458</span></span><br></pre></td></tr></table></figure>
+
+<p>这个还是很简单的吧，老套路了。但是即便这么简单，依然有坑：<strong><code>(c - &#39;0&#39;)</code>的这个括号不能省略，否则可能造成整型溢出</strong>。</p>
+<p>因为变量<code>c</code>是一个 ASCII 码，如果不加括号就会先加后减，想象一下<code>s</code>如果接近 INT_MAX，就会溢出。所以用括号保证先减后加才行。</p>
+<h3 id="二、处理加减法"><a href="#二、处理加减法" class="headerlink" title="二、处理加减法"></a>二、处理加减法</h3><p>现在进一步，<strong>如果输入的这个算式只包含加减法，而且不存在空格</strong>，你怎么计算结果？我们拿字符串算式<code>1-12+3</code>为例，来说一个很简单的思路：</p>
+<p>1、先给第一个数字加一个默认符号<code>+</code>，变成<code>+1-12+3</code>。</p>
+<p>2、把一个运算符和数字组合成一对儿，也就是三对儿<code>+1</code>，<code>-12</code>，<code>+3</code>，把它们转化成数字，然后放到一个栈中。</p>
+<p>3、将栈中所有的数字求和，就是原算式的结果。</p>
+<p>我们直接看代码，结合一张图就看明白了：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">calculate</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; stk;</span><br><span class="line">    <span class="comment">// 记录算式中的数字</span></span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 记录 num 前的符号，初始化为 +</span></span><br><span class="line">    <span class="keyword">char</span> sign = <span class="string">'+'</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.size(); i++) &#123;</span><br><span class="line">        <span class="keyword">char</span> c = s[i];</span><br><span class="line">        <span class="comment">// 如果是数字，连续读取到 num</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">isdigit</span>(c)) </span><br><span class="line">            num = <span class="number">10</span> * num + (c - <span class="string">'0'</span>);</span><br><span class="line">        <span class="comment">// 如果不是数字，就是遇到了下一个符号，</span></span><br><span class="line">        <span class="comment">// 之前的数字和符号就要存进栈中</span></span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">isdigit</span>(c) || i == s.size() - <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">switch</span> (sign) &#123;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">'+'</span>:</span><br><span class="line">                    stk.push(num); <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">'-'</span>:</span><br><span class="line">                    stk.push(-num); <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 更新符号为当前符号，数字清零</span></span><br><span class="line">            sign = c;</span><br><span class="line">            num = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 将栈中所有结果求和就是答案</span></span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (!stk.empty()) &#123;</span><br><span class="line">        res += stk.top();</span><br><span class="line">        stk.pop();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我估计就是中间带<code>switch</code>语句的部分有点不好理解吧，<code>i</code>就是从左到右扫描，<code>sign</code>和<code>num</code>跟在它身后。当<code>s[i]</code>遇到一个运算符时，情况是这样的：</p>
+<p><img src="/fucking-algorithm/数据结构系列/实现计算器.htm/pictures/calculator/1.jpg" alt></p>
+<p>所以说，此时要根据<code>sign</code>的 case 不同选择<code>nums</code>的正负号，存入栈中，然后更新<code>sign</code>并清零<code>nums</code>记录下一对儿符合和数字的组合。</p>
+<p>另外注意，不只是遇到新的符号会触发入栈，当<code>i</code>走到了算式的尽头（<code>i == s.size() - 1</code>），也应该将前面的数字入栈，方便后续计算最终结果。</p>
+<p><img src="/fucking-algorithm/数据结构系列/实现计算器.htm/pictures/calculator/2.jpg" alt></p>
+<p>至此，仅处理紧凑加减法字符串的算法就完成了，请确保理解以上内容，后续的内容就基于这个框架修修改改就完事儿了。</p>
+<h3 id="三、处理乘除法"><a href="#三、处理乘除法" class="headerlink" title="三、处理乘除法"></a>三、处理乘除法</h3><p>其实思路跟仅处理加减法没啥区别，拿字符串<code>2-3*4+5</code>举例，核心思路依然是把字符串分解成符号和数字的组合。</p>
+<p>比如上述例子就可以分解为<code>+2</code>，<code>-3</code>，<code>*4</code>，<code>+5</code>几对儿，我们刚才不是没有处理乘除号吗，很简单，<strong>其他部分都不用变</strong>，在<code>switch</code>部分加上对应的 case 就行了：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.size(); i++) &#123;</span><br><span class="line">    <span class="keyword">char</span> c = s[i];</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">isdigit</span>(c)) </span><br><span class="line">        num = <span class="number">10</span> * num + (c - <span class="string">'0'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">isdigit</span>(c) || i == s.size() - <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">switch</span> (sign) &#123;</span><br><span class="line">            <span class="keyword">int</span> pre;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'+'</span>:</span><br><span class="line">                stk.push(num); <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'-'</span>:</span><br><span class="line">                stk.push(-num); <span class="keyword">break</span>;</span><br><span class="line">            <span class="comment">// 只要拿出前一个数字做对应运算即可</span></span><br><span class="line">            <span class="keyword">case</span> <span class="string">'*'</span>:</span><br><span class="line">                pre = stk.top();</span><br><span class="line">                stk.pop();</span><br><span class="line">                stk.push(pre * num);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">'/'</span>:</span><br><span class="line">                pre = stk.top();</span><br><span class="line">                stk.pop();</span><br><span class="line">                stk.push(pre / num);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 更新符号为当前符号，数字清零</span></span><br><span class="line">        sign = c;</span><br><span class="line">        num = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/fucking-algorithm/数据结构系列/实现计算器.htm/pictures/calculator/3.jpg" alt></p>
+<p><strong>乘除法优先于加减法体现在，乘除法可以和栈顶的数结合，而加减法只能把自己放入栈</strong>。</p>
+<p>现在我们思考一下<strong>如何处理字符串中可能出现的空格字符</strong>。其实也非常简单，想想空格字符的出现，会影响我们现有代码的哪一部分？</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 如果 c 非数字</span></span><br><span class="line"><span class="keyword">if</span> (!<span class="built_in">isdigit</span>(c) || i == s.size() - <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">switch</span> (c) &#123;...&#125;</span><br><span class="line">    sign = c;</span><br><span class="line">    num = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>显然空格会进入这个 if 语句，但是我们并不想让空格的情况进入这个 if，因为这里会更新<code>sign</code>并清零<code>nums</code>，空格根本就不是运算符，应该被忽略。</p>
+<p>那么只要多加一个条件即可：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((!<span class="built_in">isdigit</span>(c) &amp;&amp; c != <span class="string">' '</span>) || i == s.size() - <span class="number">1</span>) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>好了，现在我们的算法已经可以按照正确的法则计算加减乘除，并且自动忽略空格符，剩下的就是如何让算法正确识别括号了。</p>
+<h3 id="四、处理括号"><a href="#四、处理括号" class="headerlink" title="四、处理括号"></a>四、处理括号</h3><p>处理算式中的括号看起来应该是最难的，但真没有看起来那么难。</p>
+<p>为了规避编程语言的繁琐细节，我把前面解法的代码翻译成 Python 版本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calculate</span><span class="params">(s: str)</span> -&gt; int:</span></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">helper</span><span class="params">(s: List)</span> -&gt; int:</span></span><br><span class="line">        stack = []</span><br><span class="line">        sign = <span class="string">'+'</span></span><br><span class="line">        num = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> len(s) &gt; <span class="number">0</span>:</span><br><span class="line">            c = s.pop(<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">if</span> c.isdigit():</span><br><span class="line">                num = <span class="number">10</span> * num + int(c)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">not</span> c.isdigit() <span class="keyword">and</span> c != <span class="string">' '</span>) <span class="keyword">or</span> len(s) == <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">if</span> sign == <span class="string">'+'</span>:</span><br><span class="line">                    stack.append(num)</span><br><span class="line">                <span class="keyword">elif</span> sign == <span class="string">'-'</span>:</span><br><span class="line">                    stack.append(-num)</span><br><span class="line">                <span class="keyword">elif</span> sign == <span class="string">'*'</span>:</span><br><span class="line">                    stack[<span class="number">-1</span>] = stack[<span class="number">-1</span>] * num</span><br><span class="line">                <span class="keyword">elif</span> sign == <span class="string">'/'</span>:</span><br><span class="line">                    <span class="comment"># python 除法向 0 取整的写法</span></span><br><span class="line">                    stack[<span class="number">-1</span>] = int(stack[<span class="number">-1</span>] / float(num))                    </span><br><span class="line">                num = <span class="number">0</span></span><br><span class="line">                sign = c</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> sum(stack)</span><br><span class="line">    <span class="comment"># 需要把字符串转成列表方便操作</span></span><br><span class="line">    <span class="keyword">return</span> helper(list(s))</span><br></pre></td></tr></table></figure>
+
+<p>这段代码跟刚才 C++ 代码完全相同，唯一的区别是，不是从左到右遍历字符串，而是不断从左边<code>pop</code>出字符，本质还是一样的。</p>
+<p>那么，为什么说处理括号没有看起来那么难呢，<strong>因为括号具有递归性质</strong>。我们拿字符串<code>3*(4-5/2)-6</code>举例：</p>
+<p>calculate(<code>3*(4-5/2)-6</code>)<br>= 3 * calculate(<code>4-5/2</code>) - 6<br>= 3 * 2 - 6<br>= 0</p>
+<p>可以脑补一下，无论多少层括号嵌套，通过 calculate 函数递归调用自己，都可以将括号中的算式化简成一个数字。<strong>换句话说，括号包含的算式，我们直接视为一个数字就行了</strong>。</p>
+<p>现在的问题是，递归的开始条件和结束条件是什么？<strong>遇到<code>(</code>开始递归，遇到<code>)</code>结束递归</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calculate</span><span class="params">(s: str)</span> -&gt; int:</span></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">helper</span><span class="params">(s: List)</span> -&gt; int:</span></span><br><span class="line">        stack = []</span><br><span class="line">        sign = <span class="string">'+'</span></span><br><span class="line">        num = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> len(s) &gt; <span class="number">0</span>:</span><br><span class="line">            c = s.pop(<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">if</span> c.isdigit():</span><br><span class="line">                num = <span class="number">10</span> * num + int(c)</span><br><span class="line">            <span class="comment"># 遇到左括号开始递归计算 num</span></span><br><span class="line">            <span class="keyword">if</span> c == <span class="string">'('</span>:</span><br><span class="line">                num = helper(s)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">not</span> c.isdigit() <span class="keyword">and</span> c != <span class="string">' '</span>) <span class="keyword">or</span> len(s) == <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">if</span> sign == <span class="string">'+'</span>: ...</span><br><span class="line">                <span class="keyword">elif</span> sign == <span class="string">'-'</span>: ... </span><br><span class="line">                <span class="keyword">elif</span> sign == <span class="string">'*'</span>: ...</span><br><span class="line">                <span class="keyword">elif</span> sign == <span class="string">'/'</span>: ...</span><br><span class="line">                num = <span class="number">0</span></span><br><span class="line">                sign = c</span><br><span class="line">            <span class="comment"># 遇到右括号返回递归结果</span></span><br><span class="line">            <span class="keyword">if</span> c == <span class="string">')'</span>: <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">return</span> sum(stack)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> helper(list(s))</span><br></pre></td></tr></table></figure>
+
+<p><img src="/fucking-algorithm/数据结构系列/实现计算器.htm/pictures/calculator/4.jpg" alt></p>
+<p><img src="/fucking-algorithm/数据结构系列/实现计算器.htm/pictures/calculator/5.jpg" alt></p>
+<p><img src="/fucking-algorithm/数据结构系列/实现计算器.htm/pictures/calculator/6.jpg" alt></p>
+<p>你看，加了两三行代码，就可以处理括号了，这就是递归的魅力。至此，计算器的全部功能就实现了，通过对问题的层层拆解化整为零，再回头看，这个问题似乎也没那么复杂嘛。</p>
+<h3 id="五、最后总结"><a href="#五、最后总结" class="headerlink" title="五、最后总结"></a>五、最后总结</h3><p>本文借实现计算器的问题，主要想表达的是一种处理复杂问题的思路。</p>
+<p>我们首先从字符串转数字这个简单问题开始，进而处理只包含加减法的算式，进而处理包含加减乘除四则运算的算式，进而处理空格字符，进而处理包含括号的算式。</p>
+<p><strong>可见，对于一些比较困难的问题，其解法并不是一蹴而就的，而是步步推进，螺旋上升的</strong>。如果一开始给你原题，你不会做，甚至看不懂答案，都很正常，关键在于我们自己如何简化问题，如何以退为进。</p>
+<p><strong>退而求其次是一种很聪明策略</strong>。你想想啊，假设这是一道考试题，你不会实现这个计算器，但是你写了字符串转整数的算法并指出了容易溢出的陷阱，那起码可以得 20 分吧；如果你能够处理加减法，那可以得 40 分吧；如果你能处理加减乘除四则运算，那起码够 70 分了；再加上处理空格字符，80 有了吧。我就是不会处理括号，那就算了，80 已经很 OK 了好不好。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/数据结构系列/实现计算器.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/数据结构系列/实现计算器.html" data-id="cklrh5za70020ro9b07biv2nb" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#拆解复杂问题：实现计算器"><span class="toc-number">1.</span> <span class="toc-text">拆解复杂问题：实现计算器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、字符串转整数"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、字符串转整数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、处理加减法"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、处理加减法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、处理乘除法"><span class="toc-number">1.0.3.</span> <span class="toc-text">三、处理乘除法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#四、处理括号"><span class="toc-number">1.0.4.</span> <span class="toc-text">四、处理括号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#五、最后总结"><span class="toc-number">1.0.5.</span> <span class="toc-text">五、最后总结</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

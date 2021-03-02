@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="如何寻找消失的元素        相关推荐：  学习算法和数据结构的思路指南 回溯算法最佳实践：括号生成  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 448.找到所有数组中消失的数字 ———– 之前也有文章写过几个有趣的智力题，今天再聊一道巧妙的题目。 题目非常简单：  给一个长度为 n 的数组，其索引应该在 [0,n)，但是现在你要装进去 n + 1 个元">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/高频面试系列/消失的元素.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="如何寻找消失的元素        相关推荐：  学习算法和数据结构的思路指南 回溯算法最佳实践：括号生成  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 448.找到所有数组中消失的数字 ———– 之前也有文章写过几个有趣的智力题，今天再聊一道巧妙的题目。 题目非常简单：  给一个长度为 n 的数组，其索引应该在 [0,n)，但是现在你要装进去 n + 1 个元">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/消失的元素.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/消失的元素.htm/pictures/%E7%BC%BA%E5%A4%B1%E5%85%83%E7%B4%A0/title.png">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/消失的元素.htm/pictures/%E7%BC%BA%E5%A4%B1%E5%85%83%E7%B4%A0/1.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/消失的元素.htm/pictures/%E7%BC%BA%E5%A4%B1%E5%85%83%E7%B4%A0/2.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/消失的元素.htm/pictures/%E7%BC%BA%E5%A4%B1%E5%85%83%E7%B4%A0/3.jpg">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/消失的元素.htm/pictures/%E7%BC%BA%E5%A4%B1%E5%85%83%E7%B4%A0/xor.png">
+<meta property="og:image" content="/fucking-algorithm/高频面试系列/消失的元素.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.879Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="如何寻找消失的元素        相关推荐：  学习算法和数据结构的思路指南 回溯算法最佳实践：括号生成  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 448.找到所有数组中消失的数字 ———– 之前也有文章写过几个有趣的智力题，今天再聊一道巧妙的题目。 题目非常简单：  给一个长度为 n 的数组，其索引应该在 [0,n)，但是现在你要装进去 n + 1 个元">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/高频面试系列/消失的元素.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.879Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="如何寻找消失的元素"><a href="#如何寻找消失的元素" class="headerlink" title="如何寻找消失的元素"></a>如何寻找消失的元素</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/高频面试系列/消失的元素.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">学习算法和数据结构的思路指南</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">回溯算法最佳实践：括号生成</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/find-all-numbers-disappeared-in-an-array" target="_blank" rel="noopener">448.找到所有数组中消失的数字</a></p>
+<p><strong>———–</strong></p>
+<p>之前也有文章写过几个有趣的智力题，今天再聊一道巧妙的题目。</p>
+<p>题目非常简单：</p>
+<p><img src="/fucking-algorithm/高频面试系列/消失的元素.htm/pictures/%E7%BC%BA%E5%A4%B1%E5%85%83%E7%B4%A0/title.png" alt></p>
+<p>给一个长度为 n 的数组，其索引应该在 <code>[0,n)</code>，但是现在你要装进去 n + 1 个元素 <code>[0,n]</code>，那么肯定有一个元素装不下嘛，请你找出这个缺失的元素。</p>
+<p>这道题不难的，我们应该很容易想到，把这个数组排个序，然后遍历一遍，不就很容易找到缺失的那个元素了吗？</p>
+<p>或者说，借助数据结构的特性，用一个 HashSet 把数组里出现的数字都储存下来，再遍历 <code>[0,n]</code> 之间的数字，去 HashSet 中查询，也可以很容易查出那个缺失的元素。</p>
+<p>排序解法的时间复杂度是 O(NlogN)，HashSet 的解法时间复杂度是 O(N)，但是还需要 O(N) 的空间复杂度存储 HashSet。</p>
+<p><strong>第三种方法是位运算</strong>。</p>
+<p>对于异或运算（<code>^</code>），我们知道它有一个特殊性质：一个数和它本身做异或运算结果为 0，一个数和 0 做异或运算还是它本身。</p>
+<p>而且异或运算满足交换律和结合律，也就是说：</p>
+<p>2 ^ 3 ^ 2 = 3 ^ (2 ^ 2) = 3 ^ 0 = 3</p>
+<p>而这道题索就可以通过这些性质巧妙算出缺失的那个元素。比如说 <code>nums = [0,3,1,4]</code>：</p>
+<p><img src="/fucking-algorithm/高频面试系列/消失的元素.htm/pictures/%E7%BC%BA%E5%A4%B1%E5%85%83%E7%B4%A0/1.jpg" alt></p>
+<p>为了容易理解，我们假设先把索引补一位，然后让每个元素和自己相等的索引相对应：</p>
+<p><img src="/fucking-algorithm/高频面试系列/消失的元素.htm/pictures/%E7%BC%BA%E5%A4%B1%E5%85%83%E7%B4%A0/2.jpg" alt></p>
+<p>这样做了之后，就可以发现除了缺失元素之外，所有的索引和元素都组成一对儿了，现在如果把这个落单的索引 2 找出来，也就找到了缺失的那个元素。</p>
+<p>如何找这个落单的数字呢，<strong>只要把所有的元素和索引做异或运算，成对儿的数字都会消为 0，只有这个落单的元素会剩下</strong>，也就达到了我们的目的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">missingNumber</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = nums.length;</span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 先和新补的索引异或一下</span></span><br><span class="line">    res ^= n;</span><br><span class="line">    <span class="comment">// 和其他的元素、索引做异或</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        res ^= i ^ nums[i];</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/fucking-algorithm/高频面试系列/消失的元素.htm/pictures/%E7%BC%BA%E5%A4%B1%E5%85%83%E7%B4%A0/3.jpg" alt></p>
+<p>由于异或运算满足交换律和结合律，所以总是能把成对儿的数字消去，留下缺失的那个元素的。</p>
+<p>至此，时间复杂度 O(N)，空间复杂度 O(1)，已经达到了最优，我们是否就应该打道回府了呢？</p>
+<p>如果这样想，说明我们受算法的毒害太深，随着我们学习的知识越来越多，反而容易陷入思维定式，这个问题其实还有一个特别简单的解法：<strong>等差数列求和公式</strong>。</p>
+<p>题目的意思可以这样理解：现在有个等差数列 0, 1, 2,…, n，其中少了某一个数字，请你把它找出来。那这个数字不就是 <code>sum(0,1,..n) - sum(nums)</code> 嘛？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">missingNumber</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = nums.length;</span><br><span class="line">    <span class="comment">// 公式：(首项 + 末项) * 项数 / 2</span></span><br><span class="line">    <span class="keyword">int</span> expect = (<span class="number">0</span> + n) * (n + <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> x : nums) </span><br><span class="line">        sum += x;</span><br><span class="line">    <span class="keyword">return</span> expect - sum;</span><br></pre></td></tr></table></figure>
+
+<p>你看，这种解法应该是最简单的，但说实话，我自己也没想到这个解法，而且我去问了几个大佬，他们也没想到这个最简单的思路。相反，如果去问一个初中生，他也许很快就能想到。</p>
+<p>做到这一步了，我们是否就应该打道回府了呢？</p>
+<p>如果这样想，说明我们对细节的把控还差点火候。在用求和公式计算 <code>expect</code> 时，你考虑过<strong>整型溢出</strong>吗？如果相乘的结果太大导致溢出，那么结果肯定是错误的。</p>
+<p>刚才我们的思路是把两个和都加出来然后相减，为了避免溢出，干脆一边求和一边减算了。很类似刚才位运算解法的思路，仍然假设 <code>nums = [0,3,1,4]</code>，先补一位索引再让元素跟索引配对：</p>
+<p><img src="/fucking-algorithm/高频面试系列/消失的元素.htm/pictures/%E7%BC%BA%E5%A4%B1%E5%85%83%E7%B4%A0/xor.png" alt></p>
+<p>我们让每个索引减去其对应的元素，再把相减的结果加起来，不就是那个缺失的元素吗？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">missingNumber</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = nums.length;</span><br><span class="line">    <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 新补的索引</span></span><br><span class="line">    res += n - <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 剩下索引和元素的差加起来</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) </span><br><span class="line">        res += i - nums[i];</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于加减法满足交换律和结合律，所以总是能把成对儿的数字消去，留下缺失的那个元素的。</p>
+<p>至此这道算法题目经历九曲十八弯，终于再也没有什么坑了。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/高频面试系列/消失的元素.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/高频面试系列/消失的元素.html" data-id="cklrh5zaf002iro9bzu7xu67r" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#如何寻找消失的元素"><span class="toc-number">1.</span> <span class="toc-text">如何寻找消失的元素</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

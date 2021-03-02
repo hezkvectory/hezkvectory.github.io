@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前缀和技巧        相关推荐：  如何去除有序数组的重复元素 区间调度之区间合并问题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 560.和为K的子数组 ———– 今天来聊一道简单却十分巧妙的算法问题：算出一共有几个和为 k 的子数组。  那我把所有子数组都穷举出来，算它们的和，看看谁的和等于 k 不就行了。 关键是，如何快速得到某个子数组的和呢，比如">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/算法思维系列/前缀和技巧.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="前缀和技巧        相关推荐：  如何去除有序数组的重复元素 区间调度之区间合并问题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 560.和为K的子数组 ———– 今天来聊一道简单却十分巧妙的算法问题：算出一共有几个和为 k 的子数组。  那我把所有子数组都穷举出来，算它们的和，看看谁的和等于 k 不就行了。 关键是，如何快速得到某个子数组的和呢，比如">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/前缀和技巧.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/前缀和技巧.htm/pictures/%E5%89%8D%E7%BC%80%E5%92%8C/title.png">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/前缀和技巧.htm/pictures/%E5%89%8D%E7%BC%80%E5%92%8C/1.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/前缀和技巧.htm/pictures/%E5%89%8D%E7%BC%80%E5%92%8C/2.jpg">
+<meta property="og:image" content="/fucking-algorithm/算法思维系列/前缀和技巧.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.868Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="前缀和技巧        相关推荐：  如何去除有序数组的重复元素 区间调度之区间合并问题  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 560.和为K的子数组 ———– 今天来聊一道简单却十分巧妙的算法问题：算出一共有几个和为 k 的子数组。  那我把所有子数组都穷举出来，算它们的和，看看谁的和等于 k 不就行了。 关键是，如何快速得到某个子数组的和呢，比如">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/算法思维系列/前缀和技巧.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.868Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="前缀和技巧"><a href="#前缀和技巧" class="headerlink" title="前缀和技巧"></a>前缀和技巧</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/算法思维系列/前缀和技巧.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">如何去除有序数组的重复元素</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">区间调度之区间合并问题</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/subarray-sum-equals-k" target="_blank" rel="noopener">560.和为K的子数组</a></p>
+<p><strong>———–</strong></p>
+<p>今天来聊一道简单却十分巧妙的算法问题：算出一共有几个和为 <code>k</code> 的子数组。</p>
+<p><img src="/fucking-algorithm/算法思维系列/前缀和技巧.htm/pictures/%E5%89%8D%E7%BC%80%E5%92%8C/title.png" alt></p>
+<p>那我把所有子数组都穷举出来，算它们的和，看看谁的和等于 <code>k</code> 不就行了。</p>
+<p>关键是，<strong>如何快速得到某个子数组的和呢</strong>，比如说给你一个数组 <code>nums</code>，让你实现一个接口 <code>sum(i, j)</code>，这个接口要返回 <code>nums[i..j]</code> 的和，而且会被多次调用，你怎么实现这个接口呢？</p>
+<p>因为接口要被多次调用，显然不能每次都去遍历 <code>nums[i..j]</code>，有没有一种快速的方法在 O(1) 时间内算出 <code>nums[i..j]</code> 呢？这就需要<strong>前缀和</strong>技巧了。</p>
+<h3 id="一、什么是前缀和"><a href="#一、什么是前缀和" class="headerlink" title="一、什么是前缀和"></a>一、什么是前缀和</h3><p>前缀和的思路是这样的，对于一个给定的数组 <code>nums</code>，我们额外开辟一个前缀和数组进行预处理：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> n = nums.length;</span><br><span class="line"><span class="comment">// 前缀和数组</span></span><br><span class="line"><span class="keyword">int</span>[] preSum = <span class="keyword">new</span> <span class="keyword">int</span>[n + <span class="number">1</span>];</span><br><span class="line">preSum[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">    preSum[i + <span class="number">1</span>] = preSum[i] + nums[i];</span><br></pre></td></tr></table></figure>
+
+<p><img src="/fucking-algorithm/算法思维系列/前缀和技巧.htm/pictures/%E5%89%8D%E7%BC%80%E5%92%8C/1.jpg" alt></p>
+<p>这个前缀和数组 <code>preSum</code> 的含义也很好理解，<code>preSum[i]</code> 就是 <code>nums[0..i-1]</code> 的和。那么如果我们想求 <code>nums[i..j]</code> 的和，只需要一步操作 <code>preSum[j+1]-preSum[i]</code> 即可，而不需要重新去遍历数组了。</p>
+<p>回到这个子数组问题，我们想求有多少个子数组的和为 k，借助前缀和技巧很容易写出一个解法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">subarraySum</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = nums.length;</span><br><span class="line">    <span class="comment">// 构造前缀和</span></span><br><span class="line">    <span class="keyword">int</span>[] sum = <span class="keyword">new</span> <span class="keyword">int</span>[n + <span class="number">1</span>];</span><br><span class="line">    sum[<span class="number">0</span>] = <span class="number">0</span>; </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">        sum[i + <span class="number">1</span>] = sum[i] + nums[i];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 穷举所有子数组</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++)</span><br><span class="line">            <span class="comment">// sum of nums[j..i-1]</span></span><br><span class="line">            <span class="keyword">if</span> (sum[i] - sum[j] == k)</span><br><span class="line">                ans++;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个解法的时间复杂度 <code>O(N^2)</code> 空间复杂度 <code>O(N)</code>，并不是最优的解法。不过通过这个解法理解了前缀和数组的工作原理之后，可以使用一些巧妙的办法把时间复杂度进一步降低。</p>
+<h3 id="二、优化解法"><a href="#二、优化解法" class="headerlink" title="二、优化解法"></a>二、优化解法</h3><p>前面的解法有嵌套的 for 循环：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++)</span><br><span class="line">        <span class="keyword">if</span> (sum[i] - sum[j] == k)</span><br><span class="line">            ans++;</span><br></pre></td></tr></table></figure>
+
+<p>第二层 for 循环在干嘛呢？翻译一下就是，<strong>在计算，有几个 <code>j</code> 能够使得 <code>sum[i]</code> 和 <code>sum[j]</code> 的差为 k。</strong>毎找到一个这样的 <code>j</code>，就把结果加一。</p>
+<p>我们可以把 if 语句里的条件判断移项，这样写：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (sum[j] == sum[i] - k)</span><br><span class="line">    ans++;</span><br></pre></td></tr></table></figure>
+
+<p>优化的思路是：<strong>我直接记录下有几个 <code>sum[j]</code> 和 <code>sum[i] - k</code> 相等，直接更新结果，就避免了内层的 for 循环</strong>。我们可以用哈希表，在记录前缀和的同时记录该前缀和出现的次数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">subarraySum</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n = nums.length;</span><br><span class="line">    <span class="comment">// map：前缀和 -&gt; 该前缀和出现的次数</span></span><br><span class="line">    HashMap&lt;Integer, Integer&gt; </span><br><span class="line">        preSum = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="comment">// base case</span></span><br><span class="line">    preSum.put(<span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> ans = <span class="number">0</span>, sum0_i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        sum0_i += nums[i];</span><br><span class="line">        <span class="comment">// 这是我们想找的前缀和 nums[0..j]</span></span><br><span class="line">        <span class="keyword">int</span> sum0_j = sum0_i - k;</span><br><span class="line">        <span class="comment">// 如果前面有这个前缀和，则直接更新答案</span></span><br><span class="line">        <span class="keyword">if</span> (preSum.containsKey(sum0_j))</span><br><span class="line">            ans += preSum.get(sum0_j);</span><br><span class="line">        <span class="comment">// 把前缀和 nums[0..i] 加入并记录出现次数</span></span><br><span class="line">        preSum.put(sum0_i, </span><br><span class="line">            preSum.getOrDefault(sum0_i, <span class="number">0</span>) + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>比如说下面这个情况，需要前缀和 8 就能找到和为 k 的子数组了，之前的暴力解法需要遍历数组去数有几个 8，而优化解法借助哈希表可以直接得知有几个前缀和为 8。</p>
+<p><img src="/fucking-algorithm/算法思维系列/前缀和技巧.htm/pictures/%E5%89%8D%E7%BC%80%E5%92%8C/2.jpg" alt></p>
+<p>这样，就把时间复杂度降到了 <code>O(N)</code>，是最优解法了。</p>
+<h3 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h3><p>前缀和不难，却很有用，主要用于处理数组区间的问题。</p>
+<p>比如说，让你统计班上同学考试成绩在不同分数段的百分比，也可以利用前缀和技巧：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span>[] scores; <span class="comment">// 存储着所有同学的分数</span></span><br><span class="line"><span class="comment">// 试卷满分 150 分</span></span><br><span class="line"><span class="keyword">int</span>[] count = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">150</span> + <span class="number">1</span>]</span><br><span class="line"><span class="comment">// 记录每个分数有几个同学</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> score : scores)</span><br><span class="line">    count[score]++</span><br><span class="line"><span class="comment">// 构造前缀和</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; count.length; i++)</span><br><span class="line">    count[i] = count[i] + count[i-<span class="number">1</span>];</span><br></pre></td></tr></table></figure>
+
+<p>这样，给你任何一个分数段，你都能通过前缀和相减快速计算出这个分数段的人数，百分比也就很容易计算了。</p>
+<p>但是，稍微复杂一些的算法问题，不止考察简单的前缀和技巧。比如本文探讨的这道题目，就需要借助前缀和的思路做进一步的优化，借助哈希表去除不必要的嵌套循环。可见对题目的理解和细节的分析能力对于算法的优化是至关重要的。</p>
+<p>希望本文对你有帮助。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/算法思维系列/前缀和技巧.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/算法思维系列/前缀和技巧.html" data-id="cklrh5zam002vro9bro0tf17x" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前缀和技巧"><span class="toc-number">1.</span> <span class="toc-text">前缀和技巧</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、什么是前缀和"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、什么是前缀和</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、优化解法"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、优化解法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#三、总结"><span class="toc-number">1.0.3.</span> <span class="toc-text">三、总结</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

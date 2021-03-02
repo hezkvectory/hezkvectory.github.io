@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="队列实现栈|栈实现队列        相关推荐：  手把手带你刷二叉树（第三期） 高性能短链设计  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 232.用栈实现队列 225.用队列实现栈 ———– 队列是一种先进先出的数据结构，栈是一种先进后出的数据结构，形象一点就是这样：  这两种数据结构底层其实都是数组或者链表实现的，只是 API 限定了它们的特性，那么今">
+<meta property="og:type" content="website">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="队列实现栈|栈实现队列        相关推荐：  手把手带你刷二叉树（第三期） 高性能短链设计  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 232.用栈实现队列 225.用队列实现栈 ———– 队列是一种先进先出的数据结构，栈是一种先进后出的数据结构，形象一点就是这样：  这两种数据结构底层其实都是数组或者链表实现的，只是 API 限定了它们的特性，那么今">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+<meta property="og:image" content="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu">
+<meta property="og:image" content="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat">
+<meta property="og:image" content="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.htm/pictures/souyisou.png">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.htm/pictures/%E6%A0%88%E9%98%9F%E5%88%97/1.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.htm/pictures/%E6%A0%88%E9%98%9F%E5%88%97/2.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.htm/pictures/%E6%A0%88%E9%98%9F%E5%88%97/3.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.htm/pictures/%E6%A0%88%E9%98%9F%E5%88%97/4.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.htm/pictures/%E6%A0%88%E9%98%9F%E5%88%97/5.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.htm/pictures/%E6%A0%88%E9%98%9F%E5%88%97/6.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.htm/pictures/%E6%A0%88%E9%98%9F%E5%88%97/4.jpg">
+<meta property="og:image" content="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.htm/pictures/qrcode.jpg">
+<meta property="og:updated_time" content="2021-03-02T03:51:52.864Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="队列实现栈|栈实现队列        相关推荐：  手把手带你刷二叉树（第三期） 高性能短链设计  读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目： 232.用栈实现队列 225.用队列实现栈 ———– 队列是一种先进先出的数据结构，栈是一种先进后出的数据结构，形象一点就是这样：  这两种数据结构底层其实都是数组或者链表实现的，只是 API 限定了它们的特性，那么今">
+<meta name="twitter:image" content="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.html" class="article-date">
+  <time datetime="2021-03-02T03:51:52.864Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="队列实现栈-栈实现队列"><a href="#队列实现栈-栈实现队列" class="headerlink" title="队列实现栈|栈实现队列"></a>队列实现栈|栈实现队列</h1><p align="center">
+<a href="https://github.com/labuladong/fucking-algorithm" target="view_window"><img alt="GitHub" src="https://img.shields.io/github/stars/labuladong/fucking-algorithm?label=Stars&style=flat-square&logo=GitHub"></a>
+<a href="https://www.zhihu.com/people/labuladong" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/%E7%9F%A5%E4%B9%8E-@labuladong-000000.svg?style=flat-square&logo=Zhihu"></a>
+<a href="https://i.loli.net/2020/10/10/MhRTyUKfXZOlQYN.jpg" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/公众号-@labuladong-000000.svg?style=flat-square&logo=WeChat"></a>
+<a href="https://space.bilibili.com/14089380" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/B站-@labuladong-000000.svg?style=flat-square&logo=Bilibili"></a>
+</p>
+
+<p><img src="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.htm/pictures/souyisou.png" alt></p>
+<p>相关推荐：</p>
+<ul>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">手把手带你刷二叉树（第三期）</a></li>
+<li><a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">高性能短链设计</a></li>
+</ul>
+<p>读完本文，你不仅学会了算法套路，还可以顺便去 LeetCode 上拿下如下题目：</p>
+<p><a href="https://leetcode-cn.com/problems/implement-queue-using-stacks" target="_blank" rel="noopener">232.用栈实现队列</a></p>
+<p><a href="https://leetcode-cn.com/problems/implement-stack-using-queues" target="_blank" rel="noopener">225.用队列实现栈</a></p>
+<p><strong>———–</strong></p>
+<p>队列是一种先进先出的数据结构，栈是一种先进后出的数据结构，形象一点就是这样：</p>
+<p><img src="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.htm/pictures/%E6%A0%88%E9%98%9F%E5%88%97/1.jpg" alt></p>
+<p>这两种数据结构底层其实都是数组或者链表实现的，只是 API 限定了它们的特性，那么今天就来看看如何使用「栈」的特性来实现一个「队列」，如何用「队列」实现一个「栈」。</p>
+<h3 id="一、用栈实现队列"><a href="#一、用栈实现队列" class="headerlink" title="一、用栈实现队列"></a>一、用栈实现队列</h3><p>首先，队列的 API 如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyQueue</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** 添加元素到队尾 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">int</span> x)</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** 删除队头的元素并返回 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">pop</span><span class="params">()</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** 返回队头元素 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">peek</span><span class="params">()</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** 判断队列是否为空 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">empty</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们使用两个栈 <code>s1, s2</code> 就能实现一个队列的功能（这样放置栈可能更容易理解）：</p>
+<p><img src="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.htm/pictures/%E6%A0%88%E9%98%9F%E5%88%97/2.jpg" alt></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyQueue</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Stack&lt;Integer&gt; s1, s2;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyQueue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        s1 = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">        s2 = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当调用 <code>push</code> 让元素入队时，只要把元素压入 <code>s1</code> 即可，比如说 <code>push</code> 进 3 个元素分别是 1,2,3，那么底层结构就是这样：</p>
+<p><img src="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.htm/pictures/%E6%A0%88%E9%98%9F%E5%88%97/3.jpg" alt></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 添加元素到队尾 */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">    s1.push(x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那么如果这时候使用 <code>peek</code> 查看队头的元素怎么办呢？按道理队头元素应该是 1，但是在 <code>s1</code> 中 1 被压在栈底，现在就要轮到 <code>s2</code> 起到一个中转的作用了：当 <code>s2</code> 为空时，可以把 <code>s1</code> 的所有元素取出再添加进 <code>s2</code>，<strong>这时候 <code>s2</code> 中元素就是先进先出顺序了</strong>。</p>
+<p><img src="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.htm/pictures/%E6%A0%88%E9%98%9F%E5%88%97/4.jpg" alt></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 返回队头元素 */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">peek</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (s2.isEmpty())</span><br><span class="line">        <span class="comment">// 把 s1 元素压入 s2</span></span><br><span class="line">        <span class="keyword">while</span> (!s1.isEmpty())</span><br><span class="line">            s2.push(s1.pop());</span><br><span class="line">    <span class="keyword">return</span> s2.peek();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同理，对于 <code>pop</code> 操作，只要操作 <code>s2</code> 就可以了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 删除队头的元素并返回 */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 先调用 peek 保证 s2 非空</span></span><br><span class="line">    peek();</span><br><span class="line">    <span class="keyword">return</span> s2.pop();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后，如何判断队列是否为空呢？如果两个栈都为空的话，就说明队列为空：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 判断队列是否为空 */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">empty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> s1.isEmpty() &amp;&amp; s2.isEmpty();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>至此，就用栈结构实现了一个队列，核心思想是利用两个栈互相配合。</p>
+<p>值得一提的是，这几个操作的时间复杂度是多少呢？有点意思的是 <code>peek</code> 操作，调用它时可能触发 <code>while</code> 循环，这样的话时间复杂度是 O(N)，但是大部分情况下 <code>while</code> 循环不会被触发，时间复杂度是 O(1)。由于 <code>pop</code> 操作调用了 <code>peek</code>，它的时间复杂度和 <code>peek</code> 相同。</p>
+<p>像这种情况，可以说它们的<strong>最坏时间复杂度</strong>是 O(N)，因为包含 <code>while</code> 循环，<strong>可能</strong>需要从 <code>s1</code> 往 <code>s2</code> 搬移元素。</p>
+<p>但是它们的<strong>均摊时间复杂度</strong>是 O(1)，这个要这么理解：对于一个元素，最多只可能被搬运一次，也就是说 <code>peek</code> 操作平均到每个元素的时间复杂度是 O(1)。</p>
+<h3 id="二、用队列实现栈"><a href="#二、用队列实现栈" class="headerlink" title="二、用队列实现栈"></a>二、用队列实现栈</h3><p>如果说双栈实现队列比较巧妙，那么用队列实现栈就比较简单粗暴了，只需要一个队列作为底层数据结构。首先看下栈的 API：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyStack</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** 添加元素到栈顶 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">int</span> x)</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** 删除栈顶的元素并返回 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">pop</span><span class="params">()</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** 返回栈顶元素 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">top</span><span class="params">()</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** 判断栈是否为空 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">empty</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>先说 <code>push</code> API，直接将元素加入队列，同时记录队尾元素，因为队尾元素相当于栈顶元素，如果要 <code>top</code> 查看栈顶元素的话可以直接返回：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyStack</span> </span>&#123;</span><br><span class="line">    Queue&lt;Integer&gt; q = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">    <span class="keyword">int</span> top_elem = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** 添加元素到栈顶 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// x 是队列的队尾，是栈的栈顶</span></span><br><span class="line">        q.offer(x);</span><br><span class="line">        top_elem = x;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** 返回栈顶元素 */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">top</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> top_elem;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们的底层数据结构是先进先出的队列，每次 <code>pop</code> 只能从队头取元素；但是栈是后进先出，也就是说 <code>pop</code> API 要从队尾取元素。</p>
+<p><img src="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.htm/pictures/%E6%A0%88%E9%98%9F%E5%88%97/5.jpg" alt></p>
+<p>解决方法简单粗暴，把队列前面的都取出来再加入队尾，让之前的队尾元素排到队头，这样就可以取出了：</p>
+<p><img src="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.htm/pictures/%E6%A0%88%E9%98%9F%E5%88%97/6.jpg" alt></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 删除栈顶的元素并返回 */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> size = q.size();</span><br><span class="line">    <span class="keyword">while</span> (size &gt; <span class="number">1</span>) &#123;</span><br><span class="line">        q.offer(q.poll());</span><br><span class="line">        size--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 之前的队尾元素已经到了队头</span></span><br><span class="line">    <span class="keyword">return</span> q.poll();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样实现还有一点小问题就是，原来的队尾元素被提到队头并删除了，但是 <code>top_elem</code> 变量没有更新，我们还需要一点小修改：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 删除栈顶的元素并返回 */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> size = q.size();</span><br><span class="line">    <span class="comment">// 留下队尾 2 个元素</span></span><br><span class="line">    <span class="keyword">while</span> (size &gt; <span class="number">2</span>) &#123;</span><br><span class="line">        q.offer(q.poll());</span><br><span class="line">        size--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 记录新的队尾元素</span></span><br><span class="line">    top_elem = q.peek();</span><br><span class="line">    q.offer(q.poll());</span><br><span class="line">    <span class="comment">// 删除之前的队尾元素</span></span><br><span class="line">    <span class="keyword">return</span> q.poll();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后，API <code>empty</code> 就很容易实现了，只要看底层的队列是否为空即可：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 判断栈是否为空 */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">empty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> q.isEmpty();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>很明显，用队列实现栈的话，<code>pop</code> 操作时间复杂度是 O(N)，其他操作都是 O(1)​。​</p>
+<p>个人认为，用队列实现栈是没啥亮点的问题，但是<strong>用双栈实现队列是值得学习的</strong>。</p>
+<p><img src="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.htm/pictures/%E6%A0%88%E9%98%9F%E5%88%97/4.jpg" alt></p>
+<p>从栈 <code>s1</code> 搬运元素到 <code>s2</code> 之后，元素在 <code>s2</code> 中就变成了队列的先进先出顺序，这个特性有点类似「负负得正」，确实不太容易想到。</p>
+<p>希望本文对你有帮助。</p>
+<p><strong>＿＿＿＿＿＿＿＿＿＿＿＿＿</strong></p>
+<p><strong>刷算法，学套路，认准 labuladong，公众号和 <a href="https://labuladong.gitbook.io/algo" target="_blank" rel="noopener">在线电子书</a> 持续更新最新文章</strong>。</p>
+<p><strong>本小抄即将出版，微信扫码关注公众号，后台回复「小抄」限时免费获取，回复「进群」可进刷题群一起刷题，带你搞定 LeetCode</strong>。</p>
+<p align="center">
+<img src="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.htm/pictures/qrcode.jpg" width="200">
+</p>
+
+<p>======其他语言代码======</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/fucking-algorithm/数据结构系列/队列实现栈栈实现队列.html" data-id="cklrh5za90024ro9b3106c286" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#队列实现栈-栈实现队列"><span class="toc-number">1.</span> <span class="toc-text">队列实现栈|栈实现队列</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、用栈实现队列"><span class="toc-number">1.0.1.</span> <span class="toc-text">一、用栈实现队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、用队列实现栈"><span class="toc-number">1.0.2.</span> <span class="toc-text">二、用队列实现栈</span></a></li></ol></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>
