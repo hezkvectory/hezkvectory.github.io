@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>305. 岛屿数量2 | 我的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. 题目假设你设计一个游戏，用一个 m 行 n 列的 2D 网格来存储你的游戏地图。 起始的时候，每个格子的地形都被默认标记为「水」。 我们可以通过使用 addLand 进行操作，将位置 (row, col) 的「水」变成「陆地」。 你将会被给定一个列表，来记录所有需要被操作的位置，然后你需要返回计算出来 每次 addLand 操作后岛屿的数量。 注意：一个岛的定义是被「水」包围的「陆地」，通过">
+<meta name="keywords" content="数据结构与算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="305. 岛屿数量2">
+<meta property="og:url" content="/2021/03/02/leetcode/305. 岛屿数量2/index.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="1. 题目假设你设计一个游戏，用一个 m 行 n 列的 2D 网格来存储你的游戏地图。 起始的时候，每个格子的地形都被默认标记为「水」。 我们可以通过使用 addLand 进行操作，将位置 (row, col) 的「水」变成「陆地」。 你将会被给定一个列表，来记录所有需要被操作的位置，然后你需要返回计算出来 每次 addLand 操作后岛屿的数量。 注意：一个岛的定义是被「水」包围的「陆地」，通过">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2021-03-02T04:17:30.415Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="305. 岛屿数量2">
+<meta name="twitter:description" content="1. 题目假设你设计一个游戏，用一个 m 行 n 列的 2D 网格来存储你的游戏地图。 起始的时候，每个格子的地形都被默认标记为「水」。 我们可以通过使用 addLand 进行操作，将位置 (row, col) 的「水」变成「陆地」。 你将会被给定一个列表，来记录所有需要被操作的位置，然后你需要返回计算出来 每次 addLand 操作后岛屿的数量。 注意：一个岛的定义是被「水」包围的「陆地」，通过">
+  
+  
+<!--    <link rel="icon" href="/favicon.ico">-->
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value=""></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">我的博客</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-leetcode/305. 岛屿数量2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/03/02/leetcode/305. 岛屿数量2/" class="article-date">
+  <time datetime="2021-03-02T04:42:01.000Z" itemprop="datePublished">2021-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      305. 岛屿数量2
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h3 id="1-题目"><a href="#1-题目" class="headerlink" title="1. 题目"></a>1. 题目</h3><p>假设你设计一个游戏，用一个 m 行 n 列的 2D 网格来存储你的游戏地图。</p>
+<p>起始的时候，每个格子的地形都被默认标记为「水」。 我们可以通过使用 addLand 进行操作，将位置 (row, col) 的「水」变成「陆地」。</p>
+<p>你将会被给定一个列表，来记录所有需要被操作的位置，然后你需要返回计算出来 每次 addLand 操作后岛屿的数量。</p>
+<p>注意：一个岛的定义是被「水」包围的「陆地」，通过水平方向或者垂直方向上相邻的陆地连接而成。 你可以假设地图网格的四边均被无边无际的「水」所包围。</p>
+<p>请仔细阅读下方示例与解析，更加深入了解岛屿的判定。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">示例:</span><br><span class="line">输入: m = 3, n = 3, </span><br><span class="line">	positions = [[0,0], [0,1], [1,2], [2,1]]</span><br><span class="line">输出: [1,1,2,3]</span><br><span class="line">解析:</span><br><span class="line">起初，二维网格 grid 被全部注入「水」。（0 代表「水」，1 代表「陆地」）</span><br><span class="line">0 0 0</span><br><span class="line">0 0 0</span><br><span class="line">0 0 0</span><br><span class="line"></span><br><span class="line">操作 #1：addLand(0, 0) 将 grid[0][0] 的水变为陆地。</span><br><span class="line">1 0 0</span><br><span class="line">0 0 0   Number of islands = 1</span><br><span class="line">0 0 0</span><br><span class="line"></span><br><span class="line">操作 #2：addLand(0, 1) 将 grid[0][1] 的水变为陆地。</span><br><span class="line">1 1 0</span><br><span class="line">0 0 0   岛屿的数量为 1</span><br><span class="line">0 0 0</span><br><span class="line"></span><br><span class="line">操作 #3：addLand(1, 2) 将 grid[1][2] 的水变为陆地。</span><br><span class="line">1 1 0</span><br><span class="line">0 0 1   岛屿的数量为 2</span><br><span class="line">0 0 0</span><br><span class="line"></span><br><span class="line">操作 #4：addLand(2, 1) 将 grid[2][1] 的水变为陆地。</span><br><span class="line">1 1 0</span><br><span class="line">0 0 1   岛屿的数量为 3</span><br><span class="line">0 1 0</span><br><span class="line"></span><br><span class="line">拓展：</span><br><span class="line">你是否能在 O(k log mn) 的时间复杂度程度内完成每次的计算？</span><br><span class="line">（k 表示 positions 的长度）</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">      </span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span>[] father, <span class="keyword">int</span> id)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">int</span> tf = father[id];</span><br><span class="line">          <span class="keyword">while</span> (tf != father[tf]) &#123;</span><br><span class="line">              tf = father[tf];</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">int</span> cur = id;</span><br><span class="line">          <span class="keyword">int</span> tmp;</span><br><span class="line">          <span class="keyword">while</span> (father[cur] != tf) &#123;</span><br><span class="line">              tmp = father[cur];</span><br><span class="line">              father[cur] = tf;</span><br><span class="line">              cur = tmp;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> tf;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(<span class="keyword">int</span>[] father, <span class="keyword">int</span>[] sz, <span class="keyword">int</span> id1, <span class="keyword">int</span> id2)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">int</span> tf1 = find(father, id1);</span><br><span class="line">          <span class="keyword">int</span> tf2 = find(father, id2);</span><br><span class="line">          <span class="keyword">if</span> (tf1 != tf2) &#123;</span><br><span class="line">              <span class="keyword">if</span> (sz[tf1] &gt; sz[tf2]) &#123;</span><br><span class="line">                  father[tf2] = tf1;</span><br><span class="line">                  sz[tf1] += sz[tf2];</span><br><span class="line">              &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                  father[tf1] = tf2;</span><br><span class="line">                  sz[tf2] += sz[tf1];</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">numIslands2</span><span class="params">(<span class="keyword">int</span> m, <span class="keyword">int</span> n, <span class="keyword">int</span>[][] positions)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (m == <span class="number">0</span> || n == <span class="number">0</span>) &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">          &#125;</span><br><span class="line">          ArrayList&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList();</span><br><span class="line">          <span class="keyword">int</span>[] father = <span class="keyword">new</span> <span class="keyword">int</span>[m * n];</span><br><span class="line">          <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; father.length; i++) &#123;</span><br><span class="line">              father[i] = -<span class="number">1</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">int</span>[] sz = <span class="keyword">new</span> <span class="keyword">int</span>[m * n];</span><br><span class="line">          <span class="keyword">int</span>[] dr = &#123;<span class="number">0</span>, <span class="number">0</span>, -<span class="number">1</span>, <span class="number">1</span>&#125;;</span><br><span class="line">          <span class="keyword">int</span>[] dc = &#123;-<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>&#125;;</span><br><span class="line">          <span class="keyword">int</span> r;</span><br><span class="line">          <span class="keyword">int</span> c;</span><br><span class="line">          <span class="keyword">int</span> nr;</span><br><span class="line">          <span class="keyword">int</span> nc;</span><br><span class="line">          <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; positions.length; i++) &#123;</span><br><span class="line">              r = positions[i][<span class="number">0</span>];</span><br><span class="line">              c = positions[i][<span class="number">1</span>];</span><br><span class="line">              count++;</span><br><span class="line">              father[r * n + c] = r * n + c;</span><br><span class="line">              sz[r * n + c] = <span class="number">1</span>;</span><br><span class="line">              <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">4</span>; j++) &#123;</span><br><span class="line">                  nr = r + dr[j];</span><br><span class="line">                  nc = c + dc[j];</span><br><span class="line">                  <span class="keyword">if</span> (nr &gt;= <span class="number">0</span> &amp;&amp; nr &lt; m &amp;&amp; nc &gt;= <span class="number">0</span> &amp;&amp; nc &lt; n &amp;&amp; father[nr * n + nc] != -<span class="number">1</span>) &#123;</span><br><span class="line">                      <span class="keyword">if</span> (find(father, r * n + c) != find(father, nr * n + nc)) &#123;</span><br><span class="line">                          count--;</span><br><span class="line">                          union(father, sz, r * n + c, nr * n + nc);</span><br><span class="line">                      &#125;</span><br><span class="line">                  &#125;</span><br><span class="line">              &#125;</span><br><span class="line">              res.add(count);</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> res;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/2021/03/02/leetcode/305. 岛屿数量2/" data-id="cklri2qbq0006409bqxgdlzj4" class="article-share-link">分享</a>
+      
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2021/03/02/leetcode/200. 岛屿数量/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">200. 岛屿数量</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    <!--
+
+
+-->
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-题目"><span class="toc-number">1.</span> <span class="toc-text">1. 题目</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+    
+  
+    <!--微信公众号二维码-->
+
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2021 hezhengkui&nbsp;&nbsp;
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;hzkvectory@163.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png"/>
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>
