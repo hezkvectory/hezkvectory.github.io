@@ -90,7 +90,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2021/03/05/kafka/kafka命令/" data-id="cklw4plux000qwo9baj8d04zb" class="article-share-link">分享</a>
+      <a data-url="/2021/03/05/kafka/kafka命令/" data-id="cklw4t034000qy49bqghlved5" class="article-share-link">分享</a>
       
       
       
@@ -122,7 +122,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2021/03/05/es/es-template/" data-id="cklw4plul0009wo9bltncmmf9" class="article-share-link">分享</a>
+      <a data-url="/2021/03/05/es/es-template/" data-id="cklw4t02w0009y49benhdi4zr" class="article-share-link">分享</a>
       
       
       
@@ -134,9 +134,9 @@
 
 
   
-    <article id="post-es/dsl" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-es/es-template" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2021/03/05/es/dsl/" class="article-date">
+    <a href="/2021/03/05/es/es-template/" class="article-date">
   <time datetime="2021-03-05T02:28:35.000Z" itemprop="datePublished">2021-03-05</time>
 </a>
     
@@ -148,7 +148,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/05/es/dsl/">elasticsearch dsl</a>
+      <a class="article-title" href="/2021/03/05/es/es-template/">elasticsearch索引模版</a>
     </h1>
   
 
@@ -158,247 +158,17 @@
       
         <!-- Table of Contents -->
         
-        <ul>
-<li><p>对于复杂的查询，最好都先校验下，看有没有报错。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_validate/query?explain</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &quot;toothbrush&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <p>DELETE /_template/ftp_download_log</p>
+<p>GET _template</p>
+<p>es6版本之前，一个index可以有多个type</p>
+<p>es6版本之后，一个index只有一个type，默认是 _doc</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br></pre></td><td class="code"><pre><span class="line">PUT /_template/service_log_template</span><br><span class="line">&#123;</span><br><span class="line">	&quot;order&quot;: 0,</span><br><span class="line">	&quot;template&quot;: &quot;service*&quot;,</span><br><span class="line">	&quot;settings&quot;: &#123;</span><br><span class="line">		&quot;index&quot;: &#123;</span><br><span class="line">			&quot;number_of_shards&quot;: 2,</span><br><span class="line">			&quot;number_of_replicas&quot;: 0,</span><br><span class="line">			&quot;refresh_interval&quot;: &quot;10s&quot;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	&quot;mappings&quot;: &#123;</span><br><span class="line">		&quot;meteor-access&quot;: &#123;</span><br><span class="line">			&quot;properties&quot;: &#123;</span><br><span class="line">				&quot;hostName&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;request_trace_id&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;project&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpMethod&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;request_trace_seq&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;cloud&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpUri&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpRemoteAddress&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpRequestBegin&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpCode&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpReferer&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;group&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;source_host&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpTime&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;date&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;source_timestamp&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;date&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;file_name&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;profile&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpProtocol&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;time_local&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;date&quot;,</span><br><span class="line">					&quot;format&quot;: &quot;yyyy-MM-dd/HH:mm:ss.SSS&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpUserAgent&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;message&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpResponseEnd&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpRequestType&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;@timestamp&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;date&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;originProject&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;application&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;topic&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;invokeLink&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;source_date&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;date&quot;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-
-</li>
-</ul>
-<ul>
-<li><p>搜索商品名称包含 toothbrush，而且售价大于 400 元，小于 700 的商品</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;bool&quot;: &#123;</span><br><span class="line">      &quot;must&quot;: &#123;</span><br><span class="line">        &quot;match&quot;: &#123;</span><br><span class="line">          &quot;product_name&quot;: &quot;toothbrush&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;filter&quot;: &#123;</span><br><span class="line">        &quot;range&quot;: &#123;</span><br><span class="line">          &quot;price&quot;: &#123;</span><br><span class="line">            &quot;gt&quot;: 400,</span><br><span class="line">            &quot;lt&quot;: 700</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>full-text search 全文检索，倒排索引</p>
-</li>
-<li><p>索引中只要有任意一个匹配拆分后词就可以出现在结果中，只是匹配度越高的排越前面</p>
-</li>
-<li><p>比如查询：PHILIPS toothbrush，会被拆分成两个单词：PHILIPS 和 toothbrush。只要索引中 product_name 中只要含有任意对应单词，都会在搜索结果中，只是如果有数据同时含有这两个单词，则排序在前面。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &quot;PHILIPS toothbrush&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>phrase search 短语搜索</p>
-</li>
-<li><p>索引中必须同时匹配拆分后词就可以出现在结果中</p>
-</li>
-<li><p>比如查询：PHILIPS toothbrush，会被拆分成两个单词：PHILIPS 和 toothbrush。索引中必须有同时有这两个单词的才会在结果中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match_phrase&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &quot;PHILIPS toothbrush&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>range 用法，查询数值、时间区间：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;range&quot;: &#123;</span><br><span class="line">      &quot;price&quot;: &#123;</span><br><span class="line">        &quot;gte&quot;: 30.00</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>match 用法（与 term 进行对比）：</p>
-</li>
-<li><p>查询的字段内容是进行分词处理的，只要分词的单词结果中，在数据中有满足任意的分词结果都会被查询出来</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &quot;PHILIPS toothbrush&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &#123;</span><br><span class="line">        &quot;query&quot;: &quot;PHILIPS toothbrush&quot;,</span><br><span class="line">        &quot;operator&quot;: &quot;and&quot;</span><br><span class="line">      &#125;</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>match 还还有一种情况，就是必须满足分词结果中百分比的词，比如搜索词被分成这样子：java 程序员 书 推荐，这里就有 4 个词，假如要求 50% 命中其中两个词就返回，我们可以这样：</p>
-</li>
-<li><p>当然，这种需求也可以用 must、must_not、should 匹配同一个字段进行组合来查询</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &#123;</span><br><span class="line">        &quot;query&quot;: &quot;java 程序员 书 推荐&quot;,</span><br><span class="line">        &quot;minimum_should_match&quot;: &quot;50%&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>multi_match 用法：</p>
-</li>
-<li><p>查询 product_name 和 product_desc 字段中，只要有：toothbrush 关键字的就查询出来。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;multi_match&quot;: &#123;</span><br><span class="line">      &quot;query&quot;: &quot;toothbrush&quot;,</span><br><span class="line">      &quot;fields&quot;: [</span><br><span class="line">        &quot;product_name&quot;,</span><br><span class="line">        &quot;product_desc&quot;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>multi_match 跨多个 field 查询，表示查询分词必须出现在相同字段中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;multi_match&quot;: &#123;</span><br><span class="line">      &quot;query&quot;: &quot;PHILIPS toothbrush&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;cross_fields&quot;,</span><br><span class="line">      &quot;operator&quot;: &quot;and&quot;,</span><br><span class="line">      &quot;fields&quot;: [</span><br><span class="line">        &quot;product_name&quot;,</span><br><span class="line">        &quot;product_desc&quot;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>multi_match 用法：</p>
-</li>
-<li><p>查询 product_name 和 product_desc 字段中，只要有：toothbrush 关键字的就查询出来。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;multi_match&quot;: &#123;</span><br><span class="line">      &quot;query&quot;: &quot;toothbrush&quot;,</span><br><span class="line">      &quot;fields&quot;: [</span><br><span class="line">        &quot;product_name&quot;,</span><br><span class="line">        &quot;product_desc&quot;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>multi_match 跨多个 field 查询，表示查询分词必须出现在相同字段中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;multi_match&quot;: &#123;</span><br><span class="line">      &quot;query&quot;: &quot;PHILIPS toothbrush&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;cross_fields&quot;,</span><br><span class="line">      &quot;operator&quot;: &quot;and&quot;,</span><br><span class="line">      &quot;fields&quot;: [</span><br><span class="line">        &quot;product_name&quot;,</span><br><span class="line">        &quot;product_desc&quot;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>match_phrase 用法（短语搜索）（与 match 进行对比）：</p>
-</li>
-<li><p>对这个查询词不进行分词，必须完全匹配查询词才可以作为结果显示。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match_phrase&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &quot;PHILIPS toothbrush&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>match_phrase + slop（与 match_phrase 进行对比）：</p>
-</li>
-<li><p>在说 slop 的用法之前，需要先说明原数据是：PHILIPS toothbrush HX6730/02，被分词后至少有：PHILIPS，toothbrush，HX6730 三个 term。</p>
-</li>
-<li><p>match_phrase 的用法我们上面说了，按理说查询的词必须完全匹配才能查询到，PHILIPS HX6730 很明显是不完全匹配的。</p>
-</li>
-<li><p>但是有时候我们就是要这种不完全匹配，只要求他们尽可能靠谱，中间有几个单词是没啥问题的，那就可以用到 slop。slop = 2 表示中间如果间隔 2 个单词以内也算是匹配的结果（）。</p>
-</li>
-<li><p>其实也不能称作间隔，应该说是移位，查询的关键字分词后移动多少位可以跟 doc 内容匹配，移动的次数就是 slop。所以 HX6730 PHILIPS 其实也是可以匹配到 doc 的，只是 slop = 5 才行。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match_phrase&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot; : &#123;</span><br><span class="line">          &quot;query&quot; : &quot;PHILIPS HX6730&quot;,</span><br><span class="line">          &quot;slop&quot; : 1</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>match + match_phrase + slop 组合查询，使查询结果更加精准和结果更多</p>
-</li>
-<li><p>但是 match_phrase 性能没有 match 好，所以一般需要先用 match 第一步进行过滤，然后在用 match_phrase 进行进一步匹配，并且重新打分，这里又用到了：rescore，window_size 表示对前 10 个进行重新打分</p>
-</li>
-<li><p>下面第一个是未重新打分的，第二个是重新打分的</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;bool&quot;: &#123;</span><br><span class="line">      &quot;must&quot;: &#123;</span><br><span class="line">        &quot;match&quot;: &#123;</span><br><span class="line">          &quot;product_name&quot;: &#123;</span><br><span class="line">            &quot;query&quot;: &quot;PHILIPS HX6730&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;should&quot;: &#123;</span><br><span class="line">        &quot;match_phrase&quot;: &#123;</span><br><span class="line">          &quot;product_name&quot;: &#123;</span><br><span class="line">            &quot;query&quot;: &quot;PHILIPS HX6730&quot;,</span><br><span class="line">            &quot;slop&quot;: 10</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &quot;PHILIPS HX6730&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;rescore&quot;: &#123;</span><br><span class="line">    &quot;window_size&quot;: 10,</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">      &quot;rescore_query&quot;: &#123;</span><br><span class="line">        &quot;match_phrase&quot;: &#123;</span><br><span class="line">          &quot;product_name&quot;: &#123;</span><br><span class="line">            &quot;query&quot;: &quot;PHILIPS HX6730&quot;,</span><br><span class="line">            &quot;slop&quot;: 10</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>terms 用法，类似于数据库的 in</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;constant_score&quot;: &#123;</span><br><span class="line">      &quot;filter&quot;: &#123;</span><br><span class="line">        &quot;terms&quot;: &#123;</span><br><span class="line">          &quot;product_name&quot;: [</span><br><span class="line">            &quot;toothbrush&quot;,</span><br><span class="line">            &quot;shell&quot;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>mysql 语法</th>
-<th>es dsl</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>select * from xxx</td>
-<td>/xxx/query<br>{<br>  “query”:{<br>    “match_all”:{<br>    }<br>  }<br>}</td>
-</tr>
-<tr>
-<td>select * from xxx where name=xxx</td>
-<td>/index/query<br>{<br>  “query”:{<br>    “match”:{<br>      “name”: xxx<br>    }<br>  }<br>}</td>
-</tr>
-<tr>
-<td>select * from xxx where name = xxx order by price desc</td>
-<td>/index/query<br>{<br>  “query”:{<br>    “match”:{<br>      “name”: xxx<br>    }<br>  },<br>  “sort”:[<br>    {“price”: “desc”}<br>  ]<br>}</td>
-</tr>
-<tr>
-<td>select f1,f2 from xxx where name = xxx</td>
-<td>/index/query<br>{<br>  “query”:{<br>    “match”:{<br>      “name”: xxx<br>    }<br>  },<br>  “_source”:[<br>    “f1”,<br>    “f2”<br>  ]<br>}</td>
-</tr>
-<tr>
-<td>select * from xxx where name = xxx limit 0,10</td>
-<td>/index/query<br>{<br>  “query”:{<br>    “match”:{<br>      “name”: xxx<br>    }<br>  },<br>  “from”: 0,<br>  “size”: 10<br>}</td>
-</tr>
-<tr>
-<td>select * from xxx where name = xxx and price between 400 and 700</td>
-<td>/index/query<br>{<br>  “query”:{<br>    “bool”:{<br>      “must”:{<br>        “match”:{<br>          “name”: xxx<br>        }<br>      },<br>      “filter”:{<br>        “range”:{<br>          “price”: {<br>            “gt”: 400,<br>            “lt”: 700<br>          }<br>        }<br>      }<br>    }<br>  },<br>}</td>
-</tr>
-<tr>
-<td></td>
-<td>GET /index/_search<br>{<br>  “query”: {<br>    “match_phrase”: {<br>      “product_name”: “PHILIPS toothbrush”<br>    }<br>  }<br>}</td>
-</tr>
-<tr>
-<td></td>
-<td>/index/query<br>{<br>  “query”:{<br>    “range”:{<br>      “price”:{<br>        “lt”: 300<br>      }<br>    }<br>  },<br>}</td>
-</tr>
-<tr>
-<td></td>
-<td>GET /index/_search<br>{<br>  “query”: {<br>    “match”: {<br>      “product_name”: {<br>        “query”: “PHILIPS toothbrush”,<br>        “operator”: “and”<br>      }<br>     }<br>   }<br>}</td>
-</tr>
-<tr>
-<td></td>
-<td>GET /product_index/product/_search<br>{<br>  “query”: {<br>    “match”: {<br>      “product_name”: {<br>        “query”: “java 程序员 书 推荐”,<br>        “minimum_should_match”: “50%”<br>      }<br>    }<br>  }<br>}</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<ul>
-<li>phrase search 短语搜索</li>
-</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2021/03/05/es/dsl/" data-id="cklw4pluj0006wo9b53mmbgr0" class="article-share-link">分享</a>
+      <a data-url="/2021/03/05/es/es-template/" data-id="cklw4t02x000ay49b9r4716au" class="article-share-link">分享</a>
       
       
       
@@ -470,15 +240,15 @@
           </li>
         
           <li>
-            <a href="/2021/03/05/es/dsl/">elasticsearch dsl</a>
-          </li>
-        
-          <li>
             <a href="/2021/03/05/es/es-template/">elasticsearch索引模版</a>
           </li>
         
           <li>
             <a href="/2021/03/05/es/elk/">日志收集</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/05/es/dsl/">elasticsearch dsl</a>
           </li>
         
       </ul>
