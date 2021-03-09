@@ -3,20 +3,20 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-  <title>kafka生产消费命令 | 我的博客</title>
+  <title>es-添加文档过程 | 我的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="12345678910111213./kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test001./kafka-console-producer.sh --broker-list 127.0.0.1:9092,127.0.0.1:9093 --topic logs_teacher_teacher-app_bible-">
-<meta name="keywords" content="kafka">
+  <meta name="description" content="es是如何从一条curl命令，把文本添加到es 索引文档中的，下面通过源码进行分析。 1234567891011121314151617RestIndexActionNodeClientTransportIndexActionTransportSingleItemBulkWriteActionTransportBulkActionTransportReplicationAction	Reroute">
+<meta name="keywords" content="es">
 <meta property="og:type" content="article">
-<meta property="og:title" content="kafka生产消费命令">
-<meta property="og:url" content="/2021/03/05/kafka/kafka命令/index.html">
+<meta property="og:title" content="es-添加文档过程">
+<meta property="og:url" content="/2021/03/08/es/es-添加文档过程/index.html">
 <meta property="og:site_name" content="我的博客">
-<meta property="og:description" content="12345678910111213./kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test001./kafka-console-producer.sh --broker-list 127.0.0.1:9092,127.0.0.1:9093 --topic logs_teacher_teacher-app_bible-">
+<meta property="og:description" content="es是如何从一条curl命令，把文本添加到es 索引文档中的，下面通过源码进行分析。 1234567891011121314151617RestIndexActionNodeClientTransportIndexActionTransportSingleItemBulkWriteActionTransportBulkActionTransportReplicationAction	Reroute">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2021-03-05T09:49:28.023Z">
+<meta property="og:updated_time" content="2021-03-08T10:04:55.613Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="kafka生产消费命令">
-<meta name="twitter:description" content="12345678910111213./kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test001./kafka-console-producer.sh --broker-list 127.0.0.1:9092,127.0.0.1:9093 --topic logs_teacher_teacher-app_bible-">
+<meta name="twitter:title" content="es-添加文档过程">
+<meta name="twitter:description" content="es是如何从一条curl命令，把文本添加到es 索引文档中的，下面通过源码进行分析。 1234567891011121314151617RestIndexActionNodeClientTransportIndexActionTransportSingleItemBulkWriteActionTransportBulkActionTransportReplicationAction	Reroute">
   
   
 <!--    <link rel="icon" href="/favicon.ico">-->
@@ -63,10 +63,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-kafka/kafka命令" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-es/es-添加文档过程" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2021/03/05/kafka/kafka命令/" class="article-date">
-  <time datetime="2021-03-05T10:45:02.000Z" itemprop="datePublished">2021-03-05</time>
+    <a href="/2021/03/08/es/es-添加文档过程/" class="article-date">
+  <time datetime="2021-03-08T05:28:35.000Z" itemprop="datePublished">2021-03-08</time>
 </a>
     
   </div>
@@ -77,7 +77,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      kafka生产消费命令
+      es-添加文档过程
     </h1>
   
 
@@ -87,17 +87,52 @@
       
         <!-- Table of Contents -->
         
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">./kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test001</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-console-producer.sh --broker-list 127.0.0.1:9092,127.0.0.1:9093 --topic logs_teacher_teacher-app_bible-server-api</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic logs_teacher_teacher-app_bible-server-api --from-beginning</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-topics.sh --create --zookeeper 127.0.0.1:2181 --replication-factor 1 --partitions 2 --topic test001</span><br><span class="line"></span><br><span class="line">./kafka-topics.sh --zookeeper 127.0.0.1:2181 --list</span><br></pre></td></tr></table></figure>
+        <p>es是如何从一条curl命令，把文本添加到es 索引文档中的，下面通过源码进行分析。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">RestIndexAction</span><br><span class="line">NodeClient</span><br><span class="line">TransportIndexAction</span><br><span class="line">TransportSingleItemBulkWriteAction</span><br><span class="line">TransportBulkAction</span><br><span class="line">TransportReplicationAction</span><br><span class="line">	ReroutePhase</span><br><span class="line">	</span><br><span class="line">TransportService</span><br><span class="line">	TransportReplicationAction</span><br><span class="line">		PrimaryOperationTransportHandler</span><br><span class="line">			AsyncPrimaryAction</span><br><span class="line">			ReplicationOperation</span><br><span class="line">			TransportShardBulkAction</span><br><span class="line">			TransportSingleItemBulkWriteAction</span><br><span class="line">			IndexShard</span><br><span class="line">			InternalEngine</span><br></pre></td></tr></table></figure>
 
+<p>创建索引的过程：</p>
+<ol>
+<li><p>执行curl</p>
+</li>
+<li><p>进入到RestIndexAction，解析请求参数，封装IndexRequest</p>
+</li>
+<li><p>然后进入org.elasticsearch.action.bulk.TransportBulkAction</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">executeBulk(task, bulkRequest, startTime, listener, responses, indicesThatCannotBeCreated);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">new BulkOperation(task, bulkRequest, listener, responses, startTimeNanos, indicesThatCannotBeCreated).run();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>org.elasticsearch.action.bulk.TransportShardBulkAction</p>
+</li>
+</ol>
+<ol>
+<li>org.elasticsearch.action.bulk.TransportShardBulkAction#executeBulkItemRequest</li>
+<li>org.elasticsearch.index.shard.IndexShard#index(org.elasticsearch.index.engine.Engine.Index)</li>
+<li>org.elasticsearch.index.engine.InternalEngine#index(org.elasticsearch.index.engine.Engine.Index)</li>
+</ol>
+<p>es添加索引文档</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> curl -X PUT &apos;localhost:9200/index_name/type_name/5&apos; -H &apos;Content-Type: application/json&apos; -d &apos;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;title&quot;: &quot;我是文件标题，可被搜索到&quot;,</span><br><span class="line">  &quot;text&quot;:  &quot;文本内容，ES时如何索引一个文档的&quot;,</span><br><span class="line">  &quot;date&quot;:  &quot;2019/01/01&quot;</span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure>
+
+<p>执行以上这条命令后，请求会进入到 <strong>org.elasticsearch.rest.action.document.RestIndexAction#prepareRequest</strong> 方法</p>
+<ol>
+<li><p>执行NodeClient.index方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">client.index(indexRequest, new RestStatusToXContentListener&lt;&gt;(channel, r -&gt; r.getLocation(indexRequest.routing())))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>org.elasticsearch.client.node.NodeClient#executeLocally(org.elasticsearch.action.GenericAction&lt;Request,Response&gt;, Request, org.elasticsearch.action.ActionListener<response>)</response></p>
+</li>
+<li><p>org.elasticsearch.action.support.TransportAction#execute(Request, org.elasticsearch.action.ActionListener<response>)</response></p>
+</li>
+<li><p>org.elasticsearch.action.bulk.TransportBulkAction#doExecute(org.elasticsearch.tasks.Task, org.elasticsearch.action.bulk.BulkRequest, org.elasticsearch.action.ActionListener&lt;org.elasticsearch.action.bulk.BulkResponse&gt;)</p>
+</li>
+</ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2021/03/05/kafka/kafka命令/" data-id="ckm1o24ce000ogu9b1j2l5usv" class="article-share-link">分享</a>
+      <a data-url="/2021/03/08/es/es-添加文档过程/" data-id="ckm1o24c4000bgu9ba3k06lqe" class="article-share-link">分享</a>
       
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kafka/">kafka</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
 
     </footer>
   </div>
@@ -147,19 +182,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2021/03/08/es/es-添加文档过程/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2021/03/09/es/es-基本类型/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">上一篇</strong>
       <div class="article-nav-title">
         
-          es-添加文档过程
+          elasticsearch级别类型
         
       </div>
     </a>
   
   
-    <a href="/2021/03/05/es/es-template/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2021/03/05/kafka/kafka命令/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title"></div>
+      <div class="article-nav-title">kafka生产消费命令</div>
     </a>
   
 </nav>

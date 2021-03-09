@@ -60,9 +60,39 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-es/elk" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-es/es-template" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2021/03/05/es/elk/" class="article-date">
+    <a href="/2021/03/05/es/es-template/" class="article-date">
+  <time datetime="2021-03-05T08:29:13.165Z" itemprop="datePublished">2021-03-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        {"service_log_template":{"order":0,"template":"service*","settings":{"index":{"number_of_shards":"2","number_of_replicas":"0","refresh_interval":"10s"}},"mappings":{"bible-server-api-error":{"properties":{"@timestamp":{"type":"date"},"application":{"type":"keyword"},"cloud":{"type":"keyword"},"file_name":{"type":"keyword"},"group":{"type":"keyword"},"hostName":{"type":"keyword"},"httpCode":{"type":"long"},"httpMethod":{"type":"keyword"},"httpProtocol":{"type":"keyword"},"httpReferer":{"type":"keyword"},"httpRemoteAddress":{"type":"keyword"},"httpRequestBegin":{"type":"keyword"},"httpRequestType":{"type":"keyword"},"httpResponseEnd":{"type":"keyword"},"httpTime":{"type":"date"},"httpUri":{"type":"keyword"},"httpUserAgent":{"type":"keyword"},"invokeLink":{"type":"keyword"},"message":{"type":"text"},"originProject":{"type":"keyword"},"profile":{"type":"keyword"},"project":{"type":"keyword"},"request_trace_id":{"type":"keyword"},"request_trace_seq":{"type":"keyword"},"source_host":{"type":"keyword"},"source_timestamp":{"type":"date"},"source_date":{"type":"date"},"time_local":{"type":"date","format":"yyyy-MM-dd/HH:mm:ss.SSS"},"topic":{"type":"keyword"}}}},"aliases":{}},"service-template":{"order":0,"template":"service*","settings":{"index":{"number_of_shards":"1","number_of_replicas":"4"}},"mappings":{"_default_":{"_source":{"enabled":false}},"docs":{"properties":{"sold":{"type":"long"},"online_time":{"type":"long"},"price":{"type":"long"},"publish_time":{"type":"long"},"id":{"type":"long"},"catecode":{"type":"integer"},"content":{"index":false,"store":true,"type":"keyword"},"status":{"type":"integer"}}}},"aliases":{}},"ftp_download_log":{"order":0,"template":"te*","settings":{"index":{"number_of_shards":"1"}},"mappings":{"type1":{"_source":{"enabled":false}}},"aliases":{}}}
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="/2021/03/05/es/es-template/" data-id="ckm1o24bx0007gu9bw7ihqzd5" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+ 
+
+
+  
+    <article id="post-es/es-template" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/03/05/es/es-template/" class="article-date">
   <time datetime="2021-03-05T02:28:35.000Z" itemprop="datePublished">2021-03-05</time>
 </a>
     
@@ -74,7 +104,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/05/es/elk/">日志收集</a>
+      <a class="article-title" href="/2021/03/05/es/es-template/">elasticsearch索引模版</a>
     </h1>
   
 
@@ -84,33 +114,17 @@
       
         <!-- Table of Contents -->
         
-        <p>微服务架构中，日志收集平台起着关键作用。</p>
-<p>下面一起看看elk怎么落地的。</p>
-<p>日志收集框架: flume  logstash filebeats</p>
-<p>日志存储: elasticsearch</p>
-<p>日志查询: kibana</p>
-<p>日志收集使用的是flume，flume分agent和collector。业务项目采集日志使用TAILDIR采集实时日志，使用spooldir采集历史文件。</p>
-<p>flume agent和collector通过avro进行通信，agent把日志通过tcp传输到collector，collector经过一系列的interceptor后，把数据发送到kafka集群，然后通过logstash消费kafka日志，写入elasticsearch中。最后通过kibana平台，提供业务日志查询功能。</p>
-<p>我司未使用logstash，只采用了logstash思想。</p>
-<p>需要建elasticsearch template模板。</p>
-<p>下面使用docker搭建测试日志平台。</p>
-<p>1、搭建zookeeper、kafka集群</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">version: &apos;2&apos;</span><br><span class="line">services:</span><br><span class="line">  zookeeper:</span><br><span class="line">    image: zookeeper:3.4.14</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;2181:2181&quot;</span><br><span class="line">  kafka:</span><br><span class="line">    image: wurstmeister/kafka</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;9092:9092&quot;</span><br><span class="line">    environment:</span><br><span class="line">      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1</span><br><span class="line">      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181</span><br><span class="line">      KAFKA_ADVERTISED_PORT: 9092</span><br><span class="line">      KAFKA_LOG_RETENTION_HOURS: 120</span><br><span class="line">      KAFKA_MESSAGE_MAX_BYTES: 10000000</span><br><span class="line">      KAFKA_REPLICA_FETCH_MAX_BYTES: 10000000</span><br><span class="line">      KAFKA_GROUP_MAX_SESSION_TIMEOUT_MS: 60000</span><br><span class="line">      KAFKA_NUM_PARTITIONS: 3</span><br><span class="line">      KAFKA_DELETE_RETENTION_MS: 1000</span><br><span class="line">  kafka-manager:</span><br><span class="line">    image: sheepkiller/kafka-manager</span><br><span class="line">    environment:</span><br><span class="line">        ZK_HOSTS: zookeeper</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;9001:9000&quot;</span><br></pre></td></tr></table></figure>
-
-<p>2、搭建elastichsearch 、kibana环境</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#docker-compose.yml</span><br><span class="line">version: &apos;3&apos;</span><br><span class="line"></span><br><span class="line">services:</span><br><span class="line">  elasticsearch:</span><br><span class="line">    build:</span><br><span class="line">      context: ./config/elasticsearch</span><br><span class="line">      dockerfile: Dockerfile</span><br><span class="line">    volumes:</span><br><span class="line">      - ./data/elasticsearch/data:/usr/share/elasticsearch/data</span><br><span class="line">      - ./data/elasticsearch/backups:/usr/share/elasticsearch/backups</span><br><span class="line">      - ./config/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro</span><br><span class="line">    ports:</span><br><span class="line">      - 9200:9200</span><br><span class="line">      - 9300:9300</span><br><span class="line"></span><br><span class="line">  kibana:</span><br><span class="line">    image: kibana:5.6</span><br><span class="line">    volumes:</span><br><span class="line">      - ./config/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml:ro</span><br><span class="line">      - ./data/kibana/log:/var/log:rw</span><br><span class="line">    links:</span><br><span class="line">      - elasticsearch</span><br><span class="line">    ports:</span><br><span class="line">      - 5601:5601</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#./config/elasticsearch/Dockerfile</span><br><span class="line"></span><br><span class="line">FROM elasticsearch:5.6</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#./config/elasticsearch/elasticsearch.yml</span><br><span class="line"></span><br><span class="line">network.host: 0.0.0.0</span><br><span class="line">network.bind_host: 0.0.0.0</span><br><span class="line">http.cors.enabled: true</span><br><span class="line">http.cors.allow-origin: &quot;*&quot;</span><br><span class="line">cluster.name: ElasticsearchCluster</span><br><span class="line">node.name: ElasticsearchNode</span><br><span class="line">discovery.type: single-node</span><br><span class="line">path.repo: [&quot;/usr/share/elasticsearch/backups&quot;]</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#./config/kibana/kibana.yml</span><br><span class="line"></span><br><span class="line">server.name: kibana</span><br><span class="line">server.host: &quot;0&quot;</span><br><span class="line">elasticsearch.url: http://elasticsearch:9200</span><br><span class="line">elasticsearch.username: elastic</span><br><span class="line">elasticsearch.password: MyPwd123</span><br><span class="line">xpack.monitoring.ui.container.elasticsearch.enabled: true</span><br><span class="line"># logging.dest: /var/log/kibana.log</span><br></pre></td></tr></table></figure>
+        <p>DELETE /_template/ftp_download_log</p>
+<p>GET _template</p>
+<p>es6版本之前，一个index可以有多个type</p>
+<p>es6版本之后，一个index只有一个type，默认是 _doc</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line">PUT /_template/service_log_template_1</span><br><span class="line">&#123;</span><br><span class="line">	&quot;order&quot;: 0,</span><br><span class="line">	&quot;template&quot;: &quot;service*&quot;,</span><br><span class="line">	&quot;settings&quot;: &#123;</span><br><span class="line">		&quot;index&quot;: &#123;</span><br><span class="line">			&quot;number_of_shards&quot;: 2,</span><br><span class="line">			&quot;number_of_replicas&quot;: 0,</span><br><span class="line">			&quot;refresh_interval&quot;: &quot;10s&quot;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	&quot;mappings&quot;: &#123;</span><br><span class="line">		&quot;bible-server-api&quot;: &#123;</span><br><span class="line">			&quot;properties&quot;: &#123;</span><br><span class="line">				&quot;hostName&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;request_trace_id&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;project&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpMethod&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;request_trace_seq&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;cloud&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpUri&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpRemoteAddress&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpRequestBegin&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpCode&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpReferer&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;group&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;source_host&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpTime&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;date&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;source_timestamp&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;date&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;file_name&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;profile&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpProtocol&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;time_local&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;date&quot;,</span><br><span class="line">					&quot;format&quot;: &quot;yyyy-MM-dd/HH:mm:ss.SSS&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpUserAgent&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;message&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpResponseEnd&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpRequestType&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;@timestamp&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;date&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;originProject&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;application&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;topic&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;invokeLink&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;source_date&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;date&quot;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2021/03/05/es/elk/" data-id="cklw4t02v0007y49bb8ro2sie" class="article-share-link">分享</a>
+      <a data-url="/2021/03/05/es/es-template/" data-id="ckm1o24by0009gu9bvhtqz438" class="article-share-link">分享</a>
       
       
       
@@ -388,7 +402,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="/2021/03/05/es/dsl/" data-id="cklw4t02u0006y49bbmkk44m9" class="article-share-link">分享</a>
+      <a data-url="/2021/03/05/es/dsl/" data-id="ckm1o24c6000egu9b2pg33wos" class="article-share-link">分享</a>
       
       
       
@@ -402,55 +416,10 @@
 
 
   
-    <article id="post-leetcode/stack" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2021/03/02/leetcode/stack/" class="article-date">
-  <time datetime="2021-03-02T10:45:02.000Z" itemprop="datePublished">2021-03-02</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/02/leetcode/stack/">stack</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <!-- Table of Contents -->
-        
-        <h4 id="栈定义"><a href="#栈定义" class="headerlink" title="栈定义"></a>栈定义</h4><p>栈是一种操作受限的线性表只允许从一端插入和删除数据。栈有两种存储方式，即线性存储和链接存储（链表）。栈的一个最重要的特征就是栈的插入和删除只能在栈顶进行，所以每次删除的元素都是最后进栈的元素，故栈也被称为后进先出（LIFO）表。每个栈都有一个栈顶指针，它初始值为-1，且总是指向最后一个入栈的元素，栈有两种处理方式，即进栈（push）和出栈（pop），因为在进栈只需要移动一个变量存储空间，所以它的时间复杂度为O(1)，但是对于出栈分两种情况，栈未满时，时间复杂度也为O(1)，但是当栈满时，需要重新分配内存，并移动栈内所有数据，所以此时的时间复杂度为O(n)。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Iterator;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Stack</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">Iterable</span>&lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">    <span class="comment">//记录首结点</span></span><br><span class="line">    <span class="keyword">private</span> Node head;</span><br><span class="line">    <span class="comment">//栈中元素的个数</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> N;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> T item;</span><br><span class="line">        <span class="keyword">public</span> Node next;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(T item, Node next)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.item = item;</span><br><span class="line">            <span class="keyword">this</span>.next = next;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Stack</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.head = <span class="keyword">new</span> Node(<span class="keyword">null</span>,<span class="keyword">null</span>);</span><br><span class="line">        <span class="keyword">this</span>.N=<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//判断当前栈中元素个数是否为0</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> N==<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//获取栈中元素的个数</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> N;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//把t元素压入栈</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(T t)</span></span>&#123;</span><br><span class="line">        <span class="comment">//找到首结点指向的第一个结点</span></span><br><span class="line">        Node oldFirst = head.next;</span><br><span class="line">        <span class="comment">//创建新结点</span></span><br><span class="line">        Node newNode = <span class="keyword">new</span> Node(t, <span class="keyword">null</span>);</span><br><span class="line">        <span class="comment">//让首结点指向新结点</span></span><br><span class="line">        head.next = newNode;</span><br><span class="line">        <span class="comment">//让新结点指向原来的第一个结点</span></span><br><span class="line">        newNode.next=oldFirst;</span><br><span class="line">        <span class="comment">//元素个数+1；</span></span><br><span class="line">        N++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//弹出栈顶元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">pop</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//找到首结点指向的第一个结点</span></span><br><span class="line">        Node oldFirst = head.next;</span><br><span class="line">        <span class="keyword">if</span> (oldFirst==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//让首结点指向原来第一个结点的下一个结点</span></span><br><span class="line">        head.next=oldFirst.next;</span><br><span class="line">        <span class="comment">//元素个数-1；</span></span><br><span class="line">        N--;</span><br><span class="line">        <span class="keyword">return</span> oldFirst.item;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Iterator&lt;T&gt; <span class="title">iterator</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> SIterator();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">SIterator</span> <span class="keyword">implements</span> <span class="title">Iterator</span></span>&#123;</span><br><span class="line">        <span class="keyword">private</span> Node n;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">SIterator</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.n=head;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasNext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> n.next!=<span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Object <span class="title">next</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            n = n.next;</span><br><span class="line">            <span class="keyword">return</span> n.item;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="/2021/03/02/leetcode/stack/" data-id="cklw4t03d0019y49b6zrt4bz5" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
- 
-
-
-  
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/3/">下一页&raquo;</a>
+    <a class="extend prev" rel="prev" href="/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/3/">下一页&raquo;</a>
   </nav>
 </section>
            
@@ -476,6 +445,14 @@
       <ul>
         
           <li>
+            <a href="/2021/03/09/es/es-基本类型/">elasticsearch级别类型</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/08/es/es-添加文档过程/">es-添加文档过程</a>
+          </li>
+        
+          <li>
             <a href="/2021/03/05/kafka/kafka命令/">kafka生产消费命令</a>
           </li>
         
@@ -485,14 +462,6 @@
         
           <li>
             <a href="/2021/03/05/es/es-template/">elasticsearch索引模版</a>
-          </li>
-        
-          <li>
-            <a href="/2021/03/05/es/elk/">日志收集</a>
-          </li>
-        
-          <li>
-            <a href="/2021/03/05/es/dsl/">elasticsearch dsl</a>
           </li>
         
       </ul>

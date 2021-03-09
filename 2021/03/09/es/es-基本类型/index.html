@@ -3,15 +3,20 @@
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
   
-  <title>我的博客</title>
+  <title>elasticsearch级别类型 | 我的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="我的博客">
-<meta property="og:url" content="/index.html">
+  <meta name="description" content="Object类型12345678910111213141516171819PUT my_index/my_type/1&amp;#123;   &amp;quot;region&amp;quot;: &amp;quot;US&amp;quot;,  &amp;quot;manager&amp;quot;: &amp;#123;     &amp;quot;age&amp;quot;:     30,    &amp;quot;name&amp;quot;: &amp;#123;       &amp;quo">
+<meta name="keywords" content="es">
+<meta property="og:type" content="article">
+<meta property="og:title" content="elasticsearch级别类型">
+<meta property="og:url" content="/2021/03/09/es/es-基本类型/index.html">
 <meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="Object类型12345678910111213141516171819PUT my_index/my_type/1&amp;#123;   &amp;quot;region&amp;quot;: &amp;quot;US&amp;quot;,  &amp;quot;manager&amp;quot;: &amp;#123;     &amp;quot;age&amp;quot;:     30,    &amp;quot;name&amp;quot;: &amp;#123;       &amp;quo">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2021-03-09T07:00:10.914Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="我的博客">
+<meta name="twitter:title" content="elasticsearch级别类型">
+<meta name="twitter:description" content="Object类型12345678910111213141516171819PUT my_index/my_type/1&amp;#123;   &amp;quot;region&amp;quot;: &amp;quot;US&amp;quot;,  &amp;quot;manager&amp;quot;: &amp;#123;     &amp;quot;age&amp;quot;:     30,    &amp;quot;name&amp;quot;: &amp;#123;       &amp;quo">
   
   
 <!--    <link rel="icon" href="/favicon.ico">-->
@@ -58,9 +63,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-es/es-基本类型" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-es/es-基本类型" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2021/03/09/es/es-基本类型/" class="article-date">
   <time datetime="2021-03-09T03:27:35.000Z" itemprop="datePublished">2021-03-09</time>
@@ -73,8 +76,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/09/es/es-基本类型/">elasticsearch级别类型</a>
+    <h1 class="article-title" itemprop="name">
+      elasticsearch级别类型
     </h1>
   
 
@@ -281,228 +284,112 @@
     </footer>
   </div>
   
-</article>
- 
-
-
-  
-    <article id="post-es/es-添加文档过程" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2021/03/08/es/es-添加文档过程/" class="article-date">
-  <time datetime="2021-03-08T05:28:35.000Z" itemprop="datePublished">2021-03-08</time>
-</a>
     
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/08/es/es-添加文档过程/">es-添加文档过程</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <!-- Table of Contents -->
-        
-        <p>es是如何从一条curl命令，把文本添加到es 索引文档中的，下面通过源码进行分析。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">RestIndexAction</span><br><span class="line">NodeClient</span><br><span class="line">TransportIndexAction</span><br><span class="line">TransportSingleItemBulkWriteAction</span><br><span class="line">TransportBulkAction</span><br><span class="line">TransportReplicationAction</span><br><span class="line">	ReroutePhase</span><br><span class="line">	</span><br><span class="line">TransportService</span><br><span class="line">	TransportReplicationAction</span><br><span class="line">		PrimaryOperationTransportHandler</span><br><span class="line">			AsyncPrimaryAction</span><br><span class="line">			ReplicationOperation</span><br><span class="line">			TransportShardBulkAction</span><br><span class="line">			TransportSingleItemBulkWriteAction</span><br><span class="line">			IndexShard</span><br><span class="line">			InternalEngine</span><br></pre></td></tr></table></figure>
-
-<p>创建索引的过程：</p>
-<ol>
-<li><p>执行curl</p>
-</li>
-<li><p>进入到RestIndexAction，解析请求参数，封装IndexRequest</p>
-</li>
-<li><p>然后进入org.elasticsearch.action.bulk.TransportBulkAction</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">executeBulk(task, bulkRequest, startTime, listener, responses, indicesThatCannotBeCreated);</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">new BulkOperation(task, bulkRequest, listener, responses, startTimeNanos, indicesThatCannotBeCreated).run();</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>org.elasticsearch.action.bulk.TransportShardBulkAction</p>
-</li>
-</ol>
-<ol>
-<li>org.elasticsearch.action.bulk.TransportShardBulkAction#executeBulkItemRequest</li>
-<li>org.elasticsearch.index.shard.IndexShard#index(org.elasticsearch.index.engine.Engine.Index)</li>
-<li>org.elasticsearch.index.engine.InternalEngine#index(org.elasticsearch.index.engine.Engine.Index)</li>
-</ol>
-<p>es添加索引文档</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> curl -X PUT &apos;localhost:9200/index_name/type_name/5&apos; -H &apos;Content-Type: application/json&apos; -d &apos;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;title&quot;: &quot;我是文件标题，可被搜索到&quot;,</span><br><span class="line">  &quot;text&quot;:  &quot;文本内容，ES时如何索引一个文档的&quot;,</span><br><span class="line">  &quot;date&quot;:  &quot;2019/01/01&quot;</span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure>
-
-<p>执行以上这条命令后，请求会进入到 <strong>org.elasticsearch.rest.action.document.RestIndexAction#prepareRequest</strong> 方法</p>
-<ol>
-<li><p>执行NodeClient.index方法</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">client.index(indexRequest, new RestStatusToXContentListener&lt;&gt;(channel, r -&gt; r.getLocation(indexRequest.routing())))</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>org.elasticsearch.client.node.NodeClient#executeLocally(org.elasticsearch.action.GenericAction&lt;Request,Response&gt;, Request, org.elasticsearch.action.ActionListener<response>)</response></p>
-</li>
-<li><p>org.elasticsearch.action.support.TransportAction#execute(Request, org.elasticsearch.action.ActionListener<response>)</response></p>
-</li>
-<li><p>org.elasticsearch.action.bulk.TransportBulkAction#doExecute(org.elasticsearch.tasks.Task, org.elasticsearch.action.bulk.BulkRequest, org.elasticsearch.action.ActionListener&lt;org.elasticsearch.action.bulk.BulkResponse&gt;)</p>
-</li>
-</ol>
-
-      
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
     </div>
-    <footer class="article-footer">
-      <a data-url="/2021/03/08/es/es-添加文档过程/" data-id="ckm1o24c4000bgu9ba3k06lqe" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
-
-    </footer>
   </div>
+
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2021/03/08/es/es-添加文档过程/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">es-添加文档过程</div>
+    </a>
+  
+</nav>
+
   
 </article>
  
-
-
-  
-    <article id="post-kafka/kafka命令" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2021/03/05/kafka/kafka命令/" class="article-date">
-  <time datetime="2021-03-05T10:45:02.000Z" itemprop="datePublished">2021-03-05</time>
-</a>
+     
+  <div class="comments" id="comments">
     
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
   </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/05/kafka/kafka命令/">kafka生产消费命令</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <!-- Table of Contents -->
-        
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">./kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test001</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-console-producer.sh --broker-list 127.0.0.1:9092,127.0.0.1:9093 --topic logs_teacher_teacher-app_bible-server-api</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic logs_teacher_teacher-app_bible-server-api --from-beginning</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-topics.sh --create --zookeeper 127.0.0.1:2181 --replication-factor 1 --partitions 2 --topic test001</span><br><span class="line"></span><br><span class="line">./kafka-topics.sh --zookeeper 127.0.0.1:2181 --list</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="/2021/03/05/kafka/kafka命令/" data-id="ckm1o24ce000ogu9b1j2l5usv" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kafka/">kafka</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
  
-
-
   
 
-
-  <nav id="page-nav">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/2/">下一页&raquo;</a>
-  </nav>
 </section>
            
     <aside id="sidebar">
   
     <!--
 
- <div class="widget-wrap">
-     
-        <h3 class="follow-title ">Follow me</h3>
-     
-    <div class="widget follow">
-      
-      
-      
-      
-            <a class="email" aria-hidden="true"  href="mailto:hezkvectory@163.com" target="_blank" title="邮箱"></a>
-      
-    </div>
-  </div>
-
 
 -->
 
   
     
-  
+    <div class="widget-wrap">
     
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title tagcloud">标签云</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/es/" style="font-size: 22.25px;">es</a> <a href="/tags/java/" style="font-size: 16.75px;">java</a> <a href="/tags/javascript/" style="font-size: 14px;">javascript</a> <a href="/tags/jvm/" style="font-size: 14px;">jvm</a> <a href="/tags/k8s/" style="font-size: 14px;">k8s</a> <a href="/tags/kafka/" style="font-size: 14px;">kafka</a> <a href="/tags/redis/" style="font-size: 14px;">redis</a> <a href="/tags/tcp/" style="font-size: 14px;">tcp</a> <a href="/tags/zookeeper/" style="font-size: 14px;">zookeeper</a> <a href="/tags/数据结构与算法/" style="font-size: 25px;">数据结构与算法</a> <a href="/tags/面试/" style="font-size: 19.5px;">面试</a>
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#Object类型"><span class="toc-number">1.</span> <span class="toc-text">Object类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#date类型"><span class="toc-number">2.</span> <span class="toc-text">date类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Array类型"><span class="toc-number">3.</span> <span class="toc-text">Array类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#binary类型"><span class="toc-number">4.</span> <span class="toc-text">binary类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ip类型"><span class="toc-number">5.</span> <span class="toc-text">ip类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#range类型"><span class="toc-number">6.</span> <span class="toc-text">range类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#nested类型"><span class="toc-number">7.</span> <span class="toc-text">nested类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#token-count类型"><span class="toc-number">8.</span> <span class="toc-text">token_count类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mapping参数"><span class="toc-number">9.</span> <span class="toc-text">Mapping参数</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#analyzer"><span class="toc-number">9.1.</span> <span class="toc-text">analyzer</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#normalizer"><span class="toc-number">9.2.</span> <span class="toc-text">normalizer</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#boost"><span class="toc-number">9.3.</span> <span class="toc-text">boost</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#coerce"><span class="toc-number">9.4.</span> <span class="toc-text">coerce</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#copy-to"><span class="toc-number">9.5.</span> <span class="toc-text">copy_to</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#doc-values"><span class="toc-number">9.6.</span> <span class="toc-text">doc_values</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#dynamic"><span class="toc-number">9.7.</span> <span class="toc-text">dynamic</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#enabled"><span class="toc-number">9.8.</span> <span class="toc-text">enabled</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#fielddata"><span class="toc-number">9.9.</span> <span class="toc-text">fielddata</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#format"><span class="toc-number">9.10.</span> <span class="toc-text">format</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ignore-above"><span class="toc-number">9.11.</span> <span class="toc-text">ignore_above</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ignore-malformed"><span class="toc-number">9.12.</span> <span class="toc-text">ignore_malformed</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#include-in-all"><span class="toc-number">9.13.</span> <span class="toc-text">include_in_all</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#index"><span class="toc-number">9.14.</span> <span class="toc-text">index</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#index-options"><span class="toc-number">9.15.</span> <span class="toc-text">index_options</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#fields"><span class="toc-number">9.16.</span> <span class="toc-text">fields</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#norms"><span class="toc-number">9.17.</span> <span class="toc-text">norms</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#null-value"><span class="toc-number">9.18.</span> <span class="toc-text">null_value</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#position-increment-gap"><span class="toc-number">9.19.</span> <span class="toc-text">position_increment_gap</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#search-analyzer"><span class="toc-number">9.20.</span> <span class="toc-text">search_analyzer</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#similarity"><span class="toc-number">9.21.</span> <span class="toc-text">similarity</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#store"><span class="toc-number">9.22.</span> <span class="toc-text">store</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#term-vector"><span class="toc-number">9.23.</span> <span class="toc-text">term_vector</span></a></li></ol></li></ol>
+          </div>
+      </div>
     </div>
-  </div>
 
   
     
-  <div class="widget-wrap">
-    <h3 class="widget-title recent-posts">最新文章</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2021/03/09/es/es-基本类型/">elasticsearch级别类型</a>
-          </li>
-        
-          <li>
-            <a href="/2021/03/08/es/es-添加文档过程/">es-添加文档过程</a>
-          </li>
-        
-          <li>
-            <a href="/2021/03/05/kafka/kafka命令/">kafka生产消费命令</a>
-          </li>
-        
-          <li>
-            <a href="/2021/03/05/es/es-template/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2021/03/05/es/es-template/">elasticsearch索引模版</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
 
   
     
-  <div class="widget-wrap">
-    <h3 class="widget-title archive">归档</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">7</span></li></ul>
-    </div>
-  </div>
-
+  
+    
+  
+    
 
   
     
   
     <!--微信公众号二维码-->
-
-  <div class="widget-wrap">
-    <h3 class="follow-title ">WeChat</h3>
-<!--    <div class="widget wechat-widget">
-        <img src="http://blog.giscafer.com/static/images/qrcode_giscafer.jpg" alt="扫码关注" width="250"/>
-    </div>
- --> </div>
 
 
   
