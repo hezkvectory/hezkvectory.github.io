@@ -20,20 +20,20 @@
     var CONFIG = {"hostname":"","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="es节点可以配置为master或者data。  master主要负责集群元数据处理，索引CRUD，管理集群各个节点状态，集群节点协调和调度。 data主要负责索引数据的存储和查询，数据分片、搜索和整合。 master是如何选举的？123456789101112org.elasticsearch.discovery.zen.ZenDiscovery	==》findMaster	   1、通过ping">
+  <meta name="description" content="gateway相关配置判断是否满足集群recovery的条件,满足条件后执行恢复操作 1234567gateway.expected_nodes: 10gateway.expected_master_nodes: 3gateway.expected_data_nodes: 10gateway.recover_after_time: 5mgateway.recover_after_nodes: 9g">
 <meta name="keywords" content="es">
 <meta property="og:type" content="article">
-<meta property="og:title" content="elasticsearch源码分析(一)">
-<meta property="og:url" content="/2021/03/10/es/es源码/index.html">
+<meta property="og:title" content="elasticsearch 配置文件">
+<meta property="og:url" content="/2021/03/11/es/es配置/index.html">
 <meta property="og:site_name" content="我的博客">
-<meta property="og:description" content="es节点可以配置为master或者data。  master主要负责集群元数据处理，索引CRUD，管理集群各个节点状态，集群节点协调和调度。 data主要负责索引数据的存储和查询，数据分片、搜索和整合。 master是如何选举的？123456789101112org.elasticsearch.discovery.zen.ZenDiscovery	==》findMaster	   1、通过ping">
+<meta property="og:description" content="gateway相关配置判断是否满足集群recovery的条件,满足条件后执行恢复操作 1234567gateway.expected_nodes: 10gateway.expected_master_nodes: 3gateway.expected_data_nodes: 10gateway.recover_after_time: 5mgateway.recover_after_nodes: 9g">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-03-11T10:13:11.962Z">
+<meta property="og:updated_time" content="2021-03-11T06:27:27.318Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="elasticsearch源码分析(一)">
-<meta name="twitter:description" content="es节点可以配置为master或者data。  master主要负责集群元数据处理，索引CRUD，管理集群各个节点状态，集群节点协调和调度。 data主要负责索引数据的存储和查询，数据分片、搜索和整合。 master是如何选举的？123456789101112org.elasticsearch.discovery.zen.ZenDiscovery	==》findMaster	   1、通过ping">
+<meta name="twitter:title" content="elasticsearch 配置文件">
+<meta name="twitter:description" content="gateway相关配置判断是否满足集群recovery的条件,满足条件后执行恢复操作 1234567gateway.expected_nodes: 10gateway.expected_master_nodes: 3gateway.expected_data_nodes: 10gateway.recover_after_time: 5mgateway.recover_after_nodes: 9g">
 
-<link rel="canonical" href="/2021/03/10/es/es源码/">
+<link rel="canonical" href="/2021/03/11/es/es配置/">
 
 
 <script id="page-configurations">
@@ -46,7 +46,7 @@
   };
 </script>
 
-  <title>elasticsearch源码分析(一) | 我的博客</title>
+  <title>elasticsearch 配置文件 | 我的博客</title>
   
 
 
@@ -156,7 +156,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/10/es/es源码/">
+    <link itemprop="mainEntityOfPage" href="/2021/03/11/es/es配置/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -169,7 +169,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          elasticsearch源码分析(一)
+          elasticsearch 配置文件
         </h1>
 
         <div class="post-meta">
@@ -178,16 +178,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2021-03-10 15:28:35" itemprop="dateCreated datePublished" datetime="2021-03-10T15:28:35+08:00">2021-03-10</time>
+              <time title="Created: 2021-03-11 13:28:35 / Modified: 14:27:27" itemprop="dateCreated datePublished" datetime="2021-03-11T13:28:35+08:00">2021-03-11</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-11 18:13:11" itemprop="dateModified" datetime="2021-03-11T18:13:11+08:00">2021-03-11</time>
-              </span>
 
           
 
@@ -200,41 +194,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>es节点可以配置为master或者data。 </p>
-<p>master主要负责集群元数据处理，索引CRUD，管理集群各个节点状态，集群节点协调和调度。</p>
-<p>data主要负责索引数据的存储和查询，数据分片、搜索和整合。</p>
-<h4 id="master是如何选举的？"><a href="#master是如何选举的？" class="headerlink" title="master是如何选举的？"></a>master是如何选举的？</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">org.elasticsearch.discovery.zen.ZenDiscovery</span><br><span class="line">	==》findMaster</span><br><span class="line">	   1、通过ping获取集群节点</span><br><span class="line">	   2、过滤ping相应的节点信息</span><br><span class="line">	   3、筛选activeMasters</span><br><span class="line">	   4、筛选masterCandidates</span><br><span class="line">	   5、如果activeMasters不为空，选举master。否则根据masterCandidates，判断是否满足master选举候选节点数大于(n/2)+1，满足条件则选举master成功，否则循环调用findMaster方法</span><br><span class="line">	   </span><br><span class="line">	   </span><br><span class="line">	   </span><br><span class="line">org.elasticsearch.discovery.zen.MasterFaultDetection.MasterPinger</span><br><span class="line">   ==》此线程，用户master探测，如果master挂了？rejoin</span><br></pre></td></tr></table></figure>
+        <h4 id="gateway相关配置"><a href="#gateway相关配置" class="headerlink" title="gateway相关配置"></a>gateway相关配置</h4><p>判断是否满足集群recovery的条件,满足条件后执行恢复操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">gateway.expected_nodes: 10</span><br><span class="line">gateway.expected_master_nodes: 3</span><br><span class="line">gateway.expected_data_nodes: 10</span><br><span class="line">gateway.recover_after_time: 5m</span><br><span class="line">gateway.recover_after_nodes: 9</span><br><span class="line">gateway.recover_after_master_nodes: 2</span><br><span class="line">gateway.recover_after_data_nodes: 9</span><br></pre></td></tr></table></figure>
 
-<h4 id="es索引文档是同步写入到primary和replicatoin节点中的。"><a href="#es索引文档是同步写入到primary和replicatoin节点中的。" class="headerlink" title="es索引文档是同步写入到primary和replicatoin节点中的。"></a>es索引文档是同步写入到primary和replicatoin节点中的。</h4><h4 id="es-副本分片恢复"><a href="#es-副本分片恢复" class="headerlink" title="es 副本分片恢复"></a>es 副本分片恢复</h4><p>副本恢复过程比较复杂，涉及到网络交互，有可能会有大量的数据传输。<br>分片恢复涉及到2个对象，RecoveryTarget–待恢复的对象,RecoverySource–恢复数据源。</p>
-<p>整个过程可粗略理解为：</p>
-<p><strong>target将本地分片meta信息发送给source，suorce将target信息与本地数据快照进行比对，然后将需要更新的segment以文件流方式发给target,同时将还未提交的translog也发送给target，target接收并回放translog，恢复完成。</strong></p>
-<p>由于恢复是shard级别，所以真正恢复动作从IndexShard.startRecovery开始</p>
-<p>org.elasticsearch.index.shard.IndexShard#startRecovery</p>
-<p>org.elasticsearch.indices.recovery.PeerRecoveryTargetService#doRecovery</p>
-<p>  ==》StartRecoveryRequest</p>
-<p>  ==》 transportService.submitRequest(request.sourceNode(), <strong>PeerRecoverySourceService.Actions.START_RECOVERY</strong>, request)</p>
-<p>org.elasticsearch.indices.recovery.PeerRecoverySourceService</p>
-<p>  ==》<strong>StartRecoveryTransportRequestHandler.recover</strong></p>
-<p>org.elasticsearch.indices.recovery.RecoverySourceHandler#recoverToTarget</p>
-<p>  ==》phase1 从lucence文件中恢复</p>
-<p>​             final Store.RecoveryDiff diff = recoverySourceMetadata.recoveryDiff(request.metadataSnapshot());</p>
-<p>​            recoveryTarget.receiveFileInfo(response.phase1FileNames, response.phase1FileSizes, </p>
-<p>​            org.elasticsearch.indices.recovery.RemoteRecoveryTargetHandler#receiveFileInfo</p>
-<p>​            transportService.submitRequest(targetNode, <strong>PeerRecoveryTargetService.Actions.FILES_INFO</strong>, recoveryInfoFilesRequest,</p>
-<p>​            <strong>sendFiles</strong>(store, phase1Files.toArray(new StoreFileMetaData[phase1Files.size()]), outputStreamFactories);</p>
-<p>  ==》phase2 从translog恢复  </p>
-<p>​            org.elasticsearch.indices.recovery.RecoverySourceHandler#sendSnapshot</p>
-<h4 id="es核心类"><a href="#es核心类" class="headerlink" title="es核心类"></a>es核心类</h4><p>Node 节点信息，负责核心服务启动</p>
-<p>ClusterState 集群元数据信息</p>
-<p>​    DiscoveryNodes 当前集群节点信息 master data</p>
-<p>​    MetaData 集群元数据信息  (集群settings信息、索引信息、模版信息等)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//MetaData</span><br><span class="line">private final Settings settings;</span><br><span class="line">private final ImmutableOpenMap&lt;String, IndexMetaData&gt; indices;</span><br><span class="line">private final ImmutableOpenMap&lt;String, IndexTemplateMetaData&gt; templates;</span><br><span class="line">private final ImmutableOpenMap&lt;String, Custom&gt; customs;</span><br></pre></td></tr></table></figure>
-
-<p>RoutingTable</p>
-<p>当master 检测到集群ClusterState信息变化后，发送通知信息</p>
-<p>ClusterStateApplier</p>
-<p>ClusterChangedEvent</p>
-<p>ZenDiscovery</p>
 
     </div>
 
@@ -253,12 +215,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/03/09/leetcode/前缀树trie/" rel="prev" title="前缀树trie">
-      <i class="fa fa-chevron-left"></i> 前缀树trie
+    <a href="/2021/03/11/leetcode/327-区间和的个数/" rel="prev" title="327.区间和的个数">
+      <i class="fa fa-chevron-left"></i> 327.区间和的个数
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/03/11/leetcode/327-区间和的个数/" rel="next" title="327.区间和的个数">
-      327.区间和的个数 <i class="fa fa-chevron-right"></i>
+    <a href="/2021/03/11/es/es重新分片/" rel="next" title="elasticsearch 重新分片">
+      elasticsearch 重新分片 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -318,7 +280,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#master是如何选举的？"><span class="nav-number">1.</span> <span class="nav-text">master是如何选举的？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#es索引文档是同步写入到primary和replicatoin节点中的。"><span class="nav-number">2.</span> <span class="nav-text">es索引文档是同步写入到primary和replicatoin节点中的。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#es-副本分片恢复"><span class="nav-number">3.</span> <span class="nav-text">es 副本分片恢复</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#es核心类"><span class="nav-number">4.</span> <span class="nav-text">es核心类</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#gateway相关配置"><span class="nav-number">1.</span> <span class="nav-text">gateway相关配置</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
