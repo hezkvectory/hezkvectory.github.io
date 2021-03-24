@@ -20,18 +20,18 @@
     var CONFIG = {"hostname":"","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="12345678910111213./kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test001./kafka-console-producer.sh --broker-list 127.0.0.1:9092,127.0.0.1:9093 --topic logs_teacher_teacher-app_bible-">
+  <meta name="description" content="123456789101112131415161718192021222324252627282930313233./kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test001./kafka-console-producer.sh --broker-list 127.0.0.1:9092,127.0.0.1:9093">
 <meta name="keywords" content="kafka">
 <meta property="og:type" content="article">
 <meta property="og:title" content="kafka生产消费命令">
 <meta property="og:url" content="/2021/03/05/kafka/kafka命令/index.html">
 <meta property="og:site_name" content="我的博客">
-<meta property="og:description" content="12345678910111213./kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test001./kafka-console-producer.sh --broker-list 127.0.0.1:9092,127.0.0.1:9093 --topic logs_teacher_teacher-app_bible-">
+<meta property="og:description" content="123456789101112131415161718192021222324252627282930313233./kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test001./kafka-console-producer.sh --broker-list 127.0.0.1:9092,127.0.0.1:9093">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-03-05T09:49:28.023Z">
+<meta property="og:updated_time" content="2021-03-18T11:35:12.988Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kafka生产消费命令">
-<meta name="twitter:description" content="12345678910111213./kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test001./kafka-console-producer.sh --broker-list 127.0.0.1:9092,127.0.0.1:9093 --topic logs_teacher_teacher-app_bible-">
+<meta name="twitter:description" content="123456789101112131415161718192021222324252627282930313233./kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test001./kafka-console-producer.sh --broker-list 127.0.0.1:9092,127.0.0.1:9093">
 
 <link rel="canonical" href="/2021/03/05/kafka/kafka命令/">
 
@@ -178,10 +178,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-03-05 18:45:02 / Modified: 17:49:28" itemprop="dateCreated datePublished" datetime="2021-03-05T18:45:02+08:00">2021-03-05</time>
+              <time title="Created: 2021-03-05 18:45:02" itemprop="dateCreated datePublished" datetime="2021-03-05T18:45:02+08:00">2021-03-05</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-18 19:35:12" itemprop="dateModified" datetime="2021-03-18T19:35:12+08:00">2021-03-18</time>
+              </span>
 
           
 
@@ -194,7 +200,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">./kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test001</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-console-producer.sh --broker-list 127.0.0.1:9092,127.0.0.1:9093 --topic logs_teacher_teacher-app_bible-server-api</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic logs_teacher_teacher-app_bible-server-api --from-beginning</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-topics.sh --create --zookeeper 127.0.0.1:2181 --replication-factor 1 --partitions 2 --topic test001</span><br><span class="line"></span><br><span class="line">./kafka-topics.sh --zookeeper 127.0.0.1:2181 --list</span><br></pre></td></tr></table></figure>
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">./kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test001</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-console-producer.sh --broker-list 127.0.0.1:9092,127.0.0.1:9093 --topic logs_teacher_teacher-app_bible-server-api</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic logs_teacher_teacher-app_bible-server-api --from-beginning</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-topics.sh --create --zookeeper 127.0.0.1:2181 --replication-factor 1 --partitions 2 --topic test001</span><br><span class="line"></span><br><span class="line">./kafka-topics.sh --zookeeper 127.0.0.1:2181 --list</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-console-consumer.sh --bootstrap-server kafka:9092 --group group1 --topic test_1</span><br><span class="line">./kafka-topics.sh --list --bootstrap-server kafka:9092</span><br><span class="line">./kafka-topics.sh --describe --bootstrap-server kafka:9092</span><br><span class="line">./kafka-topics.sh --describe --bootstrap-server 172.23.104.50:9092 --topic test1</span><br><span class="line">./kafka-console-consumer.sh --bootstrap-server 172.23.104.50:9092 --group group1 --topic test1</span><br><span class="line">./kafka-console-producer.sh --bootstrap-server 172.23.104.50:9092 --topic test1</span><br><span class="line">./kafka-topics.sh --alter --zookeeper 172.23.104.50:2181 --partitions 2 --topic test1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-topics.sh --zookeeper zookeeper:2181 --delete --topic test1</span><br><span class="line">./kafka-consumer-groups.sh --bootstrap-server 172.23.104.50:9092 --list</span><br><span class="line"></span><br><span class="line">./kafka-consumer-groups.sh --describe --bootstrap-server 172.23.104.50:9092 --group ds</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">删除以#开头的行</span><br><span class="line">cat ./conf/server.properties | sed -e &apos;/^#/d&apos;</span><br></pre></td></tr></table></figure>
 
 
     </div>
@@ -218,8 +224,8 @@
       <i class="fa fa-chevron-left"></i> 
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/03/08/es/es-添加文档过程/" rel="next" title="es-添加文档过程">
-      es-添加文档过程 <i class="fa fa-chevron-right"></i>
+    <a href="/2021/03/08/kafka/kafka之comsumer再分配/" rel="next" title="kafka之consumer再分配">
+      kafka之consumer再分配 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -292,14 +298,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-count">46</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
