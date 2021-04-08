@@ -193,7 +193,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>/bin/bash</span><br><span class="line"></span><br><span class="line">MYSQL=mysql </span><br><span class="line">USER='xxx'    </span><br><span class="line">PASSWORD='xxx' </span><br><span class="line">DB='xxx'  </span><br><span class="line">HOST='xxx'</span><br><span class="line"></span><br><span class="line">COMMAND=" SELECT  ip FROM  broker" </span><br><span class="line">declare list=`$MYSQL  -h$&#123;HOST&#125; -u$&#123;USER&#125; -p$&#123;PASSWORD&#125; -D $&#123;DB&#125; -e "$&#123;COMMAND&#125;" --skip-column-name` </span><br><span class="line">for item in $list                                                                                                      </span><br><span class="line">do</span><br><span class="line">	port=8080</span><br><span class="line">	if [ "$test"x = "xxx"x ]; then	</span><br><span class="line">		port=22778</span><br><span class="line">	fi</span><br><span class="line">	echo " the item is $item"</span><br><span class="line">	url="http://$item:$port/stats"</span><br><span class="line">	curl $url | jq .data.brokerMaster</span><br><span class="line">done </span><br><span class="line"></span><br><span class="line">for i in $@</span><br><span class="line">do</span><br><span class="line">	url = "http://$i:8080/stats"</span><br><span class="line">   	curl $url | jq .data.brokerMaster</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+        <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">/bin/bash</span></span><br><span class="line"></span><br><span class="line">MYSQL=mysql </span><br><span class="line">USER='xxx'    </span><br><span class="line">PASSWORD='xxx' </span><br><span class="line">DB='xxx'  </span><br><span class="line">HOST='xxx'</span><br><span class="line"></span><br><span class="line">COMMAND=" SELECT  ip FROM  broker" </span><br><span class="line">declare list=`$MYSQL  -h$&#123;HOST&#125; -u$&#123;USER&#125; -p$&#123;PASSWORD&#125; -D $&#123;DB&#125; -e "$&#123;COMMAND&#125;" --skip-column-name` </span><br><span class="line">for item in $list                                                                                                      </span><br><span class="line">do</span><br><span class="line">	port=8080</span><br><span class="line">	if [ "$test"x = "xxx"x ]; then	</span><br><span class="line">		port=22778</span><br><span class="line">	fi</span><br><span class="line">	echo " the item is $item"</span><br><span class="line">	url="http://$item:$port/stats"</span><br><span class="line">	curl $url | jq .data.brokerMaster</span><br><span class="line">done </span><br><span class="line"></span><br><span class="line">for i in $@</span><br><span class="line">do</span><br><span class="line">	url = "http://$i:8080/stats"</span><br><span class="line">   	curl $url | jq .data.brokerMaster</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
 
 
     </div>
@@ -210,7 +210,7 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/02/26/spring/spring常用类、方法/" rel="prev" title="">
+    <a href="/2021/02/26/spring/springmvc long polling实战/" rel="prev" title="">
       <i class="fa fa-chevron-left"></i> 
     </a></div>
       <div class="post-nav-item">
@@ -288,14 +288,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-count">52</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
