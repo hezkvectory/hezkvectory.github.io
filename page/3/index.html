@@ -150,6 +150,89 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/03/28/mybatis/mybatis设计模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/28/mybatis/mybatis设计模式/" class="post-title-link" itemprop="url">mybatis设计模式</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-28 10:20:20" itemprop="dateCreated datePublished" datetime="2021-03-28T10:20:20+08:00">2021-03-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-29 10:45:00" itemprop="dateModified" datetime="2021-03-29T10:45:00+08:00">2021-03-29</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="Mybatis常用的设计模式"><a href="#Mybatis常用的设计模式" class="headerlink" title="Mybatis常用的设计模式"></a>Mybatis常用的设计模式</h4><p>1、Builder模式</p>
+<p>​     SqlSessionFactoryBuilder、XMLMapperBuilder、XMLConfigBuilder、</p>
+<p>​     XMLStatementBuilder、SqlSourceBuilder、<span style="color:red;"><strong>XMLScriptBuilder</strong></span></p>
+<p>2、工厂模式</p>
+<p>​    SqlSessionFactory、ObjectFactory、MapperProxyFactory</p>
+<p>3、代理模式</p>
+<p>​    MapperProxy、ConnectionLogger</p>
+<p>4、单例模式</p>
+<p>​    ErrorContext、LogFactory</p>
+<p>5、模版模式</p>
+<p>​    BaseExecutor、SimpleExecutor</p>
+<p>6、适配器模式</p>
+<p>​    Log的Mybatis接口和它对jdbc、log4j等各种日志框架的适配实现</p>
+<p>7、迭代器模式</p>
+<p>​    PropertyTokenizer</p>
+<p>8、装饰者模式</p>
+<p>​    Cache包中的cache.decorators子包中等各个装饰者的实现</p>
+<p>9、组合模式</p>
+<p>​    <span style="color:red;"><strong>SqlNode</strong></span>和各个子类ChooseSqlNode等</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="/2021/03/24/杂文/格局/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -330,90 +413,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/11/es/es重新分片/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/11/es/es重新分片/" class="post-title-link" itemprop="url">elasticsearch 重新分片</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-03-11 13:28:35 / Modified: 18:04:41" itemprop="dateCreated datePublished" datetime="2021-03-11T13:28:35+08:00">2021-03-11</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -XGET http://localhost:9200/_cat/indices | grep red | awk '&#123;print $3&#125;' | awk '&#123;system("sh reroute.sh "$1)&#125;'</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">index=$1</span><br><span class="line">curl -XPOST 'http://localhost:9200/_cluster/reroute?pretty' -d '&#123;</span><br><span class="line">  "commands":[</span><br><span class="line">    &#123;</span><br><span class="line">      "allocate_empty_primary":&#123;</span><br><span class="line">        "index": "'$&#123;index&#125;'",</span><br><span class="line">        "shard": 26,</span><br><span class="line">        "node": "new_node_name1",</span><br><span class="line">        "accept_data_loss": true</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      "allocate_empty_primary":&#123;</span><br><span class="line">        "index": "'$&#123;index&#125;'",</span><br><span class="line">        "shard": 27,</span><br><span class="line">        "node": "new_node_name2",</span><br><span class="line">        "accept_data_loss": true</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;'</span><br></pre></td></tr></table></figure>
-
-<p>index分布不均匀则需要_cat/shards找出每个index异常的命令，可以参考如下命令进行处理。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -XGET http://127.0.0.1:9200/_cat/shards | grep UNASSIGNED | awk '&#123;print $1,$2&#125;' | awk '&#123;system("sh reroute.sh " $0)&#125;'</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">index=$1</span><br><span class="line">shard=$2</span><br><span class="line">curl -XPOST -H &apos;Content-Type: application/json&apos; &apos;http://127.0.0.1:9200/_cluster/reroute?pretty&apos; -d &apos;&#123;</span><br><span class="line">  &quot;commands&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;allocate_empty_primary&quot;: &#123;</span><br><span class="line">        &quot;index&quot;: &quot;&apos;$&#123;index&#125;&apos;&quot;,</span><br><span class="line">        &quot;shard&quot;: &apos;$&#123;shard&#125;&apos;,</span><br><span class="line">        &quot;node&quot;: &quot;new_node_name&quot;,</span><br><span class="line">        &quot;accept_data_loss&quot;: true</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure>
-
-<p><strong>批量数据灌入ES时要禁用副本和刷新</strong></p>
-<p>大规模批量导入数据的时候，要禁用副本和刷新，ES在索引数据的时候，如果有副本的话，会同步副本，造成压力。</p>
-<p>等到数据索引完成后，在恢复副本。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 关闭</span><br><span class="line">curl -PUT http://localhost:9200/_settings -d '&#123;</span><br><span class="line">　　"index": &#123;</span><br><span class="line">　　　　"number_of_replicas" : 0</span><br><span class="line">　　　　"refresh_interval" : -1</span><br><span class="line">　　&#125;    </span><br><span class="line">&#125;'</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 打开</span><br><span class="line">curl -PUT http://localhost:9200/_settings -d '&#123;</span><br><span class="line">　　"index": &#123;</span><br><span class="line">　　　　"number_of_replicas" : 1</span><br><span class="line">　　　　"refresh_interval" : 5s</span><br><span class="line">　　&#125;    </span><br><span class="line">&#125;'</span><br></pre></td></tr></table></figure>
-
-<p><strong>高并发查询时，优化ES线程池</strong></p>
-<p>多种请求类型对应多种线程池</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">index：此线程池用于索引和删除操作。它的类型默认为fixed，size默认为可用处理器的数量，队列的size默认为200。</span><br><span class="line">search：此线程池用于搜索和计数请求。它的类型默认为fixed，size默认为(可用处理器的数量* 3) / 2) + 1，队列的size默认为1000。</span><br><span class="line">suggest：此线程池用于建议器请求。它的类型默认为fixed，size默认为可用处理器的数量，队列的size默认为1000。</span><br><span class="line">get：此线程池用于实时的GET请求。它的类型默认为fixed，size默认为可用处理器的数量，队列的size默认为1000。</span><br><span class="line">bulk：此线程池用于批量操作。它的类型默认为fixed，size默认为可用处理器的数量，队列的size默认为50。</span><br><span class="line">percolate：此线程池用于预匹配器操作。它的类型默认为fixed，size默认为可用处理器的数量，队列的size默认为1000。</span><br></pre></td></tr></table></figure>
-
-<p>这里以index为例，可以在elasticsearch.yml中修改线程池配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">threadpool.index.type: fixed</span><br><span class="line">threadpool.index.size: 100</span><br><span class="line">threadpool.index.queue_size: 500</span><br></pre></td></tr></table></figure>
-
-<p>通过api控制</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">curl -XPUT 'localhost:9200/_cluster/settings' -d '&#123;</span><br><span class="line">    "transient": &#123;</span><br><span class="line">        "threadpool.index.type": "fixed",</span><br><span class="line">        "threadpool.index.size": 100,</span><br><span class="line">        "threadpool.index.queue_size": 500</span><br><span class="line">    &#125;</span><br><span class="line">&#125;'</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -483,7 +482,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">52</span>
+          <span class="site-state-item-count">53</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
