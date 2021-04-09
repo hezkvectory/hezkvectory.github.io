@@ -150,132 +150,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/02/26/spring/eureka命令/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/26/spring/eureka命令/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-02-26 11:57:28" itemprop="dateCreated datePublished" datetime="2021-02-26T11:57:28+08:00">2021-02-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-09 18:29:24" itemprop="dateModified" datetime="2021-04-09T18:29:24+08:00">2021-04-09</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">service-group=&gt;XXX-SERVICE=stage_xxx-176,XXX-SERVICE-STAGE=stage_xxx-178</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">curl -X PUT &quot;http://eureka.test-qa.com.cn/eureka/apps/DEMO/172.23.120.21:8080/status?value=OUT_OF_SERVICE&amp;lastDirtyTimestamp=1611825169816&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">curl -X PUT &quot;http://eureka.test-qa.com.cn/eureka/apps/DEMO/172.23.120.21:8080/status?value=UP&amp;lastDirtyTimestamp=1611825169816&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">curl -X PUT &quot;http://localhost:7001/eureka/apps/DEMO/172.23.120.21:8080/status=DOWN?lastDirtyTimestamp=1611823521458&quot;</span><br><span class="line"></span><br><span class="line">curl -H &quot;Content-Type:application/json&quot; -X POST &quot;http://172.23.120.21:8080/actuator/serviceregistry?status=DOWN&quot;</span><br><span class="line"></span><br><span class="line">curl -H &quot;Content-Type:application/json&quot; -X POST &quot;http://172.23.120.21:8080/actuator/serviceregistry?status=UP&quot;</span><br><span class="line"></span><br><span class="line">http://eureka.test-qa.com.cn/eureka/apps/DEMO/172.23.120.21:8080/status?value=DOWN&amp;lastDirtyTimestamp=1611825169816</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">curl -X POST &quot;Content-Type:application/json&quot; &quot;http://eureka.test-qa.com.cn/eureka/apps/DEMO&quot; -d &apos;&#123;&quot;instanceId&quot;:&quot;172.23.120.21:9900&quot;,&quot;appName&quot;:&quot;XXX&quot;,&quot;ipAddr&quot;:&quot;172.23.120.21&quot;,&quot;sid&quot;:&quot;na&quot;,&quot;port&quot;:9900,&quot;securePort&quot;:443,&quot;homePageUrl&quot;:&quot;http://172.23.120.21:9900/&quot;,&quot;statusPageUrl&quot;:&quot;http://172.23.120.21:9900/actuator/info&quot;,&quot;healthCheckUrl&quot;:&quot;http://172.23.120.21:9900/actuator/health&quot;,&quot;vipAddress&quot;:&quot;XXX&quot;,&quot;secureVipAddress&quot;:&quot;XXX&quot;,&quot;statusPageRelativeUrl&quot;:&quot;/actuator/info&quot;,&quot;statusPageExplicitUrl&quot;:&quot;http://172.23.120.21:9900/actuator/info&quot;,&quot;healthCheckRelativeUrl&quot;:&quot;/actuator/health&quot;,&quot;vipAddressUnresolved&quot;:&quot;XXX&quot;,&quot;secureVipAddressUnresolved&quot;:&quot;vkschedule&quot;,&quot;healthCheckExplicitUrl&quot;:&quot;http://172.23.120.21:9900/actuator/health&quot;,&quot;countryId&quot;:1,&quot;isSecurePortEnabled&quot;:false,&quot;isUnsecurePortEnabled&quot;:true,&quot;dataCenterInfo&quot;:&#123;&quot;name&quot;:&quot;MyOwn&quot;&#125;,&quot;hostName&quot;:&quot;172.23.120.21&quot;,&quot;status&quot;:&quot;DOWN&quot;,&quot;overriddenStatus&quot;:&quot;UNKNOWN&quot;,&quot;isInstanceInfoDirty&quot;:true,&quot;leaseInfo&quot;:&#123;&quot;renewalIntervalInSecs&quot;:6,&quot;durationInSecs&quot;:18,&quot;registrationTimestamp&quot;:0,&quot;lastRenewalTimestamp&quot;:0,&quot;evictionTimestamp&quot;:0,&quot;serviceUpTimestamp&quot;:0&#125;,&quot;isCoordinatingDiscoveryServer&quot;:false,&quot;metadata&quot;:&#123;&quot;cloud&quot;:&quot;default&quot;,&quot;meteor-version&quot;:&quot;2.1.7&quot;,&quot;zone&quot;:&quot;default&quot;,&quot;profile&quot;:&quot;test&quot;,&quot;project&quot;:&quot;vkschedule&quot;,&quot;management.port&quot;:&quot;9900&quot;&#125;,&quot;lastUpdatedTimestamp&quot;:1611824101832,&quot;lastDirtyTimestamp&quot;:1611829847376,&quot;version&quot;:&quot;unknown&quot;&#125;&apos;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">curl -X PUT &quot;http://eureka.test-qa.com.cn/eureka/apps/DEMO/172.23.120.21:8080?status=DOWN&amp;lastDirtyTimestamp=1611832348672&quot;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;application&quot;: &#123;</span><br><span class="line">    &quot;name&quot;: &quot;FEIGN-SERVER&quot;,</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">curl -X POST -k -H &apos;Accept: application/json&apos; -H &apos;Content-Type: application/json&apos; -i &apos;http://eureka.test-qa.com.cn/eureka/apps/FEIGN-SERVER&apos; --data &apos;&#123;</span><br><span class="line">  &quot;instance&quot;: &#123;</span><br><span class="line">    &quot;instanceId&quot;: &quot;172.23.120.21:feign-server:7002&quot;,</span><br><span class="line">    &quot;hostName&quot;: &quot;172.23.120.21&quot;,</span><br><span class="line">    &quot;app&quot;: &quot;FEIGN-SERVER&quot;,</span><br><span class="line">    &quot;ipAddr&quot;: &quot;172.23.120.21&quot;,</span><br><span class="line">    &quot;status&quot;: &quot;DOWN&quot;,</span><br><span class="line">    &quot;overriddenStatus&quot;: &quot;DOWN&quot;,</span><br><span class="line">    &quot;port&quot;: &#123;</span><br><span class="line">      &quot;$&quot;: 7002,</span><br><span class="line">      &quot;@enabled&quot;: &quot;true&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;securePort&quot;: &#123;</span><br><span class="line">      &quot;$&quot;: 443,</span><br><span class="line">      &quot;@enabled&quot;: &quot;false&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;countryId&quot;: 1,</span><br><span class="line">    &quot;dataCenterInfo&quot;: &#123;</span><br><span class="line">      &quot;@class&quot;: &quot;com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo&quot;,</span><br><span class="line">      &quot;name&quot;: &quot;MyOwn&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;leaseInfo&quot;: &#123;</span><br><span class="line">      &quot;renewalIntervalInSecs&quot;: 6,</span><br><span class="line">      &quot;durationInSecs&quot;: 18,</span><br><span class="line">      &quot;registrationTimestamp&quot;: 1611888078110,</span><br><span class="line">      &quot;lastRenewalTimestamp&quot;: 1611888457171,</span><br><span class="line">      &quot;evictionTimestamp&quot;: 0,</span><br><span class="line">      &quot;serviceUpTimestamp&quot;: 1611888078110</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;metadata&quot;: &#123;</span><br><span class="line">      &quot;management.port&quot;: &quot;7002&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;homePageUrl&quot;: &quot;http://172.23.120.21:7002/&quot;,</span><br><span class="line">    &quot;statusPageUrl&quot;: &quot;http://172.23.120.21:7002/actuator/info&quot;,</span><br><span class="line">    &quot;healthCheckUrl&quot;: &quot;http://172.23.120.21:7002/actuator/health&quot;,</span><br><span class="line">    &quot;vipAddress&quot;: &quot;feign-server&quot;,</span><br><span class="line">    &quot;secureVipAddress&quot;: &quot;feign-server&quot;,</span><br><span class="line">    &quot;isCoordinatingDiscoveryServer&quot;: &quot;false&quot;,</span><br><span class="line">    &quot;lastUpdatedTimestamp&quot;: &quot;1611888078110&quot;,</span><br><span class="line">    &quot;lastDirtyTimestamp&quot;: &quot;1611888078086&quot;,</span><br><span class="line">    &quot;actionType&quot;: &quot;MODIFIED&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/02/26/spring/spring常用类、方法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/26/spring/spring常用类、方法/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-02-26 11:57:28 / Modified: 17:56:51" itemprop="dateCreated datePublished" datetime="2021-02-26T11:57:28+08:00">2021-02-26</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.AutowiredFieldElement#inject</span><br><span class="line"></span><br><span class="line">DefaultSingletonBeanRegistry</span><br><span class="line"></span><br><span class="line">org.springframework.beans.factory.support.DefaultListableBeanFactory#resolveDependency</span><br><span class="line"></span><br><span class="line">org.springframework.beans.factory.support.DefaultSingletonBeanRegistry#getSingleton(java.lang.String, org.springframework.beans.factory.ObjectFactory&lt;?&gt;)</span><br><span class="line"></span><br><span class="line">org.springframework.beans.factory.support.DefaultListableBeanFactory#addCandidateEntry</span><br><span class="line"></span><br><span class="line">org.springframework.aop.framework.CglibAopProxy#getProxy(java.lang.ClassLoader)</span><br><span class="line"></span><br><span class="line">org.springframework.beans.factory.support.SimpleInstantiationStrategy#instantiate(org.springframework.beans.factory.support.RootBeanDefinition, java.lang.String, org.springframework.beans.factory.BeanFactory)</span><br><span class="line"></span><br><span class="line">org.springframework.beans.factory.support.AbstractBeanFactory#getMergedLocalBeanDefinition</span><br><span class="line"></span><br><span class="line">org.springframework.beans.factory.support.DefaultListableBeanFactory#registerBeanDefinition</span><br><span class="line"></span><br><span class="line">org.springframework.context.support.PostProcessorRegistrationDelegate#invokeBeanFactoryPostProcessors(org.springframework.beans.factory.config.ConfigurableListableBeanFactory, java.util.List&lt;org.springframework.beans.factory.config.BeanFactoryPostProcessor&gt;)</span><br><span class="line"></span><br><span class="line">org.springframework.context.support.AbstractApplicationContext#invokeBeanFactoryPostProcessors</span><br><span class="line"></span><br><span class="line">org.springframework.context.support.PostProcessorRegistrationDelegate#invokeBeanDefinitionRegistryPostProcessors</span><br><span class="line"></span><br><span class="line">org.springframework.context.annotation.ConfigurationClassParser#processConfigurationClass</span><br><span class="line"></span><br><span class="line">org.springframework.context.annotation.ConfigurationClassParser#doProcessConfigurationClass</span><br><span class="line"></span><br><span class="line">class com.test.demo.web.TestProperties$$EnhancerBySpringCGLIB$$e2131cf5</span><br><span class="line"></span><br><span class="line">org.springframework.context.annotation.ConfigurationClassEnhancer#createClass</span><br><span class="line"></span><br><span class="line">org.springframework.context.annotation.ConfigurationClassPostProcessor#enhanceConfigurationClasses</span><br><span class="line"></span><br><span class="line">org.springframework.context.annotation.ConfigurationClassPostProcessor#postProcessBeanFactory   enhanceConfigurationClasses</span><br><span class="line"></span><br><span class="line">org.springframework.context.support.PostProcessorRegistrationDelegate#invokeBeanFactoryPostProcessors(org.springframework.beans.factory.config.ConfigurableListableBeanFactory, java.util.List&lt;org.springframework.beans.factory.config.BeanFactoryPostProcessor&gt;)</span><br><span class="line"></span><br><span class="line">invokeBeanFactoryPostProcessors</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="/2021/02/26/spring/springmvc long polling实战/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -290,7 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/02/26/spring/springmvc long polling实战/" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/2021/02/26/spring/springmvc long polling实战/" class="post-title-link" itemprop="url">springmvc long polling实战</a>
         </h2>
 
         <div class="post-meta">
@@ -300,14 +174,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-02-26 11:57:28" itemprop="dateCreated datePublished" datetime="2021-02-26T11:57:28+08:00">2021-02-26</time>
+              <time title="Created: 2021-02-26 17:55:00" itemprop="dateCreated datePublished" datetime="2021-02-26T17:55:00+08:00">2021-02-26</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-09 18:30:28" itemprop="dateModified" datetime="2021-04-09T18:30:28+08:00">2021-04-09</time>
+                <time title="Modified: 2021-04-09 18:32:04" itemprop="dateModified" datetime="2021-04-09T18:32:04+08:00">2021-04-09</time>
               </span>
 
           
@@ -348,6 +222,257 @@
 
 <h5 id="SseEmitter、ResponseBodyEmitter"><a href="#SseEmitter、ResponseBodyEmitter" class="headerlink" title="SseEmitter、ResponseBodyEmitter"></a>SseEmitter、ResponseBodyEmitter</h5><p>Callback和DeferredResult用于设置单个结果，如果有多个结果需要返回给客户端时，可以使用SseEmitter以及ResponseBodyEmitter等；</p>
 <p>http 分块传输，以及k8s list-watch机制，也是采用http分块传输机制实现的。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/02/26/java/synchronized/synchronized/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/26/java/synchronized/synchronized/" class="post-title-link" itemprop="url">synchronized</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-02-26 16:10:00 / Modified: 17:45:28" itemprop="dateCreated datePublished" datetime="2021-02-26T16:10:00+08:00">2021-02-26</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="CAS操作"><a href="#CAS操作" class="headerlink" title="CAS操作"></a>CAS操作</h4><h5 id="什么是CAS"><a href="#什么是CAS" class="headerlink" title="什么是CAS?"></a>什么是CAS?</h5><p>​        使用锁时，线程获取锁是一种<strong>悲观锁策略</strong>，即假设每一次执行临界区代码都会产生冲突，所以当前线程获取到锁的时候同时也会阻塞其他线程获取该锁。而CAS操作（又称为无锁操作）是一种<strong>乐观锁策略</strong>，它假设所有线程访问共享资源的时候不会出现冲突，既然不会出现冲突自然而然就不会阻塞其他线程的操作。因此，线程就不会出现阻塞停顿的状态。那么，如果出现冲突了怎么办？无锁操作是使用<strong>CAS(compare and swap)</strong>又叫做比较交换来鉴别线程是否出现冲突，出现冲突就重试当前操作直到没有冲突为止。</p>
+<h4 id="CAS的操作过程"><a href="#CAS的操作过程" class="headerlink" title="CAS的操作过程"></a>CAS的操作过程</h4><p>​        CAS比较交换的过程可以通俗的理解为CAS(V,O,N)，包含三个值分别为：<strong>V 内存地址存放的实际值；O 预期的值（旧值）；N 更新的新值</strong>。当V和O相同时，也就是说旧值和内存中实际的值相同表明该值没有被其他线程更改过，即该旧值O就是目前来说最新的值了，自然而然可以将新值N赋值给V。反之，V和O不相同，表明该值已经被其他线程改过了则该旧值O不是最新版本的值了，所以不能将新值N赋给V，返回V即可。当多个线程使用CAS操作一个变量是，只有一个线程会成功，并成功更新，其余会失败。失败的线程会重新尝试，当然也可以选择挂起线程</p>
+<h5 id="Synchronized-VS-CAS"><a href="#Synchronized-VS-CAS" class="headerlink" title="Synchronized VS CAS"></a>Synchronized VS CAS</h5><p>​        元老级的Synchronized(未优化前)最主要的问题是：在存在线程竞争的情况下会出现线程阻塞和唤醒锁带来的性能问题，因为这是一种互斥同步（阻塞同步）。</p>
+<p>​        而CAS并不是武断的间线程挂起，当CAS操作失败后会进行一定的尝试，而非进行耗时的挂起唤醒的操作，因此也叫做非阻塞同步。这是两者主要的区别。</p>
+<h4 id="CAS的问题"><a href="#CAS的问题" class="headerlink" title="CAS的问题"></a>CAS的问题</h4><ol>
+<li>ABA问题 (AtomicStampedReference)</li>
+<li>自旋时间过长</li>
+<li>只能保证一个共享变量的原子操作 (AtomicReference 抱着对象之间的原子性)</li>
+</ol>
+<h4 id="java对象头"><a href="#java对象头" class="headerlink" title="java对象头"></a>java对象头</h4><p>在同步的时候是获取对象的monitor,即获取到对象的锁。</p>
+<p>那么对象的锁怎么理解？无非就是类似对对象的一个标志，那么这个标志就是存放在Java对象的对象头。Java对象头里的Mark Word里默认的存放的对象的Hashcode,分代年龄和锁标记位。32为JVM Mark Word默认存储结构为</p>
+<p><img src="/2021/02/26/java/synchronized/synchronized/jvm-header.jpg" alt></p>
+<p>锁一共有4种状态，级别从低到高依次是：<strong>无锁状态、偏向锁状态、轻量级锁状态 *<em>和 *</em>重量级锁状态</strong></p>
+<p>​        这几个状态会随着竞争情况逐渐升级。<strong>锁可以升级但不能降级</strong>，意味着偏向锁升级成轻量级锁后不能降级成偏向锁。这种锁升级却不能降级的策略，目的是为了提高获得锁和释放锁的效率。对象的MarkWord变化为下图：</p>
+<p><img src="/2021/02/26/java/synchronized/synchronized/jvm-markword.jpg" alt></p>
+<h4 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h4><p>HotSpot的作者经过研究发现，大多数情况下，锁不仅不存在多线程竞争，而且总是由同一线程多次获得，为了让线程获得锁的代价更低而引入了偏向锁。</p>
+<p><strong>偏向锁的获取</strong></p>
+<p>当一个线程访问同步块并获取锁时，会在<strong>对象头</strong>和<strong>栈帧中的锁记录</strong>里存储锁偏向的线程ID，以后该线程在进入和退出同步块时不需要进行CAS操作来加锁和解锁，只需简单地测试一下对象头的Mark Word里是否存储着指向当前线程的偏向锁。如果测试成功，表示线程已经获得了锁。如果测试失败，则需要再测试一下Mark Word中偏向锁的标识是否设置成1（表示当前是偏向锁）：如果没有设置，则使用CAS竞争锁；如果设置了，则尝试使用CAS将对象头的偏向锁指向当前线程</p>
+<p><strong>偏向锁的撤销</strong></p>
+<p>偏向锁使用了一种<strong>等到竞争出现才释放锁</strong>的机制，所以当其他线程尝试竞争偏向锁时，持有偏向锁的线程才会释放锁。</p>
+<p><img src="/2021/02/26/java/synchronized/synchronized/%E9%94%81%E6%92%A4%E9%94%80.jpg" alt></p>
+<p>如图，偏向锁的撤销，需要等待<strong>全局安全点</strong>（在这个时间点上没有正在执行的字节码）。它会首先暂停拥有偏向锁的线程，然后检查持有偏向锁的线程是否活着，如果线程不处于活动状态，则将对象头设置成无锁状态；如果线程仍然活着，拥有偏向锁的栈会被执行，遍历偏向对象的锁记录，栈中的锁记录和对象头的Mark Word<strong>要么</strong>重新偏向于其他线程，<strong>要么</strong>恢复到无锁或者标记对象不适合作为偏向锁，最后唤醒暂停的线程。</p>
+<p><strong>如何关闭偏向锁</strong></p>
+<p>偏向锁在Java 6和Java 7里是默认启用的，但是它在应用程序启动几秒钟之后才激活，如有必要可以使用JVM参数来关闭延迟：<strong>-XX:BiasedLockingStartupDelay=0</strong>。如果你确定应用程序里所有的锁通常情况下处于竞争状态，可以通过JVM参数关闭偏向锁：<strong>-XX:-UseBiasedLocking=false</strong>，那么程序默认会进入轻量级锁状态</p>
+<h4 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h4><p><strong>加锁</strong></p>
+<p>线程在执行同步块之前，JVM会先在当前线程的栈桢中<strong>创建用于存储锁记录的空间</strong>，并将对象头中的Mark Word复制到锁记录中，官方称为<strong>Displaced Mark Word</strong>。然后线程尝试使用CAS<strong>将对象头中的Mark Word替换为指向锁记录的指针</strong>。如果成功，当前线程获得锁，如果失败，表示其他线程竞争锁，当前线程便尝试使用自旋来获取锁</p>
+<p><strong>解锁</strong></p>
+<p>轻量级解锁时，会使用原子的CAS操作将Displaced Mark Word替换回到对象头，如果成功，则表示没有竞争发生。如果失败，表示当前锁存在竞争，锁就会膨胀成重量级锁。</p>
+<hr>
+<h5 id="那么，什么是偏向锁"><a href="#那么，什么是偏向锁" class="headerlink" title="那么，什么是偏向锁?"></a>那么，什么是偏向锁?</h5><p>　　偏向锁是jdk1.6引入的一项锁优化，其中的“偏”是偏心的偏。它的意思就是说，这个锁会偏向于第一个获得它的线程，在接下来的执行过程中，假如该锁没有被其他线程所获取，没有其他线程来竞争该锁，那么持有偏向锁的线程将永远不需要进行同步操作。<br>也就是说:<br>在此线程之后的执行过程中，如果再次进入或者退出同一段同步块代码，并不再需要去进行<strong>加锁</strong>或者<strong>解锁</strong>操作，而是会做以下的步骤：</p>
+<ol>
+<li>Load-and-test，也就是简单判断一下当前线程id是否与Markword当中的线程id是否一致.</li>
+<li>如果一致，则说明此线程已经成功获得了锁，继续执行下面的代码.</li>
+<li>如果不一致，则要检查一下对象是否还是可偏向，即“是否偏向锁”标志位的值。</li>
+<li>如果还未偏向，则利用CAS操作来竞争锁，也即是第一次获取锁时的操作。</li>
+</ol>
+<p>　　如果此对象已经偏向了，并且不是偏向自己，则说明存在了<strong>竞争</strong>。此时可能就要根据另外线程的情况，可能是重新偏向，也有可能是做偏向撤销，但大部分情况下就是升级成<strong>轻量级锁</strong>了。<br>　　可以看出，偏向锁是针对于一个线程而言的，线程获得锁之后就不会再有解锁等操作了，这样可以省略很多开销。假如有两个线程来竞争该锁话，那么偏向锁就失效了，进而升级成轻量级锁了。<br>　　为什么要这样做呢？因为经验表明，其实大部分情况下，都会是同一个线程进入同一块同步代码块的。这也是为什么会有偏向锁出现的原因。<br>　　在Jdk1.6中，偏向锁的开关是默认开启的，适用于只有一个线程访问同步块的场景。</p>
+<h4 id="锁膨胀"><a href="#锁膨胀" class="headerlink" title="锁膨胀"></a>锁膨胀</h4><p>　　当出现有两个线程来竞争锁的话，那么偏向锁就失效了，此时锁就会膨胀，升级为轻量级锁。这也是我们经常所说的<strong>锁膨胀</strong></p>
+<h4 id="锁撤销"><a href="#锁撤销" class="headerlink" title="锁撤销"></a>锁撤销</h4><p>由于偏向锁失效了，那么接下来就得把该锁撤销，锁撤销的开销花费还是挺大的，其大概的过程如下：</p>
+<ol>
+<li>在一个安全点停止拥有锁的线程。</li>
+<li>遍历线程栈，如果存在锁记录的话，需要修复锁记录和Markword，使其变成无锁状态。</li>
+<li>唤醒当前线程，将当前锁升级成轻量级锁。<br>所以，如果某些同步代码块大多数情况下都是有两个及以上的线程竞争的话，那么偏向锁就会是一种累赘，对于这种情况，我们可以一开始就把偏向锁这个默认功能给关闭</li>
+</ol>
+<h4 id="轻量级锁-1"><a href="#轻量级锁-1" class="headerlink" title="轻量级锁"></a>轻量级锁</h4><p>锁撤销升级为轻量级锁之后，那么对象的Markword也会进行相应的的变化。下面先简单描述下锁撤销之后，升级为轻量级锁的过程：</p>
+<ol>
+<li>线程在自己的栈桢中创建锁记录 LockRecord。</li>
+<li>将锁对象的对象头中的MarkWord复制到线程的刚刚创建的锁记录中。</li>
+<li>将锁记录中的Owner指针指向锁对象。</li>
+<li>将锁对象的对象头的MarkWord替换为指向锁记录的指针。</li>
+</ol>
+<hr>
+<p>synchronized是Java中的关键字，是一种同步锁。它修饰的对象有以下几种：</p>
+<ol>
+<li>修饰一个代码块，被修饰的代码块称为同步语句块，其作用的范围是大括号{}括起来的代码，作用的对象是调用这个代码块的对象；</li>
+<li>修饰一个方法，被修饰的方法称为同步方法，其作用的范围是整个方法，作用的对象是调用这个方法的对象；</li>
+<li>修改一个静态的方法，其作用的范围是整个静态方法，作用的对象是这个类的所有对象；</li>
+<li>修改一个类，其作用的范围是synchronized后面括号括起来的部分，作用主的对象是这个类的所有对象。</li>
+</ol>
+<p>A. 无论synchronized关键字加在方法上还是对象上，如果它作用的对象是非静态的，则它取得的锁是对象；如果synchronized作用的对象是一个静态方法或一个类，则它取得的锁是对类，该类所有的对象同一把锁。<br>B. 每个对象只有一个锁（lock）与之相关联，谁拿到这个锁谁就可以运行它所控制的那段代码。<br>C. 实现同步是要很大的系统开销作为代价的，甚至可能造成死锁，所以尽量避免无谓的同步控制。</p>
+<p><img src="/2021/02/26/java/synchronized/synchronized/synchronized%E9%94%81%E5%8D%87%E7%BA%A7.jpg" alt></p>
+<hr>
+<h4 id="偏向锁–-gt-轻量级锁"><a href="#偏向锁–-gt-轻量级锁" class="headerlink" title="偏向锁–&gt;轻量级锁"></a>偏向锁–&gt;轻量级锁</h4><p><strong>偏向锁的升级</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">当线程1访问代码块并获取锁对象时，会在java对象头和栈帧中记录偏向的锁的threadID，因为偏向锁不会主动释放锁，因此以后线程1再次获取锁的时候，需要比较当前线程的threadID和Java对象头中的threadID是否一致，如果一致（还是线程1获取锁对象），则无需使用CAS来加锁、解锁；如果不一致（其他线程，如线程2要竞争锁对象，而偏向锁不会主动释放因此还是存储的线程1的threadID），那么需要查看Java对象头中记录的线程1是否存活，如果没有存活，那么锁对象被重置为无锁状态，其它线程（线程2）可以竞争将其设置为偏向锁；如果存活，那么立刻查找该线程（线程1）的栈帧信息，如果还是需要继续持有这个锁对象，那么暂停当前线程1，撤销偏向锁，升级为轻量级锁，如果线程1 不再使用该锁对象，那么将锁对象状态设为无锁状态，重新偏向新的线程。</span><br></pre></td></tr></table></figure>
+
+<p>没有竞争的时候，就是偏向锁</p>
+<h4 id="轻量级锁–-gt-重量级锁"><a href="#轻量级锁–-gt-重量级锁" class="headerlink" title="轻量级锁–&gt;重量级锁"></a>轻量级锁–&gt;重量级锁</h4><p><strong>为什么要引入轻量级锁？</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">轻量级锁考虑的是竞争锁对象的线程不多，而且线程持有锁的时间也不长的情景。因为阻塞线程需要CPU从用户态转到内核态，代价较大，如果刚刚阻塞不久这个锁就被释放了，那这个代价就有点得不偿失了，因此这个时候就干脆不阻塞这个线程，让它自旋这等待锁释放。</span><br></pre></td></tr></table></figure>
+
+<p><strong>轻量级锁什么时候升级为重量级锁？</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">线程1获取轻量级锁时会先把锁对象的对象头MarkWord复制一份到线程1的栈帧中创建的用于存储锁记录的空间（称为DisplacedMarkWord），然后使用CAS把对象头中的内容替换为线程1存储的锁记录（DisplacedMarkWord）的地址；</span><br><span class="line"></span><br><span class="line">如果在线程1复制对象头的同时（在线程1CAS之前），线程2也准备获取锁，复制了对象头到线程2的锁记录空间中，但是在线程2CAS的时候，发现线程1已经把对象头换了，线程2的CAS失败，那么线程2就尝试使用自旋锁来等待线程1释放锁。</span><br><span class="line"></span><br><span class="line">但是如果自旋的时间太长也不行，因为自旋是要消耗CPU的，因此自旋的次数是有限制的，比如10次或者100次，如果自旋次数到了线程1还没有释放锁，或者线程1还在执行，线程2还在自旋等待，这时又有一个线程3过来竞争这个锁对象，那么这个时候轻量级锁就会膨胀为重量级锁。重量级锁把除了拥有锁的线程都阻塞，防止CPU空转。</span><br></pre></td></tr></table></figure>
+
+<hr>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/02/26/技术栈/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/26/技术栈/" class="post-title-link" itemprop="url">java技术</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-02-26 14:18:00" itemprop="dateCreated datePublished" datetime="2021-02-26T14:18:00+08:00">2021-02-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-08 15:01:43" itemprop="dateModified" datetime="2021-04-08T15:01:43+08:00">2021-04-08</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="Java技术"><a href="#Java技术" class="headerlink" title="Java技术"></a>Java技术</h3><ol>
+<li><p>java</p>
+</li>
+<li><p>spring、springboot、springcloud</p>
+<ol>
+<li>eureka</li>
+<li>open-feign</li>
+<li>sleuth、zipkin</li>
+<li>智能路由</li>
+<li>spring-cloud-gateway、zuul</li>
+</ol>
+</li>
+<li><p>mybatis、sharing-jdbc</p>
+</li>
+<li><p>hystrix、sentinel</p>
+</li>
+<li><p>arthas、jconsole、profile</p>
+</li>
+<li><p>Redis</p>
+</li>
+<li><p>mysql</p>
+</li>
+<li><p>dubbo、motan</p>
+</li>
+<li><p>xxl-job、quartz</p>
+</li>
+<li><p>rocketmq、kafka</p>
+<ol>
+<li>kafka客户端原理</li>
+</ol>
+</li>
+<li><p>netty、nio、t-io</p>
+</li>
+<li><p>skywalking、zipkin、cat</p>
+</li>
+<li><p>apollo、nacos</p>
+</li>
+<li><p>zookeeper、etcd</p>
+</li>
+<li><p>nginx</p>
+</li>
+<li><p>prometheus、grafana</p>
+</li>
+<li><p>数据结构和算法-leetcode</p>
+</li>
+<li><p>elk</p>
+<ol>
+<li>elasticsearch</li>
+<li>logstash、filebeat、flume</li>
+<li>kibana</li>
+</ol>
+</li>
+<li><p>kubernetes</p>
+</li>
+</ol>
+<p><img src="/2021/02/26/技术栈/1.png" alt></p>
 
       
     </div>
@@ -439,7 +564,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
