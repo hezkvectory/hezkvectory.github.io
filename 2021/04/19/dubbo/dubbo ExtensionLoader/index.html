@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Dubbo ExtensionLoader123456789101112131415161718package com.alibaba.dubbo.rpc.cluster;import com.alibaba.dubbo.common.extension.ExtensionLoader;public class Cluster$Adaptive implements com.alibaba.dub">
+<meta name="keywords" content="dubbo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dubbo ExtensionLoader">
+<meta property="og:url" content="/2021/04/19/dubbo/dubbo ExtensionLoader/index.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="Dubbo ExtensionLoader123456789101112131415161718package com.alibaba.dubbo.rpc.cluster;import com.alibaba.dubbo.common.extension.ExtensionLoader;public class Cluster$Adaptive implements com.alibaba.dub">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-04-19T10:18:03.137Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="dubbo ExtensionLoader">
+<meta name="twitter:description" content="Dubbo ExtensionLoader123456789101112131415161718package com.alibaba.dubbo.rpc.cluster;import com.alibaba.dubbo.common.extension.ExtensionLoader;public class Cluster$Adaptive implements com.alibaba.dub">
+
+<link rel="canonical" href="/2021/04/19/dubbo/dubbo ExtensionLoader/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>dubbo ExtensionLoader | 我的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">我的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/04/19/dubbo/dubbo ExtensionLoader/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          dubbo ExtensionLoader
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-04-19 10:28:35 / Modified: 18:18:03" itemprop="dateCreated datePublished" datetime="2021-04-19T10:28:35+08:00">2021-04-19</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="Dubbo-ExtensionLoader"><a href="#Dubbo-ExtensionLoader" class="headerlink" title="Dubbo ExtensionLoader"></a>Dubbo ExtensionLoader</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.alibaba.dubbo.rpc.cluster;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.alibaba.dubbo.common.extension.ExtensionLoader;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Cluster</span>$<span class="title">Adaptive</span> <span class="keyword">implements</span> <span class="title">com</span>.<span class="title">alibaba</span>.<span class="title">dubbo</span>.<span class="title">rpc</span>.<span class="title">cluster</span>.<span class="title">Cluster</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> com.alibaba.dubbo.rpc.<span class="function">Invoker <span class="title">join</span><span class="params">(com.alibaba.dubbo.rpc.cluster.Directory arg0)</span> <span class="keyword">throws</span> com.alibaba.dubbo.rpc.RpcException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (arg0 == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"com.alibaba.dubbo.rpc.cluster.Directory argument == null"</span>);</span><br><span class="line">        <span class="keyword">if</span> (arg0.getUrl() == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"com.alibaba.dubbo.rpc.cluster.Directory argument getUrl() == null"</span>);</span><br><span class="line">        com.alibaba.dubbo.common.URL url = arg0.getUrl();</span><br><span class="line">        String extName = url.getParameter(<span class="string">"cluster"</span>, <span class="string">"failover"</span>);</span><br><span class="line">        <span class="keyword">if</span> (extName == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Fail to get extension(com.alibaba.dubbo.rpc.cluster.Cluster) name from url("</span> + url.toString() + <span class="string">") use keys([cluster])"</span>);</span><br><span class="line">        com.alibaba.dubbo.rpc.cluster.Cluster extension = (com.alibaba.dubbo.rpc.cluster.Cluster) ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.rpc.cluster.Cluster.class).getExtension(extName);</span><br><span class="line">        <span class="keyword">return</span> extension.join(arg0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.alibaba.dubbo.rpc;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.alibaba.dubbo.common.extension.ExtensionLoader;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Protocol</span>$<span class="title">Adaptive</span> <span class="keyword">implements</span> <span class="title">com</span>.<span class="title">alibaba</span>.<span class="title">dubbo</span>.<span class="title">rpc</span>.<span class="title">Protocol</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedOperationException(<span class="string">"method public abstract void com.alibaba.dubbo.rpc.Protocol.destroy() of interface com.alibaba.dubbo.rpc.Protocol is not adaptive method!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getDefaultPort</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedOperationException(<span class="string">"method public abstract int com.alibaba.dubbo.rpc.Protocol.getDefaultPort() of interface com.alibaba.dubbo.rpc.Protocol is not adaptive method!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> com.alibaba.dubbo.rpc.<span class="function">Exporter <span class="title">export</span><span class="params">(com.alibaba.dubbo.rpc.Invoker arg0)</span> <span class="keyword">throws</span> com.alibaba.dubbo.rpc.RpcException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (arg0 == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"com.alibaba.dubbo.rpc.Invoker argument == null"</span>);</span><br><span class="line">        <span class="keyword">if</span> (arg0.getUrl() == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"com.alibaba.dubbo.rpc.Invoker argument getUrl() == null"</span>);</span><br><span class="line">        com.alibaba.dubbo.common.URL url = arg0.getUrl();</span><br><span class="line">        String extName = (url.getProtocol() == <span class="keyword">null</span> ? <span class="string">"dubbo"</span> : url.getProtocol());</span><br><span class="line">        <span class="keyword">if</span> (extName == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Fail to get extension(com.alibaba.dubbo.rpc.Protocol) name from url("</span> + url.toString() + <span class="string">") use keys([protocol])"</span>);</span><br><span class="line">        com.alibaba.dubbo.rpc.Protocol extension = (com.alibaba.dubbo.rpc.Protocol) ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.rpc.Protocol.class).getExtension(extName);</span><br><span class="line">        <span class="keyword">return</span> extension.export(arg0);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> com.alibaba.dubbo.rpc.<span class="function">Invoker <span class="title">refer</span><span class="params">(java.lang.Class arg0, com.alibaba.dubbo.common.URL arg1)</span> <span class="keyword">throws</span> com.alibaba.dubbo.rpc.RpcException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (arg1 == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"url == null"</span>);</span><br><span class="line">        com.alibaba.dubbo.common.URL url = arg1;</span><br><span class="line">        String extName = (url.getProtocol() == <span class="keyword">null</span> ? <span class="string">"dubbo"</span> : url.getProtocol());</span><br><span class="line">        <span class="keyword">if</span> (extName == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Fail to get extension(com.alibaba.dubbo.rpc.Protocol) name from url("</span> + url.toString() + <span class="string">") use keys([protocol])"</span>);</span><br><span class="line">        com.alibaba.dubbo.rpc.Protocol extension = (com.alibaba.dubbo.rpc.Protocol) ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.rpc.Protocol.class).getExtension(extName);</span><br><span class="line">        <span class="keyword">return</span> extension.refer(arg0, arg1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">package com.alibaba.dubbo.rpc;</span><br><span class="line"></span><br><span class="line">import com.alibaba.dubbo.common.extension.ExtensionLoader;</span><br><span class="line"></span><br><span class="line">public class ProxyFactory$Adaptive implements com.alibaba.dubbo.rpc.ProxyFactory &#123;</span><br><span class="line"></span><br><span class="line">    public java.lang.Object getProxy(com.alibaba.dubbo.rpc.Invoker arg0) throws com.alibaba.dubbo.rpc.RpcException &#123;</span><br><span class="line">        if (arg0 == null) throw new IllegalArgumentException(&quot;com.alibaba.dubbo.rpc.Invoker argument == null&quot;);</span><br><span class="line">        if (arg0.getUrl() == null)</span><br><span class="line">            throw new IllegalArgumentException(&quot;com.alibaba.dubbo.rpc.Invoker argument getUrl() == null&quot;);</span><br><span class="line">        com.alibaba.dubbo.common.URL url = arg0.getUrl();</span><br><span class="line">        String extName = url.getParameter(&quot;proxy&quot;, &quot;javassist&quot;);</span><br><span class="line">        if (extName == null)</span><br><span class="line">            throw new IllegalStateException(&quot;Fail to get extension(com.alibaba.dubbo.rpc.ProxyFactory) name from url(&quot; + url.toString() + &quot;) use keys([proxy])&quot;);</span><br><span class="line">        com.alibaba.dubbo.rpc.ProxyFactory extension = (com.alibaba.dubbo.rpc.ProxyFactory) ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.rpc.ProxyFactory.class).getExtension(extName);</span><br><span class="line">        return extension.getProxy(arg0);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public java.lang.Object getProxy(com.alibaba.dubbo.rpc.Invoker arg0, boolean arg1) throws com.alibaba.dubbo.rpc.RpcException &#123;</span><br><span class="line">        if (arg0 == null) throw new IllegalArgumentException(&quot;com.alibaba.dubbo.rpc.Invoker argument == null&quot;);</span><br><span class="line">        if (arg0.getUrl() == null)</span><br><span class="line">            throw new IllegalArgumentException(&quot;com.alibaba.dubbo.rpc.Invoker argument getUrl() == null&quot;);</span><br><span class="line">        com.alibaba.dubbo.common.URL url = arg0.getUrl();</span><br><span class="line">        String extName = url.getParameter(&quot;proxy&quot;, &quot;javassist&quot;);</span><br><span class="line">        if (extName == null)</span><br><span class="line">            throw new IllegalStateException(&quot;Fail to get extension(com.alibaba.dubbo.rpc.ProxyFactory) name from url(&quot; + url.toString() + &quot;) use keys([proxy])&quot;);</span><br><span class="line">        com.alibaba.dubbo.rpc.ProxyFactory extension = (com.alibaba.dubbo.rpc.ProxyFactory) ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.rpc.ProxyFactory.class).getExtension(extName);</span><br><span class="line">        return extension.getProxy(arg0, arg1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public com.alibaba.dubbo.rpc.Invoker getInvoker(java.lang.Object arg0, java.lang.Class arg1, com.alibaba.dubbo.common.URL arg2) throws com.alibaba.dubbo.rpc.RpcException &#123;</span><br><span class="line">        if (arg2 == null) throw new IllegalArgumentException(&quot;url == null&quot;);</span><br><span class="line">        com.alibaba.dubbo.common.URL url = arg2;</span><br><span class="line">        String extName = url.getParameter(&quot;proxy&quot;, &quot;javassist&quot;);</span><br><span class="line">        if (extName == null)</span><br><span class="line">            throw new IllegalStateException(&quot;Fail to get extension(com.alibaba.dubbo.rpc.ProxyFactory) name from url(&quot; + url.toString() + &quot;) use keys([proxy])&quot;);</span><br><span class="line">        com.alibaba.dubbo.rpc.ProxyFactory extension = (com.alibaba.dubbo.rpc.ProxyFactory) ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.rpc.ProxyFactory.class).getExtension(extName);</span><br><span class="line">        return extension.getInvoker(arg0, arg1, arg2);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.alibaba.dubbo.common.threadpool;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.alibaba.dubbo.common.extension.ExtensionLoader;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadPool</span>$<span class="title">Adaptive</span> <span class="keyword">implements</span> <span class="title">com</span>.<span class="title">alibaba</span>.<span class="title">dubbo</span>.<span class="title">common</span>.<span class="title">threadpool</span>.<span class="title">ThreadPool</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> java.util.concurrent.<span class="function">Executor <span class="title">getExecutor</span><span class="params">(com.alibaba.dubbo.common.URL arg0)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (arg0 == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"url == null"</span>);</span><br><span class="line">        com.alibaba.dubbo.common.URL url = arg0;</span><br><span class="line">        String extName = url.getParameter(<span class="string">"threadpool"</span>, <span class="string">"fixed"</span>);</span><br><span class="line">        <span class="keyword">if</span> (extName == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Fail to get extension(com.alibaba.dubbo.common.threadpool.ThreadPool) name from url("</span> + url.toString() + <span class="string">") use keys([threadpool])"</span>);</span><br><span class="line">        com.alibaba.dubbo.common.threadpool.ThreadPool extension = (com.alibaba.dubbo.common.threadpool.ThreadPool) ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.common.threadpool.ThreadPool.class).getExtension(extName);</span><br><span class="line">        <span class="keyword">return</span> extension.getExecutor(arg0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/dubbo/" rel="tag"># dubbo</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/15/架构/" rel="prev" title="架构">
+      <i class="fa fa-chevron-left"></i> 架构
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/19/dubbo/dubbo编解码和协议/" rel="next" title="dubbo编解码和协议">
+      dubbo编解码和协议 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Dubbo-ExtensionLoader"><span class="nav-number">1.</span> <span class="nav-text">Dubbo ExtensionLoader</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">hezhengkui</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hezhengkui</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

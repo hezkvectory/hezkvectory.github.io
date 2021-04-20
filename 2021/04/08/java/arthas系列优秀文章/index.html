@@ -20,18 +20,18 @@
     var CONFIG = {"hostname":"","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="工商银行打造在线诊断平台的探索与实践">
+  <meta name="description" content="工商银行打造在线诊断平台的探索与实践 arthas命令sc查看jvm已加载的类信息 sm查看jvm已加载类的方法信息 monitor方法执行监控，统计被监控方法执行总数、成功、失败、失败率等数据 stack输出当前方法被调用的调用路径 输出当前方法堆栈信息 trace方法内部调用滤镜，并输出方法路径上的每个节点耗时 watch方法执行数据观测 观察：入参、返回值、抛出异常">
 <meta name="keywords" content="jvm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="arthas系列优秀文章">
 <meta property="og:url" content="/2021/04/08/java/arthas系列优秀文章/index.html">
 <meta property="og:site_name" content="我的博客">
-<meta property="og:description" content="工商银行打造在线诊断平台的探索与实践">
+<meta property="og:description" content="工商银行打造在线诊断平台的探索与实践 arthas命令sc查看jvm已加载的类信息 sm查看jvm已加载类的方法信息 monitor方法执行监控，统计被监控方法执行总数、成功、失败、失败率等数据 stack输出当前方法被调用的调用路径 输出当前方法堆栈信息 trace方法内部调用滤镜，并输出方法路径上的每个节点耗时 watch方法执行数据观测 观察：入参、返回值、抛出异常">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-04-08T04:31:40.772Z">
+<meta property="og:updated_time" content="2021-04-13T08:59:00.412Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="arthas系列优秀文章">
-<meta name="twitter:description" content="工商银行打造在线诊断平台的探索与实践">
+<meta name="twitter:description" content="工商银行打造在线诊断平台的探索与实践 arthas命令sc查看jvm已加载的类信息 sm查看jvm已加载类的方法信息 monitor方法执行监控，统计被监控方法执行总数、成功、失败、失败率等数据 stack输出当前方法被调用的调用路径 输出当前方法堆栈信息 trace方法内部调用滤镜，并输出方法路径上的每个节点耗时 watch方法执行数据观测 观察：入参、返回值、抛出异常">
 
 <link rel="canonical" href="/2021/04/08/java/arthas系列优秀文章/">
 
@@ -178,10 +178,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-04-08 10:44:02 / Modified: 12:31:40" itemprop="dateCreated datePublished" datetime="2021-04-08T10:44:02+08:00">2021-04-08</time>
+              <time title="Created: 2021-04-08 10:44:02" itemprop="dateCreated datePublished" datetime="2021-04-08T10:44:02+08:00">2021-04-08</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-13 16:59:00" itemprop="dateModified" datetime="2021-04-13T16:59:00+08:00">2021-04-13</time>
+              </span>
 
           
 
@@ -195,6 +201,14 @@
 
       
         <p><a href="https://blog.csdn.net/alisystemsoftware/article/details/109159529" target="_blank" rel="noopener">工商银行打造在线诊断平台的探索与实践</a></p>
+<h4 id="arthas命令"><a href="#arthas命令" class="headerlink" title="arthas命令"></a>arthas命令</h4><h4 id="sc"><a href="#sc" class="headerlink" title="sc"></a>sc</h4><p>查看jvm已加载的类信息</p>
+<h4 id="sm"><a href="#sm" class="headerlink" title="sm"></a>sm</h4><p>查看jvm已加载类的方法信息</p>
+<h5 id="monitor"><a href="#monitor" class="headerlink" title="monitor"></a>monitor</h5><p>方法执行监控，统计被监控方法执行总数、成功、失败、失败率等数据</p>
+<h5 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h5><p>输出当前方法被调用的调用路径</p>
+<p>输出当前方法堆栈信息</p>
+<h5 id="trace"><a href="#trace" class="headerlink" title="trace"></a>trace</h5><p>方法内部调用滤镜，并输出方法路径上的每个节点耗时</p>
+<h5 id="watch"><a href="#watch" class="headerlink" title="watch"></a>watch</h5><p>方法执行数据观测</p>
+<p>观察：入参、返回值、抛出异常</p>
 
     </div>
 
@@ -278,6 +292,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#arthas命令"><span class="nav-number">1.</span> <span class="nav-text">arthas命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sc"><span class="nav-number">2.</span> <span class="nav-text">sc</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sm"><span class="nav-number">3.</span> <span class="nav-text">sm</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#monitor"><span class="nav-number">3.1.</span> <span class="nav-text">monitor</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#stack"><span class="nav-number">3.2.</span> <span class="nav-text">stack</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#trace"><span class="nav-number">3.3.</span> <span class="nav-text">trace</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#watch"><span class="nav-number">3.4.</span> <span class="nav-text">watch</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -291,14 +306,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">53</span>
+          <span class="site-state-item-count">57</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
