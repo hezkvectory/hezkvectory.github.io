@@ -150,6 +150,259 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2019/07/12/http/tcp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/07/12/http/tcp/" class="post-title-link" itemprop="url">tcp三次握手、四次挥手</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-07-12 12:28:35" itemprop="dateCreated datePublished" datetime="2019-07-12T12:28:35+08:00">2019-07-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-02-18 19:03:12" itemprop="dateModified" datetime="2021-02-18T19:03:12+08:00">2021-02-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="/2019/07/12/http/tcp/tcp.jpeg" alt="dddd"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2019/07/12/java/java多线程竞拍/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/07/12/java/java多线程竞拍/" class="post-title-link" itemprop="url">阿里云面试题-多线程竞拍</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-07-12 12:28:35" itemprop="dateCreated datePublished" datetime="2019-07-12T12:28:35+08:00">2019-07-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-01 18:56:07" itemprop="dateModified" datetime="2021-03-01T18:56:07+08:00">2021-03-01</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>多线程竞拍</p>
+<pre><code>创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）
+
+每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
+
+所有人的心理上线价位都为 M ，不会出价比M高
+
+每次出价必须比上一次出价高
+
+经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。</code></pre><p>个人觉得主要考察java基础（CountDownLatch、CyclicBarrier）的使用方法</p>
+<pre><code>import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.*;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class AuctionTest {
+
+/**
+ * 创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）
+ * 每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
+ * 所有人的心理上线价位都为 M ，不会出价比M高
+ * 每次出价必须比上一次出价高
+ * 经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。
+ */
+static int N = 10; //竞拍人数
+static int M = 100;//所有人的心理上线价位都为 M ，不会出价比M高
+static int AUCTION_NUM = 5; //经过 k 次竞拍后
+
+static ConcurrentHashMap&lt;String, List&lt;Integer&gt;&gt; ACTION_HIST = new ConcurrentHashMap&lt;&gt;();
+
+static ReentrantLock lock = new ReentrantLock();//这个锁是为了保证出价比上一个人出价高
+
+static volatile int CUR_MAX_PRICE = 0;
+
+public static void main(String[] args) throws Exception {
+    CyclicBarrier barrier = new CyclicBarrier(N);//每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
+    CountDownLatch countDownLatch = new CountDownLatch(N);//这里应该是N
+    ThreadPoolExecutor executor = new ThreadPoolExecutor(N, N, 1, TimeUnit.SECONDS, new ArrayBlockingQueue&lt;Runnable&gt;(1), new ThreadFactory() {
+        @Override
+        public Thread newThread(Runnable r) {
+            return new Thread(r, &quot;Auction&quot;);
+        }
+    });
+    int step = M / (AUCTION_NUM * N); //每次出价阶梯
+
+    for (int i = 1; i &lt;= N; i++) {
+        executor.execute(new Auction(barrier, countDownLatch, &quot;P&quot; + i, step));
+    }
+
+    countDownLatch.await();
+
+    String personName = null;
+    int maxPrice = 0;
+    int personId = 0;
+    for (int num = 1; num &lt;= AUCTION_NUM; num++) {
+        for (int i = 1; i &lt;= N; i++) {
+            personName = &quot;P&quot; + i;
+            Integer price = ACTION_HIST.get(personName).get(num - 1);
+            if (num == AUCTION_NUM) {
+                if (maxPrice &lt; price) {
+                    maxPrice = price;
+                    personId = i;
+                }
+            }
+            System.out.println(&quot;第&quot; + num + &quot;次出价人:P&quot; + i + &quot; 出价:&quot; + price);
+        }
+        System.out.println(&quot;-----------------&quot;);
+    }
+    System.out.println(&quot;最终竞价成功人:P&quot; + personId + &quot;,最终出价:&quot; + maxPrice);
+    executor.shutdown();
+}
+
+static class Auction implements Runnable {
+    private String name;
+    private CyclicBarrier barrier;
+    private int step;
+    private CountDownLatch countDownLatch;
+
+    public Auction(CyclicBarrier barrier, CountDownLatch countDownLatch, String name, int step) {
+        this.name = name;
+        this.barrier = barrier;
+        this.step = step;
+        this.countDownLatch = countDownLatch;
+    }
+
+    @Override
+    public void run() {
+        if (!ACTION_HIST.containsKey(name)) {
+            ACTION_HIST.put(name, new ArrayList&lt;&gt;());
+        }
+        lock.lock();
+        int currentPrice = 0;
+        try {
+            currentPrice = getRandPrice(step);
+            CUR_MAX_PRICE = CUR_MAX_PRICE &lt; currentPrice ? currentPrice : CUR_MAX_PRICE;
+        } finally {
+            lock.unlock();
+        }
+
+        ACTION_HIST.get(name).add(currentPrice);
+        int tmp = 1;
+        try {
+            while (tmp &lt; AUCTION_NUM) {
+                barrier.await();
+                currentPrice = getRandPrice(step);
+                currentPrice = currentPrice &gt; M ? M : currentPrice;
+                CUR_MAX_PRICE = CUR_MAX_PRICE &lt; currentPrice ? currentPrice : CUR_MAX_PRICE;
+                ACTION_HIST.get(name).add(currentPrice);
+                tmp++;
+            }
+            countDownLatch.countDown();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }   /**
+     * 当前心里价比上次多多少
+     *
+     * @param step
+     * @return
+     */
+    int getRandPrice(int step) {
+        return CUR_MAX_PRICE + new Random().nextInt(step) + 1;
+    }
+}</code></pre>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="/2019/07/12/k8s/深入理解Kubernetes环境中的iptables/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -341,202 +594,6 @@ iptables-save | grep KUBE-SEP-H5CCP4V3TZFUD6ZZ</code></pre><p><img src="./images
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2019/07/12/http/tcp/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/12/http/tcp/" class="post-title-link" itemprop="url">tcp三次握手、四次挥手</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-07-12 12:28:35" itemprop="dateCreated datePublished" datetime="2019-07-12T12:28:35+08:00">2019-07-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-02-18 19:03:12" itemprop="dateModified" datetime="2021-02-18T19:03:12+08:00">2021-02-18</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="/2019/07/12/http/tcp/tcp.jpeg" alt="dddd"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2019/07/11/zookeeper/zookeeper_expiryQueue/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/11/zookeeper/zookeeper_expiryQueue/" class="post-title-link" itemprop="url">zookeeper之ExpiryQueue</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-07-11 12:28:35" itemprop="dateCreated datePublished" datetime="2019-07-11T12:28:35+08:00">2019-07-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-09 18:31:34" itemprop="dateModified" datetime="2021-04-09T18:31:34+08:00">2021-04-09</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>zookeeper之ExpiryQueue</p>
-<pre><code>ExpiryQueue是在SessionTrackerImpl中使用的，主要是维护zk中session的队列
-了解ExpiryQueue的实现
-
-//ExpiryQueue&lt;SessionImpl&gt; sessionExpiryQueue;
-
-//elemMap保存的是SessionImpl--&gt;过期时间
-private final ConcurrentHashMap&lt;E, Long&gt; elemMap = new ConcurrentHashMap&lt;E, Long&gt;();
-
-//expiryMap保存的是 过期时间--&gt;SessionImpl集合
-private final ConcurrentHashMap&lt;Long, Set&lt;E&gt;&gt; expiryMap = new ConcurrentHashMap&lt;Long, Set&lt;E&gt;&gt;();
-
-****elemMap和expiryMap是利用空间换时间，方便根据SessionImpl 和 过期时间相互查找****</code></pre><p>ExpiryQueue的remove方法</p>
-<pre><code>ExpiryQueue的实现相当于一个缓存，想起之前面试的一个题目：实现一个缓存fifo,缓存的value可以有过期时间/无过
-期时间，缓存大小一定，当put时，如果缓存满了(达到缓存上线)，优先剔除最近要失效的key-value，如果key都不过
-期，优先剔除最先进来的key，直到能放下新的key-value。这个题可以用ConcurrentHashMap缓存，TreeSet(有序集
-合)过期时间排序，或者二分查找。
-**从这里感觉算法的重要性。时间复杂度、空间复杂度在实际工作中得以应用。**
-
-public Long remove(E elem) {
-     //快速根据SessionImpl获取过期的时间
-    Long expiryTime = elemMap.remove(elem);
-    if (expiryTime != null) {
-        Set&lt;E&gt; set = expiryMap.get(expiryTime);
-        if (set != null) {
-                //从expiryMap中删除
-            set.remove(elem);
-        }
-    }
-    return expiryTime;
-}</code></pre><p>ExpiryQueue的update方法</p>
-<pre><code>public Long update(E elem, int timeout) {
-    Long prevExpiryTime = elemMap.get(elem);
-    long now = Time.currentElapsedTime();
-    Long newExpiryTime = roundToNextInterval(now + timeout);
-
-    if (newExpiryTime.equals(prevExpiryTime)) {
-        // No change, so nothing to update
-        return null;
-    }
-
-    // First add the elem to the new expiry time bucket in expiryMap.
-    Set&lt;E&gt; set = expiryMap.get(newExpiryTime);
-    //**如果elemMap中不存在，放入到elemMap中
-    if (set == null) {
-        // Construct a ConcurrentHashSet using a ConcurrentHashMap
-        set = Collections.newSetFromMap(
-            new ConcurrentHashMap&lt;E, Boolean&gt;());
-        // Put the new set in the map, but only if another thread
-        // hasn&apos;t beaten us to it
-        Set&lt;E&gt; existingSet = expiryMap.putIfAbsent(newExpiryTime, set);
-        if (existingSet != null) {
-            set = existingSet;
-        }
-    }
-    set.add(elem);
-
-    // Map the elem to the new expiry time. If a different previous
-    // mapping was present, clean up the previous expiry bucket.
-    prevExpiryTime = elemMap.put(elem, newExpiryTime);
-    if (prevExpiryTime != null &amp;&amp; !newExpiryTime.equals(prevExpiryTime)) {
-        Set&lt;E&gt; prevSet = expiryMap.get(prevExpiryTime);
-        if (prevSet != null) {
-            prevSet.remove(elem);
-        }
-    }
-    return newExpiryTime;
-}</code></pre>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -606,7 +663,7 @@ public Long remove(E elem) {
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-count">59</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

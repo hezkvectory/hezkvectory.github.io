@@ -150,6 +150,125 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/03/31/java/mat-oql/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/31/java/mat-oql/" class="post-title-link" itemprop="url">mat之OQL</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-31 10:44:02" itemprop="dateCreated datePublished" datetime="2021-03-31T10:44:02+08:00">2021-03-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-01 11:45:23" itemprop="dateModified" datetime="2021-04-01T11:45:23+08:00">2021-04-01</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://help.eclipse.org/2021-03/index.jsp?topic=/org.eclipse.mat.ui.help/welcome.html" target="_blank" rel="noopener">https://help.eclipse.org/2021-03/index.jsp?topic=/org.eclipse.mat.ui.help/welcome.html</a></p>
+<h4 id="OQL"><a href="#OQL" class="headerlink" title="OQL"></a>OQL</h4><h5 id="1、OQL-SELECT"><a href="#1、OQL-SELECT" class="headerlink" title="1、OQL-SELECT"></a>1、OQL-SELECT</h5><ul>
+<li>SELECT * FROM java.lang.String</li>
+<li>SELECT toString(s), s.count, s.value FROM java.lang.String s</li>
+<li>SELECT toString(s) AS Value,s.@usedHeapSize AS “Shallow Size” FROM java.lang.String s<br><strong>（@为属性访问器，可以使用AS起个别名</strong>）</li>
+<li>SELECT AS RETAINED SET * FROM java.lang.String<br>（使用AS RETAINED SET 获得与选择对象相关联的对象集合）</li>
+<li>SELECT OBJECTS dominators(s) FROM java.lang.String s<br>（<strong>OBJECTS 关键字使得dominators 返回二维数组简化为一维对象列表</strong>）</li>
+<li>SELECT DISTINCT OBJECTS classof(s) FROM java.lang.String s<br>（<strong>DISTINCT 去重复</strong>）</li>
+<li>查询所有的异常对象<br>SELECT * FROM INSTANCEOF java.lang.Exception exceptions<br>SELECT exceptions.@displayName, exceptions.detailMessage.toString() FROM INSTANCEOF java.lang.Exception exceptions</li>
+</ul>
+<h5 id="2、OQL-FROM"><a href="#2、OQL-FROM" class="headerlink" title="2、OQL-FROM"></a>2、OQL-FROM</h5><ul>
+<li>SELECT * FROM “java.lang..*”<br>（支持正则）</li>
+<li>SELECT * FROM java.lang.String</li>
+<li>SELECT * FROM 0xe14a100<br>（根据<strong>类对象</strong>在堆转储快照中的地址查询）</li>
+<li>SELECT * FROM 3022<br>（根据对象在堆转储快照中的地址ID）</li>
+<li>SELECT * FROM ( SELECT * FROM java.lang.Class c )</li>
+<li>SELECT * FROM <strong><em>\</em>${snapshot}.getClasses()<br>**</strong>（使用属性访问器）</li>
+<li>SELECT * FROM INSTANCEOF java.lang.ref.Reference<br>（<em>INSTANCEOF</em> 会把指定类的子类也查询出来）</li>
+<li>SELECT * FROM OBJECTS java.lang.String<br>（OBJECTS 禁止OQL把查询范围解释为对象实例，上述结果为java.lang.String对应的Class）</li>
+</ul>
+<h5 id="3、OQL-WHERE"><a href="#3、OQL-WHERE" class="headerlink" title="3、OQL-WHERE"></a>3、OQL-WHERE</h5><ul>
+<li><p>SELECT * FROM java.lang.String s WHERE s.count &gt;= 100</p>
+</li>
+<li><p>SELECT * FROM java.lang.String s WHERE toString(s) LIKE “.*day” </p>
+</li>
+<li><p>SELECT * FROM java.lang.String s WHERE s.value NOT IN dominators(s) </p>
+</li>
+<li><p>SELECT * FROM java.lang.String s WHERE toString(s) = “monday” </p>
+</li>
+<li><p>SELECT * FROM java.lang.String s WHERE s.count &gt; 100 AND s.@retainedHeapSize &gt; s.@usedHeapSize </p>
+</li>
+<li><p>SELECT * FROM java.lang.String s WHERE s.count &gt; 1000 OR s.value.@length &gt;1000 </p>
+</li>
+<li><p>SELECT * FROM java.lang.String s WHERE (s.count &gt; 1000) = true           </p>
+<p>​                                                            WHERE toString(s) = “monday”                              </p>
+<p>​                                                            WHERE dominators(s).size() = 0                             </p>
+<p>​                                                            WHERE s.retainedHeapSize &gt; 1024L                              </p>
+<p>​                                                            WHERE s.@GCRootInfo != null</p>
+</li>
+</ul>
+<h5 id="4、属性访问器"><a href="#4、属性访问器" class="headerlink" title="4、属性访问器"></a>4、属性访问器</h5><ul>
+<li>[<alias>.]<field>.<field>.……</field></field></alias></li>
+</ul>
+<p>（访问堆转储快照中对象的字段）</p>
+<ul>
+<li>[<alias>.]@<attribute>……</attribute></alias></li>
+</ul>
+<p>（访问java bean属性）</p>
+<div class="table-box"><table class="mceItemTable       " border="0" style="color:rgb(0,0,0); font-size:14px; line-height:26px; border:1px dashed rgb(187,187,187); font-family:Verdana,Arial,Helvetica,sans-serif"><tbody><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">目标</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">接口</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">属性</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">含义</span></td></tr><tr><td rowspan="6" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">任意堆中的对象</span></td><td rowspan="6" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Iobject</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">objectId</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">快照中对象的ID</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">objectAddress</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">快照中对象的地址</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Class</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">对象所属的类</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">usedHeapSize</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">对象的shallowSize</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">retainedHeapSize</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">对象的retainedSize</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">displayName</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">对象的显示名称</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">类对象</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Iclass</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">classLoaderId</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">类加载器Id</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">任意数组</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Iarray</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">length</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">数组的长度</span></td></tr></tbody></table></div>
+
+
+
+<h5 id="5、OQL-内建函数"><a href="#5、OQL-内建函数" class="headerlink" title="5、OQL 内建函数"></a>5、OQL 内建函数</h5><p>.[<alias>.]@&lt;方法&gt;([&lt;表达式&gt;,&lt;表达式&gt;])……</alias></p>
+<p>（调用OQL java方法，加“()”会令MAT解释为一个OQL java调用）</p>
+<p>常见的OQL java方法</p>
+<div class="table-box"><table class="mceItemTable       " border="0" style="color:rgb(0,0,0); font-size:14px; line-height:26px; border:1px dashed rgb(187,187,187); font-family:Verdana,Arial,Helvetica,sans-serif"><tbody><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">目标</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">接口</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">属性</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">含义</span></td></tr><tr><td rowspan="2" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">$snapshot</span></td><td rowspan="2" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Isnapshot</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">getClasses()</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">获取所有类的集合</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">getClassesByName(String name,boolean includeSubClasses)</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">获取指定类的集合</span></td></tr><tr><td rowspan="2" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Class object</span></td><td rowspan="2" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Iclass</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">hasSuperClass()</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">如果对象有父类则返回true</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">isArrayType()</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">如果Class是数组类型则返回true</span></td></tr></tbody></table></div>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="/2021/03/29/leetcode/tree/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -432,89 +551,6 @@ sum+=isPalindrome(ch, i, i+1);</code></pre><p>什么，你不明白？？？那�
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/28/mybatis/mybatis设计模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/28/mybatis/mybatis设计模式/" class="post-title-link" itemprop="url">mybatis设计模式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-03-28 10:20:20" itemprop="dateCreated datePublished" datetime="2021-03-28T10:20:20+08:00">2021-03-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-29 10:45:00" itemprop="dateModified" datetime="2021-03-29T10:45:00+08:00">2021-03-29</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="Mybatis常用的设计模式"><a href="#Mybatis常用的设计模式" class="headerlink" title="Mybatis常用的设计模式"></a>Mybatis常用的设计模式</h4><p>1、Builder模式</p>
-<p>​     SqlSessionFactoryBuilder、XMLMapperBuilder、XMLConfigBuilder、</p>
-<p>​     XMLStatementBuilder、SqlSourceBuilder、<span style="color:red;"><strong>XMLScriptBuilder</strong></span></p>
-<p>2、工厂模式</p>
-<p>​    SqlSessionFactory、ObjectFactory、MapperProxyFactory</p>
-<p>3、代理模式</p>
-<p>​    MapperProxy、ConnectionLogger</p>
-<p>4、单例模式</p>
-<p>​    ErrorContext、LogFactory</p>
-<p>5、模版模式</p>
-<p>​    BaseExecutor、SimpleExecutor</p>
-<p>6、适配器模式</p>
-<p>​    Log的Mybatis接口和它对jdbc、log4j等各种日志框架的适配实现</p>
-<p>7、迭代器模式</p>
-<p>​    PropertyTokenizer</p>
-<p>8、装饰者模式</p>
-<p>​    Cache包中的cache.decorators子包中等各个装饰者的实现</p>
-<p>9、组合模式</p>
-<p>​    <span style="color:red;"><strong>SqlNode</strong></span>和各个子类ChooseSqlNode等</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -584,7 +620,7 @@ sum+=isPalindrome(ch, i, i+1);</code></pre><p>什么，你不明白？？？那�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-count">59</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

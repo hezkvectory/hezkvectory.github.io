@@ -150,6 +150,88 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/04/09/spring/spring-bean-async循环依赖/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/09/spring/spring-bean-async循环依赖/" class="post-title-link" itemprop="url">spring bean + async循环依赖问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-04-09 17:55:00 / Modified: 18:33:52" itemprop="dateCreated datePublished" datetime="2021-04-09T17:55:00+08:00">2021-04-09</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="什么是循环依赖-如何解决"><a href="#什么是循环依赖-如何解决" class="headerlink" title="什么是循环依赖? 如何解决?"></a>什么是循环依赖? 如何解决?</h4><p>有3个类，A、B、C</p>
+<p>A-&gt;B-&gt;C <strong>A依赖B，B依赖C [属性注入]</strong></p>
+<p>C-&gt;B  <strong>C依赖B</strong></p>
+<p>正常情况下，B、C相互依赖，spring通过<strong>三级缓存</strong>来解决属性注入的循环依赖问题，</p>
+<p><u><strong>B、C类实例必须是单例的，spring没法解决prototype和构造器注入的循环依赖问题</strong></u></p>
+<h4 id="EnableAsync-Async和循环依赖"><a href="#EnableAsync-Async和循环依赖" class="headerlink" title="@EnableAsync @Async和循环依赖"></a>@EnableAsync @Async和循环依赖</h4><p>此时如果类B或者类B方法使用@Async进行标记，使此方法可以异步执行，则会导致循环依赖问题。</p>
+<p><strong>为何会出现此问题？</strong></p>
+<p>spring bean实例化过程</p>
+<ol>
+<li>实例化</li>
+<li>属性赋值</li>
+<li>初始化</li>
+<li>使用和销毁</li>
+</ol>
+<p>Spring创建bean过程，以及和@Async一同使用，导致循环依赖问题解释如下</p>
+<p>org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#doCreateBean</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> Object <span class="title">doCreateBean</span><span class="params">(String beanName, RootBeanDefinition mbd, @Nullable Object[] args)</span></span></span><br><span class="line"><span class="function">			<span class="keyword">throws</span> BeanCreationException </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">//1⃣️ 实例化bean</span></span><br><span class="line">		BeanWrapper instanceWrapper = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">if</span> (mbd.isSingleton()) &#123;</span><br><span class="line">			instanceWrapper = <span class="keyword">this</span>.factoryBeanInstanceCache.remove(beanName);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (instanceWrapper == <span class="keyword">null</span>) &#123;</span><br><span class="line">			instanceWrapper = createBeanInstance(beanName, mbd, args);</span><br><span class="line">		&#125;</span><br><span class="line">		Object bean = instanceWrapper.getWrappedInstance();</span><br><span class="line">		Class&lt;?&gt; beanType = instanceWrapper.getWrappedClass();</span><br><span class="line">		<span class="keyword">if</span> (beanType != NullBean.class) &#123;</span><br><span class="line">			mbd.resolvedTargetType = beanType;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Allow post-processors to modify the merged bean definition.</span></span><br><span class="line">		<span class="keyword">synchronized</span> (mbd.postProcessingLock) &#123;</span><br><span class="line">			<span class="keyword">if</span> (!mbd.postProcessed) &#123;</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">					<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(mbd.getResourceDescription(), beanName,</span><br><span class="line">							<span class="string">"Post-processing of merged bean definition failed"</span>, ex);</span><br><span class="line">				&#125;</span><br><span class="line">				mbd.postProcessed = <span class="keyword">true</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Eagerly cache singletons to be able to resolve circular references</span></span><br><span class="line">		<span class="comment">// even when triggered by lifecycle interfaces like BeanFactoryAware.</span></span><br><span class="line">    <span class="comment">//2⃣️判断是否提前暴露bean, true就会添加到singletonFactories缓存中</span></span><br><span class="line">		<span class="keyword">boolean</span> earlySingletonExposure = (mbd.isSingleton() &amp;&amp; <span class="keyword">this</span>.allowCircularReferences &amp;&amp;</span><br><span class="line">				isSingletonCurrentlyInCreation(beanName));</span><br><span class="line">		<span class="keyword">if</span> (earlySingletonExposure) &#123;</span><br><span class="line">			<span class="keyword">if</span> (logger.isTraceEnabled()) &#123;</span><br><span class="line">				logger.trace(<span class="string">"Eagerly caching bean '"</span> + beanName +</span><br><span class="line">						<span class="string">"' to allow for resolving potential circular references"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			addSingletonFactory(beanName, () -&gt; getEarlyBeanReference(beanName, mbd, bean));</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Initialize the bean instance.</span></span><br><span class="line">		Object exposedObject = bean;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">//3⃣️属性赋值</span></span><br><span class="line">			populateBean(beanName, mbd, instanceWrapper);</span><br><span class="line">      <span class="comment">//4⃣️初始化，init方法等，循环依赖+@Async时，就是因为在这里，会执行AsyncAnnotationBeanPostProcessor的postProcessAfterInitialization方法，判断此bean是否满足被代理proxy条件，即方法或类上是否有@Async注解，如果存在注解，则返回的是被Proxy的bean</span></span><br><span class="line">			exposedObject = initializeBean(beanName, exposedObject, mbd);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">			<span class="keyword">if</span> (ex <span class="keyword">instanceof</span> BeanCreationException &amp;&amp; beanName.equals(((BeanCreationException) ex).getBeanName())) &#123;</span><br><span class="line">				<span class="keyword">throw</span> (BeanCreationException) ex;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span> &#123;</span><br><span class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(</span><br><span class="line">						mbd.getResourceDescription(), beanName, <span class="string">"Initialization of bean failed"</span>, ex);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (earlySingletonExposure) &#123;</span><br><span class="line">			Object earlySingletonReference = getSingleton(beanName, <span class="keyword">false</span>);</span><br><span class="line">			<span class="keyword">if</span> (earlySingletonReference != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">//5⃣️在此判断，如果初始化返回的bean和实例化的bean不相等，需要判断循环依赖的bean，是否被已创建完成的bean依赖，</span></span><br><span class="line">        <span class="comment">//此时类C已经注入了提前曝光的类B实例，但和exposedObject不同版本，启动就会报错。</span></span><br><span class="line">				<span class="keyword">if</span> (exposedObject == bean) &#123;</span><br><span class="line">					exposedObject = earlySingletonReference;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span> <span class="keyword">if</span> (!<span class="keyword">this</span>.allowRawInjectionDespiteWrapping &amp;&amp; hasDependentBean(beanName)) &#123;</span><br><span class="line">					String[] dependentBeans = getDependentBeans(beanName);</span><br><span class="line">					Set&lt;String&gt; actualDependentBeans = <span class="keyword">new</span> LinkedHashSet&lt;&gt;(dependentBeans.length);</span><br><span class="line">					<span class="keyword">for</span> (String dependentBean : dependentBeans) &#123;</span><br><span class="line">						<span class="keyword">if</span> (!removeSingletonIfCreatedForTypeCheckOnly(dependentBean)) &#123;</span><br><span class="line">							actualDependentBeans.add(dependentBean);</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">if</span> (!actualDependentBeans.isEmpty()) &#123;</span><br><span class="line">						<span class="keyword">throw</span> <span class="keyword">new</span> BeanCurrentlyInCreationException(beanName,</span><br><span class="line">								<span class="string">"Bean with name '"</span> + beanName + <span class="string">"' has been injected into other beans ["</span> +</span><br><span class="line">								StringUtils.collectionToCommaDelimitedString(actualDependentBeans) +</span><br><span class="line">								<span class="string">"] in its raw version as part of a circular reference, but has eventually been "</span> +</span><br><span class="line">								<span class="string">"wrapped. This means that said other beans do not use the final version of the "</span> +</span><br><span class="line">								<span class="string">"bean. This is often the result of over-eager type matching - consider using "</span> +</span><br><span class="line">								<span class="string">"'getBeanNamesForType' with the 'allowEagerInit' flag turned off, for example."</span>);</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Register bean as disposable.</span></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">//6⃣️bean销毁方法</span></span><br><span class="line">			registerDisposableBeanIfNecessary(beanName, bean, mbd);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (BeanDefinitionValidationException ex) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(</span><br><span class="line">					mbd.getResourceDescription(), beanName, <span class="string">"Invalid destruction signature"</span>, ex);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> exposedObject;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="EnableAsync核心类"><a href="#EnableAsync核心类" class="headerlink" title="@EnableAsync核心类"></a>@EnableAsync核心类</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">AsyncAnnotationBeanPostProcessor</span><br><span class="line">AnnotationClassFilter</span><br><span class="line">org.springframework.aop.support.annotation.AnnotationMatchingPointcut.AnnotationCandidateClassFilter</span><br><span class="line">AnnotationAsyncExecutionInterceptor</span><br></pre></td></tr></table></figure>
+
+<h4 id="bean属性注入核心代码"><a href="#bean属性注入核心代码" class="headerlink" title="bean属性注入核心代码"></a>bean属性注入核心代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">AutowiredAnnotationBeanPostProcessor</span><br><span class="line">InjectionMetadata</span><br><span class="line">AutowiredFieldElement</span><br><span class="line">DefaultListableBeanFactory.resolveDependency</span><br><span class="line">DependencyDescriptor</span><br><span class="line">AnnotationAwareAspectJAutoProxyCreator</span><br><span class="line">AbstractAutowireCapableBeanFactory</span><br><span class="line">AbstractBeanFactory</span><br><span class="line">AbstractAutowireCapableBeanFactory</span><br><span class="line">DefaultListableBeanFactory</span><br></pre></td></tr></table></figure>
+
+<h4 id="bean实例化过程中使用到相关的BeanPostProcessor相关类"><a href="#bean实例化过程中使用到相关的BeanPostProcessor相关类" class="headerlink" title="bean实例化过程中使用到相关的BeanPostProcessor相关类"></a>bean实例化过程中使用到相关的BeanPostProcessor相关类</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">instantiation beanpostprocessor（getBeanPostProcessorCache().instantiationAware）</span><br><span class="line"></span><br><span class="line">- 0 = &#123;ConfigurationClassPostProcessor$ImportAwareBeanPostProcessor@2359&#125; </span><br><span class="line">- 1 = &#123;CommonAnnotationBeanPostProcessor@2306&#125; </span><br><span class="line">- 2 = &#123;AutowiredAnnotationBeanPostProcessor@2007&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">getBeanPostProcessorCache().mergedDefinition</span><br><span class="line"></span><br><span class="line">1. 0 = &#123;CommonAnnotationBeanPostProcessor@2306&#125; </span><br><span class="line">2. 1 = &#123;AutowiredAnnotationBeanPostProcessor@2007&#125; </span><br><span class="line">3. 2 = &#123;ApplicationListenerDetector@2795&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">getBeanPostProcessorCache().smartInstantiationAware</span><br><span class="line"></span><br><span class="line">1. 0 = &#123;AnnotationAwareAspectJAutoProxyCreator@1846&#125;</span><br><span class="line">2. 1 = &#123;AutowiredAnnotationBeanPostProcessor@2068&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">getBeanPostProcessors()</span><br><span class="line"></span><br><span class="line">- 0 = &#123;ApplicationContextAwareProcessor@2478&#125; </span><br><span class="line">- 1 = &#123;ConfigurationClassPostProcessor$ImportAwareBeanPostProcessor@2174&#125; </span><br><span class="line">- 2 = &#123;PostProcessorRegistrationDelegate$BeanPostProcessorChecker@2479&#125; </span><br><span class="line">- 3 = &#123;AnnotationAwareAspectJAutoProxyCreator@2273&#125; &quot;proxyTargetClass=true; optimize=false; opaque=false; exposeProxy=false; frozen=false&quot;</span><br><span class="line">- 4 = &#123;AsyncAnnotationBeanPostProcessor@2191&#125; &quot;proxyTargetClass=false; optimize=false; opaque=false; exposeProxy=false; frozen=false&quot;</span><br><span class="line">- 5 = &#123;CommonAnnotationBeanPostProcessor@2038&#125; </span><br><span class="line">- 6 = &#123;AutowiredAnnotationBeanPostProcessor@2010&#125; </span><br><span class="line">- 7 = &#123;ApplicationListenerDetector@2480&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="/2021/04/08/java/arthas系列优秀文章/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1067,125 +1149,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/31/java/mat-oql/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/31/java/mat-oql/" class="post-title-link" itemprop="url">mat之OQL</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-03-31 10:44:02" itemprop="dateCreated datePublished" datetime="2021-03-31T10:44:02+08:00">2021-03-31</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-01 11:45:23" itemprop="dateModified" datetime="2021-04-01T11:45:23+08:00">2021-04-01</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a href="https://help.eclipse.org/2021-03/index.jsp?topic=/org.eclipse.mat.ui.help/welcome.html" target="_blank" rel="noopener">https://help.eclipse.org/2021-03/index.jsp?topic=/org.eclipse.mat.ui.help/welcome.html</a></p>
-<h4 id="OQL"><a href="#OQL" class="headerlink" title="OQL"></a>OQL</h4><h5 id="1、OQL-SELECT"><a href="#1、OQL-SELECT" class="headerlink" title="1、OQL-SELECT"></a>1、OQL-SELECT</h5><ul>
-<li>SELECT * FROM java.lang.String</li>
-<li>SELECT toString(s), s.count, s.value FROM java.lang.String s</li>
-<li>SELECT toString(s) AS Value,s.@usedHeapSize AS “Shallow Size” FROM java.lang.String s<br><strong>（@为属性访问器，可以使用AS起个别名</strong>）</li>
-<li>SELECT AS RETAINED SET * FROM java.lang.String<br>（使用AS RETAINED SET 获得与选择对象相关联的对象集合）</li>
-<li>SELECT OBJECTS dominators(s) FROM java.lang.String s<br>（<strong>OBJECTS 关键字使得dominators 返回二维数组简化为一维对象列表</strong>）</li>
-<li>SELECT DISTINCT OBJECTS classof(s) FROM java.lang.String s<br>（<strong>DISTINCT 去重复</strong>）</li>
-<li>查询所有的异常对象<br>SELECT * FROM INSTANCEOF java.lang.Exception exceptions<br>SELECT exceptions.@displayName, exceptions.detailMessage.toString() FROM INSTANCEOF java.lang.Exception exceptions</li>
-</ul>
-<h5 id="2、OQL-FROM"><a href="#2、OQL-FROM" class="headerlink" title="2、OQL-FROM"></a>2、OQL-FROM</h5><ul>
-<li>SELECT * FROM “java.lang..*”<br>（支持正则）</li>
-<li>SELECT * FROM java.lang.String</li>
-<li>SELECT * FROM 0xe14a100<br>（根据<strong>类对象</strong>在堆转储快照中的地址查询）</li>
-<li>SELECT * FROM 3022<br>（根据对象在堆转储快照中的地址ID）</li>
-<li>SELECT * FROM ( SELECT * FROM java.lang.Class c )</li>
-<li>SELECT * FROM <strong><em>\</em>${snapshot}.getClasses()<br>**</strong>（使用属性访问器）</li>
-<li>SELECT * FROM INSTANCEOF java.lang.ref.Reference<br>（<em>INSTANCEOF</em> 会把指定类的子类也查询出来）</li>
-<li>SELECT * FROM OBJECTS java.lang.String<br>（OBJECTS 禁止OQL把查询范围解释为对象实例，上述结果为java.lang.String对应的Class）</li>
-</ul>
-<h5 id="3、OQL-WHERE"><a href="#3、OQL-WHERE" class="headerlink" title="3、OQL-WHERE"></a>3、OQL-WHERE</h5><ul>
-<li><p>SELECT * FROM java.lang.String s WHERE s.count &gt;= 100</p>
-</li>
-<li><p>SELECT * FROM java.lang.String s WHERE toString(s) LIKE “.*day” </p>
-</li>
-<li><p>SELECT * FROM java.lang.String s WHERE s.value NOT IN dominators(s) </p>
-</li>
-<li><p>SELECT * FROM java.lang.String s WHERE toString(s) = “monday” </p>
-</li>
-<li><p>SELECT * FROM java.lang.String s WHERE s.count &gt; 100 AND s.@retainedHeapSize &gt; s.@usedHeapSize </p>
-</li>
-<li><p>SELECT * FROM java.lang.String s WHERE s.count &gt; 1000 OR s.value.@length &gt;1000 </p>
-</li>
-<li><p>SELECT * FROM java.lang.String s WHERE (s.count &gt; 1000) = true           </p>
-<p>​                                                            WHERE toString(s) = “monday”                              </p>
-<p>​                                                            WHERE dominators(s).size() = 0                             </p>
-<p>​                                                            WHERE s.retainedHeapSize &gt; 1024L                              </p>
-<p>​                                                            WHERE s.@GCRootInfo != null</p>
-</li>
-</ul>
-<h5 id="4、属性访问器"><a href="#4、属性访问器" class="headerlink" title="4、属性访问器"></a>4、属性访问器</h5><ul>
-<li>[<alias>.]<field>.<field>.……</field></field></alias></li>
-</ul>
-<p>（访问堆转储快照中对象的字段）</p>
-<ul>
-<li>[<alias>.]@<attribute>……</attribute></alias></li>
-</ul>
-<p>（访问java bean属性）</p>
-<div class="table-box"><table class="mceItemTable       " border="0" style="color:rgb(0,0,0); font-size:14px; line-height:26px; border:1px dashed rgb(187,187,187); font-family:Verdana,Arial,Helvetica,sans-serif"><tbody><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">目标</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">接口</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">属性</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">含义</span></td></tr><tr><td rowspan="6" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">任意堆中的对象</span></td><td rowspan="6" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Iobject</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">objectId</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">快照中对象的ID</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">objectAddress</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">快照中对象的地址</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Class</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">对象所属的类</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">usedHeapSize</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">对象的shallowSize</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">retainedHeapSize</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">对象的retainedSize</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">displayName</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">对象的显示名称</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">类对象</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Iclass</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">classLoaderId</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">类加载器Id</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">任意数组</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Iarray</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">length</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">数组的长度</span></td></tr></tbody></table></div>
-
-
-
-<h5 id="5、OQL-内建函数"><a href="#5、OQL-内建函数" class="headerlink" title="5、OQL 内建函数"></a>5、OQL 内建函数</h5><p>.[<alias>.]@&lt;方法&gt;([&lt;表达式&gt;,&lt;表达式&gt;])……</alias></p>
-<p>（调用OQL java方法，加“()”会令MAT解释为一个OQL java调用）</p>
-<p>常见的OQL java方法</p>
-<div class="table-box"><table class="mceItemTable       " border="0" style="color:rgb(0,0,0); font-size:14px; line-height:26px; border:1px dashed rgb(187,187,187); font-family:Verdana,Arial,Helvetica,sans-serif"><tbody><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">目标</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">接口</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">属性</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">含义</span></td></tr><tr><td rowspan="2" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">$snapshot</span></td><td rowspan="2" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Isnapshot</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">getClasses()</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">获取所有类的集合</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">getClassesByName(String name,boolean includeSubClasses)</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">获取指定类的集合</span></td></tr><tr><td rowspan="2" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Class object</span></td><td rowspan="2" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Iclass</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">hasSuperClass()</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">如果对象有父类则返回true</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">isArrayType()</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">如果Class是数组类型则返回true</span></td></tr></tbody></table></div>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1255,7 +1218,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-count">59</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
