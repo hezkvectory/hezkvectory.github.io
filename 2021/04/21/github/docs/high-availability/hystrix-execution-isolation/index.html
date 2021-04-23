@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Hystrix 隔离策略细粒度控制Hystrix 实现资源隔离，有两种策略：  线程池隔离 信号量隔离  对资源隔离这一块东西，其实可以做一定细粒度的一些控制。 execution.isolation.strategy指定了 HystrixCommand.run() 的资源隔离策略：THREAD or SEMAPHORE，一种基于线程池，一种基于信号量。 12345// to use thread">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/2021/04/21/github/docs/high-availability/hystrix-execution-isolation/index.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="Hystrix 隔离策略细粒度控制Hystrix 实现资源隔离，有两种策略：  线程池隔离 信号量隔离  对资源隔离这一块东西，其实可以做一定细粒度的一些控制。 execution.isolation.strategy指定了 HystrixCommand.run() 的资源隔离策略：THREAD or SEMAPHORE，一种基于线程池，一种基于信号量。 12345// to use thread">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="/2021/04/21/github/docs/high-availability/hystrix-execution-isolation/images/hystrix-thread-pool-queue.png">
+<meta property="og:updated_time" content="2021-04-21T07:37:08.873Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="Hystrix 隔离策略细粒度控制Hystrix 实现资源隔离，有两种策略：  线程池隔离 信号量隔离  对资源隔离这一块东西，其实可以做一定细粒度的一些控制。 execution.isolation.strategy指定了 HystrixCommand.run() 的资源隔离策略：THREAD or SEMAPHORE，一种基于线程池，一种基于信号量。 12345// to use thread">
+<meta name="twitter:image" content="/2021/04/21/github/docs/high-availability/hystrix-execution-isolation/images/hystrix-thread-pool-queue.png">
+
+<link rel="canonical" href="/2021/04/21/github/docs/high-availability/hystrix-execution-isolation/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title> | 我的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">我的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/04/21/github/docs/high-availability/hystrix-execution-isolation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-04-21 15:37:08" itemprop="dateCreated datePublished" datetime="2021-04-21T15:37:08+08:00">2021-04-21</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Hystrix-隔离策略细粒度控制"><a href="#Hystrix-隔离策略细粒度控制" class="headerlink" title="Hystrix 隔离策略细粒度控制"></a>Hystrix 隔离策略细粒度控制</h2><p>Hystrix 实现资源隔离，有两种策略：</p>
+<ul>
+<li>线程池隔离</li>
+<li>信号量隔离</li>
+</ul>
+<p>对资源隔离这一块东西，其实可以做一定细粒度的一些控制。</p>
+<h3 id="execution-isolation-strategy"><a href="#execution-isolation-strategy" class="headerlink" title="execution.isolation.strategy"></a>execution.isolation.strategy</h3><p>指定了 HystrixCommand.run() 的资源隔离策略：<code>THREAD</code> or <code>SEMAPHORE</code>，一种基于线程池，一种基于信号量。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// to use thread isolation</span></span><br><span class="line">HystrixCommandProperties.Setter().withExecutionIsolationStrategy(ExecutionIsolationStrategy.THREAD)</span><br><span class="line"></span><br><span class="line"><span class="comment">// to use semaphore isolation</span></span><br><span class="line">HystrixCommandProperties.Setter().withExecutionIsolationStrategy(ExecutionIsolationStrategy.SEMAPHORE)</span><br></pre></td></tr></table></figure>
+
+<p>线程池机制，每个 command 运行在一个线程中，限流是通过线程池的大小来控制的；信号量机制，command 是运行在调用线程中（也就是 Tomcat 的线程池），通过信号量的容量来进行限流。</p>
+<p>如何在线程池和信号量之间做选择？</p>
+<p><strong>默认的策略</strong>就是线程池。</p>
+<p><strong>线程池</strong>其实最大的好处就是对于网络访问请求，如果有超时的话，可以避免调用线程阻塞住。</p>
+<p>而使用信号量的场景，通常是针对超大并发量的场景下，每个服务实例每秒都几百的 <code>QPS</code>，那么此时你用线程池的话，线程一般不会太多，可能撑不住那么高的并发，如果要撑住，可能要耗费大量的线程资源，那么就是用信号量，来进行限流保护。一般用信号量常见于那种基于纯内存的一些业务逻辑服务，而不涉及到任何网络访问请求。</p>
+<h3 id="command-key-amp-command-group"><a href="#command-key-amp-command-group" class="headerlink" title="command key &amp; command group"></a>command key &amp; command group</h3><p>我们使用线程池隔离，要怎么对<strong>依赖服务</strong>、<strong>依赖服务接口</strong>、<strong>线程池</strong>三者做划分呢？</p>
+<p>每一个 command，都可以设置一个自己的名称 command key，同时可以设置一个自己的组 command group。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Setter cachedSetter = Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(<span class="string">"ExampleGroup"</span>))</span><br><span class="line">                                                 .andCommandKey(HystrixCommandKey.Factory.asKey(<span class="string">"HelloWorld"</span>));</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">CommandHelloWorld</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(cachedSetter);</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>command group 是一个非常重要的概念，默认情况下，就是通过 command group 来定义一个线程池的，而且还会通过 command group 来聚合一些监控和报警信息。同一个 command group 中的请求，都会进入同一个线程池中。</p>
+<h3 id="command-thread-pool"><a href="#command-thread-pool" class="headerlink" title="command thread pool"></a>command thread pool</h3><p>ThreadPoolKey 代表了一个 HystrixThreadPool，用来进行统一监控、统计、缓存。默认的 ThreadPoolKey 就是 command group 的名称。每个 command 都会跟它的 ThreadPoolKey 对应的 ThreadPool 绑定在一起。</p>
+<p>如果不想直接用 command group，也可以手动设置 ThreadPool 的名称。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Setter cachedSetter = Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(<span class="string">"ExampleGroup"</span>))</span><br><span class="line">                                                 .andCommandKey(HystrixCommandKey.Factory.asKey(<span class="string">"HelloWorld"</span>))</span><br><span class="line">                                                 .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey(<span class="string">"HelloWorldPool"</span>));</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">CommandHelloWorld</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(cachedSetter);</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="command-key-amp-command-group-amp-command-thread-pool"><a href="#command-key-amp-command-group-amp-command-thread-pool" class="headerlink" title="command key &amp; command group &amp; command thread pool"></a>command key &amp; command group &amp; command thread pool</h3><p><strong>command key</strong> ，代表了一类 command，一般来说，代表了下游依赖服务的某个接口。</p>
+<p><strong>command group</strong> ，代表了某一个下游依赖服务，这是很合理的，一个依赖服务可能会暴露出来多个接口，每个接口就是一个 command key。command group 在逻辑上对一堆 command key 的调用次数、成功次数、timeout 次数、失败次数等进行统计，可以看到某一个服务整体的一些访问情况。<strong>一般来说，推荐根据一个服务区划分出一个线程池，command key 默认都是属于同一个线程池的。</strong></p>
+<p>比如说有一个服务 A，你估算出来服务 A 每秒所有接口加起来的整体 <code>QPS</code> 在 100 左右，你有一个服务 B 去调用服务 A。你的服务 B 部署了 10 个实例，每个实例上，用 command group 去对应下游服务 A。给一个线程池，量大概是 10 就可以了，这样服务 B 对服务 A 整体的访问 QPS 就大概是每秒 100 了。</p>
+<p>但是，如果说 command group 对应了一个服务，而这个服务暴露出来的几个接口，访问量很不一样，差异非常之大。你可能就希望在这个服务对应 command group 的内部，包含对应多个接口的 command key，做一些细粒度的资源隔离。<strong>就是说，希望对同一个服务的不同接口，使用不同的线程池。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">command key -&gt; command group</span><br><span class="line"></span><br><span class="line">command key -&gt; 自己的 thread pool key</span><br></pre></td></tr></table></figure>
+
+<p>逻辑上来说，多个 command key 属于一个 command group，在做统计的时候，会放在一起统计。每个 command key 有自己的线程池，每个接口有自己的线程池，去做资源隔离和限流。</p>
+<p>说白点，就是说如果你的 command key 要用自己的线程池，可以定义自己的 thread pool key，就 ok 了。</p>
+<h3 id="coreSize"><a href="#coreSize" class="headerlink" title="coreSize"></a>coreSize</h3><p>设置线程池的大小，默认是 10。一般来说，用这个默认的 10 个线程大小就够了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HystrixThreadPoolProperties.Setter().withCoreSize(<span class="keyword">int</span> value);</span><br></pre></td></tr></table></figure>
+
+<h3 id="queueSizeRejectionThreshold"><a href="#queueSizeRejectionThreshold" class="headerlink" title="queueSizeRejectionThreshold"></a>queueSizeRejectionThreshold</h3><p>如果说线程池中的 10 个线程都在工作中，没有空闲的线程来做其它的事情，此时再有请求过来，会先进入队列积压。如果说队列积压满了，再有请求过来，就直接 reject，拒绝请求，执行 fallback 降级的逻辑，快速返回。</p>
+<p><img src="./images/hystrix-thread-pool-queue.png" alt="hystrix-thread-pool-queue"></p>
+<p>控制 queue 满了之后 reject 的 threshold，因为 maxQueueSize 不允许热修改，因此提供这个参数可以热修改，控制队列的最大大小。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HystrixThreadPoolProperties.Setter().withQueueSizeRejectionThreshold(<span class="keyword">int</span> value);</span><br></pre></td></tr></table></figure>
+
+<h3 id="execution-isolation-semaphore-maxConcurrentRequests"><a href="#execution-isolation-semaphore-maxConcurrentRequests" class="headerlink" title="execution.isolation.semaphore.maxConcurrentRequests"></a>execution.isolation.semaphore.maxConcurrentRequests</h3><p>设置使用 SEMAPHORE 隔离策略的时候允许访问的最大并发量，超过这个最大并发量，请求直接被 reject。</p>
+<p>这个并发量的设置，跟线程池大小的设置，应该是类似的，但是基于信号量的话，性能会好很多，而且 Hystrix 框架本身的开销会小很多。</p>
+<p>默认值是 10，尽量设置的小一些，因为一旦设置的太大，而且有延时发生，可能瞬间导致 tomcat 本身的线程资源被占满。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HystrixCommandProperties.Setter().withExecutionIsolationSemaphoreMaxConcurrentRequests(<span class="keyword">int</span> value);</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/21/github/docs/high-availability/hystrix-introduction/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/21/github/docs/high-availability/hystrix-fallback/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hystrix-隔离策略细粒度控制"><span class="nav-number">1.</span> <span class="nav-text">Hystrix 隔离策略细粒度控制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#execution-isolation-strategy"><span class="nav-number">1.1.</span> <span class="nav-text">execution.isolation.strategy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#command-key-amp-command-group"><span class="nav-number">1.2.</span> <span class="nav-text">command key &amp; command group</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#command-thread-pool"><span class="nav-number">1.3.</span> <span class="nav-text">command thread pool</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#command-key-amp-command-group-amp-command-thread-pool"><span class="nav-number">1.4.</span> <span class="nav-text">command key &amp; command group &amp; command thread pool</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#coreSize"><span class="nav-number">1.5.</span> <span class="nav-text">coreSize</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#queueSizeRejectionThreshold"><span class="nav-number">1.6.</span> <span class="nav-text">queueSizeRejectionThreshold</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#execution-isolation-semaphore-maxConcurrentRequests"><span class="nav-number">1.7.</span> <span class="nav-text">execution.isolation.semaphore.maxConcurrentRequests</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">hezhengkui</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hezhengkui</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

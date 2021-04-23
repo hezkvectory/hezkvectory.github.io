@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="深入 Hystrix 断路器执行原理状态机Hystrix 断路器有三种状态，分别是关闭（Closed）、打开（Open）与半开（Half-Open），三种状态转化关系如下：   Closed 断路器关闭：调用下游的请求正常通过 Open 断路器打开：阻断对下游服务的调用，直接走 Fallback 逻辑 Half-Open 断路器处于半开状态：SleepWindowInMilliseconds  E">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/2021/04/21/github/docs/high-availability/hystrix-circuit-breaker/index.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="深入 Hystrix 断路器执行原理状态机Hystrix 断路器有三种状态，分别是关闭（Closed）、打开（Open）与半开（Half-Open），三种状态转化关系如下：   Closed 断路器关闭：调用下游的请求正常通过 Open 断路器打开：阻断对下游服务的调用，直接走 Fallback 逻辑 Half-Open 断路器处于半开状态：SleepWindowInMilliseconds  E">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="/2021/04/21/github/docs/high-availability/hystrix-circuit-breaker/images/hystrix-circuit-breaker-state-machine.png">
+<meta property="og:updated_time" content="2021-04-21T07:37:08.873Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="深入 Hystrix 断路器执行原理状态机Hystrix 断路器有三种状态，分别是关闭（Closed）、打开（Open）与半开（Half-Open），三种状态转化关系如下：   Closed 断路器关闭：调用下游的请求正常通过 Open 断路器打开：阻断对下游服务的调用，直接走 Fallback 逻辑 Half-Open 断路器处于半开状态：SleepWindowInMilliseconds  E">
+<meta name="twitter:image" content="/2021/04/21/github/docs/high-availability/hystrix-circuit-breaker/images/hystrix-circuit-breaker-state-machine.png">
+
+<link rel="canonical" href="/2021/04/21/github/docs/high-availability/hystrix-circuit-breaker/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title> | 我的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">我的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/04/21/github/docs/high-availability/hystrix-circuit-breaker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-04-21 15:37:08" itemprop="dateCreated datePublished" datetime="2021-04-21T15:37:08+08:00">2021-04-21</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="深入-Hystrix-断路器执行原理"><a href="#深入-Hystrix-断路器执行原理" class="headerlink" title="深入 Hystrix 断路器执行原理"></a>深入 Hystrix 断路器执行原理</h2><h3 id="状态机"><a href="#状态机" class="headerlink" title="状态机"></a>状态机</h3><p>Hystrix 断路器有三种状态，分别是关闭（Closed）、打开（Open）与半开（Half-Open），三种状态转化关系如下：</p>
+<p><img src="./images/hystrix-circuit-breaker-state-machine.png" alt="image-20191104211642271"></p>
+<ol>
+<li><code>Closed</code> 断路器关闭：调用下游的请求正常通过</li>
+<li><code>Open</code> 断路器打开：阻断对下游服务的调用，直接走 Fallback 逻辑</li>
+<li><code>Half-Open</code> 断路器处于半开状态：<a href="#circuitBreaker.sleepWindowInMilliseconds">SleepWindowInMilliseconds</a></li>
+</ol>
+<h3 id="Enabled"><a href="#Enabled" class="headerlink" title="Enabled"></a><a href="https://github.com/Netflix/Hystrix/wiki/Configuration#circuitbreakerenabled" target="_blank" rel="noopener">Enabled</a></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HystrixCommandProperties.Setter()</span><br><span class="line">    .withCircuitBreakerEnabled(<span class="keyword">boolean</span>)</span><br></pre></td></tr></table></figure>
+
+<p>控制断路器是否工作，包括跟踪依赖服务调用的健康状况，以及对异常情况过多时是否允许触发断路。默认值 <code>true</code>。</p>
+<h3 id="circuitBreaker-requestVolumeThreshold"><a href="#circuitBreaker-requestVolumeThreshold" class="headerlink" title="circuitBreaker.requestVolumeThreshold"></a><a href="https://github.com/Netflix/Hystrix/wiki/Configuration#circuitbreakerrequestvolumethreshold" target="_blank" rel="noopener">circuitBreaker.requestVolumeThreshold</a></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HystrixCommandProperties.Setter()</span><br><span class="line">    .withCircuitBreakerRequestVolumeThreshold(<span class="keyword">int</span>)</span><br></pre></td></tr></table></figure>
+
+<p>表示在一次统计的<strong>时间滑动窗口中（这个参数也很重要，下面有说到）</strong>，至少经过多少个请求，才可能触发断路，默认值 20。<strong>经过 Hystrix 断路器的流量只有在超过了一定阈值后，才有可能触发断路。</strong>比如说，要求在 10s 内经过断路器的流量必须达到 20 个，而实际经过断路器的请求有 19 个，即使这 19 个请求全都失败，也不会去判断要不要断路。</p>
+<h3 id="circuitBreaker-errorThresholdPercentage"><a href="#circuitBreaker-errorThresholdPercentage" class="headerlink" title="circuitBreaker.errorThresholdPercentage"></a><a href="https://github.com/Netflix/Hystrix/wiki/Configuration#circuitBreaker.errorThresholdPercentage" target="_blank" rel="noopener">circuitBreaker.errorThresholdPercentage</a></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HystrixCommandProperties.Setter()</span><br><span class="line">    .withCircuitBreakerErrorThresholdPercentage(<span class="keyword">int</span>)</span><br></pre></td></tr></table></figure>
+
+<p>表示异常比例达到多少，才会触发断路，默认值是 50(%)。</p>
+<h4 id="circuitBreaker-sleepWindowInMilliseconds"><a href="#circuitBreaker-sleepWindowInMilliseconds" class="headerlink" title="circuitBreaker.sleepWindowInMilliseconds"></a><a href="https://github.com/Netflix/Hystrix/wiki/Configuration#circuitbreakersleepwindowinmilliseconds" target="_blank" rel="noopener">circuitBreaker.sleepWindowInMilliseconds</a></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HystrixCommandProperties.Setter()</span><br><span class="line">    .withCircuitBreakerSleepWindowInMilliseconds(<span class="keyword">int</span>)</span><br></pre></td></tr></table></figure>
+
+<p>断路器状态由 Close 转换到 Open，在之后 <code>SleepWindowInMilliseconds</code> 时间内，所有经过该断路器的请求会被断路，不调用后端服务，直接走 Fallback 降级机制，默认值 5000(ms)。</p>
+<p>而在该参数时间过后，断路器会变为 <code>Half-Open</code> 半开闭状态，尝试让一条请求经过断路器，看能不能正常调用。如果调用成功了，那么就自动恢复，断路器转为 Close 状态。</p>
+<h3 id="ForceOpen"><a href="#ForceOpen" class="headerlink" title="ForceOpen"></a><a href="https://github.com/Netflix/Hystrix/wiki/Configuration#circuitbreakerforceopen" target="_blank" rel="noopener">ForceOpen</a></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HystrixCommandProperties.Setter()</span><br><span class="line">    .withCircuitBreakerForceOpen(<span class="keyword">boolean</span>)</span><br></pre></td></tr></table></figure>
+
+<p>如果设置为 true 的话，直接强迫打开断路器，相当于是手动断路了，手动降级，默认值是 <code>false</code>。</p>
+<h3 id="ForceClosed"><a href="#ForceClosed" class="headerlink" title="ForceClosed"></a><a href="https://github.com/Netflix/Hystrix/wiki/Configuration#circuitbreakerforceclosed" target="_blank" rel="noopener">ForceClosed</a></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HystrixCommandProperties.Setter()</span><br><span class="line">    .withCircuitBreakerForceClosed(<span class="keyword">boolean</span>)</span><br></pre></td></tr></table></figure>
+
+<p>如果设置为 true，直接强迫关闭断路器，相当于手动停止断路了，手动升级，默认值是 <code>false</code>。</p>
+<h3 id="Metrics-统计器"><a href="#Metrics-统计器" class="headerlink" title="Metrics 统计器"></a>Metrics 统计器</h3><p>与 Hystrix 断路器紧密协作的，还有另一个重要组件 —— <strong>统计器（Metrics）</strong>。统计器中最重要的参数要数滑动窗口（<a href="https://github.com/Netflix/Hystrix/wiki/Configuration#metricsrollingstatstimeinmilliseconds" target="_blank" rel="noopener">metrics.rollingStats.timeInMilliseconds</a>）以及桶（<a href="https://github.com/Netflix/Hystrix/wiki/Configuration#metricsrollingstatsnumbuckets" target="_blank" rel="noopener">metrics.rollingStats.numBuckets</a>）了，这里引用<a href="https://zhenbianshu.github.io/2018/09/hystrix_configuration_analysis.html" target="_blank" rel="noopener">一段博文</a>来解释滑动窗口（默认值是 10000 ms）：</p>
+<blockquote>
+<p>一位乘客坐在正在行驶的列车的靠窗座位上，列车行驶的公路两侧种着一排挺拔的白杨树，随着列车的前进，路边的白杨树迅速从窗口滑过。我们用每棵树来代表一个请求，用列车的行驶代表时间的流逝，那么，列车上的这个窗口就是一个典型的滑动窗口，这个乘客能通过窗口看到的白杨树就是 Hystrix 要统计的数据。</p>
+</blockquote>
+<p>Hystrix 并不是只要有一条请求经过就去统计，而是将整个滑动窗口均分为 numBuckets 份，时间每经过一份就去统计一次。<strong>在经过一个时间窗口后，才会判断断路器状态要不要开启，请看下面的例子。</strong></p>
+<h2 id="实例-Demo"><a href="#实例-Demo" class="headerlink" title="实例 Demo"></a>实例 Demo</h2><h3 id="HystrixCommand-配置参数"><a href="#HystrixCommand-配置参数" class="headerlink" title="HystrixCommand 配置参数"></a>HystrixCommand 配置参数</h3><p>在 GetProductInfoCommand 中配置 Setter 断路器相关参数。</p>
+<ul>
+<li>滑动窗口中，最少 20 个请求，才可能触发断路。</li>
+<li>异常比例达到 40% 时，才触发断路。</li>
+<li>断路后 3000ms 内，所有请求都被 reject，直接走 fallback 降级，不会调用 run() 方法。3000ms 过后，变为 half-open 状态。</li>
+</ul>
+<p>run() 方法中，我们判断一下 productId 是否为 -1，是的话，直接抛出异常。这么写，我们之后测试的时候就可以传入 productId=-1，<strong>模拟服务执行异常</strong>了。</p>
+<p>在降级逻辑中，我们直接给它返回降级商品就好了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GetProductInfoCommand</span> <span class="keyword">extends</span> <span class="title">HystrixCommand</span>&lt;<span class="title">ProductInfo</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Long productId;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> HystrixCommandKey KEY = HystrixCommandKey.Factory.asKey(<span class="string">"GetProductInfoCommand"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">GetProductInfoCommand</span><span class="params">(Long productId)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(<span class="string">"ProductInfoService"</span>))</span><br><span class="line">                .andCommandKey(KEY)</span><br><span class="line">                .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()</span><br><span class="line">                        <span class="comment">// 是否允许断路器工作</span></span><br><span class="line">                        .withCircuitBreakerEnabled(<span class="keyword">true</span>)</span><br><span class="line">                        <span class="comment">// 滑动窗口中，最少有多少个请求，才可能触发断路</span></span><br><span class="line">                        .withCircuitBreakerRequestVolumeThreshold(<span class="number">20</span>)</span><br><span class="line">                        <span class="comment">// 异常比例达到多少，才触发断路，默认50%</span></span><br><span class="line">                        .withCircuitBreakerErrorThresholdPercentage(<span class="number">40</span>)</span><br><span class="line">                        <span class="comment">// 断路后多少时间内直接reject请求，之后进入half-open状态，默认5000ms</span></span><br><span class="line">                        .withCircuitBreakerSleepWindowInMilliseconds(<span class="number">3000</span>)));</span><br><span class="line">        <span class="keyword">this</span>.productId = productId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> ProductInfo <span class="title">run</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"调用接口查询商品数据，productId="</span> + productId);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (productId == -<span class="number">1L</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Exception();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        String url = <span class="string">"http://localhost:8081/getProductInfo?productId="</span> + productId;</span><br><span class="line">        String response = HttpClientUtils.sendGetRequest(url);</span><br><span class="line">        <span class="keyword">return</span> JSONObject.parseObject(response, ProductInfo.class);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> ProductInfo <span class="title">getFallback</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ProductInfo productInfo = <span class="keyword">new</span> ProductInfo();</span><br><span class="line">        productInfo.setName(<span class="string">"降级商品"</span>);</span><br><span class="line">        <span class="keyword">return</span> productInfo;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="断路测试类"><a href="#断路测试类" class="headerlink" title="断路测试类"></a>断路测试类</h3><p>我们在测试类中，前 30 次请求，传入 productId=-1，然后休眠 3s，之后 70 次请求，传入 productId=1。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="meta">@RunWith</span>(SpringRunner.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CircuitBreakerTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testCircuitBreaker</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        String baseURL = <span class="string">"http://localhost:8080/getProductInfo?productId="</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">30</span>; ++i) &#123;</span><br><span class="line">            <span class="comment">// 传入-1，会抛出异常，然后走降级逻辑</span></span><br><span class="line">            HttpClientUtils.sendGetRequest(baseURL + <span class="string">"-1"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        TimeUtils.sleep(<span class="number">3</span>);</span><br><span class="line">        System.out.println(<span class="string">"After sleeping..."</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">31</span>; i &lt; <span class="number">100</span>; ++i) &#123;</span><br><span class="line">            <span class="comment">// 传入1，走服务正常调用</span></span><br><span class="line">            HttpClientUtils.sendGetRequest(baseURL + <span class="string">"1"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h3><p>测试结果，我们可以明显看出系统断路与恢复的整个过程。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">调用接口查询商品数据，productId=<span class="number">-1</span></span><br><span class="line">ProductInfo(id=null, name=降级商品, price=null, pictureList=null, specification=null, service=null, color=null, size=null, shopId=null, modifiedTime=null, cityId=null, cityName=null, brandId=null, brandName=null)</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="comment">// 这里重复打印了 20 次上面的结果</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ProductInfo(id=null, name=降级商品, price=null, pictureList=null, specification=null, service=null, color=null, size=null, shopId=null, modifiedTime=null, cityId=null, cityName=null, brandId=null, brandName=null)</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="comment">// 这里重复打印了 8 次上面的结果</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 休眠 3s 后</span></span><br><span class="line">调用接口查询商品数据，productId=<span class="number">1</span></span><br><span class="line">ProductInfo(id=<span class="number">1</span>, name=iphone7手机, price=<span class="number">5599.0</span>, pictureList=a.jpg,b.jpg, specification=iphone7的规格, service=iphone7的售后服务, color=红色,白色,黑色, size=<span class="number">5.5</span>, shopId=<span class="number">1</span>, modifiedTime=<span class="number">2017</span><span class="number">-01</span><span class="number">-01</span> <span class="number">12</span>:<span class="number">00</span>:<span class="number">00</span>, cityId=<span class="number">1</span>, cityName=null, brandId=<span class="number">1</span>, brandName=null)</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="comment">// 这里重复打印了 69 次上面的结果</span></span><br></pre></td></tr></table></figure>
+
+<p>前 30 次请求，我们传入的 productId 为 -1，所以服务执行过程中会抛出异常。我们设置了最少 20 次请求通过断路器并且异常比例超出 40% 就触发断路。因此执行了 21 次接口调用，每次都抛异常并且走降级，21 次过后，断路器就被打开了。</p>
+<p>之后的 9 次请求，都不会执行 run() 方法，也就不会打印以下信息。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">调用接口查询商品数据，productId=<span class="number">-1</span></span><br></pre></td></tr></table></figure>
+
+<p>而是直接走降级逻辑，调用 getFallback() 执行。</p>
+<p>休眠了 3s 后，我们在之后的 70 次请求中，都传入 productId 为 1。由于我们前面设置了 3000ms 过后断路器变为 <code>half-open</code> 状态。因此 Hystrix 会尝试执行请求，发现成功了，那么断路器关闭，之后的所有请求也都能正常调用了。</p>
+<h3 id="参考内容"><a href="#参考内容" class="headerlink" title="参考内容"></a>参考内容</h3><ol>
+<li><a href="https://github.com/Netflix/Hystrix/issues/1459" target="_blank" rel="noopener">Hystrix issue 1459</a></li>
+<li><a href="https://github.com/Netflix/Hystrix/wiki/Configuration#metrics" target="_blank" rel="noopener">Hystrix Metrics</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/21/github/docs/high-availability/e-commerce-website-detail-page-architecture/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/21/github/docs/high-availability/hystrix-introduction/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#深入-Hystrix-断路器执行原理"><span class="nav-number">1.</span> <span class="nav-text">深入 Hystrix 断路器执行原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#状态机"><span class="nav-number">1.1.</span> <span class="nav-text">状态机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Enabled"><span class="nav-number">1.2.</span> <span class="nav-text">Enabled</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#circuitBreaker-requestVolumeThreshold"><span class="nav-number">1.3.</span> <span class="nav-text">circuitBreaker.requestVolumeThreshold</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#circuitBreaker-errorThresholdPercentage"><span class="nav-number">1.4.</span> <span class="nav-text">circuitBreaker.errorThresholdPercentage</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#circuitBreaker-sleepWindowInMilliseconds"><span class="nav-number">1.4.1.</span> <span class="nav-text">circuitBreaker.sleepWindowInMilliseconds</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ForceOpen"><span class="nav-number">1.5.</span> <span class="nav-text">ForceOpen</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ForceClosed"><span class="nav-number">1.6.</span> <span class="nav-text">ForceClosed</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Metrics-统计器"><span class="nav-number">1.7.</span> <span class="nav-text">Metrics 统计器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例-Demo"><span class="nav-number">2.</span> <span class="nav-text">实例 Demo</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HystrixCommand-配置参数"><span class="nav-number">2.1.</span> <span class="nav-text">HystrixCommand 配置参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#断路测试类"><span class="nav-number">2.2.</span> <span class="nav-text">断路测试类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试结果"><span class="nav-number">2.3.</span> <span class="nav-text">测试结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考内容"><span class="nav-number">2.4.</span> <span class="nav-text">参考内容</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">hezhengkui</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hezhengkui</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

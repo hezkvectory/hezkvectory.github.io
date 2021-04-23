@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/02/26/mysql/MySQL实战45讲/">
+    <link itemprop="mainEntityOfPage" href="/2021/04/21/github/docs/high-availability/hystrix-introduction/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/02/26/mysql/MySQL实战45讲/" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/2021/04/21/github/docs/high-availability/hystrix-introduction/" class="post-title-link" itemprop="url">Untitled</a>
         </h2>
 
         <div class="post-meta">
@@ -173,9 +173,8 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-02-26 11:57:28 / Modified: 12:46:11" itemprop="dateCreated datePublished" datetime="2021-02-26T11:57:28+08:00">2021-02-26</time>
+              <time title="Created: 2021-04-21 15:37:08" itemprop="dateCreated datePublished" datetime="2021-04-21T15:37:08+08:00">2021-04-21</time>
             </span>
 
           
@@ -189,205 +188,36 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h3 id="01-基础架构：一条SQL查询语句是如何执行的？"><a href="#01-基础架构：一条SQL查询语句是如何执行的？" class="headerlink" title="01 | 基础架构：一条SQL查询语句是如何执行的？"></a>01 | 基础架构：一条SQL查询语句是如何执行的？</h3><p><a href="https://blog.csdn.net/zxcc1314/article/details/84842650" target="_blank" rel="noopener">https://blog.csdn.net/zxcc1314/article/details/84842650</a></p>
-<p>大体来说，MySQL分为<strong>Server层</strong>和<strong>存储引擎层</strong>两部分。</p>
-<p><img src="https://img-blog.csdnimg.cn/20181205200741375.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<ul>
-<li>连接器：负责跟客户端建立连接、获取权限、维持和管理连接。</li>
-<li>查询缓存：查询请求先访问缓存(key 是查询的语句，value 是查询的结果)。命中直接返回。不推荐使用缓存，更新会把缓存清除(关闭缓存：参数 query_cache_type 设置成 DEMAND)。</li>
-<li>分析器：对 SQL 语句做解析，判断sql是否正确。</li>
-<li>优化器：决定使用哪个索引，多表关联（join）的时候，决定各个表的连接顺序。</li>
-<li>执行器：执行语句，先判断用户有无查询权限，使用表定义的存储引擎。</li>
+          <h2 id="用-Hystrix-构建高可用服务架构"><a href="#用-Hystrix-构建高可用服务架构" class="headerlink" title="用 Hystrix 构建高可用服务架构"></a>用 Hystrix 构建高可用服务架构</h2><p>参考 <a href="https://github.com/Netflix/Hystrix/wiki#what" target="_blank" rel="noopener">Hystrix Home</a>。</p>
+<h3 id="Hystrix-是什么？"><a href="#Hystrix-是什么？" class="headerlink" title="Hystrix 是什么？"></a>Hystrix 是什么？</h3><p>在分布式系统中，每个服务都可能会调用很多其他服务，被调用的那些服务就是<strong>依赖服务</strong>，有的时候某些依赖服务出现故障也是很正常的。</p>
+<p>Hystrix 可以让我们在分布式系统中对服务间的调用进行控制，加入一些<strong>调用延迟</strong>或者<strong>依赖故障</strong>的<strong>容错机制</strong>。</p>
+<p>Hystrix 通过将依赖服务进行<strong>资源隔离</strong>，进而阻止某个依赖服务出现故障时在整个系统所有的依赖服务调用中进行蔓延；同时 Hystrix 还提供故障时的 fallback 降级机制。</p>
+<p><strong>总而言之，Hystrix 通过这些方法帮助我们提升分布式系统的可用性和稳定性。</strong></p>
+<h3 id="Hystrix-的历史"><a href="#Hystrix-的历史" class="headerlink" title="Hystrix 的历史"></a>Hystrix 的历史</h3><p>Hystrix 是高可用性保障的一个框架。Netflix（可以认为是国外的优酷或者爱奇艺之类的视频网站）的 API 团队从 2011 年开始做一些提升系统可用性和稳定性的工作，Hystrix 就是从那时候开始发展出来的。</p>
+<p>在 2012 年的时候，Hystrix 就变得比较成熟和稳定了，Netflix 中，除了 API 团队以外，很多其他的团队都开始使用 Hystrix。</p>
+<p>时至今日，Netflix 中每天都有数十亿次的服务间调用，通过 Hystrix 框架在进行，而 Hystrix 也帮助 Netflix 网站提升了整体的可用性和稳定性。</p>
+<p><a href="https://github.com/Netflix/Hystrix/blob/master/README.md#hystrix-status" target="_blank" rel="noopener">2018 年 11 月，Hystrix 在其 Github 主页宣布，不再开放新功能，推荐开发者使用其他仍然活跃的开源项目</a>。维护模式的转变绝不意味着 Hystrix 不再有价值。相反，Hystrix 激发了很多伟大的想法和项目，我们高可用的这一块知识还是会针对 Hystrix 进行讲解。</p>
+<h3 id="Hystrix-的设计原则"><a href="#Hystrix-的设计原则" class="headerlink" title="Hystrix 的设计原则"></a>Hystrix 的设计原则</h3><ul>
+<li>对依赖服务调用时出现的调用延迟和调用失败进行<strong>控制和容错保护</strong>。</li>
+<li>在复杂的分布式系统中，阻止某一个依赖服务的故障在整个系统中蔓延。比如某一个服务故障了，导致其它服务也跟着故障。</li>
+<li>提供 <code>fail-fast</code>（快速失败）和快速恢复的支持。</li>
+<li>提供 fallback 优雅降级的支持。</li>
+<li>支持近实时的监控、报警以及运维操作。</li>
 </ul>
-<h3 id="02-日志系统：一条SQL更新语句是如何执行的？"><a href="#02-日志系统：一条SQL更新语句是如何执行的？" class="headerlink" title="02 | 日志系统：一条SQL更新语句是如何执行的？"></a><strong>02 | 日志系统：一条SQL更新语句是如何执行的？</strong></h3><h4 id="redo-log"><a href="#redo-log" class="headerlink" title="redo log"></a>redo log</h4><p>MySQL WAL 技术，先写日志，再写磁盘。保证掉电重启，数据不丢失（crash-safe）。<br>redo log 是 InnoDB 引擎特有的日志。<br>当记录更新时，Innodb 先记录 redo log 再更新内存，这时更新就算完成。引擎往往会在系统空闲时刷盘。</p>
-<p><img src="https://img-blog.csdnimg.cn/20181214201529442.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<p>redo log 是实现了类似环形缓冲区，一个指针 write pos 是当前记录的位置，另一个指针 checkpoint 是当前要擦除的位置，write pos 和checkpoint 之间是空闲部分。如果 write pos 快追上 checkpoint 时，代表缓冲区快满了，需要暂停刷盘。（CP’见12讲）</p>
-<p>innodb_flush_log_at_trx_commit参数：<br>0：log buffer将每秒一次地写入log file中，并且log file的flush(刷到磁盘)操作同时进行。该模式下在事务提交的时候，不会主动触发写入磁盘的操作。<br>1：每次事务提交时MySQL都会把log buffer的数据写入log file，并且flush(刷到磁盘)中去，该模式为系统默认。<br>2：每次事务提交时MySQL都会把log buffer的数据写入log file，但是flush(刷到磁盘)操作并不会同时进行。该模式下，MySQL会每秒执行一次 flush(刷到磁盘)操作。</p>
-<h4 id="binlog（归档日志）"><a href="#binlog（归档日志）" class="headerlink" title="binlog（归档日志）"></a>binlog（归档日志）</h4><p>Server层日志。binlog 日志只能用于归档，没有crash-safe能力。<br>三个用途:</p>
-<ul>
-<li><p>恢复：利用binlog日志恢复数据库数据</p>
-</li>
-<li><p>复制：主从同步</p>
-</li>
-<li><p>审计：通过二进制日志中的信息来进行审计，判断是否有对数据库进行注入攻击</p>
-</li>
+<p>举个栗子。</p>
+<p>有这样一个分布式系统，服务 A 依赖于服务 B，服务 B 依赖于服务 C/D/E。在这样一个成熟的系统内，比如说最多可能只有 100 个线程资源。正常情况下，40 个线程并发调用服务 C，各 30 个线程并发调用 D/E。</p>
+<p>调用服务 C，只需要 20ms，现在因为服务 C 故障了，比如延迟，或者挂了，此时线程会 hang 住 2s 左右。40 个线程全部被卡住，由于请求不断涌入，其它的线程也用来调用服务 C，同样也会被卡住。这样导致服务 B 的线程资源被耗尽，无法接收新的请求，甚至可能因为大量线程不断的运转，导致自己宕机。这种影响势必会蔓延至服务 A，导致服务 A 也跟着挂掉。</p>
+<p><img src="./images/service-invoke-road.png" alt="service-invoke-road"></p>
+<p>Hystrix 可以对其进行资源隔离，比如限制服务 B 只有 40 个线程调用服务 C。当此 40 个线程被 hang 住时，其它 60 个线程依然能正常调用工作。从而确保整个系统不会被拖垮。</p>
+<h3 id="Hystrix-更加细节的设计原则"><a href="#Hystrix-更加细节的设计原则" class="headerlink" title="Hystrix 更加细节的设计原则"></a>Hystrix 更加细节的设计原则</h3><ul>
+<li>阻止任何一个依赖服务耗尽所有的资源，比如 tomcat 中的所有线程资源。</li>
+<li>避免请求排队和积压，采用限流和 <code>fail fast</code> 来控制故障。</li>
+<li>提供 fallback 降级机制来应对故障。</li>
+<li>使用资源隔离技术，比如 <code>bulkhead</code>（舱壁隔离技术）、<code>swimlane</code>（泳道技术）、<code>circuit breaker</code>（断路技术）来限制任何一个依赖服务的故障的影响。</li>
+<li>通过近实时的统计/监控/报警功能，来提高故障发现的速度。</li>
+<li>通过近实时的属性和配置<strong>热修改</strong>功能，来提高故障处理和恢复的速度。</li>
+<li>保护依赖服务调用的所有故障情况，而不仅仅只是网络故障情况。</li>
 </ul>
-<p>  常见格式：</p>
-<table>
-<thead>
-<tr>
-<th>format</th>
-<th>定义</th>
-<th>优点</th>
-<th>缺点</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>statement</td>
-<td>记录的是修改SQL语句</td>
-<td>日志文件小，节约IO，提高性能</td>
-<td>准确性差，对一些系统函数不能准确复制或不能复制，如now()、uuid()等</td>
-</tr>
-<tr>
-<td>row(推荐）</td>
-<td>记录的是每行实际数据的变更，记两条，更新前和更新后</td>
-<td>准确性强，能准确复制数据的变更</td>
-<td>日志文件大，较大的网络IO和磁盘IO</td>
-</tr>
-<tr>
-<td>mixed</td>
-<td>statement和row模式的混合</td>
-<td>准确性强，文件大小适中</td>
-<td>有可能发生主从不一致问题</td>
-</tr>
-</tbody></table>
-<p>sync_binlog参数：</p>
-<p>​        0：当事务提交后，Mysql仅仅是将binlog_cache中的数据写入Binlog文件，但不执行fsync之类的磁盘 同步指令通知文件系统将缓存刷新到磁盘，而让Filesystem自行决定什么时候来做同步，这个是性能最好的。<br>​        n：在进行n次事务提交以后，Mysql将执行一次fsync之类的磁盘同步指令，同志文件系统将Binlog文件缓存刷新到磁盘。</p>
-<h5 id="不同点"><a href="#不同点" class="headerlink" title="不同点:"></a>不同点:</h5><p>redo log 是物理日志，记录的是“在某个数据页上做了什么修改”；</p>
-<p>binlog 是逻辑日志，记录的是这个语句的原始逻辑，比如“给 ID=2 这一行的 c 字段加 1 ”。<br>redo log 是循环写的，空间固定会用完；binlog 是可以追加写入的。binlog 文件到一定大小，会切换到下一个文件。</p>
-<p>update执行过程：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update T set c=c+1 where ID=2;</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://img-blog.csdnimg.cn/20181205200935425.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<p>两阶段提交</p>
-<ul>
-<li><p>1 prepare阶段 </p>
-</li>
-<li><p>2 写binlog </p>
-</li>
-<li><p>3 commit</p>
-<p>当在2之前崩溃时<br>重启恢复：后发现没有commit，回滚。备份恢复：没有binlog 。<br>当在3之前崩溃<br>重启恢复：虽没有commit，但满足prepare和binlog完整，所以重启后会自动commit。备份：有binlog 。</p>
-</li>
-</ul>
-<h3 id="03-事务隔离：为什么你改了我还看不见？"><a href="#03-事务隔离：为什么你改了我还看不见？" class="headerlink" title="03 | 事务隔离：为什么你改了我还看不见？"></a>03 | 事务隔离：为什么你改了我还看不见？</h3><p>事务ACID、隔离级别</p>
-<table>
-<thead>
-<tr>
-<th align="left">事务隔离级别</th>
-<th>脏读</th>
-<th>不可重复读</th>
-<th>幻读</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">读未提交（read-uncommitted）</td>
-<td>是</td>
-<td>是</td>
-<td>是</td>
-</tr>
-<tr>
-<td align="left">不可重复读（read-committed）</td>
-<td>否</td>
-<td>是</td>
-<td>是</td>
-</tr>
-<tr>
-<td align="left">可重复读（repeatable-read）</td>
-<td>否</td>
-<td>否</td>
-<td>是</td>
-</tr>
-<tr>
-<td align="left">串行化（serializable）</td>
-<td>否</td>
-<td>否</td>
-<td>否</td>
-</tr>
-</tbody></table>
-<p>总结：<br>    RR下，事务在第一个Read操作时，会建立read-view<br>    RC下，事务在每次Read操作时，都会建立read-view<br>    不同业务选择不同的隔离级别。</p>
-<h4 id="回滚段"><a href="#回滚段" class="headerlink" title="回滚段"></a>回滚段</h4><p>​        rollback segment称为回滚段，每个回滚段中有1024个undo log segment。每个undo操作在记录的时候占用一个undo log segment。<br>​        undo log有两个作用：提供回滚和多个行版本控制(MVCC)。<br>在数据修改的时候，不仅记录了redo，还记录了相对应的undo，如果因为某些原因导致事务失败或回滚了，可以借助该undo进行回滚。<br>​        undo log和redo log记录物理日志不一样，它是逻辑日志。可以认为当delete一条记录时，undo log中会记录一条对应的insert记录，反之亦然，当update一条记录时，它记录一条对应相反的update记录。</p>
-<h3 id="事务隔离的实现"><a href="#事务隔离的实现" class="headerlink" title="事务隔离的实现"></a>事务隔离的实现</h3><p>以可重复读（RR）为例，每条记录在更新的时候都会同时记录一条回滚操作。</p>
-<p><img src="https://img-blog.csdnimg.cn/20181205201633554.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<p>不同时刻启动的事务会有不同的 read-view。同一条记录在系统中可以存在多个版本，就是数据库的多版本并发控制（MVCC）。<br>当系统里没有比这个回滚日志更早的 read-view 的时候，回滚日志会被删除。所以要避免长事务。</p>
-<h3 id="04-深入浅出索引（上）"><a href="#04-深入浅出索引（上）" class="headerlink" title="04 | 深入浅出索引（上）"></a>04 | 深入浅出索引（上）</h3><h4 id="索引的常见模型"><a href="#索引的常见模型" class="headerlink" title="索引的常见模型"></a>索引的常见模型</h4><ul>
-<li>哈希表，不适合做区间搜索。</li>
-<li>有序数组，只适合静态数据，插入麻烦。</li>
-<li>二叉搜索树，N叉树。</li>
-</ul>
-<h4 id="InnoDB-的索引模型"><a href="#InnoDB-的索引模型" class="headerlink" title="InnoDB 的索引模型"></a>InnoDB 的索引模型</h4><p>​        在 MySQL 中，索引是在存储引擎层实现的。<br>​        以主键顺序存在B+树中。</p>
-<ul>
-<li>主键索引（聚簇索引） 的叶子节点存的是整行数据。主键查询主需要扫描主键索引。</li>
-<li>非主键索引（二级索引）的叶子节点内容是主键的值。通过二级索引需要扫描二级索引树，找到主键后再扫描主键索引。该过程称为回表。</li>
-</ul>
-<h4 id="索引维护"><a href="#索引维护" class="headerlink" title="索引维护"></a>索引维护</h4><p>当插入到索引树最后，只需直接插入。<br>但当插入到索引树中间，需要逻辑上挪动后面的数据，空出位置，并且当数据页满时，需要申请一个新的数据页，然后挪动部分数据过去（页分裂）。<br>当相邻两个页由于删除了数据，利用率很低之后，会将数据页做合并。</p>
-<p>自增索引（追加操作，都不涉及到挪动其他记录，也不会触发叶子节点的分裂）<br>业务逻辑的字段做主键，则往往不容易保证有序插入，这样写数据成本相对较高。<br>二级索引的叶子节点为主键，业务字段做主键时会占大量存储空间。<br>什么时候可以使用业务字段做主键？ 只有一个索引；该索引必须是唯一索引。</p>
-<h4 id="索引重建"><a href="#索引重建" class="headerlink" title="索引重建"></a>索引重建</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter table T engine=InnoDB</span><br></pre></td></tr></table></figure>
-
-<p>不推荐drop，再add。并且不论是删除主键还是创建主键，都会将整个表重建。</p>
-<h4 id="05-深入浅出索引（下）"><a href="#05-深入浅出索引（下）" class="headerlink" title="05 | 深入浅出索引（下）"></a>05 | 深入浅出索引（下）</h4><h4 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h4><p>当查询值已经在二级索引上时，不需要回表。</p>
-<h4 id="最左前缀原则"><a href="#最左前缀原则" class="headerlink" title="最左前缀原则"></a>最左前缀原则</h4><p>联合索引合理安排顺序，可以少维护索引，或者减少存储空间。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `geek` (</span><br><span class="line">  `a` int(11) NOT NULL,</span><br><span class="line">  `b` int(11) NOT NULL,</span><br><span class="line">  `c` int(11) NOT NULL,</span><br><span class="line">  `d` int(11) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`a`,`b`),</span><br><span class="line">  KEY `c` (`c`),</span><br><span class="line">  KEY `ca` (`c`,`a`),</span><br><span class="line">  KEY `cb` (`c`,`b`)</span><br><span class="line">) ENGINE=InnoDB;</span><br></pre></td></tr></table></figure>
-
-<p>索引ca可以去掉，因为c和主键ab，和ca和主键ab相同。</p>
-<h4 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h4><p>MySQL 5.6 引入的索引下推优化，可以在索引遍历过程中，对索引中包含的字段先做判断，直接过滤掉不满足条件的记录，减少回表次数。</p>
-<h3 id="06-全局锁和表锁-：给表加个字段怎么有这么多阻碍？"><a href="#06-全局锁和表锁-：给表加个字段怎么有这么多阻碍？" class="headerlink" title="06 | 全局锁和表锁 ：给表加个字段怎么有这么多阻碍？"></a>06 | 全局锁和表锁 ：给表加个字段怎么有这么多阻碍？</h3><p>mysql锁大致可以分成全局锁、表级锁和行锁三类</p>
-<h4 id="全局锁"><a href="#全局锁" class="headerlink" title="全局锁"></a>全局锁</h4><p>全局锁的典型使用场景是，做全库逻辑备份。<br>FTWRL命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Flush tables with read lock;</span><br></pre></td></tr></table></figure>
-
-<p>官方自带的逻辑备份工具是 mysqldump，当 mysqldump 使用参数–single-transaction 的时候，导数据之前就会启动一个事务，来确保拿到一致性视图。<br>但当引擎不支持事务时，只能使用FTWRL 命令了。不推荐不使用 set global readonly=true，readonly会被其他逻辑使用（比如判断主从），readonly发生异常会保持该状态。</p>
-<h4 id="表级锁"><a href="#表级锁" class="headerlink" title="表级锁"></a>表级锁</h4><p>MySQL 里面表级别的锁有两种：一种是表锁，一种是元数据锁（meta data lock，MDL)。<br>表锁的语法是 lock tables … read/write。<br>MDL不需要显式使用，在访问一个表的时候会被自动加上。<br>当对一个表做增删改查操作的时候，加 MDL 读锁；当要对表做结构变更操作的时候，加 MDL 写锁。</p>
-<p><img src="https://img-blog.csdnimg.cn/20181207205124386.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<p>当一个长事务还没提交，进行表结构变更操作，会导致后面的事务block。当客户端有重试机制时，新起session请求，会导致库的线程很快就会爆满。</p>
-<p>如何安全地给小表加字段？</p>
-<ol>
-<li><p>避免长事务。</p>
-</li>
-<li><p>在 alter table 语句里面设定等待时间。<br>MariaDB 已经合并了 AliSQL 的这个功能，所以这两个开源分支目前都支持 DDL NOWAIT/WAIT n 这个语法。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE tbl_name NOWAIT add column ...</span><br><span class="line">ALTER TABLE tbl_name WAIT N add column ...</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ol>
-<h3 id="07-行锁功过：怎么减少行锁对性能的影响？"><a href="#07-行锁功过：怎么减少行锁对性能的影响？" class="headerlink" title="07 | 行锁功过：怎么减少行锁对性能的影响？"></a>07 | 行锁功过：怎么减少行锁对性能的影响？</h3><h4 id="行锁"><a href="#行锁" class="headerlink" title="行锁"></a>行锁</h4><p>Mysql行锁由引擎层实现</p>
-<h4 id="两阶段锁"><a href="#两阶段锁" class="headerlink" title="两阶段锁"></a>两阶段锁</h4><p>行锁需要事务结束时才释放，这就是两阶段锁。<br>所以需要合理安排事务中sql执行顺序，尽量把容易冲突的更新语句放在后面。</p>
-<h4 id="死锁和死锁检测"><a href="#死锁和死锁检测" class="headerlink" title="死锁和死锁检测"></a>死锁和死锁检测</h4><p>设置超时时间，innodb_lock_wait_timeout。<br>死锁检测，发现死锁主动回滚某个事务，innodb_deadlock_detect 默认on。<br>假设1000个同时更新一行，则死锁检测操作就是 100 万这个量级的。即使没有死锁，检测也会消耗大量的 CPU 资源。</p>
-<h5 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a>解决方案：</h5><ol>
-<li><p>业务不会出现死锁，可以临时关闭。</p>
-</li>
-<li><p>在客户端控制并发。</p>
-</li>
-<li><p>修改MySQL 源码，并发进入引擎之前排队。</p>
-</li>
-<li><p>将一行数据改为多行，如将一个余额账户分为多个，但在数据减少操作时需考虑小于0的情况。</p>
-</li>
-</ol>
-<h3 id="08-事务到底是隔离的还是不隔离的？"><a href="#08-事务到底是隔离的还是不隔离的？" class="headerlink" title="08 | 事务到底是隔离的还是不隔离的？"></a>08 | 事务到底是隔离的还是不隔离的？</h3><h4 id="快照”在-MVCC-里是怎么工作的？"><a href="#快照”在-MVCC-里是怎么工作的？" class="headerlink" title="快照”在 MVCC 里是怎么工作的？"></a>快照”在 MVCC 里是怎么工作的？</h4><p>InnoDB 里面每个事务有一个唯一的事务 ID，叫作 transaction id。它是在事务开始的时候向InnoDB 的事务系统申请的，是按申请顺序严格递增的。<br>而每行数据也都是有多个版本的。每次事务更新数据的时候，都会生成一个新的数据版本，并且把 transaction id赋值给这个数据版本的事务 ID，记为 row trx_id。<br>也就是说，数据表中的一行记录，其实可能有多个版本 (row)，每个版本有自己的 row trx_id。</p>
-<p><img src="https://img-blog.csdnimg.cn/20181211194643271.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<p>上图中的三个虚线箭头就是undo log。<br>某个事务建立快照，只需根据transaction id。只认事务启动时小于数据版本的数据，除自己更新的数据。</p>
-<h4 id="快照实现"><a href="#快照实现" class="headerlink" title="快照实现"></a>快照实现</h4><p>InnoDB在每个事务启动瞬间，构造了数组保存了当前启动但未提交的事务ID。<br>数组ID最小值为低水位，当前系统最大事务ID+1为高水位。<br>数组和高水位，组成了当前事务的一致性事务（read-view）。</p>
-<p><img src="https://img-blog.csdnimg.cn/20181211195928928.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<p>黄色部分需分为以下两种情况，因为有可能大于低水位的某个事务已经提交：</p>
-<ol>
-<li>若 row trx_id 在数组中，表示这个版本是由还没提交的事务生成的，不可见；</li>
-<li>若 row trx_id 不在数组中，表示这个版本是已经提交了的事务生成的，可见。</li>
-</ol>
-<p>更新数据都是先读后写的，而这个读，只能读当前的值，称为“当前读”（current read）。<br>如果当前的记录的行锁被其他事务占用的话，就需要进入锁等待。</p>
-<p>不同隔离级别：</p>
-<ul>
-<li><p>对于可重复读，查询只承认在事务启动前就已经提交完成的数据</p>
-</li>
-<li><p>对于读提交，查询只承认在语句启动前就已经提交完成的数据</p>
-</li>
-<li><p>而当前读，总是读取已经提交完成的最新版本。</p>
-</li>
-</ul>
-<h3 id="14-count-这么慢，我该怎么办？"><a href="#14-count-这么慢，我该怎么办？" class="headerlink" title="14 | count(*)这么慢，我该怎么办？"></a>14 | count(*)这么慢，我该怎么办？</h3><h4 id="count-的实现方式"><a href="#count-的实现方式" class="headerlink" title="count(*) 的实现方式"></a>count(*) 的实现方式</h4><ol>
-<li>MyISAM 引擎保存总行数，所以count很快。但如果加了where不能很快返回。</li>
-<li>Innodb需要一行一行读出来累积计数。<br>innodb由于多版本并发控制（MVCC）的原因，多个事务count的行数不同，所以不能保存总行数。<br>但count(*)做了优化，引擎会选择最小的普通索引树，来计数。而不是直接统计聚集索引树。</li>
-</ol>
-<h4 id="不同的-count-用法"><a href="#不同的-count-用法" class="headerlink" title="不同的 count 用法"></a>不同的 count 用法</h4><p>下面的讨论还是基于 InnoDB 引擎的</p>
-<ol>
-<li><p>count(主键 id) ，InnoDB 引擎会遍历整张表，把每一行的 id 值都取出来，返回给 server 层。server 层拿到 id 后，判断是不可能为空的，就按行累加。</p>
-</li>
-<li><p>count(1)，InnoDB 引擎遍历整张表，但不取值。server 层对于返回的每一行，放一个数字“1”进去，判断是不可能为空的，按行累加。</p>
-</li>
-<li><p>count(字段)<br>a. 如果这个“字段”是定义为 not null 的话，一行行地从记录里面读出这个字段，判断不能为 null，按行累加；<br>b. 如果这个“字段”定义允许为 null，那么执行的时候，判断到有可能是 null，还要把值取出来再判断一下，不是 null 才累加。</p>
-</li>
-<li><p>count(<em>*)，并不会把全部字段取出来，而是专门做了优化，不取值。count(</em>) 肯定不是 null，按行累加。</p>
-</li>
-</ol>
-<p>   按照效率排序的话，count(字段)&lt;count(主键 id)&lt;count(1)≈count(<em>)，所以建议尽量使用 count(</em>)。</p>
 
       
     </div>
@@ -407,7 +237,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/02/26/sentinel/sentinel原理/">
+    <link itemprop="mainEntityOfPage" href="/2021/04/21/github/docs/high-availability/hystrix-circuit-breaker/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -421,7 +251,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/02/26/sentinel/sentinel原理/" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/2021/04/21/github/docs/high-availability/hystrix-circuit-breaker/" class="post-title-link" itemprop="url">Untitled</a>
         </h2>
 
         <div class="post-meta">
@@ -431,15 +261,8 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-02-26 11:57:28" itemprop="dateCreated datePublished" datetime="2021-02-26T11:57:28+08:00">2021-02-26</time>
+              <time title="Created: 2021-04-21 15:37:08" itemprop="dateCreated datePublished" datetime="2021-04-21T15:37:08+08:00">2021-04-21</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-01 14:46:57" itemprop="dateModified" datetime="2021-04-01T14:46:57+08:00">2021-04-01</time>
-              </span>
 
           
 
@@ -452,10 +275,63 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">NodeSelectorSlot -- DefaultNode</span><br><span class="line">ClusterBuilderSlot -- ClusterNode (response time, qps, thread count, exception)</span><br><span class="line">LogSlot</span><br><span class="line">StatisticSlot  逻辑执行完毕,metrics统计</span><br><span class="line">AuthoritySlot</span><br><span class="line">SystemSlot</span><br><span class="line">FlowSlot</span><br><span class="line">DegradeSlot</span><br></pre></td></tr></table></figure>
+          <h2 id="深入-Hystrix-断路器执行原理"><a href="#深入-Hystrix-断路器执行原理" class="headerlink" title="深入 Hystrix 断路器执行原理"></a>深入 Hystrix 断路器执行原理</h2><h3 id="状态机"><a href="#状态机" class="headerlink" title="状态机"></a>状态机</h3><p>Hystrix 断路器有三种状态，分别是关闭（Closed）、打开（Open）与半开（Half-Open），三种状态转化关系如下：</p>
+<p><img src="./images/hystrix-circuit-breaker-state-machine.png" alt="image-20191104211642271"></p>
+<ol>
+<li><code>Closed</code> 断路器关闭：调用下游的请求正常通过</li>
+<li><code>Open</code> 断路器打开：阻断对下游服务的调用，直接走 Fallback 逻辑</li>
+<li><code>Half-Open</code> 断路器处于半开状态：<a href="#circuitBreaker.sleepWindowInMilliseconds">SleepWindowInMilliseconds</a></li>
+</ol>
+<h3 id="Enabled"><a href="#Enabled" class="headerlink" title="Enabled"></a><a href="https://github.com/Netflix/Hystrix/wiki/Configuration#circuitbreakerenabled" target="_blank" rel="noopener">Enabled</a></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HystrixCommandProperties.Setter()</span><br><span class="line">    .withCircuitBreakerEnabled(<span class="keyword">boolean</span>)</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ArrayMetric</span><br><span class="line">LeapArray</span><br></pre></td></tr></table></figure>
+<p>控制断路器是否工作，包括跟踪依赖服务调用的健康状况，以及对异常情况过多时是否允许触发断路。默认值 <code>true</code>。</p>
+<h3 id="circuitBreaker-requestVolumeThreshold"><a href="#circuitBreaker-requestVolumeThreshold" class="headerlink" title="circuitBreaker.requestVolumeThreshold"></a><a href="https://github.com/Netflix/Hystrix/wiki/Configuration#circuitbreakerrequestvolumethreshold" target="_blank" rel="noopener">circuitBreaker.requestVolumeThreshold</a></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HystrixCommandProperties.Setter()</span><br><span class="line">    .withCircuitBreakerRequestVolumeThreshold(<span class="keyword">int</span>)</span><br></pre></td></tr></table></figure>
 
+<p>表示在一次统计的<strong>时间滑动窗口中（这个参数也很重要，下面有说到）</strong>，至少经过多少个请求，才可能触发断路，默认值 20。<strong>经过 Hystrix 断路器的流量只有在超过了一定阈值后，才有可能触发断路。</strong>比如说，要求在 10s 内经过断路器的流量必须达到 20 个，而实际经过断路器的请求有 19 个，即使这 19 个请求全都失败，也不会去判断要不要断路。</p>
+<h3 id="circuitBreaker-errorThresholdPercentage"><a href="#circuitBreaker-errorThresholdPercentage" class="headerlink" title="circuitBreaker.errorThresholdPercentage"></a><a href="https://github.com/Netflix/Hystrix/wiki/Configuration#circuitBreaker.errorThresholdPercentage" target="_blank" rel="noopener">circuitBreaker.errorThresholdPercentage</a></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HystrixCommandProperties.Setter()</span><br><span class="line">    .withCircuitBreakerErrorThresholdPercentage(<span class="keyword">int</span>)</span><br></pre></td></tr></table></figure>
+
+<p>表示异常比例达到多少，才会触发断路，默认值是 50(%)。</p>
+<h4 id="circuitBreaker-sleepWindowInMilliseconds"><a href="#circuitBreaker-sleepWindowInMilliseconds" class="headerlink" title="circuitBreaker.sleepWindowInMilliseconds"></a><a href="https://github.com/Netflix/Hystrix/wiki/Configuration#circuitbreakersleepwindowinmilliseconds" target="_blank" rel="noopener">circuitBreaker.sleepWindowInMilliseconds</a></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HystrixCommandProperties.Setter()</span><br><span class="line">    .withCircuitBreakerSleepWindowInMilliseconds(<span class="keyword">int</span>)</span><br></pre></td></tr></table></figure>
+
+<p>断路器状态由 Close 转换到 Open，在之后 <code>SleepWindowInMilliseconds</code> 时间内，所有经过该断路器的请求会被断路，不调用后端服务，直接走 Fallback 降级机制，默认值 5000(ms)。</p>
+<p>而在该参数时间过后，断路器会变为 <code>Half-Open</code> 半开闭状态，尝试让一条请求经过断路器，看能不能正常调用。如果调用成功了，那么就自动恢复，断路器转为 Close 状态。</p>
+<h3 id="ForceOpen"><a href="#ForceOpen" class="headerlink" title="ForceOpen"></a><a href="https://github.com/Netflix/Hystrix/wiki/Configuration#circuitbreakerforceopen" target="_blank" rel="noopener">ForceOpen</a></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HystrixCommandProperties.Setter()</span><br><span class="line">    .withCircuitBreakerForceOpen(<span class="keyword">boolean</span>)</span><br></pre></td></tr></table></figure>
+
+<p>如果设置为 true 的话，直接强迫打开断路器，相当于是手动断路了，手动降级，默认值是 <code>false</code>。</p>
+<h3 id="ForceClosed"><a href="#ForceClosed" class="headerlink" title="ForceClosed"></a><a href="https://github.com/Netflix/Hystrix/wiki/Configuration#circuitbreakerforceclosed" target="_blank" rel="noopener">ForceClosed</a></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HystrixCommandProperties.Setter()</span><br><span class="line">    .withCircuitBreakerForceClosed(<span class="keyword">boolean</span>)</span><br></pre></td></tr></table></figure>
+
+<p>如果设置为 true，直接强迫关闭断路器，相当于手动停止断路了，手动升级，默认值是 <code>false</code>。</p>
+<h3 id="Metrics-统计器"><a href="#Metrics-统计器" class="headerlink" title="Metrics 统计器"></a>Metrics 统计器</h3><p>与 Hystrix 断路器紧密协作的，还有另一个重要组件 —— <strong>统计器（Metrics）</strong>。统计器中最重要的参数要数滑动窗口（<a href="https://github.com/Netflix/Hystrix/wiki/Configuration#metricsrollingstatstimeinmilliseconds" target="_blank" rel="noopener">metrics.rollingStats.timeInMilliseconds</a>）以及桶（<a href="https://github.com/Netflix/Hystrix/wiki/Configuration#metricsrollingstatsnumbuckets" target="_blank" rel="noopener">metrics.rollingStats.numBuckets</a>）了，这里引用<a href="https://zhenbianshu.github.io/2018/09/hystrix_configuration_analysis.html" target="_blank" rel="noopener">一段博文</a>来解释滑动窗口（默认值是 10000 ms）：</p>
+<blockquote>
+<p>一位乘客坐在正在行驶的列车的靠窗座位上，列车行驶的公路两侧种着一排挺拔的白杨树，随着列车的前进，路边的白杨树迅速从窗口滑过。我们用每棵树来代表一个请求，用列车的行驶代表时间的流逝，那么，列车上的这个窗口就是一个典型的滑动窗口，这个乘客能通过窗口看到的白杨树就是 Hystrix 要统计的数据。</p>
+</blockquote>
+<p>Hystrix 并不是只要有一条请求经过就去统计，而是将整个滑动窗口均分为 numBuckets 份，时间每经过一份就去统计一次。<strong>在经过一个时间窗口后，才会判断断路器状态要不要开启，请看下面的例子。</strong></p>
+<h2 id="实例-Demo"><a href="#实例-Demo" class="headerlink" title="实例 Demo"></a>实例 Demo</h2><h3 id="HystrixCommand-配置参数"><a href="#HystrixCommand-配置参数" class="headerlink" title="HystrixCommand 配置参数"></a>HystrixCommand 配置参数</h3><p>在 GetProductInfoCommand 中配置 Setter 断路器相关参数。</p>
+<ul>
+<li>滑动窗口中，最少 20 个请求，才可能触发断路。</li>
+<li>异常比例达到 40% 时，才触发断路。</li>
+<li>断路后 3000ms 内，所有请求都被 reject，直接走 fallback 降级，不会调用 run() 方法。3000ms 过后，变为 half-open 状态。</li>
+</ul>
+<p>run() 方法中，我们判断一下 productId 是否为 -1，是的话，直接抛出异常。这么写，我们之后测试的时候就可以传入 productId=-1，<strong>模拟服务执行异常</strong>了。</p>
+<p>在降级逻辑中，我们直接给它返回降级商品就好了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GetProductInfoCommand</span> <span class="keyword">extends</span> <span class="title">HystrixCommand</span>&lt;<span class="title">ProductInfo</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Long productId;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> HystrixCommandKey KEY = HystrixCommandKey.Factory.asKey(<span class="string">"GetProductInfoCommand"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">GetProductInfoCommand</span><span class="params">(Long productId)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(<span class="string">"ProductInfoService"</span>))</span><br><span class="line">                .andCommandKey(KEY)</span><br><span class="line">                .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()</span><br><span class="line">                        <span class="comment">// 是否允许断路器工作</span></span><br><span class="line">                        .withCircuitBreakerEnabled(<span class="keyword">true</span>)</span><br><span class="line">                        <span class="comment">// 滑动窗口中，最少有多少个请求，才可能触发断路</span></span><br><span class="line">                        .withCircuitBreakerRequestVolumeThreshold(<span class="number">20</span>)</span><br><span class="line">                        <span class="comment">// 异常比例达到多少，才触发断路，默认50%</span></span><br><span class="line">                        .withCircuitBreakerErrorThresholdPercentage(<span class="number">40</span>)</span><br><span class="line">                        <span class="comment">// 断路后多少时间内直接reject请求，之后进入half-open状态，默认5000ms</span></span><br><span class="line">                        .withCircuitBreakerSleepWindowInMilliseconds(<span class="number">3000</span>)));</span><br><span class="line">        <span class="keyword">this</span>.productId = productId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> ProductInfo <span class="title">run</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"调用接口查询商品数据，productId="</span> + productId);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (productId == -<span class="number">1L</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Exception();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        String url = <span class="string">"http://localhost:8081/getProductInfo?productId="</span> + productId;</span><br><span class="line">        String response = HttpClientUtils.sendGetRequest(url);</span><br><span class="line">        <span class="keyword">return</span> JSONObject.parseObject(response, ProductInfo.class);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> ProductInfo <span class="title">getFallback</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ProductInfo productInfo = <span class="keyword">new</span> ProductInfo();</span><br><span class="line">        productInfo.setName(<span class="string">"降级商品"</span>);</span><br><span class="line">        <span class="keyword">return</span> productInfo;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="断路测试类"><a href="#断路测试类" class="headerlink" title="断路测试类"></a>断路测试类</h3><p>我们在测试类中，前 30 次请求，传入 productId=-1，然后休眠 3s，之后 70 次请求，传入 productId=1。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="meta">@RunWith</span>(SpringRunner.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CircuitBreakerTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testCircuitBreaker</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        String baseURL = <span class="string">"http://localhost:8080/getProductInfo?productId="</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">30</span>; ++i) &#123;</span><br><span class="line">            <span class="comment">// 传入-1，会抛出异常，然后走降级逻辑</span></span><br><span class="line">            HttpClientUtils.sendGetRequest(baseURL + <span class="string">"-1"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        TimeUtils.sleep(<span class="number">3</span>);</span><br><span class="line">        System.out.println(<span class="string">"After sleeping..."</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">31</span>; i &lt; <span class="number">100</span>; ++i) &#123;</span><br><span class="line">            <span class="comment">// 传入1，走服务正常调用</span></span><br><span class="line">            HttpClientUtils.sendGetRequest(baseURL + <span class="string">"1"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h3><p>测试结果，我们可以明显看出系统断路与恢复的整个过程。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">调用接口查询商品数据，productId=<span class="number">-1</span></span><br><span class="line">ProductInfo(id=null, name=降级商品, price=null, pictureList=null, specification=null, service=null, color=null, size=null, shopId=null, modifiedTime=null, cityId=null, cityName=null, brandId=null, brandName=null)</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="comment">// 这里重复打印了 20 次上面的结果</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ProductInfo(id=null, name=降级商品, price=null, pictureList=null, specification=null, service=null, color=null, size=null, shopId=null, modifiedTime=null, cityId=null, cityName=null, brandId=null, brandName=null)</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="comment">// 这里重复打印了 8 次上面的结果</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 休眠 3s 后</span></span><br><span class="line">调用接口查询商品数据，productId=<span class="number">1</span></span><br><span class="line">ProductInfo(id=<span class="number">1</span>, name=iphone7手机, price=<span class="number">5599.0</span>, pictureList=a.jpg,b.jpg, specification=iphone7的规格, service=iphone7的售后服务, color=红色,白色,黑色, size=<span class="number">5.5</span>, shopId=<span class="number">1</span>, modifiedTime=<span class="number">2017</span><span class="number">-01</span><span class="number">-01</span> <span class="number">12</span>:<span class="number">00</span>:<span class="number">00</span>, cityId=<span class="number">1</span>, cityName=null, brandId=<span class="number">1</span>, brandName=null)</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="comment">// 这里重复打印了 69 次上面的结果</span></span><br></pre></td></tr></table></figure>
+
+<p>前 30 次请求，我们传入的 productId 为 -1，所以服务执行过程中会抛出异常。我们设置了最少 20 次请求通过断路器并且异常比例超出 40% 就触发断路。因此执行了 21 次接口调用，每次都抛异常并且走降级，21 次过后，断路器就被打开了。</p>
+<p>之后的 9 次请求，都不会执行 run() 方法，也就不会打印以下信息。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">调用接口查询商品数据，productId=<span class="number">-1</span></span><br></pre></td></tr></table></figure>
+
+<p>而是直接走降级逻辑，调用 getFallback() 执行。</p>
+<p>休眠了 3s 后，我们在之后的 70 次请求中，都传入 productId 为 1。由于我们前面设置了 3000ms 过后断路器变为 <code>half-open</code> 状态。因此 Hystrix 会尝试执行请求，发现成功了，那么断路器关闭，之后的所有请求也都能正常调用了。</p>
+<h3 id="参考内容"><a href="#参考内容" class="headerlink" title="参考内容"></a>参考内容</h3><ol>
+<li><a href="https://github.com/Netflix/Hystrix/issues/1459" target="_blank" rel="noopener">Hystrix issue 1459</a></li>
+<li><a href="https://github.com/Netflix/Hystrix/wiki/Configuration#metrics" target="_blank" rel="noopener">Hystrix Metrics</a></li>
+</ol>
 
       
     </div>
@@ -475,7 +351,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/02/26/shell/url数据检测脚本/">
+    <link itemprop="mainEntityOfPage" href="/2021/04/21/github/docs/high-availability/e-commerce-website-detail-page-architecture/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -489,7 +365,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/02/26/shell/url数据检测脚本/" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/2021/04/21/github/docs/high-availability/e-commerce-website-detail-page-architecture/" class="post-title-link" itemprop="url">Untitled</a>
         </h2>
 
         <div class="post-meta">
@@ -498,9 +374,8 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-02-26 11:57:28 / Modified: 18:02:34" itemprop="dateCreated datePublished" datetime="2021-02-26T11:57:28+08:00">2021-02-26</time>
+              <time title="Created: 2021-04-21 15:37:08" itemprop="dateCreated datePublished" datetime="2021-04-21T15:37:08+08:00">2021-04-21</time>
             </span>
 
           
@@ -514,8 +389,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">/bin/bash</span></span><br><span class="line"></span><br><span class="line">MYSQL=mysql </span><br><span class="line">USER='xxx'    </span><br><span class="line">PASSWORD='xxx' </span><br><span class="line">DB='xxx'  </span><br><span class="line">HOST='xxx'</span><br><span class="line"></span><br><span class="line">COMMAND=" SELECT  ip FROM  broker" </span><br><span class="line">declare list=`$MYSQL  -h$&#123;HOST&#125; -u$&#123;USER&#125; -p$&#123;PASSWORD&#125; -D $&#123;DB&#125; -e "$&#123;COMMAND&#125;" --skip-column-name` </span><br><span class="line">for item in $list                                                                                                      </span><br><span class="line">do</span><br><span class="line">	port=8080</span><br><span class="line">	if [ "$test"x = "xxx"x ]; then	</span><br><span class="line">		port=22778</span><br><span class="line">	fi</span><br><span class="line">	echo " the item is $item"</span><br><span class="line">	url="http://$item:$port/stats"</span><br><span class="line">	curl $url | jq .data.brokerMaster</span><br><span class="line">done </span><br><span class="line"></span><br><span class="line">for i in $@</span><br><span class="line">do</span><br><span class="line">	url = "http://$i:8080/stats"</span><br><span class="line">   	curl $url | jq .data.brokerMaster</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+          <h2 id="电商网站的商品详情页系统架构"><a href="#电商网站的商品详情页系统架构" class="headerlink" title="电商网站的商品详情页系统架构"></a>电商网站的商品详情页系统架构</h2><h3 id="小型电商网站的商品详情页系统架构"><a href="#小型电商网站的商品详情页系统架构" class="headerlink" title="小型电商网站的商品详情页系统架构"></a>小型电商网站的商品详情页系统架构</h3><p>小型电商网站的页面展示采用页面全量静态化的思想。数据库中存放了所有的商品信息，页面静态化系统，将数据填充进静态模板中，形成静态化页面，推入 Nginx 服务器。用户浏览网站页面时，取用一个已经静态化好的 html 页面，直接返回回去，不涉及任何的业务逻辑处理。</p>
+<p><img src="./images/e-commerce-website-detail-page-architecture-1.png" alt="e-commerce-website-detail-page-architecture-1"></p>
+<p>下面是页面模板的简单 Demo 。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    商品名称：#&#123;productName&#125;<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">    商品价格：#&#123;productPrice&#125;<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">    商品描述：#&#123;productDesc&#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
+<p>这样做，<strong>好处</strong>在于，用户每次浏览一个页面，不需要进行任何的跟数据库的交互逻辑，也不需要执行任何的代码，直接返回一个 html 页面就可以了，速度和性能非常高。</p>
+<p>对于小网站，页面很少，很实用，非常简单，Java 中可以使用 velocity、freemarker、thymeleaf 等等，然后做个 cms 页面内容管理系统，模板变更的时候，点击按钮或者系统自动化重新进行全量渲染。</p>
+<p><strong>坏处</strong>在于，仅仅适用于一些小型的网站，比如页面的规模在几十到几万不等。对于一些大型的电商网站，亿级数量的页面，你说你每次页面模板修改了，都需要将这么多页面全量静态化，靠谱吗？每次渲染花个好几天时间，那你整个网站就废掉了。</p>
+<h3 id="大型电商网站的商品详情页系统架构"><a href="#大型电商网站的商品详情页系统架构" class="headerlink" title="大型电商网站的商品详情页系统架构"></a>大型电商网站的商品详情页系统架构</h3><p>大型电商网站商品详情页的系统设计中，当商品数据发生变更时，会将变更消息压入 MQ 消息队列中。<strong>缓存服务</strong>从消息队列中消费这条消息时，感知到有数据发生变更，便通过调用数据服务接口，获取变更后的数据，然后将整合好的数据推送至 redis 中。Nginx 本地缓存的数据是有一定的时间期限的，比如说 10 分钟，当数据过期之后，它就会从 redis 获取到最新的缓存数据，并且缓存到自己本地。</p>
+<p>用户浏览网页时，动态将 Nginx 本地数据渲染到本地 html 模板并返回给用户。</p>
+<p><img src="./images/e-commerce-website-detail-page-architecture-2.png" alt="e-commerce-website-detail-page-architecture-2"></p>
+<p>虽然没有直接返回 html 页面那么快，但是因为数据在本地缓存，所以也很快，其实耗费的也就是动态渲染一个 html 页面的性能。如果 html 模板发生了变更，不需要将所有的页面重新静态化，也不需要发送请求，没有网络请求的开销，直接将数据渲染进最新的 html 页面模板后响应即可。</p>
+<p>在这种架构下，我们需要<strong>保证系统的高可用性</strong>。</p>
+<p>如果系统访问量很高，Nginx 本地缓存过期失效了，redis 中的缓存也被 LRU 算法给清理掉了，那么会有较高的访问量，从缓存服务调用商品服务。但如果此时商品服务的接口发生故障，调用出现了延时，缓存服务全部的线程都被这个调用商品服务接口给耗尽了，每个线程去调用商品服务接口的时候，都会卡住很长时间，后面大量的请求过来都会卡在那儿，此时缓存服务没有足够的线程去调用其它一些服务的接口，从而导致整个大量的商品详情页无法正常显示。</p>
+<p>这其实就是一个商品接口服务故障导致缓存服务资源耗尽的现象。</p>
 
       
     </div>
@@ -534,7 +422,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/16/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><span class="page-number current">17</span><a class="page-number" href="/page/18/">18</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/18/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/16/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><span class="page-number current">17</span><a class="page-number" href="/page/18/">18</a><span class="space">&hellip;</span><a class="page-number" href="/page/47/">47</a><a class="extend next" rel="next" href="/page/18/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -600,7 +488,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-count">141</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

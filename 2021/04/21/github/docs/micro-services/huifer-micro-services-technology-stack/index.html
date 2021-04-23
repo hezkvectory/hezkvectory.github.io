@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="微服务技术栈 Author: HuiFer Description: 该文简单介绍微服务技术栈有哪些分别用来做什么。  技术栈微服务开发作用：快速开发服务。  Spring Spring MVC Spring Boot  Spring 目前是 JavaWeb 开发人员必不可少的一个框架，SpringBoot 简化了 Spring 开发的配置目前也是业内主流开发框架。 微服务注册发现作用：发现服务，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我的博客">
+<meta property="og:url" content="/2021/04/21/github/docs/micro-services/huifer-micro-services-technology-stack/index.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="微服务技术栈 Author: HuiFer Description: 该文简单介绍微服务技术栈有哪些分别用来做什么。  技术栈微服务开发作用：快速开发服务。  Spring Spring MVC Spring Boot  Spring 目前是 JavaWeb 开发人员必不可少的一个框架，SpringBoot 简化了 Spring 开发的配置目前也是业内主流开发框架。 微服务注册发现作用：发现服务，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-04-21T07:37:08.942Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的博客">
+<meta name="twitter:description" content="微服务技术栈 Author: HuiFer Description: 该文简单介绍微服务技术栈有哪些分别用来做什么。  技术栈微服务开发作用：快速开发服务。  Spring Spring MVC Spring Boot  Spring 目前是 JavaWeb 开发人员必不可少的一个框架，SpringBoot 简化了 Spring 开发的配置目前也是业内主流开发框架。 微服务注册发现作用：发现服务，">
+
+<link rel="canonical" href="/2021/04/21/github/docs/micro-services/huifer-micro-services-technology-stack/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title> | 我的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">我的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/04/21/github/docs/micro-services/huifer-micro-services-technology-stack/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-04-21 15:37:08" itemprop="dateCreated datePublished" datetime="2021-04-21T15:37:08+08:00">2021-04-21</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="微服务技术栈"><a href="#微服务技术栈" class="headerlink" title="微服务技术栈"></a>微服务技术栈</h1><ul>
+<li>Author: <a href="https://github.com/huifer" target="_blank" rel="noopener">HuiFer</a></li>
+<li>Description: 该文简单介绍微服务技术栈有哪些分别用来做什么。</li>
+</ul>
+<h2 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h2><h3 id="微服务开发"><a href="#微服务开发" class="headerlink" title="微服务开发"></a>微服务开发</h3><p>作用：快速开发服务。</p>
+<ul>
+<li>Spring</li>
+<li>Spring MVC</li>
+<li>Spring Boot</li>
+</ul>
+<p><a href="https://spring.io/" target="_blank" rel="noopener">Spring</a> 目前是 JavaWeb 开发人员必不可少的一个框架，SpringBoot 简化了 Spring 开发的配置目前也是业内主流开发框架。</p>
+<h3 id="微服务注册发现"><a href="#微服务注册发现" class="headerlink" title="微服务注册发现"></a>微服务注册发现</h3><p>作用：发现服务，注册服务，集中管理服务。</p>
+<h4 id="Eureka"><a href="#Eureka" class="headerlink" title="Eureka"></a>Eureka</h4><ul>
+<li>Eureka Server : 提供服务注册服务, 各个节点启动后，会在 Eureka Server 中进行注册。</li>
+<li>Eureka Client : 简化与 Eureka Server 的交互操作。</li>
+<li>Spring Cloud Netflix : <a href="https://github.com/spring-cloud/spring-cloud-netflix" target="_blank" rel="noopener">GitHub</a>，<a href="https://cloud.spring.io/spring-cloud-netflix/reference/html/" target="_blank" rel="noopener">文档</a></li>
+</ul>
+<h4 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h4><blockquote>
+<p>ZooKeeper is a centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services.</p>
+</blockquote>
+<p><a href="https://github.com/apache/zookeeper" target="_blank" rel="noopener">Zookeeper</a> 是一个集中的服务, 用于维护配置信息、命名、提供分布式同步和提供组服务。</p>
+<h4 id="Zookeeper-和-Eureka-区别"><a href="#Zookeeper-和-Eureka-区别" class="headerlink" title="Zookeeper 和 Eureka 区别"></a>Zookeeper 和 Eureka 区别</h4><p>Zookeeper 保证 CP，Eureka 保证 AP：</p>
+<ul>
+<li>C：数据一致性；</li>
+<li>A：服务可用性；</li>
+<li>P：服务对网络分区故障的容错性，这三个特性在任何分布式系统中不能同时满足，最多同时满足两个。</li>
+</ul>
+<h3 id="微服务配置管理"><a href="#微服务配置管理" class="headerlink" title="微服务配置管理"></a>微服务配置管理</h3><p>作用：统一管理一个或多个服务的配置信息, 集中管理。</p>
+<h4 id="Disconf"><a href="#Disconf" class="headerlink" title="Disconf"></a><a href="https://github.com/knightliao/disconf" target="_blank" rel="noopener">Disconf</a></h4><p>Distributed Configuration Management Platform(分布式配置管理平台) , 它是专注于各种分布式系统配置管理 的通用组件/通用平台, 提供统一的配置管理服务, 是一套完整的基于 zookeeper 的分布式配置统一解决方案。</p>
+<h4 id="SpringCloudConfig"><a href="#SpringCloudConfig" class="headerlink" title="SpringCloudConfig"></a><a href="https://github.com/spring-cloud/spring-cloud-config" target="_blank" rel="noopener">SpringCloudConfig</a></h4><h4 id="Apollo"><a href="#Apollo" class="headerlink" title="Apollo"></a><a href="https://github.com/ctripcorp/apollo" target="_blank" rel="noopener">Apollo</a></h4><p>Apollo（阿波罗）是携程框架部门研发的分布式配置中心，能够集中化管理应用不同环境、不同集群的配置，配置修改后能够实时推送到应用端，并且具备规范的权限、流程治理等特性，用于微服务配置管理场景。</p>
+<h3 id="权限认证"><a href="#权限认证" class="headerlink" title="权限认证"></a>权限认证</h3><p>作用：根据系统设置的安全规则或者安全策略, 用户可以访问而且只能访问自己被授权的资源，不多不少。</p>
+<h4 id="Spring-Security"><a href="#Spring-Security" class="headerlink" title="Spring Security"></a><a href="https://spring.io/projects/spring-security" target="_blank" rel="noopener">Spring Security</a></h4><h4 id="Apache-Shiro"><a href="#Apache-Shiro" class="headerlink" title="Apache Shiro"></a><a href="http://shiro.apache.org/" target="_blank" rel="noopener">Apache Shiro</a></h4><blockquote>
+<p>Apache Shiro™ is a powerful and easy-to-use Java security framework that performs authentication, authorization, cryptography, and session management. With Shiro’s easy-to-understand API, you can quickly and easily secure any application – from the smallest mobile applications to the largest web and enterprise applications.</p>
+</blockquote>
+<h3 id="批处理"><a href="#批处理" class="headerlink" title="批处理"></a>批处理</h3><p>作用: 批量处理同类型数据或事物</p>
+<h4 id="Spring-Batch"><a href="#Spring-Batch" class="headerlink" title="Spring Batch"></a><a href="https://spring.io/projects/spring-batch" target="_blank" rel="noopener">Spring Batch</a></h4><h3 id="定时任务"><a href="#定时任务" class="headerlink" title="定时任务"></a>定时任务</h3><blockquote>
+<p>作用: 定时做什么。</p>
+</blockquote>
+<h4 id="Quartz"><a href="#Quartz" class="headerlink" title="Quartz"></a><a href="http://www.quartz-scheduler.org/" target="_blank" rel="noopener">Quartz</a></h4><h3 id="微服务调用-协议"><a href="#微服务调用-协议" class="headerlink" title="微服务调用 (协议)"></a>微服务调用 (协议)</h3><blockquote>
+<p>通讯协议</p>
+</blockquote>
+<h4 id="Rest"><a href="#Rest" class="headerlink" title="Rest"></a>Rest</h4><ul>
+<li>通过 HTTP/HTTPS 发送 Rest 请求进行数据交互</li>
+</ul>
+<h4 id="RPC"><a href="#RPC" class="headerlink" title="RPC"></a>RPC</h4><ul>
+<li>Remote Procedure Call</li>
+<li>它是一种通过网络从远程计算机程序上请求服务，而不需要了解底层网络技术的协议。RPC 不依赖于具体的网络传输协议，tcp、udp 等都可以。</li>
+</ul>
+<h4 id="gRPC"><a href="#gRPC" class="headerlink" title="gRPC"></a><a href="https://www.grpc.io/" target="_blank" rel="noopener">gRPC</a></h4><blockquote>
+<p>A high-performance, open-source universal RPC framework</p>
+</blockquote>
+<p>所谓 RPC(remote procedure call 远程过程调用) 框架实际是提供了一套机制，使得应用程序之间可以进行通信，而且也遵从 server/client 模型。使用的时候客户端调用 server 端提供的接口就像是调用本地的函数一样。</p>
+<h4 id="RMI"><a href="#RMI" class="headerlink" title="RMI"></a>RMI</h4><ul>
+<li>Remote Method Invocation</li>
+<li>纯 Java 调用</li>
+</ul>
+<h3 id="服务接口调用"><a href="#服务接口调用" class="headerlink" title="服务接口调用"></a>服务接口调用</h3><blockquote>
+<p>作用：多个服务之间的通讯</p>
+</blockquote>
+<h4 id="Feign-HTTP"><a href="#Feign-HTTP" class="headerlink" title="Feign(HTTP)"></a><a href="https://github.com/OpenFeign/feign" target="_blank" rel="noopener">Feign(HTTP)</a></h4><p>Spring Cloud Netflix 的微服务都是以 HTTP 接口的形式暴露的，所以可以用 Apache 的 HttpClient 或 Spring 的 RestTemplate 去调用，而 Feign 是一个使用起来更加方便的 HTTP 客戶端，使用起来就像是调用自身工程的方法，而感觉不到是调用远程方法。</p>
+<h3 id="服务熔断"><a href="#服务熔断" class="headerlink" title="服务熔断"></a>服务熔断</h3><blockquote>
+<p>作用: 当请求到达一定阈值时不让请求继续.</p>
+</blockquote>
+<h4 id="Hystrix"><a href="#Hystrix" class="headerlink" title="Hystrix"></a><a href="https://github.com/Netflix/Hystrix" target="_blank" rel="noopener">Hystrix</a></h4><blockquote>
+<p>Hystrix is a latency and fault tolerance library designed to isolate points of access to remote systems, services and 3rd party libraries, stop cascading failure and enable resilience in complex distributed systems where failure is inevitable.</p>
+</blockquote>
+<h4 id="Sentinel"><a href="#Sentinel" class="headerlink" title="Sentinel"></a><a href="https://github.com/alibaba/Sentinel" target="_blank" rel="noopener">Sentinel</a></h4><blockquote>
+<p>A lightweight powerful flow control component enabling reliability and monitoring for microservices. (轻量级的流量控制、熔断降级 Java 库)</p>
+</blockquote>
+<h3 id="服务的负载均衡"><a href="#服务的负载均衡" class="headerlink" title="服务的负载均衡"></a>服务的负载均衡</h3><blockquote>
+<p>作用：降低服务压力, 增加吞吐量</p>
+</blockquote>
+<h4 id="Ribbon"><a href="#Ribbon" class="headerlink" title="Ribbon"></a><a href="https://github.com/Netflix/ribbon" target="_blank" rel="noopener">Ribbon</a></h4><blockquote>
+<p>Spring Cloud Ribbon 是一个基于 HTTP 和 TCP 的客户端负载均衡工具, 它基于 Netflix Ribbon 实现</p>
+</blockquote>
+<h4 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a><a href="https://github.com/nginx/nginx" target="_blank" rel="noopener">Nginx</a></h4><p>Nginx (engine x) 是一个高性能的 HTTP 和反向代理 web 服务器, 同时也提供了 IMAP/POP3/SMTP 服务</p>
+<h4 id="Nginx-与-Ribbon-区别"><a href="#Nginx-与-Ribbon-区别" class="headerlink" title="Nginx 与 Ribbon 区别"></a>Nginx 与 Ribbon 区别</h4><p>Nginx 属于服务端负载均衡，Ribbon 属于客户端负载均衡。Nginx 作用与 Tomcat，Ribbon 作用与各个服务之间的调用 (RPC)。</p>
+<h3 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h3><blockquote>
+<p>作用: 解耦业务, 异步化处理数据</p>
+</blockquote>
+<h4 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a><a href="http://kafka.apache.org/" target="_blank" rel="noopener">Kafka</a></h4><h4 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a><a href="https://www.rabbitmq.com/" target="_blank" rel="noopener">RabbitMQ</a></h4><h4 id="RocketMQ"><a href="#RocketMQ" class="headerlink" title="RocketMQ"></a><a href="http://rocketmq.apache.org/" target="_blank" rel="noopener">RocketMQ</a></h4><h4 id="activeMQ"><a href="#activeMQ" class="headerlink" title="activeMQ"></a><a href="http://activemq.apache.org/" target="_blank" rel="noopener">activeMQ</a></h4><h3 id="日志采集-elk"><a href="#日志采集-elk" class="headerlink" title="日志采集 (elk)"></a>日志采集 (elk)</h3><blockquote>
+<p>作用: 收集各服务日志提供日志分析、用户画像等</p>
+</blockquote>
+<h4 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a><a href="https://github.com/elastic/elasticsearch" target="_blank" rel="noopener">Elasticsearch</a></h4><h4 id="Logstash"><a href="#Logstash" class="headerlink" title="Logstash"></a><a href="https://github.com/elastic/logstash" target="_blank" rel="noopener">Logstash</a></h4><h4 id="Kibana"><a href="#Kibana" class="headerlink" title="Kibana"></a><a href="https://github.com/elastic/kibana" target="_blank" rel="noopener">Kibana</a></h4><h3 id="API-网关"><a href="#API-网关" class="headerlink" title="API 网关"></a>API 网关</h3><blockquote>
+<p>作用: 外部请求通过 API 网关进行拦截处理, 再转发到真正的服务</p>
+</blockquote>
+<h4 id="Zuul"><a href="#Zuul" class="headerlink" title="Zuul"></a><a href="https://github.com/Netflix/zuul" target="_blank" rel="noopener">Zuul</a></h4><blockquote>
+<p>Zuul is a gateway service that provides dynamic routing, monitoring, resiliency, security, and more.</p>
+</blockquote>
+<h3 id="服务监控"><a href="#服务监控" class="headerlink" title="服务监控"></a>服务监控</h3><blockquote>
+<p>作用: 以可视化或非可视化的形式展示出各个服务的运行情况 (CPU、内存、访问量等)</p>
+</blockquote>
+<h4 id="Zabbix"><a href="#Zabbix" class="headerlink" title="Zabbix"></a><a href="https://github.com/jjmartres/Zabbix" target="_blank" rel="noopener">Zabbix</a></h4><h4 id="Nagios"><a href="#Nagios" class="headerlink" title="Nagios"></a><a href="https://www.nagios.org/" target="_blank" rel="noopener">Nagios</a></h4><h4 id="Metrics"><a href="#Metrics" class="headerlink" title="Metrics"></a><a href="https://metrics.dropwizard.io" target="_blank" rel="noopener">Metrics</a></h4><h3 id="服务链路追踪"><a href="#服务链路追踪" class="headerlink" title="服务链路追踪"></a>服务链路追踪</h3><blockquote>
+<p>作用: 明确服务之间的调用关系</p>
+</blockquote>
+<h4 id="Zipkin"><a href="#Zipkin" class="headerlink" title="Zipkin"></a><a href="https://github.com/openzipkin/zipkin" target="_blank" rel="noopener">Zipkin</a></h4><h4 id="Brave"><a href="#Brave" class="headerlink" title="Brave"></a><a href="https://github.com/openzipkin/brave" target="_blank" rel="noopener">Brave</a></h4><h3 id="数据存储"><a href="#数据存储" class="headerlink" title="数据存储"></a>数据存储</h3><blockquote>
+<p>作用: 存储数据</p>
+</blockquote>
+<h4 id="关系型数据库"><a href="#关系型数据库" class="headerlink" title="关系型数据库"></a>关系型数据库</h4><h5 id="MySql"><a href="#MySql" class="headerlink" title="MySql"></a><a href="https://www.mysql.com/" target="_blank" rel="noopener">MySql</a></h5><h5 id="Oracle"><a href="#Oracle" class="headerlink" title="Oracle"></a><a href="https://www.oracle.com/index.html" target="_blank" rel="noopener">Oracle</a></h5><h5 id="MsSQL"><a href="#MsSQL" class="headerlink" title="MsSQL"></a><a href="https://docs.microsoft.com/zh-cn/sql/?view=sql-server-ver15" target="_blank" rel="noopener">MsSQL</a></h5><h5 id="PostgreSql"><a href="#PostgreSql" class="headerlink" title="PostgreSql"></a><a href="https://www.postgresql.org/" target="_blank" rel="noopener">PostgreSql</a></h5><h4 id="非关系型数据库"><a href="#非关系型数据库" class="headerlink" title="非关系型数据库"></a>非关系型数据库</h4><h5 id="Mongodb"><a href="#Mongodb" class="headerlink" title="Mongodb"></a><a href="https://www.mongodb.com/" target="_blank" rel="noopener">Mongodb</a></h5><h5 id="Elasticsearch-1"><a href="#Elasticsearch-1" class="headerlink" title="Elasticsearch"></a><a href="https://github.com/elastic/elasticsearch" target="_blank" rel="noopener">Elasticsearch</a></h5><h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><blockquote>
+<p>作用: 存储数据</p>
+</blockquote>
+<h4 id="redis"><a href="#redis" class="headerlink" title="redis"></a><a href="https://redis.io/" target="_blank" rel="noopener">redis</a></h4><h3 id="分库分表"><a href="#分库分表" class="headerlink" title="分库分表"></a>分库分表</h3><blockquote>
+<p>作用: 数据库分库分表方案.</p>
+</blockquote>
+<h4 id="ShardingSphere"><a href="#ShardingSphere" class="headerlink" title="ShardingSphere"></a><a href="http://shardingsphere.apache.org/" target="_blank" rel="noopener">ShardingSphere</a></h4><h4 id="Mycat"><a href="#Mycat" class="headerlink" title="Mycat"></a><a href="http://www.mycat.io/" target="_blank" rel="noopener">Mycat</a></h4><h3 id="服务部署"><a href="#服务部署" class="headerlink" title="服务部署"></a>服务部署</h3><blockquote>
+<p>作用: 将项目快速部署、上线、持续集成.</p>
+</blockquote>
+<h4 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a><a href="http://www.docker.com/" target="_blank" rel="noopener">Docker</a></h4><h4 id="Jenkins"><a href="#Jenkins" class="headerlink" title="Jenkins"></a><a href="https://jenkins.io/zh/" target="_blank" rel="noopener">Jenkins</a></h4><h4 id="Kubernetes-K8s"><a href="#Kubernetes-K8s" class="headerlink" title="Kubernetes(K8s)"></a><a href="https://kubernetes.io/" target="_blank" rel="noopener">Kubernetes(K8s)</a></h4><h4 id="Mesos"><a href="#Mesos" class="headerlink" title="Mesos"></a><a href="http://mesos.apache.org/" target="_blank" rel="noopener">Mesos</a></h4>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/21/github/docs/micro-services/huifer-micro-service-governance/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/21/github/docs/micro-services/huifer-what's-microservice-how-to-communicate/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#微服务技术栈"><span class="nav-number">1.</span> <span class="nav-text">微服务技术栈</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#技术栈"><span class="nav-number">1.1.</span> <span class="nav-text">技术栈</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务开发"><span class="nav-number">1.1.1.</span> <span class="nav-text">微服务开发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务注册发现"><span class="nav-number">1.1.2.</span> <span class="nav-text">微服务注册发现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Eureka"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">Eureka</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Zookeeper"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">Zookeeper</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Zookeeper-和-Eureka-区别"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">Zookeeper 和 Eureka 区别</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务配置管理"><span class="nav-number">1.1.3.</span> <span class="nav-text">微服务配置管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Disconf"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">Disconf</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SpringCloudConfig"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">SpringCloudConfig</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Apollo"><span class="nav-number">1.1.3.3.</span> <span class="nav-text">Apollo</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#权限认证"><span class="nav-number">1.1.4.</span> <span class="nav-text">权限认证</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Spring-Security"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">Spring Security</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Apache-Shiro"><span class="nav-number">1.1.4.2.</span> <span class="nav-text">Apache Shiro</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#批处理"><span class="nav-number">1.1.5.</span> <span class="nav-text">批处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Spring-Batch"><span class="nav-number">1.1.5.1.</span> <span class="nav-text">Spring Batch</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定时任务"><span class="nav-number">1.1.6.</span> <span class="nav-text">定时任务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Quartz"><span class="nav-number">1.1.6.1.</span> <span class="nav-text">Quartz</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务调用-协议"><span class="nav-number">1.1.7.</span> <span class="nav-text">微服务调用 (协议)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Rest"><span class="nav-number">1.1.7.1.</span> <span class="nav-text">Rest</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RPC"><span class="nav-number">1.1.7.2.</span> <span class="nav-text">RPC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gRPC"><span class="nav-number">1.1.7.3.</span> <span class="nav-text">gRPC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RMI"><span class="nav-number">1.1.7.4.</span> <span class="nav-text">RMI</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务接口调用"><span class="nav-number">1.1.8.</span> <span class="nav-text">服务接口调用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Feign-HTTP"><span class="nav-number">1.1.8.1.</span> <span class="nav-text">Feign(HTTP)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务熔断"><span class="nav-number">1.1.9.</span> <span class="nav-text">服务熔断</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Hystrix"><span class="nav-number">1.1.9.1.</span> <span class="nav-text">Hystrix</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sentinel"><span class="nav-number">1.1.9.2.</span> <span class="nav-text">Sentinel</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务的负载均衡"><span class="nav-number">1.1.10.</span> <span class="nav-text">服务的负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Ribbon"><span class="nav-number">1.1.10.1.</span> <span class="nav-text">Ribbon</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Nginx"><span class="nav-number">1.1.10.2.</span> <span class="nav-text">Nginx</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Nginx-与-Ribbon-区别"><span class="nav-number">1.1.10.3.</span> <span class="nav-text">Nginx 与 Ribbon 区别</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消息队列"><span class="nav-number">1.1.11.</span> <span class="nav-text">消息队列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Kafka"><span class="nav-number">1.1.11.1.</span> <span class="nav-text">Kafka</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RabbitMQ"><span class="nav-number">1.1.11.2.</span> <span class="nav-text">RabbitMQ</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RocketMQ"><span class="nav-number">1.1.11.3.</span> <span class="nav-text">RocketMQ</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#activeMQ"><span class="nav-number">1.1.11.4.</span> <span class="nav-text">activeMQ</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志采集-elk"><span class="nav-number">1.1.12.</span> <span class="nav-text">日志采集 (elk)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Elasticsearch"><span class="nav-number">1.1.12.1.</span> <span class="nav-text">Elasticsearch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Logstash"><span class="nav-number">1.1.12.2.</span> <span class="nav-text">Logstash</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Kibana"><span class="nav-number">1.1.12.3.</span> <span class="nav-text">Kibana</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API-网关"><span class="nav-number">1.1.13.</span> <span class="nav-text">API 网关</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Zuul"><span class="nav-number">1.1.13.1.</span> <span class="nav-text">Zuul</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务监控"><span class="nav-number">1.1.14.</span> <span class="nav-text">服务监控</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Zabbix"><span class="nav-number">1.1.14.1.</span> <span class="nav-text">Zabbix</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Nagios"><span class="nav-number">1.1.14.2.</span> <span class="nav-text">Nagios</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Metrics"><span class="nav-number">1.1.14.3.</span> <span class="nav-text">Metrics</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务链路追踪"><span class="nav-number">1.1.15.</span> <span class="nav-text">服务链路追踪</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Zipkin"><span class="nav-number">1.1.15.1.</span> <span class="nav-text">Zipkin</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Brave"><span class="nav-number">1.1.15.2.</span> <span class="nav-text">Brave</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据存储"><span class="nav-number">1.1.16.</span> <span class="nav-text">数据存储</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关系型数据库"><span class="nav-number">1.1.16.1.</span> <span class="nav-text">关系型数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#MySql"><span class="nav-number">1.1.16.1.1.</span> <span class="nav-text">MySql</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Oracle"><span class="nav-number">1.1.16.1.2.</span> <span class="nav-text">Oracle</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#MsSQL"><span class="nav-number">1.1.16.1.3.</span> <span class="nav-text">MsSQL</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#PostgreSql"><span class="nav-number">1.1.16.1.4.</span> <span class="nav-text">PostgreSql</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#非关系型数据库"><span class="nav-number">1.1.16.2.</span> <span class="nav-text">非关系型数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Mongodb"><span class="nav-number">1.1.16.2.1.</span> <span class="nav-text">Mongodb</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Elasticsearch-1"><span class="nav-number">1.1.16.2.2.</span> <span class="nav-text">Elasticsearch</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存"><span class="nav-number">1.1.17.</span> <span class="nav-text">缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#redis"><span class="nav-number">1.1.17.1.</span> <span class="nav-text">redis</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分库分表"><span class="nav-number">1.1.18.</span> <span class="nav-text">分库分表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ShardingSphere"><span class="nav-number">1.1.18.1.</span> <span class="nav-text">ShardingSphere</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mycat"><span class="nav-number">1.1.18.2.</span> <span class="nav-text">Mycat</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务部署"><span class="nav-number">1.1.19.</span> <span class="nav-text">服务部署</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Docker"><span class="nav-number">1.1.19.1.</span> <span class="nav-text">Docker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Jenkins"><span class="nav-number">1.1.19.2.</span> <span class="nav-text">Jenkins</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Kubernetes-K8s"><span class="nav-number">1.1.19.3.</span> <span class="nav-text">Kubernetes(K8s)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mesos"><span class="nav-number">1.1.19.4.</span> <span class="nav-text">Mesos</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">hezhengkui</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hezhengkui</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
