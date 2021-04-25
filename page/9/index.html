@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/21/github/docs/high-concurrency/how-to-ensure-the-order-of-messages/">
+    <link itemprop="mainEntityOfPage" href="/2021/03/05/es/es-template/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/04/21/github/docs/high-concurrency/how-to-ensure-the-order-of-messages/" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/2021/03/05/es/es-template/" class="post-title-link" itemprop="url">Untitled</a>
         </h2>
 
         <div class="post-meta">
@@ -174,7 +174,7 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-04-21 15:37:08" itemprop="dateCreated datePublished" datetime="2021-04-21T15:37:08+08:00">2021-04-21</time>
+              <time title="Created: 2021-03-05 16:29:13" itemprop="dateCreated datePublished" datetime="2021-03-05T16:29:13+08:00">2021-03-05</time>
             </span>
 
           
@@ -188,27 +188,76 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h2><p>如何保证消息的顺序性？</p>
-<h2 id="面试官心理分析"><a href="#面试官心理分析" class="headerlink" title="面试官心理分析"></a>面试官心理分析</h2><p>其实这个也是用 MQ 的时候必问的话题，第一看看你了不了解顺序这个事儿？第二看看你有没有办法保证消息是有顺序的？这是生产系统中常见的问题。</p>
-<h2 id="面试题剖析"><a href="#面试题剖析" class="headerlink" title="面试题剖析"></a>面试题剖析</h2><p>我举个例子，我们以前做过一个 mysql <code>binlog</code> 同步的系统，压力还是非常大的，日同步数据要达到上亿，就是说数据从一个 mysql 库原封不动地同步到另一个 mysql 库里面去（mysql -&gt; mysql）。常见的一点在于说比如大数据 team，就需要同步一个 mysql 库过来，对公司的业务系统的数据做各种复杂的操作。</p>
-<p>你在 mysql 里增删改一条数据，对应出来了增删改 3 条 <code>binlog</code> 日志，接着这三条 <code>binlog</code> 发送到 MQ 里面，再消费出来依次执行，起码得保证人家是按照顺序来的吧？不然本来是：增加、修改、删除；你愣是换了顺序给执行成删除、修改、增加，不全错了么。</p>
-<p>本来这个数据同步过来，应该最后这个数据被删除了；结果你搞错了这个顺序，最后这个数据保留下来了，数据同步就出错了。</p>
-<p>先看看顺序会错乱的俩场景：</p>
-<ul>
-<li><strong>RabbitMQ</strong>：一个 queue，多个 consumer。比如，生产者向 RabbitMQ 里发送了三条数据，顺序依次是 data1/data2/data3，压入的是 RabbitMQ 的一个内存队列。有三个消费者分别从 MQ 中消费这三条数据中的一条，结果消费者 2 先执行完操作，把 data2 存入数据库，然后是 data1/data3。这不明显乱了。</li>
-</ul>
-<p><img src="./images/rabbitmq-order-01.png" alt="rabbitmq-order-01"></p>
-<ul>
-<li><strong>Kafka</strong>：比如说我们建了一个 topic，有三个 partition。生产者在写的时候，其实可以指定一个 key，比如说我们指定了某个订单 id 作为 key，那么这个订单相关的数据，一定会被分发到同一个 partition 中去，而且这个 partition 中的数据一定是有顺序的。<br>消费者从 partition 中取出来数据的时候，也一定是有顺序的。到这里，顺序还是 ok 的，没有错乱。接着，我们在消费者里可能会搞<strong>多个线程来并发处理消息</strong>。因为如果消费者是单线程消费处理，而处理比较耗时的话，比如处理一条消息耗时几十 ms，那么 1 秒钟只能处理几十条消息，这吞吐量太低了。而多个线程并发跑的话，顺序可能就乱掉了。</li>
-</ul>
-<p><img src="./images/kafka-order-01.png" alt="kafka-order-01"></p>
-<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><h4 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a>RabbitMQ</h4><p>拆分多个 queue，每个 queue 一个 consumer，就是多一些 queue 而已，确实是麻烦点；或者就一个 queue 但是对应一个 consumer，然后这个 consumer 内部用内存队列做排队，然后分发给底层不同的 worker 来处理。</p>
-<p><img src="./images/rabbitmq-order-02.png" alt="rabbitmq-order-02"></p>
-<h4 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h4><ul>
-<li>一个 topic，一个 partition，一个 consumer，内部单线程消费，单线程吞吐量太低，一般不会用这个。</li>
-<li>写 N 个内存 queue，具有相同 key 的数据都到同一个内存 queue；然后对于 N 个线程，每个线程分别消费一个内存 queue 即可，这样就能保证顺序性。</li>
-</ul>
-<p><img src="./images/kafka-order-02.png" alt="kafka-order-02"></p>
+          {"service_log_template":{"order":0,"template":"service*","settings":{"index":{"number_of_shards":"2","number_of_replicas":"0","refresh_interval":"10s"}},"mappings":{"bible-server-api-error":{"properties":{"@timestamp":{"type":"date"},"application":{"type":"keyword"},"cloud":{"type":"keyword"},"file_name":{"type":"keyword"},"group":{"type":"keyword"},"hostName":{"type":"keyword"},"httpCode":{"type":"long"},"httpMethod":{"type":"keyword"},"httpProtocol":{"type":"keyword"},"httpReferer":{"type":"keyword"},"httpRemoteAddress":{"type":"keyword"},"httpRequestBegin":{"type":"keyword"},"httpRequestType":{"type":"keyword"},"httpResponseEnd":{"type":"keyword"},"httpTime":{"type":"date"},"httpUri":{"type":"keyword"},"httpUserAgent":{"type":"keyword"},"invokeLink":{"type":"keyword"},"message":{"type":"text"},"originProject":{"type":"keyword"},"profile":{"type":"keyword"},"project":{"type":"keyword"},"request_trace_id":{"type":"keyword"},"request_trace_seq":{"type":"keyword"},"source_host":{"type":"keyword"},"source_timestamp":{"type":"date"},"source_date":{"type":"date"},"time_local":{"type":"date","format":"yyyy-MM-dd/HH:mm:ss.SSS"},"topic":{"type":"keyword"}}}},"aliases":{}},"service-template":{"order":0,"template":"service*","settings":{"index":{"number_of_shards":"1","number_of_replicas":"4"}},"mappings":{"_default_":{"_source":{"enabled":false}},"docs":{"properties":{"sold":{"type":"long"},"online_time":{"type":"long"},"price":{"type":"long"},"publish_time":{"type":"long"},"id":{"type":"long"},"catecode":{"type":"integer"},"content":{"index":false,"store":true,"type":"keyword"},"status":{"type":"integer"}}}},"aliases":{}},"ftp_download_log":{"order":0,"template":"te*","settings":{"index":{"number_of_shards":"1"}},"mappings":{"type1":{"_source":{"enabled":false}}},"aliases":{}}}
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/03/05/es/es-template/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/05/es/es-template/" class="post-title-link" itemprop="url">elasticsearch索引模版</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-05 10:28:35" itemprop="dateCreated datePublished" datetime="2021-03-05T10:28:35+08:00">2021-03-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-09 14:11:19" itemprop="dateModified" datetime="2021-03-09T14:11:19+08:00">2021-03-09</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>DELETE /_template/ftp_download_log</p>
+<p>GET _template</p>
+<p>es6版本之前，一个index可以有多个type</p>
+<p>es6版本之后，一个index只有一个type，默认是 _doc</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line">PUT /_template/service_log_template_1</span><br><span class="line">&#123;</span><br><span class="line">	&quot;order&quot;: 0,</span><br><span class="line">	&quot;template&quot;: &quot;service*&quot;,</span><br><span class="line">	&quot;settings&quot;: &#123;</span><br><span class="line">		&quot;index&quot;: &#123;</span><br><span class="line">			&quot;number_of_shards&quot;: 2,</span><br><span class="line">			&quot;number_of_replicas&quot;: 0,</span><br><span class="line">			&quot;refresh_interval&quot;: &quot;10s&quot;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	&quot;mappings&quot;: &#123;</span><br><span class="line">		&quot;bible-server-api&quot;: &#123;</span><br><span class="line">			&quot;properties&quot;: &#123;</span><br><span class="line">				&quot;hostName&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;request_trace_id&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;project&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpMethod&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;request_trace_seq&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;cloud&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpUri&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpRemoteAddress&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpRequestBegin&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpCode&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpReferer&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;group&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;source_host&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpTime&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;date&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;source_timestamp&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;date&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;file_name&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;profile&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpProtocol&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;time_local&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;date&quot;,</span><br><span class="line">					&quot;format&quot;: &quot;yyyy-MM-dd/HH:mm:ss.SSS&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpUserAgent&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;,</span><br><span class="line">					&quot;fields&quot;: &#123;</span><br><span class="line">						&quot;keyword&quot;: &#123;</span><br><span class="line">							&quot;ignore_above&quot;: 256,</span><br><span class="line">							&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;message&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;text&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpResponseEnd&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;httpRequestType&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;@timestamp&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;date&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;originProject&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;application&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;topic&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;invokeLink&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">				&#125;,</span><br><span class="line">				&quot;source_date&quot;: &#123;</span><br><span class="line">					&quot;type&quot;: &quot;date&quot;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -228,7 +277,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/21/github/docs/high-concurrency/how-to-ensure-the-reliable-transmission-of-messages/">
+    <link itemprop="mainEntityOfPage" href="/2021/03/05/es/dsl/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -242,7 +291,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/04/21/github/docs/high-concurrency/how-to-ensure-the-reliable-transmission-of-messages/" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/2021/03/05/es/dsl/" class="post-title-link" itemprop="url">elasticsearch dsl</a>
         </h2>
 
         <div class="post-meta">
@@ -251,8 +300,9 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2021-04-21 15:37:08" itemprop="dateCreated datePublished" datetime="2021-04-21T15:37:08+08:00">2021-04-21</time>
+              <time title="Created: 2021-03-05 10:28:35 / Modified: 16:30:31" itemprop="dateCreated datePublished" datetime="2021-03-05T10:28:35+08:00">2021-03-05</time>
             </span>
 
           
@@ -266,131 +316,242 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h2><p>如何保证消息的可靠性传输？或者说，如何处理消息丢失的问题？</p>
-<h2 id="面试官心理分析"><a href="#面试官心理分析" class="headerlink" title="面试官心理分析"></a>面试官心理分析</h2><p>这个是肯定的，用 MQ 有个基本原则，就是<strong>数据不能多一条，也不能少一条</strong>，不能多，就是前面说的<a href="/docs/high-concurrency/how-to-ensure-that-messages-are-not-repeatedly-consumed.md">重复消费和幂等性问题</a>。不能少，就是说这数据别搞丢了。那这个问题你必须得考虑一下。</p>
-<p>如果说你这个是用 MQ 来传递非常核心的消息，比如说计费、扣费的一些消息，那必须确保这个 MQ 传递过程中<strong>绝对不会把计费消息给弄丢</strong>。</p>
-<h2 id="面试题剖析"><a href="#面试题剖析" class="headerlink" title="面试题剖析"></a>面试题剖析</h2><p>数据的丢失问题，可能出现在生产者、MQ、消费者中，咱们从 RabbitMQ 和 Kafka 分别来分析一下吧。</p>
-<h3 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a>RabbitMQ</h3><p><img src="./images/rabbitmq-message-lose.png" alt="rabbitmq-message-lose"></p>
-<h4 id="生产者弄丢了数据"><a href="#生产者弄丢了数据" class="headerlink" title="生产者弄丢了数据"></a>生产者弄丢了数据</h4><p>生产者将数据发送到 RabbitMQ 的时候，可能数据就在半路给搞丢了，因为网络问题啥的，都有可能。</p>
-<p>此时可以选择用 RabbitMQ 提供的事务功能，就是生产者<strong>发送数据之前</strong>开启 RabbitMQ 事务 <code>channel.txSelect</code> ，然后发送消息，如果消息没有成功被 RabbitMQ 接收到，那么生产者会收到异常报错，此时就可以回滚事务 <code>channel.txRollback</code> ，然后重试发送消息；如果收到了消息，那么可以提交事务 <code>channel.txCommit</code> 。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 开启事务</span></span><br><span class="line">channel.txSelect</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 这里发送消息</span></span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    channel.txRollback</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这里再次重发这条消息</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 提交事务</span></span><br><span class="line">channel.txCommit</span><br></pre></td></tr></table></figure>
+          <ul>
+<li><p>对于复杂的查询，最好都先校验下，看有没有报错。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_validate/query?explain</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &quot;toothbrush&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>但是问题是，RabbitMQ 事务机制（同步）一搞，基本上<strong>吞吐量会下来，因为太耗性能</strong>。</p>
-<p>所以一般来说，如果你要确保说写 RabbitMQ 的消息别丢，可以开启 <code>confirm</code> 模式，在生产者那里设置开启 <code>confirm</code> 模式之后，你每次写的消息都会分配一个唯一的 id，然后如果写入了 RabbitMQ 中，RabbitMQ 会给你回传一个 <code>ack</code> 消息，告诉你说这个消息 ok 了。如果 RabbitMQ 没能处理这个消息，会回调你的一个 <code>nack</code> 接口，告诉你这个消息接收失败，你可以重试。而且你可以结合这个机制自己在内存里维护每个消息 id 的状态，如果超过一定时间还没接收到这个消息的回调，那么你可以重发。</p>
-<p>事务机制和 <code>confirm</code> 机制最大的不同在于，<strong>事务机制是同步的</strong>，你提交一个事务之后会<strong>阻塞</strong>在那儿，但是 <code>confirm</code> 机制是<strong>异步</strong>的，你发送个消息之后就可以发送下一个消息，然后那个消息 RabbitMQ 接收了之后会异步回调你的一个接口通知你这个消息接收到了。</p>
-<p>所以一般在生产者这块<strong>避免数据丢失</strong>，都是用 <code>confirm</code> 机制的。</p>
-<h4 id="RabbitMQ-弄丢了数据"><a href="#RabbitMQ-弄丢了数据" class="headerlink" title="RabbitMQ 弄丢了数据"></a>RabbitMQ 弄丢了数据</h4><p>就是 RabbitMQ 自己弄丢了数据，这个你必须<strong>开启 RabbitMQ 的持久化</strong>，就是消息写入之后会持久化到磁盘，哪怕是 RabbitMQ 自己挂了，<strong>恢复之后会自动读取之前存储的数据</strong>，一般数据不会丢。除非极其罕见的是，RabbitMQ 还没持久化，自己就挂了，<strong>可能导致少量数据丢失</strong>，但是这个概率较小。</p>
-<p>设置持久化有<strong>两个步骤</strong>：</p>
-<ul>
-<li>创建 queue 的时候将其设置为持久化<br></li>
+
+
+</li>
 </ul>
-<p>这样就可以保证 RabbitMQ 持久化 queue 的元数据，但是它是不会持久化 queue 里的数据的。</p>
 <ul>
-<li>第二个是发送消息的时候将消息的 <code>deliveryMode</code> 设置为 2<br></li>
+<li><p>搜索商品名称包含 toothbrush，而且售价大于 400 元，小于 700 的商品</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;bool&quot;: &#123;</span><br><span class="line">      &quot;must&quot;: &#123;</span><br><span class="line">        &quot;match&quot;: &#123;</span><br><span class="line">          &quot;product_name&quot;: &quot;toothbrush&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;filter&quot;: &#123;</span><br><span class="line">        &quot;range&quot;: &#123;</span><br><span class="line">          &quot;price&quot;: &#123;</span><br><span class="line">            &quot;gt&quot;: 400,</span><br><span class="line">            &quot;lt&quot;: 700</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>full-text search 全文检索，倒排索引</p>
+</li>
+<li><p>索引中只要有任意一个匹配拆分后词就可以出现在结果中，只是匹配度越高的排越前面</p>
+</li>
+<li><p>比如查询：PHILIPS toothbrush，会被拆分成两个单词：PHILIPS 和 toothbrush。只要索引中 product_name 中只要含有任意对应单词，都会在搜索结果中，只是如果有数据同时含有这两个单词，则排序在前面。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &quot;PHILIPS toothbrush&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>phrase search 短语搜索</p>
+</li>
+<li><p>索引中必须同时匹配拆分后词就可以出现在结果中</p>
+</li>
+<li><p>比如查询：PHILIPS toothbrush，会被拆分成两个单词：PHILIPS 和 toothbrush。索引中必须有同时有这两个单词的才会在结果中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match_phrase&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &quot;PHILIPS toothbrush&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
 </ul>
-<p>就是将消息设置为持久化的，此时 RabbitMQ 就会将消息持久化到磁盘上去。</p>
-<p>必须要同时设置这两个持久化才行，RabbitMQ 哪怕是挂了，再次重启，也会从磁盘上重启恢复 queue，恢复这个 queue 里的数据。</p>
-<p>注意，哪怕是你给 RabbitMQ 开启了持久化机制，也有一种可能，就是这个消息写到了 RabbitMQ 中，但是还没来得及持久化到磁盘上，结果不巧，此时 RabbitMQ 挂了，就会导致内存里的一点点数据丢失。</p>
-<p>所以，持久化可以跟生产者那边的 <code>confirm</code> 机制配合起来，只有消息被持久化到磁盘之后，才会通知生产者 <code>ack</code> 了，所以哪怕是在持久化到磁盘之前，RabbitMQ 挂了，数据丢了，生产者收不到 <code>ack</code> ，你也是可以自己重发的。</p>
-<h4 id="消费端弄丢了数据"><a href="#消费端弄丢了数据" class="headerlink" title="消费端弄丢了数据"></a>消费端弄丢了数据</h4><p>RabbitMQ 如果丢失了数据，主要是因为你消费的时候，<strong>刚消费到，还没处理，结果进程挂了</strong>，比如重启了，那么就尴尬了，RabbitMQ 认为你都消费了，这数据就丢了。</p>
-<p>这个时候得用 RabbitMQ 提供的 <code>ack</code> 机制，简单来说，就是你必须关闭 RabbitMQ 的自动 <code>ack</code> ，可以通过一个 api 来调用就行，然后每次你自己代码里确保处理完的时候，再在程序里 <code>ack</code> 一把。这样的话，如果你还没处理完，不就没有 <code>ack</code> 了？那 RabbitMQ 就认为你还没处理完，这个时候 RabbitMQ 会把这个消费分配给别的 consumer 去处理，消息是不会丢的。</p>
-<p><img src="./images/rabbitmq-message-lose-solution.png" alt="rabbitmq-message-lose-solution"></p>
-<h3 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h3><h4 id="消费端弄丢了数据-1"><a href="#消费端弄丢了数据-1" class="headerlink" title="消费端弄丢了数据"></a>消费端弄丢了数据</h4><p>唯一可能导致消费者弄丢数据的情况，就是说，你消费到了这个消息，然后消费者那边<strong>自动提交了 offset</strong>，让 Kafka 以为你已经消费好了这个消息，但其实你才刚准备处理这个消息，你还没处理，你自己就挂了，此时这条消息就丢咯。</p>
-<p>这不是跟 RabbitMQ 差不多吗，大家都知道 Kafka 会自动提交 offset，那么只要<strong>关闭自动提交</strong> offset，在处理完之后自己手动提交 offset，就可以保证数据不会丢。但是此时确实还是<strong>可能会有重复消费</strong>，比如你刚处理完，还没提交 offset，结果自己挂了，此时肯定会重复消费一次，自己保证幂等性就好了。</p>
-<p>生产环境碰到的一个问题，就是说我们的 Kafka 消费者消费到了数据之后是写到一个内存的 queue 里先缓冲一下，结果有的时候，你刚把消息写入内存 queue，然后消费者会自动提交 offset。然后此时我们重启了系统，就会导致内存 queue 里还没来得及处理的数据就丢失了。</p>
-<h4 id="Kafka-弄丢了数据"><a href="#Kafka-弄丢了数据" class="headerlink" title="Kafka 弄丢了数据"></a>Kafka 弄丢了数据</h4><p>这块比较常见的一个场景，就是 Kafka 某个 broker 宕机，然后重新选举 partition 的 leader。大家想想，要是此时其他的 follower 刚好还有些数据没有同步，结果此时 leader 挂了，然后选举某个 follower 成 leader 之后，不就少了一些数据？这就丢了一些数据啊。</p>
-<p>生产环境也遇到过，我们也是，之前 Kafka 的 leader 机器宕机了，将 follower 切换为 leader 之后，就会发现说这个数据就丢了。</p>
-<p>所以此时一般是要求起码设置如下 4 个参数：</p>
 <ul>
-<li>给 topic 设置 <code>replication.factor</code> 参数：这个值必须大于 1，要求每个 partition 必须有至少 2 个副本。</li>
-<li>在 Kafka 服务端设置 <code>min.insync.replicas</code> 参数：这个值必须大于 1，这个是要求一个 leader 至少感知到有至少一个 follower 还跟自己保持联系，没掉队，这样才能确保 leader 挂了还有一个 follower 吧。</li>
-<li>在 producer 端设置 <code>acks=all</code> ：这个是要求每条数据，必须是<strong>写入所有 replica 之后，才能认为是写成功了</strong>。</li>
-<li>在 producer 端设置 <code>retries=MAX</code> （很大很大很大的一个值，无限次重试的意思）：这个是<strong>要求一旦写入失败，就无限重试</strong>，卡在这里了。</li>
+<li><p>range 用法，查询数值、时间区间：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;range&quot;: &#123;</span><br><span class="line">      &quot;price&quot;: &#123;</span><br><span class="line">        &quot;gte&quot;: 30.00</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
 </ul>
-<p>我们生产环境就是按照上述要求配置的，这样配置之后，至少在 Kafka broker 端就可以保证在 leader 所在 broker 发生故障，进行 leader 切换时，数据不会丢失。</p>
-<h4 id="生产者会不会弄丢数据？"><a href="#生产者会不会弄丢数据？" class="headerlink" title="生产者会不会弄丢数据？"></a>生产者会不会弄丢数据？</h4><p>如果按照上述的思路设置了 <code>acks=all</code> ，一定不会丢，要求是，你的 leader 接收到消息，所有的 follower 都同步到了消息之后，才认为本次写成功了。如果没满足这个条件，生产者会自动不断的重试，重试无限次。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/21/github/docs/high-concurrency/how-to-ensure-that-messages-are-not-repeatedly-consumed/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/21/github/docs/high-concurrency/how-to-ensure-that-messages-are-not-repeatedly-consumed/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-04-21 15:37:08" itemprop="dateCreated datePublished" datetime="2021-04-21T15:37:08+08:00">2021-04-21</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h2><p>如何保证消息不被重复消费？或者说，如何保证消息消费的幂等性？</p>
-<h2 id="面试官心理分析"><a href="#面试官心理分析" class="headerlink" title="面试官心理分析"></a>面试官心理分析</h2><p>其实这是很常见的一个问题，这俩问题基本可以连起来问。既然是消费消息，那肯定要考虑会不会重复消费？能不能避免重复消费？或者重复消费了也别造成系统异常可以吗？这个是 MQ 领域的基本问题，其实本质上还是问你<strong>使用消息队列如何保证幂等性</strong>，这个是你架构里要考虑的一个问题。</p>
-<h2 id="面试题剖析"><a href="#面试题剖析" class="headerlink" title="面试题剖析"></a>面试题剖析</h2><p>回答这个问题，首先你别听到重复消息这个事儿，就一无所知吧，你<strong>先大概说一说可能会有哪些重复消费的问题</strong>。</p>
-<p>首先，比如 RabbitMQ、RocketMQ、Kafka，都有可能会出现消息重复消费的问题，正常。因为这问题通常不是 MQ 自己保证的，是由我们开发来保证的。挑一个 Kafka 来举个例子，说说怎么重复消费吧。</p>
-<p>Kafka 实际上有个 offset 的概念，就是每个消息写进去，都有一个 offset，代表消息的序号，然后 consumer 消费了数据之后，<strong>每隔一段时间</strong>（定时定期），会把自己消费过的消息的 offset 提交一下，表示“我已经消费过了，下次我要是重启啥的，你就让我继续从上次消费到的 offset 来继续消费吧”。</p>
-<p>但是凡事总有意外，比如我们之前生产经常遇到的，就是你有时候重启系统，看你怎么重启了，如果碰到点着急的，直接 kill 进程了，再重启。这会导致 consumer 有些消息处理了，但是没来得及提交 offset，尴尬了。重启之后，少数消息会再次消费一次。</p>
-<p>举个栗子。</p>
-<p>有这么个场景。数据 1/2/3 依次进入 Kafka，Kafka 会给这三条数据每条分配一个 offset，代表这条数据的序号，我们就假设分配的 offset 依次是 152/153/154。消费者从 Kafka 去消费的时候，也是按照这个顺序去消费。假如当消费者消费了 <code>offset=153</code> 的这条数据，刚准备去提交 offset 到 Zookeeper，此时消费者进程被重启了。那么此时消费过的数据 1/2 的 offset 并没有提交，Kafka 也就不知道你已经消费了 <code>offset=153</code> 这条数据。那么重启之后，消费者会找 Kafka 说，嘿，哥儿们，你给我接着把上次我消费到的那个地方后面的数据继续给我传递过来。由于之前的 offset 没有提交成功，那么数据 1/2 会再次传过来，如果此时消费者没有去重的话，那么就会导致重复消费。</p>
-<p>注意：新版的 Kafka 已经将 offset 的存储从 Zookeeper 转移至 Kafka brokers，并使用内部位移主题 <code>__consumer_offsets</code> 进行存储。</p>
-<p><img src="./images/mq-10.png" alt="mq-10"></p>
-<p>如果消费者干的事儿是拿一条数据就往数据库里写一条，会导致说，你可能就把数据 1/2 在数据库里插入了 2 次，那么数据就错啦。</p>
-<p>其实重复消费不可怕，可怕的是你没考虑到重复消费之后，<strong>怎么保证幂等性</strong>。</p>
-<p>举个例子吧。假设你有个系统，消费一条消息就往数据库里插入一条数据，要是你一个消息重复两次，你不就插入了两条，这数据不就错了？但是你要是消费到第二次的时候，自己判断一下是否已经消费过了，若是就直接扔了，这样不就保留了一条数据，从而保证了数据的正确性。</p>
-<p>一条数据重复出现两次，数据库里就只有一条数据，这就保证了系统的幂等性。</p>
-<p>幂等性，通俗点说，就一个数据，或者一个请求，给你重复来多次，你得确保对应的数据是不会改变的，<strong>不能出错</strong>。</p>
-<p>所以第二个问题来了，怎么保证消息队列消费的幂等性？</p>
-<p>其实还是得结合业务来思考，我这里给几个思路：</p>
 <ul>
-<li>比如你拿个数据要写库，你先根据主键查一下，如果这数据都有了，你就别插入了，update 一下好吧。</li>
-<li>比如你是写 Redis，那没问题了，反正每次都是 set，天然幂等性。</li>
-<li>比如你不是上面两个场景，那做的稍微复杂一点，你需要让生产者发送每条数据的时候，里面加一个全局唯一的 id，类似订单 id 之类的东西，然后你这里消费到了之后，先根据这个 id 去比如 Redis 里查一下，之前消费过吗？如果没有消费过，你就处理，然后这个 id 写 Redis。如果消费过了，那你就别处理了，保证别重复处理相同的消息即可。</li>
-<li>比如基于数据库的唯一键来保证重复数据不会重复插入多条。因为有唯一键约束了，重复数据插入只会报错，不会导致数据库中出现脏数据。</li>
+<li><p>match 用法（与 term 进行对比）：</p>
+</li>
+<li><p>查询的字段内容是进行分词处理的，只要分词的单词结果中，在数据中有满足任意的分词结果都会被查询出来</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &quot;PHILIPS toothbrush&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &#123;</span><br><span class="line">        &quot;query&quot;: &quot;PHILIPS toothbrush&quot;,</span><br><span class="line">        &quot;operator&quot;: &quot;and&quot;</span><br><span class="line">      &#125;</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
 </ul>
-<p><img src="./images/mq-11.png" alt="mq-11"></p>
-<p>当然，如何保证 MQ 的消费是幂等性的，需要结合具体的业务来看。</p>
+<ul>
+<li><p>match 还还有一种情况，就是必须满足分词结果中百分比的词，比如搜索词被分成这样子：java 程序员 书 推荐，这里就有 4 个词，假如要求 50% 命中其中两个词就返回，我们可以这样：</p>
+</li>
+<li><p>当然，这种需求也可以用 must、must_not、should 匹配同一个字段进行组合来查询</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &#123;</span><br><span class="line">        &quot;query&quot;: &quot;java 程序员 书 推荐&quot;,</span><br><span class="line">        &quot;minimum_should_match&quot;: &quot;50%&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>multi_match 用法：</p>
+</li>
+<li><p>查询 product_name 和 product_desc 字段中，只要有：toothbrush 关键字的就查询出来。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;multi_match&quot;: &#123;</span><br><span class="line">      &quot;query&quot;: &quot;toothbrush&quot;,</span><br><span class="line">      &quot;fields&quot;: [</span><br><span class="line">        &quot;product_name&quot;,</span><br><span class="line">        &quot;product_desc&quot;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>multi_match 跨多个 field 查询，表示查询分词必须出现在相同字段中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;multi_match&quot;: &#123;</span><br><span class="line">      &quot;query&quot;: &quot;PHILIPS toothbrush&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;cross_fields&quot;,</span><br><span class="line">      &quot;operator&quot;: &quot;and&quot;,</span><br><span class="line">      &quot;fields&quot;: [</span><br><span class="line">        &quot;product_name&quot;,</span><br><span class="line">        &quot;product_desc&quot;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>multi_match 用法：</p>
+</li>
+<li><p>查询 product_name 和 product_desc 字段中，只要有：toothbrush 关键字的就查询出来。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;multi_match&quot;: &#123;</span><br><span class="line">      &quot;query&quot;: &quot;toothbrush&quot;,</span><br><span class="line">      &quot;fields&quot;: [</span><br><span class="line">        &quot;product_name&quot;,</span><br><span class="line">        &quot;product_desc&quot;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>multi_match 跨多个 field 查询，表示查询分词必须出现在相同字段中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;multi_match&quot;: &#123;</span><br><span class="line">      &quot;query&quot;: &quot;PHILIPS toothbrush&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;cross_fields&quot;,</span><br><span class="line">      &quot;operator&quot;: &quot;and&quot;,</span><br><span class="line">      &quot;fields&quot;: [</span><br><span class="line">        &quot;product_name&quot;,</span><br><span class="line">        &quot;product_desc&quot;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>match_phrase 用法（短语搜索）（与 match 进行对比）：</p>
+</li>
+<li><p>对这个查询词不进行分词，必须完全匹配查询词才可以作为结果显示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match_phrase&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &quot;PHILIPS toothbrush&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>match_phrase + slop（与 match_phrase 进行对比）：</p>
+</li>
+<li><p>在说 slop 的用法之前，需要先说明原数据是：PHILIPS toothbrush HX6730/02，被分词后至少有：PHILIPS，toothbrush，HX6730 三个 term。</p>
+</li>
+<li><p>match_phrase 的用法我们上面说了，按理说查询的词必须完全匹配才能查询到，PHILIPS HX6730 很明显是不完全匹配的。</p>
+</li>
+<li><p>但是有时候我们就是要这种不完全匹配，只要求他们尽可能靠谱，中间有几个单词是没啥问题的，那就可以用到 slop。slop = 2 表示中间如果间隔 2 个单词以内也算是匹配的结果（）。</p>
+</li>
+<li><p>其实也不能称作间隔，应该说是移位，查询的关键字分词后移动多少位可以跟 doc 内容匹配，移动的次数就是 slop。所以 HX6730 PHILIPS 其实也是可以匹配到 doc 的，只是 slop = 5 才行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match_phrase&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot; : &#123;</span><br><span class="line">          &quot;query&quot; : &quot;PHILIPS HX6730&quot;,</span><br><span class="line">          &quot;slop&quot; : 1</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>match + match_phrase + slop 组合查询，使查询结果更加精准和结果更多</p>
+</li>
+<li><p>但是 match_phrase 性能没有 match 好，所以一般需要先用 match 第一步进行过滤，然后在用 match_phrase 进行进一步匹配，并且重新打分，这里又用到了：rescore，window_size 表示对前 10 个进行重新打分</p>
+</li>
+<li><p>下面第一个是未重新打分的，第二个是重新打分的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;bool&quot;: &#123;</span><br><span class="line">      &quot;must&quot;: &#123;</span><br><span class="line">        &quot;match&quot;: &#123;</span><br><span class="line">          &quot;product_name&quot;: &#123;</span><br><span class="line">            &quot;query&quot;: &quot;PHILIPS HX6730&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;should&quot;: &#123;</span><br><span class="line">        &quot;match_phrase&quot;: &#123;</span><br><span class="line">          &quot;product_name&quot;: &#123;</span><br><span class="line">            &quot;query&quot;: &quot;PHILIPS HX6730&quot;,</span><br><span class="line">            &quot;slop&quot;: 10</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &quot;PHILIPS HX6730&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;rescore&quot;: &#123;</span><br><span class="line">    &quot;window_size&quot;: 10,</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">      &quot;rescore_query&quot;: &#123;</span><br><span class="line">        &quot;match_phrase&quot;: &#123;</span><br><span class="line">          &quot;product_name&quot;: &#123;</span><br><span class="line">            &quot;query&quot;: &quot;PHILIPS HX6730&quot;,</span><br><span class="line">            &quot;slop&quot;: 10</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>terms 用法，类似于数据库的 in</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;constant_score&quot;: &#123;</span><br><span class="line">      &quot;filter&quot;: &#123;</span><br><span class="line">        &quot;terms&quot;: &#123;</span><br><span class="line">          &quot;product_name&quot;: [</span><br><span class="line">            &quot;toothbrush&quot;,</span><br><span class="line">            &quot;shell&quot;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+<ul>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+<li></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>mysql 语法</th>
+<th>es dsl</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>select * from xxx</td>
+<td>/xxx/query<br>{<br>  “query”:{<br>    “match_all”:{<br>    }<br>  }<br>}</td>
+</tr>
+<tr>
+<td>select * from xxx where name=xxx</td>
+<td>/index/query<br>{<br>  “query”:{<br>    “match”:{<br>      “name”: xxx<br>    }<br>  }<br>}</td>
+</tr>
+<tr>
+<td>select * from xxx where name = xxx order by price desc</td>
+<td>/index/query<br>{<br>  “query”:{<br>    “match”:{<br>      “name”: xxx<br>    }<br>  },<br>  “sort”:[<br>    {“price”: “desc”}<br>  ]<br>}</td>
+</tr>
+<tr>
+<td>select f1,f2 from xxx where name = xxx</td>
+<td>/index/query<br>{<br>  “query”:{<br>    “match”:{<br>      “name”: xxx<br>    }<br>  },<br>  “_source”:[<br>    “f1”,<br>    “f2”<br>  ]<br>}</td>
+</tr>
+<tr>
+<td>select * from xxx where name = xxx limit 0,10</td>
+<td>/index/query<br>{<br>  “query”:{<br>    “match”:{<br>      “name”: xxx<br>    }<br>  },<br>  “from”: 0,<br>  “size”: 10<br>}</td>
+</tr>
+<tr>
+<td>select * from xxx where name = xxx and price between 400 and 700</td>
+<td>/index/query<br>{<br>  “query”:{<br>    “bool”:{<br>      “must”:{<br>        “match”:{<br>          “name”: xxx<br>        }<br>      },<br>      “filter”:{<br>        “range”:{<br>          “price”: {<br>            “gt”: 400,<br>            “lt”: 700<br>          }<br>        }<br>      }<br>    }<br>  },<br>}</td>
+</tr>
+<tr>
+<td></td>
+<td>GET /index/_search<br>{<br>  “query”: {<br>    “match_phrase”: {<br>      “product_name”: “PHILIPS toothbrush”<br>    }<br>  }<br>}</td>
+</tr>
+<tr>
+<td></td>
+<td>/index/query<br>{<br>  “query”:{<br>    “range”:{<br>      “price”:{<br>        “lt”: 300<br>      }<br>    }<br>  },<br>}</td>
+</tr>
+<tr>
+<td></td>
+<td>GET /index/_search<br>{<br>  “query”: {<br>    “match”: {<br>      “product_name”: {<br>        “query”: “PHILIPS toothbrush”,<br>        “operator”: “and”<br>      }<br>     }<br>   }<br>}</td>
+</tr>
+<tr>
+<td></td>
+<td>GET /product_index/product/_search<br>{<br>  “query”: {<br>    “match”: {<br>      “product_name”: {<br>        “query”: “java 程序员 书 推荐”,<br>        “minimum_should_match”: “50%”<br>      }<br>    }<br>  }<br>}</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<ul>
+<li>phrase search 短语搜索</li>
+</ul>
 
       
     </div>
@@ -409,7 +570,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/47/">47</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -475,7 +636,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-count">59</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

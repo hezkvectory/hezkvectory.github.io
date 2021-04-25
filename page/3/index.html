@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/21/github/docs/micro-services/event-driven-data-management-for-microservices/">
+    <link itemprop="mainEntityOfPage" href="/2021/04/09/spring/spring-bean-async循环依赖/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/04/21/github/docs/micro-services/event-driven-data-management-for-microservices/" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/2021/04/09/spring/spring-bean-async循环依赖/" class="post-title-link" itemprop="url">spring bean + async循环依赖问题</a>
         </h2>
 
         <div class="post-meta">
@@ -173,8 +173,9 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2021-04-21 15:37:08" itemprop="dateCreated datePublished" datetime="2021-04-21T15:37:08+08:00">2021-04-21</time>
+              <time title="Created: 2021-04-09 17:55:00 / Modified: 18:33:52" itemprop="dateCreated datePublished" datetime="2021-04-09T17:55:00+08:00">2021-04-09</time>
             </span>
 
           
@@ -188,64 +189,30 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="1-1-微服务和分布式数据管理问题"><a href="#1-1-微服务和分布式数据管理问题" class="headerlink" title="1.1 微服务和分布式数据管理问题"></a>1.1 微服务和分布式数据管理问题</h1><p>单体式应用一般都会有一个关系型数据库，由此带来的好处是应用可以使用 ACID transactions，可以带来一些重要的操作特性：</p>
+          <h4 id="什么是循环依赖-如何解决"><a href="#什么是循环依赖-如何解决" class="headerlink" title="什么是循环依赖? 如何解决?"></a>什么是循环依赖? 如何解决?</h4><p>有3个类，A、B、C</p>
+<p>A-&gt;B-&gt;C <strong>A依赖B，B依赖C [属性注入]</strong></p>
+<p>C-&gt;B  <strong>C依赖B</strong></p>
+<p>正常情况下，B、C相互依赖，spring通过<strong>三级缓存</strong>来解决属性注入的循环依赖问题，</p>
+<p><u><strong>B、C类实例必须是单例的，spring没法解决prototype和构造器注入的循环依赖问题</strong></u></p>
+<h4 id="EnableAsync-Async和循环依赖"><a href="#EnableAsync-Async和循环依赖" class="headerlink" title="@EnableAsync @Async和循环依赖"></a>@EnableAsync @Async和循环依赖</h4><p>此时如果类B或者类B方法使用@Async进行标记，使此方法可以异步执行，则会导致循环依赖问题。</p>
+<p><strong>为何会出现此问题？</strong></p>
+<p>spring bean实例化过程</p>
 <ol>
-<li>原子性 – 任何改变都是原子性的</li>
-<li>一致性 – 数据库状态一直是一致性的</li>
-<li>隔离性 – 即使交易并发执行，看起来也是串行的</li>
-<li>Durable – 一旦交易提交了就不可回滚</li>
+<li>实例化</li>
+<li>属性赋值</li>
+<li>初始化</li>
+<li>使用和销毁</li>
 </ol>
-<p>鉴于以上特性，应用可以简化为：开始一个交易，改变（插入，删除，更新）很多行，然后提交这些交易。</p>
-<p>使用关系型数据库带来另外一个优势在于提供 SQL（功能强大，可声明的，表转化的查询语言）支持。用户可以非常容易通过查询将多个表的数据组合起来，RDBMS 查询调度器决定最佳实现方式，用户不需要担心例如如何访问数据库等底层问题。另外，因为所有应用的数据都在一个数据库中，很容易去查询。</p>
-<p>然而，对于微服务架构来说，数据访问变得非常复杂，这是因为数据都是微服务私有的，唯一可访问的方式就是通过 API。这种打包数据访问方式使得微服务之间松耦合，并且彼此之间独立。如果多个服务访问同一个数据，schema 会更新访问时间，并在所有服务之间进行协调。</p>
-<p>更甚于，不同的微服务经常使用不同的数据库。应用会产生各种不同数据，关系型数据库并不一定是最佳选择。某些场景，某个 NoSQL 数据库可能提供更方便的数据模型，提供更加的性能和可扩展性。例如，某个产生和查询字符串的应用采用例如 Elasticsearch 的字符搜索引擎。同样的，某个产生社交图片数据的应用可以采用图片数据库，例如，Neo4j ；因此，基于微服务的应用一般都使用 SQL 和 NoSQL 结合的数据库，也就是被称为 polyglot persistence 的方法。</p>
-<p>分区的，polyglot-persistent 架构用于存储数据有许多优势，包括松耦合服务和更佳性能和可扩展性。然而，随之而来的则是分布式数据管理带来的挑战。</p>
-<p>第一个挑战在于如何完成一笔交易的同时保持多个服务之间数据一致性。之所以会有这个问题，我们以一个在线 B2B 商店为例，客户服务维护包括客户的各种信息，例如 credit lines 。订单服务管理订单，需要验证某个新订单与客户的信用限制没有冲突。在单一式应用中，订单服务只需要使用 ACID 交易就可以检查可用信用和创建订单。</p>
-<p>相反的，微服务架构下，订单和客户表分别是相对应服务的私有表，如下图所示：</p>
-<p><img src="./images/Private-table-of-the-corresponding-service.png" alt="service table"></p>
-<p>订单服务不能直接访问客户表，只能通过客户服务发布的 API 来访问。订单服务也可以使用 distributed transactions, 也就是周知的两阶段提交 (2PC)。然而，2PC 在现在应用中不是可选性。根据 CAP 理论，必须在可用性（availability）和 ACID 一致性（consistency）之间做出选择，availability 一般是更好的选择。但是，许多现代科技，例如许多 NoSQL 数据库，并不支持 2PC。在服务和数据库之间维护数据一致性是非常根本的需求，因此我们需要找其他的方案。</p>
-<p>第二个挑战是如何完成从多个服务中搜索数据。例如，设想应用需要显示客户和他的订单。如果订单服务提供 API 来接受用户订单信息，那么用户可以使用类应用型的 join 操作接收数据。应用从用户服务接受用户信息，从订单服务接受此用户订单。假设，订单服务只支持通过私有键（key）来查询订单（也许是在使用只支持基于主键接受的 NoSQL 数据库），此时，没有合适的方法来接收所需数据。</p>
-<h1 id="1-2-事件驱动架构"><a href="#1-2-事件驱动架构" class="headerlink" title="1.2 事件驱动架构"></a>1.2 事件驱动架构</h1><p>对许多应用来说，这个解决方案就是使用事件驱动架构（event-driven architecture）。在这种架构中，当某件重要事情发生时，微服务会发布一个事件，例如更新一个业务实体。当订阅这些事件的微服务接收此事件时，就可以更新自己的业务实体，也可能会引发更多的时间发布。</p>
-<p>可以使用事件来实现跨多服务的业务交易。交易一般由一系列步骤构成，每一步骤都由一个更新业务实体的微服务和发布激活下一步骤的事件构成。下图展现如何使用事件驱动方法，在创建订单时检查信用可用度，微服务通过消息代理（Messsage Broker）来交换事件。</p>
-<ol>
-<li>订单服务创建一个带有 NEW 状态的 Order （订单），发布了一个 “Order Created Event（创建订单）” 的事件。</li>
-</ol>
-<p><img src="./images/Order-Created-Event.png" alt="Order-Created-Event"></p>
-<ol start="2">
-<li>客户服务消费 Order Created Event 事件，为此订单预留信用，发布 “Credit Reserved Event（信用预留）” 事件。</li>
-</ol>
-<p><img src="./images/Credit-Reserved-Event.png" alt="Credit-Reserved-Event"></p>
-<ol start="3">
-<li>订单服务消费 Credit Reserved Event ，改变订单的状态为 OPEN。</li>
-</ol>
-<p><img src="./images/Status-is-OPEN.png" alt="Status-is-OPEN"></p>
-<p>更复杂的场景可以引入更多步骤，例如在检查用户信用的同时预留库存等。</p>
-<p>考虑到（a）每个服务原子性更新数据库和发布事件，然后，（b）消息代理确保事件传递至少一次，然后可以跨多个服务完成业务交易（此交易不是 ACID 交易）。这种模式提供弱确定性，例如最终一致性 eventual consistency。这种交易类型被称作 BASE model。</p>
-<p>亦可以使用事件来维护不同微服务拥有数据预连接（pre-join）的实现视图。维护此视图的服务订阅相关事件并且更新视图。例如，客户订单视图更新服务（维护客户订单视图）会订阅由客户服务和订单服务发布的事件。</p>
-<p><img src="./images/pre-join.png" alt="pre-join"></p>
-<p>当客户订单视图更新服务收到客户或者订单事件，就会更新 客户订单视图数据集。可以使用文档数据库（例如 MongoDB）来实现客户订单视图，为每个用户存储一个文档。客户订单视图查询服务负责响应对客户以及最近订单（通过查询客户订单视图数据集）的查询。</p>
-<p>事件驱动架构也是既有优点也有缺点，此架构可以使得交易跨多个服务且提供最终一致性，并且可以使应用维护最终视图；而缺点在于编程模式比 ACID 交易模式更加复杂：为了从应用层级失效中恢复，还需要完成补偿性交易，例如，如果信用检查不成功则必须取消订单；另外，应用必须应对不一致的数据，这是因为临时（in-flight）交易造成的改变是可见的，另外当应用读取未更新的最终视图时也会遇见数据不一致问题。另外一个缺点在于订阅者必须检测和忽略冗余事件。</p>
-<h1 id="1-3-原子操作-Achieving-Atomicity"><a href="#1-3-原子操作-Achieving-Atomicity" class="headerlink" title="1.3 原子操作 Achieving Atomicity"></a>1.3 原子操作 Achieving Atomicity</h1><p>事件驱动架构还会碰到数据库更新和发布事件原子性问题。例如，订单服务必须向 ORDER 表插入一行，然后发布 Order Created event，这两个操作需要原子性。如果更新数据库后，服务瘫了（crashes）造成事件未能发布，系统变成不一致状态。确保原子操作的标准方式是使用一个分布式交易，其中包括数据库和消息代理。然而，基于以上描述的 CAP 理论，这却并不是我们想要的。</p>
-<h2 id="1-3-1-使用本地交易发布事件"><a href="#1-3-1-使用本地交易发布事件" class="headerlink" title="1.3.1 使用本地交易发布事件"></a>1.3.1 使用本地交易发布事件</h2><p>获得原子性的一个方法是对发布事件应用采用 multi-step process involving only local transactions，技巧在于一个 EVENT 表，此表在存储业务实体数据库中起到消息列表功能。应用发起一个（本地）数据库交易，更新业务实体状态，向 EVENT 表中插入一个事件，然后提交此次交易。另外一个独立应用进程或者线程查询此 EVENT 表，向消息代理发布事件，然后使用本地交易标志此事件为已发布，如下图所示：</p>
-<p><img src="./images/multi-step-process.png" alt="multi-step process"></p>
-<p>订单服务向 ORDER 表插入一行，然后向 EVENT 表中插入 Order Created event，事件发布线程或者进程查询 EVENT 表，请求未发布事件，发布他们，然后更新 EVENT 表标志此事件为已发布。</p>
-<p>此方法也是优缺点都有。优点是可以确保事件发布不依赖于 2PC，应用发布业务层级事件而不需要推断他们发生了什么；而缺点在于此方法由于开发人员必须牢记发布事件，因此有可能出现错误。另外此方法对于某些使用 NoSQL 数据库的应用是个挑战，因为 NoSQL 本身交易和查询能力有限。</p>
-<p>此方法因为应用采用了本地交易更新状态和发布事件而不需要 2PC，现在再看看另外一种应用简单更新状态获得原子性的方法。</p>
-<h2 id="1-3-2-挖掘数据库交易日志"><a href="#1-3-2-挖掘数据库交易日志" class="headerlink" title="1.3.2 挖掘数据库交易日志"></a>1.3.2 挖掘数据库交易日志</h2><p>另外一种不需要 2PC 而获得线程或者进程发布事件原子性的方式就是挖掘数据库交易或者提交日志。应用更新数据库，在数据库交易日志中产生变化，交易日志挖掘进程或者线程读这些交易日志，将日志发布给消息代理。如下图所见：</p>
-<p><img src="./images/No-2PC-required.png" alt="No-2PC-required"></p>
-<p>此方法的例子如 LinkedIn Databus 项目，Databus 挖掘 Oracle 交易日志，根据变化发布事件，LinkedIn 使用 Databus 来保证系统内各记录之间的一致性。</p>
-<p>另外的例子如：AWS 的 streams mechanism in AWS DynamoDB，是一个可管理的 NoSQL 数据库，一个 DynamoDB 流是由过去 24 小时对数据库表基于时序的变化（创建，更新和删除操作），应用可以从流中读取这些变化，然后以事件方式发布这些变化。</p>
-<p>交易日志挖掘也是优缺点并存。优点是确保每次更新发布事件不依赖于 2PC。交易日志挖掘可以通过将发布事件和应用业务逻辑分离开得到简化；而主要缺点在于交易日志对不同数据库有不同格式，甚至不同数据库版本也有不同格式；而且很难从底层交易日志更新记录转换为高层业务事件。</p>
-<p>交易日志挖掘方法通过应用直接更新数据库而不需要 2PC 介入。下面我们再看一种完全不同的方法：不需要更新只依赖事件的方法。</p>
-<h2 id="1-3-3-使用事件源"><a href="#1-3-3-使用事件源" class="headerlink" title="1.3.3 使用事件源"></a>1.3.3 使用事件源</h2><p>Event sourcing （事件源）通过使用根本不同的事件中心方式来获得不需 2PC 的原子性，保证业务实体的一致性。 这种应用保存业务实体一系列状态改变事件，而不是存储实体现在的状态。应用可以通过重放事件来重建实体现在状态。只要业务实体发生变化，新事件就会添加到时间表中。因为保存事件是单一操作，因此肯定是原子性的。</p>
-<p>为了理解事件源工作方式，考虑事件实体作为一个例子。传统方式中，每个订单映射为 ORDER 表中一行，例如在 ORDER_LINE_ITEM 表中。但是对于事件源方式，订单服务以事件状态改变方式存储一个订单：创建的，已批准的，已发货的，取消的；每个事件包括足够数据来重建订单状态。</p>
-<p><img src="./images/Event-sourcing.png" alt="Event-sourcing"></p>
-<p>事件是长期保存在事件数据库中，提供 API 添加和获取实体事件。事件存储跟之前描述的消息代理类似，提供 API 来订阅事件。事件存储将事件递送到所有感兴趣的订阅者，事件存储是事件驱动微服务架构的基干。</p>
-<p>事件源方法有很多优点：解决了事件驱动架构关键问题，使得只要有状态变化就可以可靠地发布事件，也就解决了微服务架构中数据一致性问题。另外，因为是持久化事件而不是对象，也就避免了 object relational impedance mismatch problem。</p>
-<p>数据源方法提供了 100%可靠的业务实体变化监控日志，使得获取任何时点实体状态成为可能。另外，事件源方法可以使得业务逻辑可以由事件交换的松耦合业务实体构成。这些优势使得单体应用移植到微服务架构变的相对容易。</p>
-<p>事件源方法也有不少缺点，因为采用不同或者不太熟悉的变成模式，使得重新学习不太容易；事件存储只支持主键查询业务实体，必须使用 Command Query Responsibility Segregation (CQRS) 来完成查询业务，因此，应用必须处理最终一致数据。</p>
-<h1 id="1-4-总结"><a href="#1-4-总结" class="headerlink" title="1.4 总结"></a>1.4 总结</h1><p>在微服务架构中，每个微服务都有自己私有的数据集。不同微服务可能使用不同的 SQL 或者 NoSQL 数据库。尽管数据库架构有很强的优势，但是也面对数据分布式管理的挑战。第一个挑战就是如何在多服务之间维护业务交易一致性；第二个挑战是如何从多服务环境中获取一致性数据。</p>
-<p>最佳解决办法是采用事件驱动架构。其中碰到的一个挑战是如何原子性的更新状态和发布事件。有几种方法可以解决此问题，包括将数据库视为消息队列、交易日志挖掘和事件源。</p>
+<p>Spring创建bean过程，以及和@Async一同使用，导致循环依赖问题解释如下</p>
+<p>org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#doCreateBean</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> Object <span class="title">doCreateBean</span><span class="params">(String beanName, RootBeanDefinition mbd, @Nullable Object[] args)</span></span></span><br><span class="line"><span class="function">			<span class="keyword">throws</span> BeanCreationException </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">//1⃣️ 实例化bean</span></span><br><span class="line">		BeanWrapper instanceWrapper = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">if</span> (mbd.isSingleton()) &#123;</span><br><span class="line">			instanceWrapper = <span class="keyword">this</span>.factoryBeanInstanceCache.remove(beanName);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (instanceWrapper == <span class="keyword">null</span>) &#123;</span><br><span class="line">			instanceWrapper = createBeanInstance(beanName, mbd, args);</span><br><span class="line">		&#125;</span><br><span class="line">		Object bean = instanceWrapper.getWrappedInstance();</span><br><span class="line">		Class&lt;?&gt; beanType = instanceWrapper.getWrappedClass();</span><br><span class="line">		<span class="keyword">if</span> (beanType != NullBean.class) &#123;</span><br><span class="line">			mbd.resolvedTargetType = beanType;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Allow post-processors to modify the merged bean definition.</span></span><br><span class="line">		<span class="keyword">synchronized</span> (mbd.postProcessingLock) &#123;</span><br><span class="line">			<span class="keyword">if</span> (!mbd.postProcessed) &#123;</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">					<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(mbd.getResourceDescription(), beanName,</span><br><span class="line">							<span class="string">"Post-processing of merged bean definition failed"</span>, ex);</span><br><span class="line">				&#125;</span><br><span class="line">				mbd.postProcessed = <span class="keyword">true</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Eagerly cache singletons to be able to resolve circular references</span></span><br><span class="line">		<span class="comment">// even when triggered by lifecycle interfaces like BeanFactoryAware.</span></span><br><span class="line">    <span class="comment">//2⃣️判断是否提前暴露bean, true就会添加到singletonFactories缓存中</span></span><br><span class="line">		<span class="keyword">boolean</span> earlySingletonExposure = (mbd.isSingleton() &amp;&amp; <span class="keyword">this</span>.allowCircularReferences &amp;&amp;</span><br><span class="line">				isSingletonCurrentlyInCreation(beanName));</span><br><span class="line">		<span class="keyword">if</span> (earlySingletonExposure) &#123;</span><br><span class="line">			<span class="keyword">if</span> (logger.isTraceEnabled()) &#123;</span><br><span class="line">				logger.trace(<span class="string">"Eagerly caching bean '"</span> + beanName +</span><br><span class="line">						<span class="string">"' to allow for resolving potential circular references"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			addSingletonFactory(beanName, () -&gt; getEarlyBeanReference(beanName, mbd, bean));</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Initialize the bean instance.</span></span><br><span class="line">		Object exposedObject = bean;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">//3⃣️属性赋值</span></span><br><span class="line">			populateBean(beanName, mbd, instanceWrapper);</span><br><span class="line">      <span class="comment">//4⃣️初始化，init方法等，循环依赖+@Async时，就是因为在这里，会执行AsyncAnnotationBeanPostProcessor的postProcessAfterInitialization方法，判断此bean是否满足被代理proxy条件，即方法或类上是否有@Async注解，如果存在注解，则返回的是被Proxy的bean</span></span><br><span class="line">			exposedObject = initializeBean(beanName, exposedObject, mbd);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">			<span class="keyword">if</span> (ex <span class="keyword">instanceof</span> BeanCreationException &amp;&amp; beanName.equals(((BeanCreationException) ex).getBeanName())) &#123;</span><br><span class="line">				<span class="keyword">throw</span> (BeanCreationException) ex;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span> &#123;</span><br><span class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(</span><br><span class="line">						mbd.getResourceDescription(), beanName, <span class="string">"Initialization of bean failed"</span>, ex);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (earlySingletonExposure) &#123;</span><br><span class="line">			Object earlySingletonReference = getSingleton(beanName, <span class="keyword">false</span>);</span><br><span class="line">			<span class="keyword">if</span> (earlySingletonReference != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">//5⃣️在此判断，如果初始化返回的bean和实例化的bean不相等，需要判断循环依赖的bean，是否被已创建完成的bean依赖，</span></span><br><span class="line">        <span class="comment">//此时类C已经注入了提前曝光的类B实例，但和exposedObject不同版本，启动就会报错。</span></span><br><span class="line">				<span class="keyword">if</span> (exposedObject == bean) &#123;</span><br><span class="line">					exposedObject = earlySingletonReference;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span> <span class="keyword">if</span> (!<span class="keyword">this</span>.allowRawInjectionDespiteWrapping &amp;&amp; hasDependentBean(beanName)) &#123;</span><br><span class="line">					String[] dependentBeans = getDependentBeans(beanName);</span><br><span class="line">					Set&lt;String&gt; actualDependentBeans = <span class="keyword">new</span> LinkedHashSet&lt;&gt;(dependentBeans.length);</span><br><span class="line">					<span class="keyword">for</span> (String dependentBean : dependentBeans) &#123;</span><br><span class="line">						<span class="keyword">if</span> (!removeSingletonIfCreatedForTypeCheckOnly(dependentBean)) &#123;</span><br><span class="line">							actualDependentBeans.add(dependentBean);</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">if</span> (!actualDependentBeans.isEmpty()) &#123;</span><br><span class="line">						<span class="keyword">throw</span> <span class="keyword">new</span> BeanCurrentlyInCreationException(beanName,</span><br><span class="line">								<span class="string">"Bean with name '"</span> + beanName + <span class="string">"' has been injected into other beans ["</span> +</span><br><span class="line">								StringUtils.collectionToCommaDelimitedString(actualDependentBeans) +</span><br><span class="line">								<span class="string">"] in its raw version as part of a circular reference, but has eventually been "</span> +</span><br><span class="line">								<span class="string">"wrapped. This means that said other beans do not use the final version of the "</span> +</span><br><span class="line">								<span class="string">"bean. This is often the result of over-eager type matching - consider using "</span> +</span><br><span class="line">								<span class="string">"'getBeanNamesForType' with the 'allowEagerInit' flag turned off, for example."</span>);</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Register bean as disposable.</span></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">//6⃣️bean销毁方法</span></span><br><span class="line">			registerDisposableBeanIfNecessary(beanName, bean, mbd);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (BeanDefinitionValidationException ex) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(</span><br><span class="line">					mbd.getResourceDescription(), beanName, <span class="string">"Invalid destruction signature"</span>, ex);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> exposedObject;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="EnableAsync核心类"><a href="#EnableAsync核心类" class="headerlink" title="@EnableAsync核心类"></a>@EnableAsync核心类</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">AsyncAnnotationBeanPostProcessor</span><br><span class="line">AnnotationClassFilter</span><br><span class="line">org.springframework.aop.support.annotation.AnnotationMatchingPointcut.AnnotationCandidateClassFilter</span><br><span class="line">AnnotationAsyncExecutionInterceptor</span><br></pre></td></tr></table></figure>
+
+<h4 id="bean属性注入核心代码"><a href="#bean属性注入核心代码" class="headerlink" title="bean属性注入核心代码"></a>bean属性注入核心代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">AutowiredAnnotationBeanPostProcessor</span><br><span class="line">InjectionMetadata</span><br><span class="line">AutowiredFieldElement</span><br><span class="line">DefaultListableBeanFactory.resolveDependency</span><br><span class="line">DependencyDescriptor</span><br><span class="line">AnnotationAwareAspectJAutoProxyCreator</span><br><span class="line">AbstractAutowireCapableBeanFactory</span><br><span class="line">AbstractBeanFactory</span><br><span class="line">AbstractAutowireCapableBeanFactory</span><br><span class="line">DefaultListableBeanFactory</span><br></pre></td></tr></table></figure>
+
+<h4 id="bean实例化过程中使用到相关的BeanPostProcessor相关类"><a href="#bean实例化过程中使用到相关的BeanPostProcessor相关类" class="headerlink" title="bean实例化过程中使用到相关的BeanPostProcessor相关类"></a>bean实例化过程中使用到相关的BeanPostProcessor相关类</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">instantiation beanpostprocessor（getBeanPostProcessorCache().instantiationAware）</span><br><span class="line"></span><br><span class="line">- 0 = &#123;ConfigurationClassPostProcessor$ImportAwareBeanPostProcessor@2359&#125; </span><br><span class="line">- 1 = &#123;CommonAnnotationBeanPostProcessor@2306&#125; </span><br><span class="line">- 2 = &#123;AutowiredAnnotationBeanPostProcessor@2007&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">getBeanPostProcessorCache().mergedDefinition</span><br><span class="line"></span><br><span class="line">1. 0 = &#123;CommonAnnotationBeanPostProcessor@2306&#125; </span><br><span class="line">2. 1 = &#123;AutowiredAnnotationBeanPostProcessor@2007&#125; </span><br><span class="line">3. 2 = &#123;ApplicationListenerDetector@2795&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">getBeanPostProcessorCache().smartInstantiationAware</span><br><span class="line"></span><br><span class="line">1. 0 = &#123;AnnotationAwareAspectJAutoProxyCreator@1846&#125;</span><br><span class="line">2. 1 = &#123;AutowiredAnnotationBeanPostProcessor@2068&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">getBeanPostProcessors()</span><br><span class="line"></span><br><span class="line">- 0 = &#123;ApplicationContextAwareProcessor@2478&#125; </span><br><span class="line">- 1 = &#123;ConfigurationClassPostProcessor$ImportAwareBeanPostProcessor@2174&#125; </span><br><span class="line">- 2 = &#123;PostProcessorRegistrationDelegate$BeanPostProcessorChecker@2479&#125; </span><br><span class="line">- 3 = &#123;AnnotationAwareAspectJAutoProxyCreator@2273&#125; &quot;proxyTargetClass=true; optimize=false; opaque=false; exposeProxy=false; frozen=false&quot;</span><br><span class="line">- 4 = &#123;AsyncAnnotationBeanPostProcessor@2191&#125; &quot;proxyTargetClass=false; optimize=false; opaque=false; exposeProxy=false; frozen=false&quot;</span><br><span class="line">- 5 = &#123;CommonAnnotationBeanPostProcessor@2038&#125; </span><br><span class="line">- 6 = &#123;AutowiredAnnotationBeanPostProcessor@2010&#125; </span><br><span class="line">- 7 = &#123;ApplicationListenerDetector@2480&#125;</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -265,7 +232,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/21/github/docs/micro-services/choose-microservice-deployment-strategy/">
+    <link itemprop="mainEntityOfPage" href="/2021/04/08/java/arthas系列优秀文章/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -279,7 +246,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/04/21/github/docs/micro-services/choose-microservice-deployment-strategy/" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/2021/04/08/java/arthas系列优秀文章/" class="post-title-link" itemprop="url">arthas系列优秀文章</a>
         </h2>
 
         <div class="post-meta">
@@ -289,7 +256,81 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-04-21 15:37:08" itemprop="dateCreated datePublished" datetime="2021-04-21T15:37:08+08:00">2021-04-21</time>
+              <time title="Created: 2021-04-08 10:44:02" itemprop="dateCreated datePublished" datetime="2021-04-08T10:44:02+08:00">2021-04-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-13 16:59:00" itemprop="dateModified" datetime="2021-04-13T16:59:00+08:00">2021-04-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://blog.csdn.net/alisystemsoftware/article/details/109159529" target="_blank" rel="noopener">工商银行打造在线诊断平台的探索与实践</a></p>
+<h4 id="arthas命令"><a href="#arthas命令" class="headerlink" title="arthas命令"></a>arthas命令</h4><h4 id="sc"><a href="#sc" class="headerlink" title="sc"></a>sc</h4><p>查看jvm已加载的类信息</p>
+<h4 id="sm"><a href="#sm" class="headerlink" title="sm"></a>sm</h4><p>查看jvm已加载类的方法信息</p>
+<h5 id="monitor"><a href="#monitor" class="headerlink" title="monitor"></a>monitor</h5><p>方法执行监控，统计被监控方法执行总数、成功、失败、失败率等数据</p>
+<h5 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h5><p>输出当前方法被调用的调用路径</p>
+<p>输出当前方法堆栈信息</p>
+<h5 id="trace"><a href="#trace" class="headerlink" title="trace"></a>trace</h5><p>方法内部调用滤镜，并输出方法路径上的每个节点耗时</p>
+<h5 id="watch"><a href="#watch" class="headerlink" title="watch"></a>watch</h5><p>方法执行数据观测</p>
+<p>观察：入参、返回值、抛出异常</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/03/31/java/jvm调优工具/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/31/java/jvm调优工具/" class="post-title-link" itemprop="url">JVM调优工具</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-03-31 18:44:02 / Modified: 17:50:55" itemprop="dateCreated datePublished" datetime="2021-03-31T18:44:02+08:00">2021-03-31</time>
             </span>
 
           
@@ -303,137 +344,796 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>部署一个单体式应用意味运行大型应用的多个副本，典型的提供若干个（N）服务器（物理或者虚拟），运行若干个（M）个应用实例。部署单体式应用不会很直接，但是肯定比部署微服务应用简单些。</p>
-<p>一个微服务应用由上百个服务构成，服务可以采用不同语言和框架分别写就。每个服务都是一个单一应用，可以有自己的部署、资源、扩展和监控需求。例如，可以根据服务需求运行若干个服务实例，除此之外，每个实例必须有自己的 CPU，内存和 I/O 资源。尽管很复杂，但是更挑战的是服务部署必须快速、可靠和性价比高。</p>
-<p>有一些微服务部署的模式，先讨论一下每个主机多服务实例的模式。</p>
-<h1 id="单主机多服务实例模式"><a href="#单主机多服务实例模式" class="headerlink" title="单主机多服务实例模式"></a>单主机多服务实例模式</h1><p>部署微服务的一种方法就是单主机多服务实例模式，使用这种模式，需要提供若干台物理或者虚拟机，每台机器上运行多个服务实例。很多情况下，这是传统的应用部署方法。每个服务实例运行一个或者多个主机的 well-known 端口，主机可以看做宠物。</p>
-<p>下图展示的是这种架构：</p>
-<p><img src="./images/deployment-strategy-1.png" alt="deployment-strategy-1"></p>
-<p>这种模式有一些参数，一个参数代表每个服务实例由多少进程构成。例如，需要在 Apache Tomcat Server 上部署一个 Java 服务实例作为 web 应用。一个 Node.js 服务实例可能有一个父进程和若干个子进程构成。</p>
-<p>另外一个参数定义同一进程组内有多少服务实例运行。例如，可以在同一个 Apache Tomcat Server 上运行多个 Java web 应用，或者在同一个 OSGI 容器内运行多个 OSGI 捆绑实例。</p>
-<p>单主机多服务实例模式也是优缺点并存。主要优点在于资源利用有效性。多服务实例共享服务器和操作系统，如果进程组运行多个服务实例效率会更高，例如，多个 web 应用共享同一个 Apache Tomcat Server 和 JVM。</p>
-<p>另一个优点在于部署服务实例很快。只需将服务拷贝到主机并启动它。如果服务用 Java 写的，只需要拷贝 JAR 或者 WAR 文件即可。对于其它语言，例如 Node.js 或者 Ruby，需要拷贝源码。也就是说网络负载很低。</p>
-<p>因为没有太多负载，启动服务很快。如果服务是自包含的进程，只需要启动就可以；否则，如果是运行在容器进程组中的某个服务实例，则需要动态部署进容器中，或者重启容器。</p>
-<p>除了上述优点外，单主机多服务实例也有缺陷。其中一个主要缺点是服务实例间很少或者没有隔离，除非每个服务实例是独立进程。如果想精确监控每个服务实例资源使用，就不能限制每个实例资源使用。因此有可能造成某个糟糕的服务实例占用了主机的所有内存或者 CPU。</p>
-<p>同一进程内多服务实例没有隔离。所有实例有可能，例如，共享同一个 JVM heap。某个糟糕服务实例很容易攻击同一进程中其它服务；更甚至于，有可能无法监控每个服务实例使用的资源情况。</p>
-<p>另一个严重问题在于运维团队必须知道如何部署的详细步骤。服务可以用不同语言和框架写成，因此开发团队肯定有很多需要跟运维团队沟通事项。其中复杂性增加了部署过程中出错的可能性。</p>
-<p>可以看到，尽管熟悉，但是单主机多服务实例有很多严重缺陷。下面看看是否有其他部署微服务方式能够避免这些问题。</p>
-<h1 id="单主机单服务实例模式"><a href="#单主机单服务实例模式" class="headerlink" title="单主机单服务实例模式"></a>单主机单服务实例模式</h1><p>另外一种部署微服务方式是单主机单实例模式。当使用这种模式，每个主机上服务实例都是各自独立的。有两种不同实现模式：单虚拟机单实例和单容器单实例。</p>
-<h2 id="单虚拟机单实例模式"><a href="#单虚拟机单实例模式" class="headerlink" title="单虚拟机单实例模式"></a>单虚拟机单实例模式</h2><p>但是用单虚拟机单实例模式，一般将服务打包成虚拟机映像（image），例如一个 Amazon EC2 AMI。每个服务实例是一个使用此映像启动的 VM（例如，EC2 实例）。下图展示了此架构：</p>
-<p><img src="./images/deployment-strategy-2.png" alt="deployment-strategy-2"></p>
-<p>Netfix 采用这种架构部署 video streaming service。Netfix 使用 Aminator 将每个服务打包成一个 EC2 AMI。每个运行服务实例就是一个 EC2 实例。</p>
-<p>有很多工具可以用来搭建自己的 VMs。可以配置持续集成（CI）服务（例如，Jenkins）避免 Aminator 将服务打包成 EC2 AMI。packer.io 是自动虚机映像创建的另外一种选择。跟 Aminator 不同，它支持一系列虚拟化技术，例如 EC2，DigitalOcean，VirtualBox 和 VMware。​</p>
-<p>Boxfuse 公司有一个创新方法创建虚机映像，克服了如下缺陷。Boxfuse 将 java 应用打包成最小虚机映像，它们创建迅速，启动很快，因为对外暴露服务接口少而更加安全。</p>
-<p>CloudNative 公司有一个用于创建 EC2 AMI 的 SaaS 应用，Bakery。用户微服务架构通过测试后，可以配置自己的 CI 服务器激活 Bakery。Bakery 将服务打包成 AMI。使用如 Bakery 的 SaaS 应用意味着用户不需要浪费时间在设置自己的 AMI 创建架构。</p>
-<p>每虚拟机服务实例模式有许多优势，主要的 VM 优势在于每个服务实例都是完全独立运行的，都有各自独立的 CPU 和内存而不会被其它服务占用。</p>
-<p>另外一个好处在于用户可以使用成熟云架构，例如 AWS 提供的，云服务都提供如负载均衡和扩展性等有用功能。</p>
-<p>还有一个好处在于服务实施技术被自包含了。一旦服务被打包成 VM 就成为一个黑盒子。VM 的管理 API 成为部署服务的 API，部署成为一个非常简单和可靠的事情。</p>
-<p>单虚拟机单实例模式也有缺点。一个缺点就是资源利用效率不高。每个服务实例占用整个虚机的资源，包括操作系统。而且，在一个典型的公有 IaaS 环境，虚机资源都是标准化的，有可能未被充分利用。</p>
-<p>而且，公有 IaaS 根据 VM 来收费，而不管虚机是否繁忙；例如 AWS 提供了自动扩展功能，但是对随需应用缺乏快速响应，使得用户不得不多部署虚机，从而增加了部署费用。</p>
-<p>另外一个缺点在于部署服务新版本比较慢。虚机镜像因为大小原因创建起来比较慢，同样原因，虚机初始化也比较慢，操作系统启动也需要时间。但是这并不一直是这样，一些轻量级虚机，例如使用 Boxfuse 创建的虚机，就比较快。</p>
-<p>第三个缺点是对于运维团队，它们负责许多客制化工作。除非使用如 Boxfuse 之类的工具，可以帮助减轻大量创建和管理虚机的工作；否则会占用大量时间从事与核心业务不太无关的工作。</p>
-<p>那么我们来看看另外一种仍然具有虚机特性，但是比较轻量的微服务部署方法。</p>
-<h1 id="单容器单服务实例模式"><a href="#单容器单服务实例模式" class="headerlink" title="单容器单服务实例模式"></a>单容器单服务实例模式</h1><p>当使用这种模式时，每个服务实例都运行在各自容器中。容器是运行在操作系统层面的虚拟化机制。一个容器包含若干运行在沙箱中的进程。从进程角度来看，他们有各自的命名空间和根文件系统；可以限制容器的内存和 CPU 资源。某些容器还具有 I/O 限制，这类容器技术包括 Docker 和 Solaris Zones。</p>
-<p>下图展示了这种模式：</p>
-<p><img src="./images/deployment-strategy-3.png" alt="deployment-strategy-3"></p>
-<p>使用这种模式需要将服务打包成容器映像。一个容器映像是一个运行包含服务所需库和应用的文件系统 ​。某些容器映像由完整的 linux 根文件系统组成，其它则是轻量级的。例如，为了部署 Java 服务，需要创建包含 Java 运行库的容器映像，也许还要包含 Apache Tomcat server，以及编译过的 Java 应用。</p>
-<p>一旦将服务打包成容器映像，就需要启动若干容器。一般在一个物理机或者虚拟机上运行多个容器，可能需要集群管理系统，例如 k8s 或者 Marathon，来管理容器。集群管理系统将主机作为资源池，根据每个容器对资源的需求，决定将容器调度到那个主机上。</p>
-<p>单容器单服务实例模式也是优缺点都有。容器的优点跟虚机很相似，服务实例之间完全独立，可以很容易监控每个容器消耗的资源。跟虚机相似，容器使用隔离技术部署服务。容器管理 API 也可以作为管理服务的 API。</p>
-<p>然而，跟虚机不一样，容器是一个轻量级技术。容器映像创建起来很快，例如，在笔记本电脑上，将 Spring Boot 应用打包成容器映像只需要 5 秒钟。因为不需要操作系统启动机制，容器启动也很快。当容器启动时，后台服务就启动了。</p>
-<p>使用容器也有一些缺点。尽管容器架构发展迅速，但是还是不如虚机架构成熟。而且由于容器之间共享 host OS 内核因此并不像虚机那么安全。</p>
-<p>另外，容器技术将会对管理容器映像提出许多客制化需求，除非使用如 Google Container Engine 或者 Amazon EC2 Container Service (ECS)，否则用户将同时需要管理容器架构以及虚机架构。</p>
-<p>第三，容器经常被部署在按照虚机收费的架构上，很显然，客户也会增加部署费用来应对负载的增长。</p>
-<p>有趣的是，容器和虚机之间的区别越来越模糊。如前所述，Boxfuse 虚机启动创建都很快，Clear Container 技术面向创建轻量级虚机。unikernel 公司的技术也引起大家关注，Docker 最近收购了 Unikernel 公司。</p>
-<p>除了这些之外，server-less 部署技术，避免了前述容器和 VM 技术的缺陷，吸引了越来越多的注意。下面我们来看看。</p>
-<h1 id="Serverless-部署"><a href="#Serverless-部署" class="headerlink" title="Serverless 部署"></a>Serverless 部署</h1><p>AWS Lambda 是 serverless 部署技术的例子，支持 Java，Node.js 和 Python 服务；需要将服务打包成 ZIP 文件上载到 AWS Lambda 就可以部署。可以提供元数据，提供处理服务请求函数的名字（一个事件）。AWS Lambda 自动运行处理请求足够多的微服务，然而只根据运行时间和消耗内存量来计费。当然细节决定成败，AWS Lambda 也有限制。但是大家都不需要担心服务器，虚拟机或者容器内的任何方面绝对吸引人。</p>
-<p>Lambda 函数 是无状态服务。一般通过激活 AWS 服务处理请求。例如，当映像上载到 S3 bucket 激活 Lambda 函数后，就可以在 DynamoDB 映像表中插入一个条目，给 Kinesis 流发布一条消息，触发映像处理动作。Lambda 函数也可以通过第三方 web 服务激活。</p>
-<p>有四种方法激活 Lambda 函数：</p>
-<ul>
-<li>直接方式，使用 web 服务请求</li>
-<li>自动方式，回应例如 AWS S3，DynamoDB，Kinesis 或者 Simple Email Service 等产生的事件</li>
-<li>自动方式，通过 AWS API 网关来处理应用客户端发出的 HTTP 请求 ​</li>
-<li>定时方式，通过 cron 响应 ​–很像定时器方式</li>
+          <h4 id="内存分析"><a href="#内存分析" class="headerlink" title="内存分析"></a>内存分析</h4><h5 id="dump-内存"><a href="#dump-内存" class="headerlink" title="dump 内存"></a>dump 内存</h5><p>获取内存的3中方法</p>
+<p>1、获取内存详情：jmap -dump:format=b,file=e.bin pid</p>
+<p>这种方式可以用 jvisualvm.exe 进行内存分析，或者采用 Eclipse Memory Analysis Tools (MAT)这个工具</p>
+<ol>
+<li>获取内存dump： jmap -histo:live pid</li>
+</ol>
+<p>这种方式会先出发fullgc，所有如果不希望触发fullgc 可以使用jmap -histo pid</p>
+<p>3.第三种方式：jdk启动加参数：</p>
+<p>-XX:+HeapDumpBeforeFullGC</p>
+<p>-XX:HeapDumpPath=/httx/logs/dump</p>
+<p>这种方式会产生dump日志，再通过jvisualvm.exe 或者Eclipse Memory Analysis Tools 工具进行分析</p>
+<hr>
+<h3 id="jmap-使用"><a href="#jmap-使用" class="headerlink" title="jmap 使用"></a>jmap 使用</h3><ul>
+<li>-F<ul>
+<li>强迫.在pid没有响应的时候使用-dump或者-histo参数. 在这个模式下,live子参数无效.</li>
 </ul>
-<p>可以看出，AWS Lambda 是一种很方便部署微服务的方式。基于请求计费方式意味着用户只需要承担处理自己业务那部分的负载；另外，因为不需要了解基础架构，用户只需要开发自己的应用。</p>
-<p>然而还是有不少限制。不需要用来部署长期服务，例如用来消费从第三方代理转发来的消息，请求必须在 300 秒内完成，服务必须是无状态，因为理论上 AWS Lambda 会为每个请求生成一个独立的实例；必须用某种支持的语言完成，服务必须启动很快，否则，会因为超时被停止。<br>部署微服务应用也是一种挑战。用各种语言和框架写成的服务成百上千。每种服务都是一种迷你应用，有自己独特的部署、资源、扩充和监控需求。有若干种微服务部署模式，包括单虚机单实例以及单容器单实例。另外可选模式还有 AWS Lambda，一种 serverless 方法。</p>
+</li>
+<li>J<ul>
+<li>传递参数给jmap启动的jvm.</li>
+</ul>
+</li>
+</ul>
+<h4 id="heap"><a href="#heap" class="headerlink" title="-heap"></a>-heap</h4><p>打印heap（堆）的概要信息，GC使用的算法，heap的配置及wise heap的使用情况.</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">C:\WINDOWS\system32&gt;jmap -heap <span class="number">9196</span></span><br><span class="line">Attaching to <span class="keyword">process</span> ID <span class="number">9196</span>, please wait...</span><br><span class="line">Debugger attached successfully.</span><br><span class="line">Server compiler detected.</span><br><span class="line">JVM version is <span class="number">25.131</span>-b11</span><br><span class="line"></span><br><span class="line">using thread-local object allocation.</span><br><span class="line">Parallel GC with <span class="number">4</span> thread(s)</span><br><span class="line"></span><br><span class="line">Heap Configuration:</span><br><span class="line">   MinHeapFreeRatio         = <span class="number">0</span></span><br><span class="line">   MaxHeapFreeRatio         = <span class="number">100</span></span><br><span class="line">   MaxHeapSize              = <span class="number">4278190080</span> (<span class="number">4080.0</span>MB)</span><br><span class="line">   NewSize                  = <span class="number">89128960</span> (<span class="number">85.0</span>MB)</span><br><span class="line">   MaxNewSize               = <span class="number">1426063360</span> (<span class="number">1360.0</span>MB)</span><br><span class="line">   OldSize                  = <span class="number">179306496</span> (<span class="number">171.0</span>MB)</span><br><span class="line">   NewRatio                 = <span class="number">2</span></span><br><span class="line">   SurvivorRatio            = <span class="number">8</span></span><br><span class="line">   MetaspaceSize            = <span class="number">134217728</span> (<span class="number">128.0</span>MB)</span><br><span class="line">   CompressedClassSpaceSize = <span class="number">1073741824</span> (<span class="number">1024.0</span>MB)</span><br><span class="line">   MaxMetaspaceSize         = <span class="number">134217728</span> (<span class="number">128.0</span>MB)</span><br><span class="line">   G1HeapRegionSize         = <span class="number">0</span> (<span class="number">0.0</span>MB)</span><br><span class="line"></span><br><span class="line">Heap Usage:</span><br><span class="line">PS Young Generation</span><br><span class="line">Eden Space:</span><br><span class="line">   capacity = <span class="number">268435456</span> (<span class="number">256.0</span>MB)</span><br><span class="line">   used     = <span class="number">240676256</span> (<span class="number">229.52676391601562</span>MB)</span><br><span class="line">   free     = <span class="number">27759200</span> (<span class="number">26.473236083984375</span>MB)</span><br><span class="line">   <span class="number">89.6588921546936</span>% used</span><br><span class="line">From Space:</span><br><span class="line">   capacity = <span class="number">11010048</span> (<span class="number">10.5</span>MB)</span><br><span class="line">   used     = <span class="number">10981440</span> (<span class="number">10.47271728515625</span>MB)</span><br><span class="line">   free     = <span class="number">28608</span> (<span class="number">0.02728271484375</span>MB)</span><br><span class="line">   <span class="number">99.74016462053571</span>% used</span><br><span class="line">To Space:</span><br><span class="line">   capacity = <span class="number">43515904</span> (<span class="number">41.5</span>MB)</span><br><span class="line">   used     = <span class="number">0</span> (<span class="number">0.0</span>MB)</span><br><span class="line">   free     = <span class="number">43515904</span> (<span class="number">41.5</span>MB)</span><br><span class="line">   <span class="number">0.0</span>% used</span><br><span class="line">PS Old Generation</span><br><span class="line">   capacity = <span class="number">179306496</span> (<span class="number">171.0</span>MB)</span><br><span class="line">   used     = <span class="number">50697656</span> (<span class="number">48.34905242919922</span>MB)</span><br><span class="line">   free     = <span class="number">128608840</span> (<span class="number">122.65094757080078</span>MB)</span><br><span class="line">   <span class="number">28.274299666198374</span>% used</span><br><span class="line"></span><br><span class="line"><span class="number">25447</span> interned Strings occupying <span class="number">3283176</span> bytes.</span><br></pre></td></tr></table></figure>
 
-      
-    </div>
+<h5 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h5><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MinHeapFreeRatio</td>
+<td>#-XX:MinHeapFreeRatio设置JVM堆最小空闲比率</td>
+</tr>
+<tr>
+<td>MaxHeapFreeRatio</td>
+<td>#-XX:MaxHeapFreeRatio设置JVM堆最大空闲比率</td>
+</tr>
+<tr>
+<td>MaxHeapSize</td>
+<td>#-XX:MaxHeapSize=设置JVM堆的最大大小</td>
+</tr>
+<tr>
+<td>NewSize</td>
+<td>#-XX:NewSize=设置JVM堆的‘新生代’的默认大小</td>
+</tr>
+<tr>
+<td>MaxNewSize</td>
+<td>#-XX:MaxNewSize=设置JVM堆的‘新生代’的最大大小</td>
+</tr>
+<tr>
+<td>OldSize</td>
+<td>#-XX:OldSize=设置JVM堆的‘老生代’的大小</td>
+</tr>
+<tr>
+<td>NewRatio</td>
+<td>#-XX:NewRatio=:‘新生代’和‘老生代’的大小比率</td>
+</tr>
+<tr>
+<td>SurvivorRatio</td>
+<td>#-XX:SurvivorRatio=设置年轻代中Eden区与Survivor区的大小比值</td>
+</tr>
+<tr>
+<td>MetaspaceSize</td>
+<td>-XX:MaxMetaspaceSize= 元数据空间</td>
+</tr>
+<tr>
+<td>CompressedClassSpaceSize</td>
+<td>只有当-XX:+UseCompressedClassPointers开启了才有效，</td>
+</tr>
+<tr>
+<td>PermSize</td>
+<td>#-XX:PermSize=:设置JVM堆的‘持久代’的初始大小</td>
+</tr>
+<tr>
+<td>MaxPermSize</td>
+<td>#-XX:MaxPermSize=:设置JVM堆的‘持久代’的最大大小</td>
+</tr>
+<tr>
+<td>PS Young Generation</td>
+<td>#新生代区内存分布，包含伊甸园区+1个Survivor区</td>
+</tr>
+<tr>
+<td>Eden Space</td>
+<td>伊甸园区 内容分布</td>
+</tr>
+<tr>
+<td>From Space</td>
+<td>Survivor from 区的内存分布</td>
+</tr>
+<tr>
+<td>To Space</td>
+<td>Survivor to 区的内存分布</td>
+</tr>
+<tr>
+<td>PS Old Generation</td>
+<td>当前的Old区内存分布</td>
+</tr>
+<tr>
+<td>capacity</td>
+<td>总容量</td>
+</tr>
+<tr>
+<td>used</td>
+<td>已使用</td>
+</tr>
+<tr>
+<td>free</td>
+<td>未使用</td>
+</tr>
+<tr>
+<td>PS Perm Generation</td>
+<td>持久代大小 <strong>1.8 已经移除，用Metaspace 进行替代管理</strong></td>
+</tr>
+</tbody></table>
+<p>内存计算：</p>
+<ul>
+<li>年轻代：Eden Space + From Space + To Space</li>
+<li>老年代：PS Old Generation</li>
+<li>最大堆内存大小：年轻代大小+老年代大小</li>
+<li>java应用程序占用内存大小：最大堆内存大小+持久代大小</li>
+</ul>
+<hr>
+<h4 id="dump"><a href="#dump" class="headerlink" title="-dump"></a>-dump</h4><p> 这个命令执行，JVM会将整个heap的信息dump写入到一个文件，heap（堆）如果比较大的话，就会导致这个过程比较耗时，并且执行的过程中为了保证dump的信息是可靠的，所以会暂停应用。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如果只dump heap中的存活对象，则加上选项-live。 </span></span><br><span class="line"><span class="comment"># 这种方式会先出发fullgc，所有如果不希望触发fullgc 可以使用jmap  -histo pid</span></span><br><span class="line">C:\WINDOWS\system32&gt;jmap -dump:live,format=b,file=a.hprof <span class="number">9196</span></span><br><span class="line">Dumping heap to C:\Windows\System32\a.bin ...</span><br><span class="line">Heap dump file created</span><br><span class="line"></span><br><span class="line"><span class="comment"># 这种方式可以用 jvisualvm.exe 进行内存分析，或者采用 Eclipse Memory Analysis Tools (MAT)这个工具</span></span><br><span class="line">C:\WINDOWS\system32&gt;jmap -dump,format=b,file=b.hprof <span class="number">9196</span></span><br><span class="line">Dumping heap to C:\Windows\System32\a.bin ...</span><br><span class="line">Heap dump file created</span><br></pre></td></tr></table></figure>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+<h5 id="参数配置"><a href="#参数配置" class="headerlink" title="参数配置"></a>参数配置</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-XX:+HeapDumpBeforeFullGC </span><br><span class="line"></span><br><span class="line">-XX:HeapDumpPath=/httx/logs/dump</span><br><span class="line"></span><br><span class="line">让JVM在遇到OutOfMemoryError时自动生成Dump文件</span><br></pre></td></tr></table></figure>
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/21/github/docs/high-concurrency/why-cache/">
+<hr>
+<h4 id="histo"><a href="#histo" class="headerlink" title="-histo"></a>-histo</h4><p> 打印每个class的实例数目,内存占用,类全名信息. VM的内部类名字开头会加上前缀”*”. 如果live子参数加上后,只统计活的对象数量.</p>
+<p>instances（实例数）、bytes（大小）、classs name（类名）。它基本是按照使用使用大小逆序排列的。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">C:\WINDOWS\system32&gt;jmap -histo 9196</span><br><span class="line"></span><br><span class="line"> num     #instances         #bytes  class name</span><br><span class="line">----------------------------------------------</span><br><span class="line">   1:        527171       84318160  [C</span><br><span class="line">   2:        103023       56034400  [Ljava.lang.Object;</span><br><span class="line">   3:        214858       47519096  [I</span><br><span class="line">   4:        105922       34715680  [B</span><br><span class="line">   5:        375666        9015984  java.lang.String</span><br><span class="line">   6:        251237        6029688  java.util.LinkedList$Node</span><br><span class="line">   7:        169334        5418688  java.util.HashMap$Node</span><br><span class="line">   8:        122315        2935560  java.util.ArrayList</span><br><span class="line">   .......</span><br><span class="line">   .......</span><br><span class="line">   Total       3090439      316004152</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 可以观察heap中所有对象的情况（heap中所有生存的对象的情况）。包括对象数量和所占空间大小。 可以将其保存到文本中去，在一段时间后，使用文本对比工具，可以对比出GC回收了哪些对象。</span><br><span class="line"></span><br><span class="line">jmap -histo:live 这个命令执行，JVM会先触发gc，然后再统计信息。</span><br><span class="line">C:\WINDOWS\system32&gt;jmap -histo:live 9196</span><br><span class="line"></span><br><span class="line"> num     #instances         #bytes  class name</span><br><span class="line">----------------------------------------------</span><br><span class="line">   1:         91735        9084568  [C</span><br><span class="line">   2:        138588        4434816  java.util.HashMap$Node</span><br><span class="line">   3:         37733        2374384  [Ljava.lang.Object;</span><br><span class="line">   4:         90330        2167920  java.lang.String</span><br><span class="line">   5:          5036        1337104  [Ljava.util.HashMap$Node;</span><br><span class="line">   6:          8141         906712  java.lang.Class</span><br><span class="line">   7:         32702         784848  java.util.ArrayList</span><br><span class="line">   8:         31471         755304  io.termd.core.term.Feature</span><br><span class="line">   9:         30539         488624  io.termd.core.term.OpCode$Literal</span><br><span class="line">  10:         13726         439232  java.util.concurrent.ConcurrentHashMap$Node</span><br><span class="line">  11:         26476         423616  io.termd.core.term.Sequence</span><br><span class="line">  12:         10377         415080  java.util.LinkedHashMap$Entry</span><br><span class="line">  13:          4202         369776  java.lang.reflect.Method</span><br><span class="line">  14:          2761         363968  [I</span><br><span class="line">  15:          1085         321728  [B</span><br><span class="line">  16:          3255         182280  java.util.LinkedHashMap</span><br><span class="line">  17:          9977         159632  java.lang.Object</span><br><span class="line">  18:           123         157680  [Ljava.util.concurrent.ConcurrentHashMap$Node;</span><br><span class="line">  19:          2975         142800  java.util.HashMap</span><br><span class="line">  20:          4412         141184  io.netty.util.Recycler$DefaultHandle</span><br><span class="line">  21:          1840         105928  [Ljava.lang.String;</span><br><span class="line">  .......</span><br><span class="line">  .......</span><br><span class="line">  Total       3090439      316004152</span><br><span class="line">linux 环境下 查看对象数最多的对象，并按降序排序输出</span><br></pre></td></tr></table></figure>
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
+<h5 id="名称解释"><a href="#名称解释" class="headerlink" title="名称解释"></a>名称解释</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#instance 是对象的实例个数 </span><br><span class="line">#bytes 是总占用的字节数 </span><br><span class="line">class name 对应的就是 Class 文件里的 class 的标识 </span><br><span class="line">B 代表 byte</span><br><span class="line">C 代表 char</span><br><span class="line">D 代表 double</span><br><span class="line">F 代表 float</span><br><span class="line">I 代表 int</span><br><span class="line">J 代表 long</span><br><span class="line">Z 代表 boolean</span><br><span class="line">前边有 [ 代表数组， [I 就相当于 int[]</span><br><span class="line">对象用 [L+ 类名表示</span><br></pre></td></tr></table></figure>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/21/github/docs/high-concurrency/why-cache/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>:live</td>
+<td>存活对象</td>
+</tr>
+</tbody></table>
+<p>上面的输出中[C对象占用Heap这么多，往往跟String有关，String其内部使用final char[]数组来保存数据的</p>
+<hr>
+<h4 id="permstat"><a href="#permstat" class="headerlink" title="-permstat"></a>-permstat</h4><p> clstats是-permstat的替代方案，在JDK8之前，-permstat用来打印类加载器的数据 打印Java堆内存的永久保存区域的类加载器的智能统计信息。对于每个类加载器而言，它的名称、活跃度、地址、父类加载器、它所加载的类的数量和大小都会被打印。此外，包含的字符串数量和大小也会被打印。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">C:\WINDOWS\system32&gt;jmap -clstats  9196</span><br><span class="line">Attaching to process ID 9196, please <span class="built_in">wait</span>...</span><br><span class="line">Debugger attached successfully.</span><br><span class="line">Server compiler detected.</span><br><span class="line">JVM version is 25.131-b11</span><br><span class="line">finding class loader instances ..<span class="keyword">done</span>.</span><br><span class="line">computing per loader <span class="built_in">stat</span> ..<span class="keyword">done</span>.</span><br><span class="line">please <span class="built_in">wait</span>.. computing liveness.liveness analysis may be inaccurate ...</span><br><span class="line">class_loader    classes bytes   parent_loader   alive?  <span class="built_in">type</span></span><br><span class="line"></span><br><span class="line">&lt;bootstrap&gt;     2555    4328024   null          live    &lt;internal&gt;</span><br><span class="line">0x00000006c1589498      1       880     0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c288e208      1       880       null          dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c288fbc8      1       1473    0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c1596518      1       1473    0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c28d9a88      1       1471    0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c17661b0      1       880     0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c15f5c58      1       880     0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c1589790      1       880     0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c1589f90      1       880     0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c1603428      1       880     0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c288ff40      1       1473    0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c1595ad0      1       880     0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c15c3d90      1       1473    0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c15c3fd0      1       1473    0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c16650a8      1       1473    0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c1766278      1       880     0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c1767378      1       880     0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c22e1420      3871    6591266 0x00000006c22e1480      dead    sun/misc/Launcher<span class="variable">$AppClassLoader</span>@0x00000007c000f6a0</span><br><span class="line">0x00000006c288f358      1       1505      null          dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c288fe18      1       1473    0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c28d9958      1       880       null          dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c1766020      1       880     0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c16ffa78      0       0       0x00000006c22e1420      dead    java/util/ResourceBundle<span class="variable">$RBClassLoader</span>@0x00000007c00f3c18</span><br><span class="line">0x00000006c17086a8      8       31426   0x00000006c22e1420      dead    sun/reflect/misc/MethodUtil@0x00000007c0447148</span><br><span class="line">0x00000006c162cd78      1       1476    0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c163acf8      1       1471    0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line"></span><br><span class="line">total = 48      7662    13151889            N/A         alive=1, dead=47            N/A</span><br></pre></td></tr></table></figure>
 
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
+<hr>
+<h4 id="finalizerinfo"><a href="#finalizerinfo" class="headerlink" title="-finalizerinfo"></a>-finalizerinfo</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">finalizerinfo 打印等待回收的对象信息</span><br><span class="line">C:\WINDOWS\system32&gt;jmap -finalizerinfo  9196</span><br><span class="line">Attaching to process ID 9196, please wait...</span><br><span class="line">Debugger attached successfully.</span><br><span class="line">Server compiler detected.</span><br><span class="line">JVM version is 25.131-b11</span><br><span class="line">Number of objects pending for finalization: 0</span><br></pre></td></tr></table></figure>
 
-              <time title="Created: 2021-04-21 15:37:08" itemprop="dateCreated datePublished" datetime="2021-04-21T15:37:08+08:00">2021-04-21</time>
-            </span>
+<p>最后一句表明当前F-QUEUE队列中没有等待Finalizer线程执行finalizer方法的对象</p>
+<h3 id="jstat-使用"><a href="#jstat-使用" class="headerlink" title="jstat 使用"></a>jstat 使用</h3><p> jstat命令可以查看堆内存各部分的使用量，以及加载类的数量。命令的格式如下：</p>
+<p>jstat <strong>[ 观察类型 ]</strong> <strong>[PID]</strong> <strong>[间隔时间（毫秒）] \</strong> **[ 次数]**</p>
+<h5 id="–class"><a href="#–class" class="headerlink" title="–class"></a>–class</h5><p>查看class 加载信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\daocr&gt;jstat -class 13388  1000  10</span><br><span class="line">Loaded  Bytes  Unloaded  Bytes     Time</span><br><span class="line">  6313 11329.1        0     0.0       2.15</span><br><span class="line">  6313 11329.1        0     0.0       2.15</span><br><span class="line">  6313 11329.1        0     0.0       2.15</span><br></pre></td></tr></table></figure>
 
-          
+<p><strong>名称解释</strong></p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Loaded</td>
+<td>加载class 数量</td>
+</tr>
+<tr>
+<td>Bytes(第一个)</td>
+<td>加载的大小</td>
+</tr>
+<tr>
+<td>Unloaded</td>
+<td>卸载class 数量</td>
+</tr>
+<tr>
+<td>Bytes(第二个)</td>
+<td>卸载大小</td>
+</tr>
+<tr>
+<td>Time</td>
+<td>执行加载和卸载所花费的时间</td>
+</tr>
+</tbody></table>
+<hr>
+<h5 id="compiler"><a href="#compiler" class="headerlink" title="-compiler"></a>-compiler</h5><p>查看class 编译信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\daocr&gt;jstat -compiler 13388  1000  3</span><br><span class="line">Compiled Failed Invalid   Time   FailedType FailedMethod</span><br><span class="line">    3039      0       0     0.70          0</span><br><span class="line">    3039      0       0     0.70          0</span><br><span class="line">    3039      0       0     0.70          0</span><br></pre></td></tr></table></figure>
 
-        </div>
-      </header>
+<p><strong>名称解释</strong></p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>官方解释</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Compiled</td>
+<td>Number of compilation tasks performed.</td>
+<td>执行编译任务数量</td>
+</tr>
+<tr>
+<td>Failed</td>
+<td>Number of compilations tasks failed.</td>
+<td>执行编译任务失败数量</td>
+</tr>
+<tr>
+<td>Invalid</td>
+<td>Number of compilation tasks that were invalidated.</td>
+<td>失效的编译任务数量</td>
+</tr>
+<tr>
+<td>Time</td>
+<td>Time spent performing compilation tasks.</td>
+<td>编译耗费的时间</td>
+</tr>
+<tr>
+<td>FailedType</td>
+<td>Compile type of the last failed compilation.</td>
+<td>上次编译失败的类型</td>
+</tr>
+<tr>
+<td>FailedMethod</td>
+<td>Class name and method of the last failed compilation.</td>
+<td>上次编译失败的类名和方法</td>
+</tr>
+</tbody></table>
+<hr>
+<h5 id="gc"><a href="#gc" class="headerlink" title="-gc"></a>-gc</h5><p>垃圾收集统计信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\daocr&gt;jstat -gc 13388  1000  3</span><br><span class="line"> S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">14848.0 10752.0  0.0   10730.5 91136.0   5157.0   112640.0   13722.3   32128.0 30417.7 4480.0 4140.9      5    0.046   1      0.040    0.086</span><br><span class="line">14848.0 10752.0  0.0   10730.5 91136.0   5157.0   112640.0   13722.3   32128.0 30417.7 4480.0 4140.9      5    0.046   1      0.040    0.086</span><br><span class="line">14848.0 10752.0  0.0   10730.5 91136.0   5157.0   112640.0   13722.3   32128.0 30417.7 4480.0 4140.9      5    0.046   1      0.040    0.086</span><br></pre></td></tr></table></figure>
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
+<p><strong>名称解释</strong></p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>官方解释</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S0C</td>
+<td>Current survivor space 0 capacity (kB).</td>
+<td>当前 ServivorTo（S0）总容量大小</td>
+</tr>
+<tr>
+<td>S1C</td>
+<td>Current survivor space 1 capacity (kB).</td>
+<td>当前 ServivorFrom（S1）总容量大小</td>
+</tr>
+<tr>
+<td>S0U</td>
+<td>Survivor space 0 utilization (kB).</td>
+<td>当前 ServivorTo（S0）使用大小</td>
+</tr>
+<tr>
+<td>S1U</td>
+<td>Survivor space 1 utilization (kB).</td>
+<td>当前 ServivorFrom（S1）使用大小</td>
+</tr>
+<tr>
+<td>EC</td>
+<td>Current eden space capacity (kB).</td>
+<td>Eden （伊甸园区的） 总容量大小</td>
+</tr>
+<tr>
+<td>EU</td>
+<td>Eden space utilization (kB).</td>
+<td>Eden （伊甸园区的） 使用大小</td>
+</tr>
+<tr>
+<td>OC</td>
+<td>Current old space capacity (kB).</td>
+<td>Old（老年的带）容量大小</td>
+</tr>
+<tr>
+<td>OU</td>
+<td>Old space utilization (kB).</td>
+<td>Old（老年的带）使用大小</td>
+</tr>
+<tr>
+<td>MC</td>
+<td>Metaspace capacity (kB).</td>
+<td>Method Area (方法区) 容量大小</td>
+</tr>
+<tr>
+<td>MU</td>
+<td>Metacspace utilization (kB).</td>
+<td>Method Area (方法区) 使用大小</td>
+</tr>
+<tr>
+<td>CCSC</td>
+<td>Compressed class space capacity (kB).</td>
+<td>CCS（压缩空间）容量大小</td>
+</tr>
+<tr>
+<td>CCSU</td>
+<td>Compressed class space used (kB).</td>
+<td>CCS（压缩空间）使用大小</td>
+</tr>
+<tr>
+<td>YGC</td>
+<td>Number of young generation garbage collection events.</td>
+<td>YGC (年轻的gc) 次数</td>
+</tr>
+<tr>
+<td>YGCT</td>
+<td>Young generation garbage collection time.</td>
+<td>YGC (年轻的gc) 消耗时间</td>
+</tr>
+<tr>
+<td>FGC</td>
+<td>Number of full GC events.</td>
+<td>Full GC 次数</td>
+</tr>
+<tr>
+<td>FGCT</td>
+<td>Full garbage collection time.</td>
+<td>Full GC 消耗时间</td>
+</tr>
+<tr>
+<td>GCT</td>
+<td>Total garbage collection time.</td>
+<td>GC 总消耗时间</td>
+</tr>
+</tbody></table>
+<hr>
+<h5 id="gccapacity"><a href="#gccapacity" class="headerlink" title="-gccapacity"></a>-gccapacity</h5><p> 堆内存容量统计</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\daocr&gt;jstat -gccapacity  13388  1000  1000</span><br><span class="line"> NGCMN    NGCMX     NGC     S0C   S1C       EC      OGCMN      OGCMX       OGC         OC       MCMN     MCMX      MC     CCSMN    CCSMX     CCSC    YGC    FGC</span><br><span class="line"> 87040.0 1392640.0 156160.0 14848.0 10752.0  91136.0   175104.0  2785280.0   112640.0   112640.0      0.0 1077248.0  32128.0      0.0 1048576.0   4480.0      5     1</span><br><span class="line"> 87040.0 1392640.0 156160.0 14848.0 10752.0  91136.0   175104.0  2785280.0   112640.0   112640.0      0.0 1077248.0  32128.0      0.0 1048576.0   4480.0      5     1</span><br><span class="line"> 87040.0 1392640.0 156160.0 14848.0 10752.0  91136.0   175104.0  2785280.0   112640.0   112640.0      0.0 1077248.0  32128.0      0.0 1048576.0   4480.0      5     1</span><br><span class="line"> 87040.0 1392640.0 156160.0 14848.0 10752.0  91136.0   175104.0  2785280.0   112640.0   112640.0      0.0 1077248.0  32128.0      0.0 1048576.0   4480.0      5     1</span><br></pre></td></tr></table></figure>
 
-      
-          <h2 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h2><p>项目中缓存是如何使用的？为什么要用缓存？缓存使用不当会造成什么后果？</p>
-<h2 id="面试官心理分析"><a href="#面试官心理分析" class="headerlink" title="面试官心理分析"></a>面试官心理分析</h2><p>这个问题，互联网公司必问，要是一个人连缓存都不太清楚，那确实比较尴尬。</p>
-<p>只要问到缓存，上来第一个问题，肯定是先问问你项目哪里用了缓存？为啥要用？不用行不行？如果用了以后可能会有什么不良的后果？</p>
-<p>这就是看看你对缓存这个东西背后有没有思考，如果你就是傻乎乎的瞎用，没法给面试官一个合理的解答，那面试官对你印象肯定不太好，觉得你平时思考太少，就知道干活儿。</p>
-<h2 id="面试题剖析"><a href="#面试题剖析" class="headerlink" title="面试题剖析"></a>面试题剖析</h2><h3 id="项目中缓存是如何使用的？"><a href="#项目中缓存是如何使用的？" class="headerlink" title="项目中缓存是如何使用的？"></a>项目中缓存是如何使用的？</h3><p>这个，需要结合自己项目的业务来。</p>
-<h3 id="为什么要用缓存？"><a href="#为什么要用缓存？" class="headerlink" title="为什么要用缓存？"></a>为什么要用缓存？</h3><p>用缓存，主要有两个用途：<strong>高性能</strong>、<strong>高并发</strong>。</p>
-<h4 id="高性能"><a href="#高性能" class="headerlink" title="高性能"></a>高性能</h4><p>假设这么个场景，你有个操作，一个请求过来，吭哧吭哧你各种乱七八糟操作 mysql，半天查出来一个结果，耗时 600ms。但是这个结果可能接下来几个小时都不会变了，或者变了也可以不用立即反馈给用户。那么此时咋办？</p>
-<p>缓存啊，折腾 600ms 查出来的结果，扔缓存里，一个 key 对应一个 value，下次再有人查，别走 mysql 折腾 600ms 了，直接从缓存里，通过一个 key 查出来一个 value，2ms 搞定。性能提升 300 倍。</p>
-<p>就是说对于一些需要复杂操作耗时查出来的结果，且确定后面不怎么变化，但是有很多读请求，那么直接将查询出来的结果放在缓存中，后面直接读缓存就好。</p>
-<h4 id="高并发"><a href="#高并发" class="headerlink" title="高并发"></a>高并发</h4><p>mysql 这么重的数据库，压根儿设计不是让你玩儿高并发的，虽然也可以玩儿，但是天然支持不好。mysql 单机支撑到 <code>2000QPS</code> 也开始容易报警了。</p>
-<p>所以要是你有个系统，高峰期一秒钟过来的请求有 1 万，那一个 mysql 单机绝对会死掉。你这个时候就只能上缓存，把很多数据放缓存，别放 mysql。缓存功能简单，说白了就是 <code>key-value</code> 式操作，单机支撑的并发量轻松一秒几万十几万，支撑高并发 so easy。单机承载并发量是 mysql 单机的几十倍。</p>
+<p><strong>名称解释</strong></p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>官方解释</th>
+<th>解释 <strong>(单位：kb)</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NGCMN</td>
+<td>Minimum new generation capacity (kB).</td>
+<td>新生代最小容量</td>
+</tr>
+<tr>
+<td>NGCMX</td>
+<td>Maximum new generation capacity (kB).</td>
+<td>新生代最大容量</td>
+</tr>
+<tr>
+<td>NGC</td>
+<td>Current new generation capacity (kB).</td>
+<td>当前新生代容量</td>
+</tr>
+<tr>
+<td>S0C</td>
+<td>Current survivor space 0 capacity (kB).</td>
+<td>第一个幸存区（S0）容量</td>
+</tr>
+<tr>
+<td>S1C</td>
+<td>Current survivor space 1 capacity (kB).</td>
+<td>第二个幸存区（S1）容量</td>
+</tr>
+<tr>
+<td>EC</td>
+<td>Current eden space capacity (kB).</td>
+<td>伊甸园区的容量</td>
+</tr>
+<tr>
+<td>OGCMN</td>
+<td>Minimum old generation capacity (kB).</td>
+<td>老年代最小容量</td>
+</tr>
+<tr>
+<td>OGCMX</td>
+<td>Maximum old generation capacity (kB).</td>
+<td>老年代最大容量</td>
+</tr>
+<tr>
+<td>OGC</td>
+<td>Current old generation capacity (kB).</td>
+<td>当前老年代容量</td>
+</tr>
+<tr>
+<td>OC</td>
+<td>Current old space capacity (kB).</td>
+<td>当前老年代使用 容量</td>
+</tr>
+<tr>
+<td>MCMN</td>
+<td>Minimum metaspace capacity (kB).</td>
+<td>最小 metaspace 容量</td>
+</tr>
+<tr>
+<td>MCMX</td>
+<td>Maximum metaspace capacity (kB).</td>
+<td>最大 metaspace 容量</td>
+</tr>
+<tr>
+<td>MC</td>
+<td>Metaspace capacity (kB).</td>
+<td>当前 metaspace 容量</td>
+</tr>
+<tr>
+<td>CCSMN</td>
+<td>Compressed class space minimum capacity (kB).</td>
+<td>类压缩空间最小 容量</td>
+</tr>
+<tr>
+<td>CCSMX</td>
+<td>Compressed class space maximum capacity (kB).</td>
+<td>类压缩空间最大 容量</td>
+</tr>
+<tr>
+<td>CCSC</td>
+<td>Compressed class space capacity (kB).</td>
+<td>当前类压缩空间 容量</td>
+</tr>
+<tr>
+<td>YGC</td>
+<td>Number of young generation GC events.</td>
+<td>YGC 次数</td>
+</tr>
+<tr>
+<td>FGC</td>
+<td>Number of full GC events.</td>
+<td>FGC 次数</td>
+</tr>
+</tbody></table>
+<hr>
+<h5 id="gcnew"><a href="#gcnew" class="headerlink" title="-gcnew"></a>-gcnew</h5><p><strong>新生代垃圾回收统计</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\daocr&gt;jstat -gcnew   13388  1000  1000</span><br><span class="line"> S0C    S1C    S0U    S1U   TT MTT  DSS      EC       EU     YGC     YGCT</span><br><span class="line">14848.0 10752.0    0.0 10730.5  6  15 14848.0  91136.0   7526.5      5    0.046</span><br><span class="line">14848.0 10752.0    0.0 10730.5  6  15 14848.0  91136.0   7526.5      5    0.046</span><br></pre></td></tr></table></figure>
+
+<p><strong>名称解释</strong></p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>官方解释</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S0C</td>
+<td>Current survivor space 0 capacity (kB).</td>
+<td>survivor (S0) 总容量</td>
+</tr>
+<tr>
+<td>S1C</td>
+<td>Current survivor space 1 capacity (kB).</td>
+<td>survivor (S1) 总容量</td>
+</tr>
+<tr>
+<td>S0U</td>
+<td>Survivor space 0 utilization (kB).</td>
+<td>survivor (S0) 已使用容量</td>
+</tr>
+<tr>
+<td>S1U</td>
+<td>Survivor space 1 utilization (kB).</td>
+<td>survivor (S1) 已使用容量</td>
+</tr>
+<tr>
+<td>TT</td>
+<td>Tenuring threshold.</td>
+<td>对象在新生代存活的次数</td>
+</tr>
+<tr>
+<td>MTT</td>
+<td>Maximum tenuring threshold.</td>
+<td>-XX:MaxTenuringThreshold 对象在新生代存活的最大次数</td>
+</tr>
+<tr>
+<td>DSS</td>
+<td>Desired survivor size (kB).</td>
+<td>期望的幸存区大小</td>
+</tr>
+<tr>
+<td>EC</td>
+<td>Current eden space capacity (kB).</td>
+<td>伊甸园区的大小</td>
+</tr>
+<tr>
+<td>EU</td>
+<td>Eden space utilization (kB).</td>
+<td>伊甸园区的使用大小</td>
+</tr>
+<tr>
+<td>YGC</td>
+<td>Number of young generation GC events.</td>
+<td>年轻代垃圾回收次数</td>
+</tr>
+<tr>
+<td>YGCT</td>
+<td>Young generation garbage collection time.</td>
+<td>年轻代垃圾回收消耗时间</td>
+</tr>
+</tbody></table>
+<h5 id="gccause"><a href="#gccause" class="headerlink" title="-gccause"></a>-gccause</h5><h5 id="gcnewcapacity"><a href="#gcnewcapacity" class="headerlink" title="-gcnewcapacity"></a>-gcnewcapacity</h5><p>年轻代对象的信息及其占用量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\daocr&gt;jstat -gcnewcapacity   13388  1000  1000</span><br><span class="line">  NGCMN      NGCMX       NGC      S0CMX     S0C     S1CMX     S1C       ECMX        EC      YGC   FGC</span><br><span class="line">   87040.0  1392640.0   156160.0 463872.0  14848.0 463872.0  10752.0  1391616.0    91136.0     5     1</span><br><span class="line">   87040.0  1392640.0   156160.0 463872.0  14848.0 463872.0  10752.0  1391616.0    91136.0     5     1</span><br></pre></td></tr></table></figure>
+
+<p><strong>名称解释</strong></p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>官方解释</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NGCMN</td>
+<td>Minimum new generation capacity (kB).</td>
+<td>新生代最小容量</td>
+</tr>
+<tr>
+<td>NGCMX</td>
+<td>Maximum new generation capacity (kB).</td>
+<td>新生代最大容量</td>
+</tr>
+<tr>
+<td>NGC</td>
+<td>Current new generation capacity (kB).</td>
+<td>当前新生代已使用容量</td>
+</tr>
+<tr>
+<td>S0CMX</td>
+<td>Maximum survivor space 0 capacity (kB).</td>
+<td>S0 最大容量</td>
+</tr>
+<tr>
+<td>S0C</td>
+<td>Current survivor space 0 capacity (kB).</td>
+<td>S0 已使用容量</td>
+</tr>
+<tr>
+<td>S1CMX</td>
+<td>Maximum survivor space 1 capacity (kB).</td>
+<td>S1 最大容量</td>
+</tr>
+<tr>
+<td>S1C</td>
+<td>Current survivor space 1 capacity (kB).</td>
+<td>S1 已使用容量</td>
+</tr>
+<tr>
+<td>ECMX</td>
+<td>Maximum eden space capacity (kB).</td>
+<td>eden 最大容量</td>
+</tr>
+<tr>
+<td>EC</td>
+<td>Current eden space capacity (kB).</td>
+<td>eden 当前使用容量</td>
+</tr>
+<tr>
+<td>YGC</td>
+<td>Number of young generation GC events.</td>
+<td>ygc 次数</td>
+</tr>
+<tr>
+<td>FGC</td>
+<td>Number of full GC events.</td>
+<td>full gc 次数</td>
+</tr>
+</tbody></table>
+<hr>
+<h5 id="gcold"><a href="#gcold" class="headerlink" title="-gcold"></a>-gcold</h5><p>old 区和 matespace 内存区域信息统计</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\daocr&gt;jstat -gcold   13388  1000  1000</span><br><span class="line">   MC       MU      CCSC     CCSU       OC          OU       YGC    FGC    FGCT     GCT</span><br><span class="line"> 32128.0  30417.7   4480.0   4140.9    112640.0     13722.3      5     1    0.040    0.086</span><br><span class="line"> 32128.0  30417.7   4480.0   4140.9    112640.0     13722.3      5     1    0.040    0.086</span><br></pre></td></tr></table></figure>
+
+<p>名称解释</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>官方解释</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MC</td>
+<td>Metaspace capacity (kB).</td>
+<td></td>
+</tr>
+<tr>
+<td>MU</td>
+<td>Metaspace utilization (kB).</td>
+<td></td>
+</tr>
+<tr>
+<td>CCSC</td>
+<td>Compressed class space capacity (kB).</td>
+<td></td>
+</tr>
+<tr>
+<td>CCSU</td>
+<td>Compressed class space used (kB).</td>
+<td></td>
+</tr>
+<tr>
+<td>OC</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>OU</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>YGC</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>FGC</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>FGCT</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>GCT</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h5 id="参考地址"><a href="#参考地址" class="headerlink" title="参考地址"></a>参考地址</h5><ul>
+<li>官方地址<ul>
+<li><a href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/jstat.html" target="_blank" rel="noopener">https://docs.oracle.com/javase/8/docs/technotes/tools/windows/jstat.html</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="线程分析"><a href="#线程分析" class="headerlink" title="线程分析"></a>线程分析</h1><p><strong>线程状态</strong></p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NEW</td>
+<td>创建</td>
+</tr>
+<tr>
+<td>RUNNABLE</td>
+<td>可运行的</td>
+</tr>
+<tr>
+<td>BLOCKED</td>
+<td>阻塞状态</td>
+</tr>
+<tr>
+<td>WAITING</td>
+<td>等待状态</td>
+</tr>
+<tr>
+<td>TIMED_WAITING</td>
+<td>线程等待指定的时间</td>
+</tr>
+<tr>
+<td>TERMINATED</td>
+<td>线程终止</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>NEW</strong>（新建）</li>
+</ul>
 <blockquote>
-<p>缓存是走内存的，内存天然就支撑高并发。</p>
+<p> 线程刚刚被创建，也就是已经new过了，但是还没有调用start()方法，<strong>jstack命令不会列出处于此状态的线程信息</strong> .</p>
 </blockquote>
-<h3 id="用了缓存之后会有什么不良后果？"><a href="#用了缓存之后会有什么不良后果？" class="headerlink" title="用了缓存之后会有什么不良后果？"></a>用了缓存之后会有什么不良后果？</h3><p>常见的缓存问题有以下几个：</p>
 <ul>
-<li><a href="/docs/high-concurrency/redis-consistence.md">缓存与数据库双写不一致</a></li>
-<li><a href="/docs/high-concurrency/redis-caching-avalanche-and-caching-penetration.md">缓存雪崩、缓存穿透、缓存击穿</a></li>
-<li><a href="/docs/high-concurrency/redis-cas.md">缓存并发竞争</a></li>
+<li><strong>RUNNABLE</strong>（可运行）</li>
 </ul>
-<p>点击超链接，可直接查看缓存相关问题及解决方案。</p>
+<blockquote>
+<p><strong>RUNNABLE #java.lang.Thread.State: RUNNABLE</strong></p>
+<p>RUNNABLE这个名字很具有欺骗性，很容易让人误以为处于这个状态的线程正在运行。事实上，这个状态只是表示，线程是可运行的。我们已经无数次提到过，一个单核CPU在同一时刻，只能运行一个线程.</p>
+</blockquote>
+<ul>
+<li><strong>BLOCKED</strong>（堵塞状态）</li>
+</ul>
+<blockquote>
+<p><strong># java.lang.Thread.State: BLOCKED (on object monitor)</strong></p>
+<p> 线程处于阻塞状态，正在等待一个monitor lock。通常情况下，是因为本线程与其他线程公用了一个锁。其他在线程正在使用这个锁进入某个synchronized同步方法块或者方法，而本线程进入这个同步代码块也需要这个锁，最终导致本线程处于阻塞状态。</p>
+</blockquote>
+<ul>
+<li><p>WAITING</p>
+<p>（等待状态）</p>
+<ul>
+<li><code>Object.wait</code> 不指定超时时间 <code># java.lang.Thread.State: WAITING (on object monitor)</code></li>
+<li><code>Thread.join</code> with no timeout</li>
+<li><code>LockSupport.park #java.lang.Thread.State: WAITING (parking)</code></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p> 例如：对于wait()方法，一个线程处于等待状态，通常是在等待其他线程完成某个操作。本线程调用某个对象的wait()方法，其他线程处于完成之后，调用同一个对象的notify或者notifyAll()方法。Object.wait()方法只能够在同步代码块中调用。调用了wait()方法后，会释放锁。</p>
+</blockquote>
+<ul>
+<li><strong>TIMED_WAITING</strong><ul>
+<li><code>Thread.sleep #java.lang.Thread.State: TIMED_WAITING (sleeping)</code></li>
+<li><code>Object.wait</code> 指定超时时间 #java.lang.Thread.State: TIMED_WAITING (on object monitor)</li>
+<li><code>Thread.join</code> with timeout</li>
+<li><code>LockSupport.parkNanos #java.lang.Thread.State: TIMED_WAITING (parking)</code></li>
+<li><code>LockSupport.parkUntil #java.lang.Thread.State: TIMED_WAITING (parking)</code></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p> 线程等待指定的时间，对于以下方法的调用，可能会导致线程处于这个状态</p>
+</blockquote>
+<ul>
+<li><strong>TERMINATED</strong> （线程终止）</li>
+</ul>
+<hr>
+<p> 说明，对于 <strong>java.lang.Thread.State: WAITING (on object monitor)\</strong>和<strong>java.lang.Thread.State: TIMED_WAITING (on object monitor)</strong>，对于这两个状态，是因为调用了Object的<strong>wait</strong>方法(前者没有指定超时，后者指定了超时)，由于wait方法肯定要在<strong>syncronized</strong>代码中编写，因此肯定是如类似以下代码导致：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">synchronized</span>(obj) &#123;</span><br><span class="line">               .........</span><br><span class="line">               obj.wait();</span><br><span class="line">               .........</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因此通常的堆栈信息中，必然后一个lock标记，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">CM1<span class="string">" #21 daemon prio=5 os_prio=0 tid=0x00007f02f0d6d800 nid=0x3d48 in Object.wait() [0x00007f02fefef000]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">   java.lang.Thread.State: WAITING (on object monitor)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        at java.lang.Object.wait(Native Method)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        at java.lang.Object.wait(Object.java:502)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        at java.util.TimerThread.mainLoop(Timer.java:526)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        - locked &lt;0x00000000eca75aa8&gt; (a java.util.TaskQueue)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        at java.util.TimerThread.run(Timer.java:505)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="查看线程"><a href="#查看线程" class="headerlink" title="查看线程"></a>查看线程</h2><p>线程状态</p>
+<h3 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h3><p>观察jvm中当前所有线程的运行情况和线程当前状态。</p>
+<p>系统崩溃了？如果java程序崩溃生成core文件，jstack工具可以用来获得core文件的java stack和native stack的信息，从而可以轻松地知道java程序是如何崩溃和在程序何处发生问题。</p>
+<p>系统hung（挂起）住了？jstack工具还可以附属到正在运行的java程序中，看到当时运行的java程序的java stack和native stack的信息, 如果现在运行的java程序呈现hung的状态，jstack是非常有用的。</p>
+<hr>
+<p>jstack主要用来查看某个Java进程内的线程堆栈信息。语法格式如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\daorc&gt;jstack -h</span><br><span class="line">Usage:</span><br><span class="line">    jstack [-l] &lt;pid&gt;</span><br><span class="line">        (to connect to running process)</span><br><span class="line">    jstack -F [-m] [-l] &lt;pid&gt;</span><br><span class="line">        (to connect to a hung process)</span><br><span class="line">    jstack [-m] [-l] &lt;executable&gt; &lt;core&gt;</span><br><span class="line">        (to connect to a core file)</span><br><span class="line">    jstack [-m] [-l] [server_id@]&lt;remote server IP or hostname&gt;</span><br><span class="line">        (to connect to a remote debug server)</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">    -F  to force a thread dump. Use when jstack &lt;pid&gt; does not respond (process is hung)</span><br><span class="line">    -m  to print both java and native frames (mixed mode)</span><br><span class="line">    -l  long listing. Prints additional information about locks</span><br><span class="line">    -h or -help to print this help message</span><br></pre></td></tr></table></figure>
+
+<h4 id="无参数"><a href="#无参数" class="headerlink" title="无参数"></a>无参数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\daorc&gt;jstack 12176</span><br><span class="line">.....省略</span><br><span class="line"></span><br><span class="line">&quot;main&quot; #1 prio=5 os_prio=0 tid=0x0000000002b9e000 nid=0xb40 waiting on condition [0x0000000002c9f000]</span><br><span class="line">   java.lang.Thread.State: TIMED_WAITING (sleeping)</span><br><span class="line">        at java.lang.Thread.sleep(Native Method)</span><br><span class="line">        at org.totoro.boot.Test.main(Test.java:12)</span><br><span class="line"></span><br><span class="line">........省略</span><br></pre></td></tr></table></figure>
+
+<h5 id="名词解释-1"><a href="#名词解释-1" class="headerlink" title="名词解释"></a>名词解释</h5><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>“main”</td>
+<td>线程名称</td>
+</tr>
+<tr>
+<td>prio</td>
+<td>优先级</td>
+</tr>
+<tr>
+<td>daemon</td>
+<td>是否是守护线程</td>
+</tr>
+<tr>
+<td>os_prio</td>
+<td></td>
+</tr>
+<tr>
+<td>tid</td>
+<td>java 线程id</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p><a href="https://gitee.com/adminxl/document/blob/master/JVM%20%E8%B0%83%E4%BC%98%E5%B7%A5%E5%85%B7.md" target="_blank" rel="noopener">文档来源</a></p>
 
       
     </div>
@@ -452,7 +1152,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/47/">47</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -518,7 +1218,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-count">59</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
