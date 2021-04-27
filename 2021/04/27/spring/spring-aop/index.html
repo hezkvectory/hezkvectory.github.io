@@ -20,19 +20,20 @@
     var CONFIG = {"hostname":"","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="1234567891011121314151617181920212223242526#/bin/bashMYSQL=mysql USER=&apos;xxx&apos;    PASSWORD=&apos;xxx&apos; DB=&apos;xxx&apos;  HOST=&apos;xxx&apos;COMMAND=&quot; SELECT  ip FROM  broker&quot; declare list=`$MYSQL  -h$&amp;#123;HOST&amp;#125; -u$&amp;#123;">
+  <meta name="description" content="核心类讲解 spring代理采用cglib或者jdk proxy cglib核心类ProxyFactory、MethodInterceptor、DynamicAdvisedInterceptor、CglibMethodInvocation Pointcut​    ClassFilter MethodFilter Advice​    MethodBeforeAdvice AfterReturni">
+<meta name="keywords" content="spring">
 <meta property="og:type" content="article">
-<meta property="og:title" content="我的博客">
-<meta property="og:url" content="/2021/02/26/shell/url数据检测脚本/index.html">
+<meta property="og:title" content="spring aop">
+<meta property="og:url" content="/2021/04/27/spring/spring-aop/index.html">
 <meta property="og:site_name" content="我的博客">
-<meta property="og:description" content="1234567891011121314151617181920212223242526#/bin/bashMYSQL=mysql USER=&apos;xxx&apos;    PASSWORD=&apos;xxx&apos; DB=&apos;xxx&apos;  HOST=&apos;xxx&apos;COMMAND=&quot; SELECT  ip FROM  broker&quot; declare list=`$MYSQL  -h$&amp;#123;HOST&amp;#125; -u$&amp;#123;">
+<meta property="og:description" content="核心类讲解 spring代理采用cglib或者jdk proxy cglib核心类ProxyFactory、MethodInterceptor、DynamicAdvisedInterceptor、CglibMethodInvocation Pointcut​    ClassFilter MethodFilter Advice​    MethodBeforeAdvice AfterReturni">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-02-26T10:02:34.224Z">
+<meta property="og:updated_time" content="2021-04-27T10:53:39.008Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="我的博客">
-<meta name="twitter:description" content="1234567891011121314151617181920212223242526#/bin/bashMYSQL=mysql USER=&apos;xxx&apos;    PASSWORD=&apos;xxx&apos; DB=&apos;xxx&apos;  HOST=&apos;xxx&apos;COMMAND=&quot; SELECT  ip FROM  broker&quot; declare list=`$MYSQL  -h$&amp;#123;HOST&amp;#125; -u$&amp;#123;">
+<meta name="twitter:title" content="spring aop">
+<meta name="twitter:description" content="核心类讲解 spring代理采用cglib或者jdk proxy cglib核心类ProxyFactory、MethodInterceptor、DynamicAdvisedInterceptor、CglibMethodInvocation Pointcut​    ClassFilter MethodFilter Advice​    MethodBeforeAdvice AfterReturni">
 
-<link rel="canonical" href="/2021/02/26/shell/url数据检测脚本/">
+<link rel="canonical" href="/2021/04/27/spring/spring-aop/">
 
 
 <script id="page-configurations">
@@ -45,7 +46,7 @@
   };
 </script>
 
-  <title> | 我的博客</title>
+  <title>spring aop | 我的博客</title>
   
 
 
@@ -155,7 +156,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/02/26/shell/url数据检测脚本/">
+    <link itemprop="mainEntityOfPage" href="/2021/04/27/spring/spring-aop/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -168,7 +169,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          spring aop
         </h1>
 
         <div class="post-meta">
@@ -179,7 +180,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-02-26 11:57:28 / Modified: 18:02:34" itemprop="dateCreated datePublished" datetime="2021-02-26T11:57:28+08:00">2021-02-26</time>
+              <time title="Created: 2021-04-27 17:55:00 / Modified: 18:53:39" itemprop="dateCreated datePublished" datetime="2021-04-27T17:55:00+08:00">2021-04-27</time>
             </span>
 
           
@@ -193,7 +194,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">/bin/bash</span></span><br><span class="line"></span><br><span class="line">MYSQL=mysql </span><br><span class="line">USER='xxx'    </span><br><span class="line">PASSWORD='xxx' </span><br><span class="line">DB='xxx'  </span><br><span class="line">HOST='xxx'</span><br><span class="line"></span><br><span class="line">COMMAND=" SELECT  ip FROM  broker" </span><br><span class="line">declare list=`$MYSQL  -h$&#123;HOST&#125; -u$&#123;USER&#125; -p$&#123;PASSWORD&#125; -D $&#123;DB&#125; -e "$&#123;COMMAND&#125;" --skip-column-name` </span><br><span class="line">for item in $list                                                                                                      </span><br><span class="line">do</span><br><span class="line">	port=8080</span><br><span class="line">	if [ "$test"x = "xxx"x ]; then	</span><br><span class="line">		port=22778</span><br><span class="line">	fi</span><br><span class="line">	echo " the item is $item"</span><br><span class="line">	url="http://$item:$port/stats"</span><br><span class="line">	curl $url | jq .data.brokerMaster</span><br><span class="line">done </span><br><span class="line"></span><br><span class="line">for i in $@</span><br><span class="line">do</span><br><span class="line">	url = "http://$i:8080/stats"</span><br><span class="line">   	curl $url | jq .data.brokerMaster</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+        <p><strong><a href="https://cloud.tencent.com/developer/article/1497770" target="_blank" rel="noopener">核心类讲解</a></strong></p>
+<p>spring代理采用cglib或者jdk proxy</p>
+<p>cglib核心类ProxyFactory、MethodInterceptor、DynamicAdvisedInterceptor、CglibMethodInvocation</p>
+<h4 id="Pointcut"><a href="#Pointcut" class="headerlink" title="Pointcut"></a>Pointcut</h4><p>​    ClassFilter MethodFilter</p>
+<h4 id="Advice"><a href="#Advice" class="headerlink" title="Advice"></a>Advice</h4><p>​    MethodBeforeAdvice AfterReturningAdvice AspectJAroundAdvice</p>
+<h4 id="Advisor"><a href="#Advisor" class="headerlink" title="Advisor"></a>Advisor</h4><p>​    Advisor 其实它就是 Pointcut 与 Advice 的组合, Advice 是执行的方法, 而要知道方法何时执行, 则 Advice 必需与 Pointcut 组合在一起, 这就诞生了 Advisor 这个类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">AopProxyUtils.completeProxiedInterfaces(this.advised)</span><br><span class="line">		0 = &#123;Class@521&#125; &quot;interface com.hezk.aop.service.Browser&quot;</span><br><span class="line">		1 = &#123;Class@1152&#125; &quot;interface org.springframework.aop.SpringProxy&quot;</span><br><span class="line">		2 = &#123;Class@511&#125; &quot;interface org.springframework.aop.framework.Advised&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Callback		</span><br><span class="line">	0 = &#123;CglibAopProxy$DynamicAdvisedInterceptor@1184&#125; </span><br><span class="line">	1 = &#123;CglibAopProxy$StaticUnadvisedInterceptor@1198&#125; </span><br><span class="line">	2 = &#123;CglibAopProxy$SerializableNoOp@1218&#125; </span><br><span class="line">	3 = &#123;CglibAopProxy$StaticDispatcher@1206&#125; </span><br><span class="line">	4 = &#123;CglibAopProxy$AdvisedDispatcher@984&#125; </span><br><span class="line">	5 = &#123;CglibAopProxy$EqualsInterceptor@1219&#125; </span><br><span class="line">	6 = &#123;CglibAopProxy$HashCodeInterceptor@1220&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ProxyCallbackFilter</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">interceptorList = &#123;ArrayList@1723&#125;  size = 3</span><br><span class="line"> 0 = &#123;MethodBeforeAdviceInterceptor@1930&#125; </span><br><span class="line"> 1 = &#123;AfterReturningAdviceInterceptor@1931&#125; </span><br><span class="line"> 2 = &#123;BrowserAroundAdvice@975&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> CglibMethodInvocation</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> org.springframework.cglib.core.AbstractClassGenerator.generate 生成代理方法</span><br></pre></td></tr></table></figure>
 
 
     </div>
@@ -203,6 +210,9 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/spring/" rel="tag"># spring</a>
+          </div>
 
         
 
@@ -210,13 +220,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/02/26/sentinel/sentinel原理/" rel="prev" title="">
-      <i class="fa fa-chevron-left"></i> 
+    <a href="/2021/04/19/dubbo/dubbo编解码和协议/" rel="prev" title="dubbo编解码和协议">
+      <i class="fa fa-chevron-left"></i> dubbo编解码和协议
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/02/26/mysql/MySQL实战45讲/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -275,6 +282,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Pointcut"><span class="nav-number">1.</span> <span class="nav-text">Pointcut</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Advice"><span class="nav-number">2.</span> <span class="nav-text">Advice</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Advisor"><span class="nav-number">3.</span> <span class="nav-text">Advisor</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
