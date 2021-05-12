@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/08/es/es-添加文档过程/">
+    <link itemprop="mainEntityOfPage" href="/2021/03/11/es/es重新分片/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/03/08/es/es-添加文档过程/" class="post-title-link" itemprop="url">es-添加文档过程</a>
+            <a href="/2021/03/11/es/es重新分片/" class="post-title-link" itemprop="url">elasticsearch 重新分片</a>
         </h2>
 
         <div class="post-meta">
@@ -175,7 +175,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-03-08 13:28:35 / Modified: 18:04:55" itemprop="dateCreated datePublished" datetime="2021-03-08T13:28:35+08:00">2021-03-08</time>
+              <time title="Created: 2021-03-11 13:28:35 / Modified: 18:04:41" itemprop="dateCreated datePublished" datetime="2021-03-11T13:28:35+08:00">2021-03-11</time>
             </span>
 
           
@@ -189,43 +189,32 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>es是如何从一条curl命令，把文本添加到es 索引文档中的，下面通过源码进行分析。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">RestIndexAction</span><br><span class="line">NodeClient</span><br><span class="line">TransportIndexAction</span><br><span class="line">TransportSingleItemBulkWriteAction</span><br><span class="line">TransportBulkAction</span><br><span class="line">TransportReplicationAction</span><br><span class="line">	ReroutePhase</span><br><span class="line">	</span><br><span class="line">TransportService</span><br><span class="line">	TransportReplicationAction</span><br><span class="line">		PrimaryOperationTransportHandler</span><br><span class="line">			AsyncPrimaryAction</span><br><span class="line">			ReplicationOperation</span><br><span class="line">			TransportShardBulkAction</span><br><span class="line">			TransportSingleItemBulkWriteAction</span><br><span class="line">			IndexShard</span><br><span class="line">			InternalEngine</span><br></pre></td></tr></table></figure>
+          <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -XGET http://localhost:9200/_cat/indices | grep red | awk '&#123;print $3&#125;' | awk '&#123;system("sh reroute.sh "$1)&#125;'</span><br></pre></td></tr></table></figure>
 
-<p>创建索引的过程：</p>
-<ol>
-<li><p>执行curl</p>
-</li>
-<li><p>进入到RestIndexAction，解析请求参数，封装IndexRequest</p>
-</li>
-<li><p>然后进入org.elasticsearch.action.bulk.TransportBulkAction</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">executeBulk(task, bulkRequest, startTime, listener, responses, indicesThatCannotBeCreated);</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">index=$1</span><br><span class="line">curl -XPOST 'http://localhost:9200/_cluster/reroute?pretty' -d '&#123;</span><br><span class="line">  "commands":[</span><br><span class="line">    &#123;</span><br><span class="line">      "allocate_empty_primary":&#123;</span><br><span class="line">        "index": "'$&#123;index&#125;'",</span><br><span class="line">        "shard": 26,</span><br><span class="line">        "node": "new_node_name1",</span><br><span class="line">        "accept_data_loss": true</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      "allocate_empty_primary":&#123;</span><br><span class="line">        "index": "'$&#123;index&#125;'",</span><br><span class="line">        "shard": 27,</span><br><span class="line">        "node": "new_node_name2",</span><br><span class="line">        "accept_data_loss": true</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;'</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">new BulkOperation(task, bulkRequest, listener, responses, startTimeNanos, indicesThatCannotBeCreated).run();</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>org.elasticsearch.action.bulk.TransportShardBulkAction</p>
-</li>
-</ol>
-<ol>
-<li>org.elasticsearch.action.bulk.TransportShardBulkAction#executeBulkItemRequest</li>
-<li>org.elasticsearch.index.shard.IndexShard#index(org.elasticsearch.index.engine.Engine.Index)</li>
-<li>org.elasticsearch.index.engine.InternalEngine#index(org.elasticsearch.index.engine.Engine.Index)</li>
-</ol>
-<p>es添加索引文档</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> curl -X PUT &apos;localhost:9200/index_name/type_name/5&apos; -H &apos;Content-Type: application/json&apos; -d &apos;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;title&quot;: &quot;我是文件标题，可被搜索到&quot;,</span><br><span class="line">  &quot;text&quot;:  &quot;文本内容，ES时如何索引一个文档的&quot;,</span><br><span class="line">  &quot;date&quot;:  &quot;2019/01/01&quot;</span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure>
+<p>index分布不均匀则需要_cat/shards找出每个index异常的命令，可以参考如下命令进行处理。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -XGET http://127.0.0.1:9200/_cat/shards | grep UNASSIGNED | awk '&#123;print $1,$2&#125;' | awk '&#123;system("sh reroute.sh " $0)&#125;'</span><br></pre></td></tr></table></figure>
 
-<p>执行以上这条命令后，请求会进入到 <strong>org.elasticsearch.rest.action.document.RestIndexAction#prepareRequest</strong> 方法</p>
-<ol>
-<li><p>执行NodeClient.index方法</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">client.index(indexRequest, new RestStatusToXContentListener&lt;&gt;(channel, r -&gt; r.getLocation(indexRequest.routing())))</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>org.elasticsearch.client.node.NodeClient#executeLocally(org.elasticsearch.action.GenericAction&lt;Request,Response&gt;, Request, org.elasticsearch.action.ActionListener<response>)</response></p>
-</li>
-<li><p>org.elasticsearch.action.support.TransportAction#execute(Request, org.elasticsearch.action.ActionListener<response>)</response></p>
-</li>
-<li><p>org.elasticsearch.action.bulk.TransportBulkAction#doExecute(org.elasticsearch.tasks.Task, org.elasticsearch.action.bulk.BulkRequest, org.elasticsearch.action.ActionListener&lt;org.elasticsearch.action.bulk.BulkResponse&gt;)</p>
-</li>
-</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">index=$1</span><br><span class="line">shard=$2</span><br><span class="line">curl -XPOST -H &apos;Content-Type: application/json&apos; &apos;http://127.0.0.1:9200/_cluster/reroute?pretty&apos; -d &apos;&#123;</span><br><span class="line">  &quot;commands&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;allocate_empty_primary&quot;: &#123;</span><br><span class="line">        &quot;index&quot;: &quot;&apos;$&#123;index&#125;&apos;&quot;,</span><br><span class="line">        &quot;shard&quot;: &apos;$&#123;shard&#125;&apos;,</span><br><span class="line">        &quot;node&quot;: &quot;new_node_name&quot;,</span><br><span class="line">        &quot;accept_data_loss&quot;: true</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure>
+
+<p><strong>批量数据灌入ES时要禁用副本和刷新</strong></p>
+<p>大规模批量导入数据的时候，要禁用副本和刷新，ES在索引数据的时候，如果有副本的话，会同步副本，造成压力。</p>
+<p>等到数据索引完成后，在恢复副本。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 关闭</span><br><span class="line">curl -PUT http://localhost:9200/_settings -d '&#123;</span><br><span class="line">　　"index": &#123;</span><br><span class="line">　　　　"number_of_replicas" : 0</span><br><span class="line">　　　　"refresh_interval" : -1</span><br><span class="line">　　&#125;    </span><br><span class="line">&#125;'</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 打开</span><br><span class="line">curl -PUT http://localhost:9200/_settings -d '&#123;</span><br><span class="line">　　"index": &#123;</span><br><span class="line">　　　　"number_of_replicas" : 1</span><br><span class="line">　　　　"refresh_interval" : 5s</span><br><span class="line">　　&#125;    </span><br><span class="line">&#125;'</span><br></pre></td></tr></table></figure>
+
+<p><strong>高并发查询时，优化ES线程池</strong></p>
+<p>多种请求类型对应多种线程池</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">index：此线程池用于索引和删除操作。它的类型默认为fixed，size默认为可用处理器的数量，队列的size默认为200。</span><br><span class="line">search：此线程池用于搜索和计数请求。它的类型默认为fixed，size默认为(可用处理器的数量* 3) / 2) + 1，队列的size默认为1000。</span><br><span class="line">suggest：此线程池用于建议器请求。它的类型默认为fixed，size默认为可用处理器的数量，队列的size默认为1000。</span><br><span class="line">get：此线程池用于实时的GET请求。它的类型默认为fixed，size默认为可用处理器的数量，队列的size默认为1000。</span><br><span class="line">bulk：此线程池用于批量操作。它的类型默认为fixed，size默认为可用处理器的数量，队列的size默认为50。</span><br><span class="line">percolate：此线程池用于预匹配器操作。它的类型默认为fixed，size默认为可用处理器的数量，队列的size默认为1000。</span><br></pre></td></tr></table></figure>
+
+<p>这里以index为例，可以在elasticsearch.yml中修改线程池配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">threadpool.index.type: fixed</span><br><span class="line">threadpool.index.size: 100</span><br><span class="line">threadpool.index.queue_size: 500</span><br></pre></td></tr></table></figure>
+
+<p>通过api控制</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">curl -XPUT 'localhost:9200/_cluster/settings' -d '&#123;</span><br><span class="line">    "transient": &#123;</span><br><span class="line">        "threadpool.index.type": "fixed",</span><br><span class="line">        "threadpool.index.size": 100,</span><br><span class="line">        "threadpool.index.queue_size": 500</span><br><span class="line">    &#125;</span><br><span class="line">&#125;'</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -245,7 +234,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/08/kafka/kafka之comsumer再分配/">
+    <link itemprop="mainEntityOfPage" href="/2021/03/11/leetcode/327-区间和的个数/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -259,7 +248,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/03/08/kafka/kafka之comsumer再分配/" class="post-title-link" itemprop="url">kafka之consumer再分配</a>
+            <a href="/2021/03/11/leetcode/327-区间和的个数/" class="post-title-link" itemprop="url">327.区间和的个数</a>
         </h2>
 
         <div class="post-meta">
@@ -268,16 +257,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2021-03-08 11:04:02" itemprop="dateCreated datePublished" datetime="2021-03-08T11:04:02+08:00">2021-03-08</time>
+              <time title="Created: 2021-03-11 11:42:01 / Modified: 10:57:58" itemprop="dateCreated datePublished" datetime="2021-03-11T11:42:01+08:00">2021-03-11</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-18 11:17:22" itemprop="dateModified" datetime="2021-03-18T11:17:22+08:00">2021-03-18</time>
-              </span>
 
           
 
@@ -290,45 +273,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h4 id="consumer和Coordinator"><a href="#consumer和Coordinator" class="headerlink" title="consumer和Coordinator"></a>consumer和Coordinator</h4><p>Coordinator是运行在broker上的Group Coordinator，用于管理consumer group中的各个成员，主要用于offset位移管理和consumer rebalance。</p>
-<p>Coordinator存储的信息</p>
-<p>每个consumer group的coordinator都会存储以下信息:</p>
-<ol>
-<li>每个topic，有哪些消费者group订阅</li>
-<li>每个ConsumerGroup元数据：<ol>
-<li>订阅的topic列表</li>
-<li>ConsumerGroup配置信息(session timeout等)</li>
-<li>consumer元数据信息(主机名、consumerId)</li>
-<li>每个topic partition当前的offset</li>
-<li>consumer消费partitions的映射信息</li>
-</ol>
-</li>
-</ol>
-<p>如何确定consumer group的coordinator</p>
-<ol>
-<li>consumergroup位移信息写入_consumers_offsets [topic]哪个分区?<ol>
-<li>_consumers_offsets partition = Math.abs(groupId.hashCode() % offsets.topic.num.paration)， 默认分区50</li>
-</ol>
-</li>
-<li>1⃣️中计算出来的分区所在的broker就是此consumer 的coordinator</li>
-</ol>
-<h4 id="Consumer-rebalance"><a href="#Consumer-rebalance" class="headerlink" title="Consumer rebalance"></a>Consumer rebalance</h4><p>rebalance触发条件</p>
-<ol>
-<li><p>组成员发生变更(新加入、主动离开和consumer崩溃)</p>
-</li>
-<li><p>订阅topic分区数发生变更</p>
-</li>
-<li><p>consumer通过正则匹配订阅topic，新建了对应正则topic</p>
-</li>
-</ol>
-<p>rebalance协议</p>
-<ol>
-<li>HeatBeat请求 (session.timeout.ms)</li>
-<li>LeaveGroup请求</li>
-<li>SyncGroup请求</li>
-<li>JoinGroup请求</li>
-<li>DescribeGroup请求</li>
-</ol>
+          <p><a href="https://leetcode-cn.com/problems/count-of-range-sum/solution/suan-fa-bi-ji-javaguan-fang-ti-jie-yi-er-xiang-xi-/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/count-of-range-sum/solution/suan-fa-bi-ji-javaguan-fang-ti-jie-yi-er-xiang-xi-/</a></p>
+<p>给定一个整数数组 nums 。区间和 S(i, j) 表示在 nums 中，位置从 i 到 j 的元素之和，包含 i 和 j (i ≤ j)。</p>
+<p>请你以下标 i （0 &lt;= i &lt;= nums.length ）为起点，元素个数逐次递增，计算子数组内的元素和。</p>
+<p>当元素和落在范围 [lower, upper] （包含 lower 和 upper）之内时，记录子数组当前最末元素下标 j ，记作 有效 区间和 S(i, j) 。</p>
+<p>求数组中，值位于范围 [lower, upper] （包含 lower 和 upper）之内的 有效 区间和的个数。</p>
+<p>注意：<br>最直观的算法复杂度是 O(n2) ，请在此基础上优化你的算法。</p>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [-2,5,-1], lower = -2, upper = 2,</span><br><span class="line">输出：3 </span><br><span class="line">解释：</span><br><span class="line">下标 i = 0 时，子数组 [-2]、[-2,5]、[-2,5,-1]，对应元素和分别为 -2、3、2 ；其中 -2 和 2 落在范围 [lower = -2, upper = 2] 之间，因此记录有效区间和 S(0,0)，S(0,2) 。</span><br><span class="line">下标 i = 1 时，子数组 [5]、[5,-1] ，元素和 5、4 ；没有满足题意的有效区间和。</span><br><span class="line">下标 i = 2 时，子数组 [-1] ，元素和 -1 ；记录有效区间和 S(2,2) 。</span><br><span class="line">故，共有 3 个有效区间和。</span><br></pre></td></tr></table></figure>
+
+<p>利用前缀和 + 线段树</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br></pre></td><td class="code"><pre><span class="line">     <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 整体思路（面向结果型，即不提供想到算法的思路，只描述代码实现的思路）：</span></span><br><span class="line"><span class="comment">     * 满足题目要求的连续数组通过数学公式表达如下：</span></span><br><span class="line"><span class="comment">     * lower &lt;= sum[i, j] &lt;= upper</span></span><br><span class="line"><span class="comment">     * 第一层转换：</span></span><br><span class="line"><span class="comment">     * 实际计算过程中需要遍历所有0 &lt;= i &lt;= j &lt; input.length的组合且存在大量的重复运算，因此通过前缀和进行转换</span></span><br><span class="line"><span class="comment">     * preSum[i] = sum[0, i - 1]</span></span><br><span class="line"><span class="comment">     * 第二层转换：</span></span><br><span class="line"><span class="comment">     * 通过前缀和数组变形之后的满足题目要求的公式表达变为：</span></span><br><span class="line"><span class="comment">     * lower &lt;= preSum[j] - preSum[i - 1] &lt;= upper</span></span><br><span class="line"><span class="comment">     * 也就是说preSum[i - 1]数值在[preSum[j] - upper, preSum[j] - lower]范围内表示input[i, j]满足题目要求</span></span><br><span class="line"><span class="comment">     * 至此，我们将原始输入转换成了各个前缀和数组之间的【范围】关系，将范围关系保存在helper数组中</span></span><br><span class="line"><span class="comment">     * 第三层转换：</span></span><br><span class="line"><span class="comment">     * 由于input[]、lower和upper内容离散导致helper数组内容也离散，为便于查找，将helper[]的内容进行hash映射</span></span><br><span class="line"><span class="comment">     * 核心算法：</span></span><br><span class="line"><span class="comment">     * 将helper数组转换为线段树保存，利用线段树可以快速查询连续数组数据特征的功能统计每个叶子节点的【范围】</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution4</span> </span>&#123;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">SegNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> lo, hi, add;</span><br><span class="line">    SegNode lchild, rchild;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SegNode</span><span class="params">(<span class="keyword">int</span> left, <span class="keyword">int</span> right)</span> </span>&#123;</span><br><span class="line">      lo = left;</span><br><span class="line">      hi = right;</span><br><span class="line">      add = <span class="number">0</span>;</span><br><span class="line">      lchild = <span class="keyword">null</span>;</span><br><span class="line">      rchild = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printf</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.lchild != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">this</span>.lchild.printf();</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      System.out.println(<span class="string">"lo="</span> + <span class="keyword">this</span>.lo + <span class="string">", hi="</span> + hi + <span class="string">", add="</span> + add);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.rchild != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">this</span>.rchild.printf();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">countRangeSumMergeSegmentTree</span><span class="params">(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> lower, <span class="keyword">int</span> upper)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> tempCount = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">long</span>[] preSum = <span class="keyword">new</span> <span class="keyword">long</span>[nums.length + <span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; ++i) &#123;</span><br><span class="line">      sum += nums[i];</span><br><span class="line">      preSum[i + <span class="number">1</span>] = sum;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Set&lt;Long&gt; helper = <span class="keyword">new</span> TreeSet();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">long</span> x : preSum) &#123;</span><br><span class="line">      helper.add(x);</span><br><span class="line">      helper.add(x - lower);</span><br><span class="line">      helper.add(x - upper);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">             * 利用哈希表进行离散化，通常构建线段树时，需要严格划分所有叶子节点，也就是每个叶子节点表示的数据范围为1</span></span><br><span class="line"><span class="comment">             * 因此，通过hashMap将原始数据映射到数据范围较小的数值上，以代码中输入[-2, 5, 1]为例</span></span><br><span class="line"><span class="comment">             * sum=[0, -2, 3, 4]</span></span><br><span class="line"><span class="comment">             * helper=[-4, -2, 0, 1, 2, 3, 4, 5, 6]</span></span><br><span class="line"><span class="comment">             * map=[</span></span><br><span class="line"><span class="comment">             *      key    : -4 -2  0  1  2  3  4  5  6</span></span><br><span class="line"><span class="comment">             *      value  :  0  1  2  3  4  5  6  7  8</span></span><br><span class="line"><span class="comment">             * ]</span></span><br><span class="line"><span class="comment">             * 实现了将范围较大的value映射比较聚合的“连续”的“小”数组上</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line"></span><br><span class="line">    Map&lt;Long, Integer&gt; values = <span class="keyword">new</span> HashMap();</span><br><span class="line">    <span class="keyword">int</span> idx = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">long</span> x : helper) &#123;</span><br><span class="line">      values.put(x, idx++);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">"preSum:"</span>);</span><br><span class="line">    System.out.println(Arrays.toString(preSum));</span><br><span class="line">    System.out.println(<span class="string">"\nhelper:"</span>);</span><br><span class="line">    System.out.println(helper);</span><br><span class="line">    System.out.println(<span class="string">"\nhelper map:"</span>);</span><br><span class="line">    System.out.println(values);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* 按照helper[]的大小构建空的线段树，此时线段树只有标注map的key的位置的功能，还不具备统计【范围】的能力</span></span><br><span class="line"><span class="comment">             * 本例的线段树如下([left, right]):</span></span><br><span class="line"><span class="comment">             * [0,8]---------------------------+</span></span><br><span class="line"><span class="comment">             *   |                             |</span></span><br><span class="line"><span class="comment">             * [0,4]---------------+         [5,8]---------+</span></span><br><span class="line"><span class="comment">             *   |                 |           |           |</span></span><br><span class="line"><span class="comment">             * [0,2]---------+   [3,4]---+   [5,6]---+   [7,8]---+</span></span><br><span class="line"><span class="comment">             *   |           |     |     |     |     |     |     |</span></span><br><span class="line"><span class="comment">             * [0,1]---+     |     |     |     |     |     |     |</span></span><br><span class="line"><span class="comment">             *   |     |     |     |     |     |     |     |     |</span></span><br><span class="line"><span class="comment">             * [0,0] [1,1] [2,2] [3,3] [4,4] [5,5] [6,6] [7,7] [8,8]</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">    SegNode root = build(<span class="number">0</span>, values.size() - <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> ret = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">long</span> x : preSum) &#123;</span><br><span class="line">      <span class="comment">/*</span></span><br><span class="line"><span class="comment">                 * left和right表示preSum[x]的范围，举例来说：</span></span><br><span class="line"><span class="comment">                 * preSum[0]=0，不需要判断</span></span><br><span class="line"><span class="comment">                 * preSum[1]=-2，它满足题目的要求就是[-4, 0]</span></span><br><span class="line"><span class="comment">                 */</span></span><br><span class="line">      <span class="keyword">int</span> left = values.get(x - upper), right = values.get(x - lower);</span><br><span class="line">      System.out.println(<span class="string">"\nx="</span> + x + <span class="string">", x.idx="</span> + values.get(x) + <span class="string">", left.idx="</span> + left + <span class="string">", right.idx="</span> + right);</span><br><span class="line"></span><br><span class="line">      <span class="comment">/*</span></span><br><span class="line"><span class="comment">                 * 这里的代码实现不全是线段树统计的算法，比较顺畅的思路应该是先将preSum的范围插入线段树，也就是更新线段树的内容</span></span><br><span class="line"><span class="comment">                 * 然后再依次统计所有preSum的结果，由于上述说法需要两次for循环，从效率的角度以上两个操作可以合并在一个for循环中，</span></span><br><span class="line"><span class="comment">                 * 从结果正确性的角度来说，preSum[0]其实不是一个有效的结果</span></span><br><span class="line"><span class="comment">                 * 因此这里实际操作的是preSum[1]开始的数据，因为第一轮循环时，preSum[0]的数据还没有更新到线段树中</span></span><br><span class="line"><span class="comment">                 * 对于preSum[1]来说，它的范围通过前文的left、right保存，只需要在当前的线段树中统计节点【范围】在left、right之间即可</span></span><br><span class="line"><span class="comment">                 */</span></span><br><span class="line">      tempCount = count(root, left, right);</span><br><span class="line">      ret += tempCount;</span><br><span class="line">      System.out.println(<span class="string">"count="</span> + tempCount);</span><br><span class="line">      root.printf();</span><br><span class="line"></span><br><span class="line">      <span class="comment">/*</span></span><br><span class="line"><span class="comment">                 * 将preSum[i]的数据更新到线段树中，这里更新的内容是preSum[i]对应的hash值</span></span><br><span class="line"><span class="comment">                 * 在for循环时这样考虑</span></span><br><span class="line"><span class="comment">                 * preSum[0]=0 实际没有进行过统计</span></span><br><span class="line"><span class="comment">                 * preSum[1]=-2 insert之后，本例的线段树如下(&#123;[left, right]=add&#125;):</span></span><br><span class="line"><span class="comment">                 * &#123;[0,8]=1&#125;--------------------------------------------+</span></span><br><span class="line"><span class="comment">                 *   |                                                  |</span></span><br><span class="line"><span class="comment">                 * &#123;[0,4]=1&#125;------------------------+                &#123;[5,8]=1&#125;-------------+</span></span><br><span class="line"><span class="comment">                 *   |                              |                   |                  |</span></span><br><span class="line"><span class="comment">                 * &#123;[0,2]=1&#125;-------------+        &#123;[3,4]=0&#125;--+       &#123;[5,6]=0&#125;---+       &#123;[7,8]=0&#125;---+</span></span><br><span class="line"><span class="comment">                 *   |                   |          |        |         |         |         |         |</span></span><br><span class="line"><span class="comment">                 * &#123;[0,1]=0&#125;---+         |          |        |         |         |         |         |</span></span><br><span class="line"><span class="comment">                 *   |         |         |          |        |         |         |         |         |</span></span><br><span class="line"><span class="comment">                 * &#123;[0,0]=0&#125; &#123;[1,1]=0&#125; &#123;[2,2]=1&#125; &#123;[3,3]=0&#125; &#123;[4,4]=0&#125; &#123;[5,5]=0&#125; &#123;[6,6]=0&#125; &#123;[7,7]=0&#125; &#123;[8,8]=0&#125;</span></span><br><span class="line"><span class="comment">                 * 此时进行count，统计的是从input开始到input[0]为在满足要求的连续子数组的数量，对于preSum[1]=-2而言，满足要求的范围是[-4,-2]，</span></span><br><span class="line"><span class="comment">                 * 对应树形hash结构的[0,2], count=1</span></span><br><span class="line"><span class="comment">                 *</span></span><br><span class="line"><span class="comment">                 * preSum[2]=3 insert之后</span></span><br><span class="line"><span class="comment">                 * &#123;[0,8]=2&#125;--------------------------------------------+</span></span><br><span class="line"><span class="comment">                 *   |                                                  |</span></span><br><span class="line"><span class="comment">                 * &#123;[0,4]=2&#125;------------------------+                &#123;[5,8]=1&#125;-------------+</span></span><br><span class="line"><span class="comment">                 *   |                              |                   |                  |</span></span><br><span class="line"><span class="comment">                 * &#123;[0,2]=2&#125;-------------+        &#123;[3,4]=0&#125;--+       &#123;[5,6]=0&#125;---+       &#123;[7,8]=0&#125;---+</span></span><br><span class="line"><span class="comment">                 *   |                   |          |        |         |         |         |         |</span></span><br><span class="line"><span class="comment">                 * &#123;[0,1]=0&#125;---+         |          |        |         |         |         |         |</span></span><br><span class="line"><span class="comment">                 *   |         |         |          |        |         |         |         |         |</span></span><br><span class="line"><span class="comment">                 * &#123;[0,0]=0&#125; &#123;[1,1]=1&#125; &#123;[2,2]=1&#125; &#123;[3,3]=0&#125; &#123;[4,4]=0&#125; &#123;[5,5]=0&#125; &#123;[6,6]=0&#125; &#123;[7,7]=0&#125; &#123;[8,8]=0&#125;</span></span><br><span class="line"><span class="comment">                 * 此时进行count，统计的是input开始input[2]为止满足要求的连续子数组的数量，对于preSum[2]=3而言，满足要求的范围是[1,5],</span></span><br><span class="line"><span class="comment">                 * 对应树形hash结构的[3,7], count=0</span></span><br><span class="line"><span class="comment">                 *</span></span><br><span class="line"><span class="comment">                 * preSum[3]=3 insert之后</span></span><br><span class="line"><span class="comment">                 * &#123;[0,8]=3&#125;--------------------------------------------+</span></span><br><span class="line"><span class="comment">                 *   |                                                  |</span></span><br><span class="line"><span class="comment">                 * &#123;[0,4]=2&#125;------------------------+                &#123;[5,8]=1&#125;-------------+</span></span><br><span class="line"><span class="comment">                 *   |                              |                   |                  |</span></span><br><span class="line"><span class="comment">                 * &#123;[0,2]=2&#125;-------------+        &#123;[3,4]=0&#125;--+       &#123;[5,6]=1&#125;---+       &#123;[7,8]=0&#125;---+</span></span><br><span class="line"><span class="comment">                 *   |                   |          |        |         |         |         |         |</span></span><br><span class="line"><span class="comment">                 * &#123;[0,1]=0&#125;---+         |          |        |         |         |         |         |</span></span><br><span class="line"><span class="comment">                 *   |         |         |          |        |         |         |         |         |</span></span><br><span class="line"><span class="comment">                 * &#123;[0,0]=0&#125; &#123;[1,1]=1&#125; &#123;[2,2]=1&#125; &#123;[3,3]=0&#125; &#123;[4,4]=0&#125; &#123;[5,5]=1&#125; &#123;[6,6]=0&#125; &#123;[7,7]=0&#125; &#123;[8,8]=0&#125;</span></span><br><span class="line"><span class="comment">                 * 此时进行count，统计的是input开始input[3]为止满足要求的连续子数组的数量，对于preSum[3]=3而言，满足要求的范围是[3,7],</span></span><br><span class="line"><span class="comment">                 * 对应树形hash结构的[3,7], count=1</span></span><br><span class="line"><span class="comment">                 * 后续的依次类推</span></span><br><span class="line"><span class="comment">                 */</span></span><br><span class="line">      insert(root, values.get(x));</span><br><span class="line">      System.out.println(<span class="string">"\nsegment tree after insert: "</span>);</span><br><span class="line">      root.printf();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">"\nsegment tree: "</span>);</span><br><span class="line">    root.printf();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> SegNode <span class="title">build</span><span class="params">(<span class="keyword">int</span> left, <span class="keyword">int</span> right)</span> </span>&#123;</span><br><span class="line">    SegNode node = <span class="keyword">new</span> SegNode(left, right);</span><br><span class="line">    <span class="keyword">if</span> (left == right) &#123;</span><br><span class="line">      <span class="keyword">return</span> node;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> mid = (left + right) / <span class="number">2</span>;</span><br><span class="line">    node.lchild = build(left, mid);</span><br><span class="line">    node.rchild = build(mid + <span class="number">1</span>, right);</span><br><span class="line">    <span class="keyword">return</span> node;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">count</span><span class="params">(SegNode root, <span class="keyword">int</span> left, <span class="keyword">int</span> right)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (left &gt; root.hi || right &lt; root.lo) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (left &lt;= root.lo &amp;&amp; root.hi &lt;= right) &#123;</span><br><span class="line">      <span class="keyword">return</span> root.add;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count(root.lchild, left, right) + count(root.rchild, left, right);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(SegNode root, <span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">    root.add++;</span><br><span class="line">    <span class="keyword">if</span> (root.lo == root.hi) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> mid = (root.lo + root.hi) / <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">if</span> (val &lt;= mid) &#123;</span><br><span class="line">      insert(root.lchild, val);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      insert(root.rchild, val);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -348,7 +304,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/05/kafka/kafka命令/">
+    <link itemprop="mainEntityOfPage" href="/2021/03/10/es/es源码/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -362,7 +318,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/03/05/kafka/kafka命令/" class="post-title-link" itemprop="url">kafka生产消费命令</a>
+            <a href="/2021/03/10/es/es源码/" class="post-title-link" itemprop="url">elasticsearch源码分析(一)</a>
         </h2>
 
         <div class="post-meta">
@@ -372,14 +328,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-03-05 18:45:02" itemprop="dateCreated datePublished" datetime="2021-03-05T18:45:02+08:00">2021-03-05</time>
+              <time title="Created: 2021-03-10 15:28:35" itemprop="dateCreated datePublished" datetime="2021-03-10T15:28:35+08:00">2021-03-10</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-18 19:35:12" itemprop="dateModified" datetime="2021-03-18T19:35:12+08:00">2021-03-18</time>
+                <time title="Modified: 2021-03-11 19:24:27" itemprop="dateModified" datetime="2021-03-11T19:24:27+08:00">2021-03-11</time>
               </span>
 
           
@@ -393,8 +349,46 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">./kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test001</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-console-producer.sh --broker-list 127.0.0.1:9092,127.0.0.1:9093 --topic logs_teacher_teacher-app_bible-server-api</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic logs_teacher_teacher-app_bible-server-api --from-beginning</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-topics.sh --create --zookeeper 127.0.0.1:2181 --replication-factor 1 --partitions 2 --topic test001</span><br><span class="line"></span><br><span class="line">./kafka-topics.sh --zookeeper 127.0.0.1:2181 --list</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-console-consumer.sh --bootstrap-server kafka:9092 --group group1 --topic test_1</span><br><span class="line">./kafka-topics.sh --list --bootstrap-server kafka:9092</span><br><span class="line">./kafka-topics.sh --describe --bootstrap-server kafka:9092</span><br><span class="line">./kafka-topics.sh --describe --bootstrap-server 172.23.104.50:9092 --topic test1</span><br><span class="line">./kafka-console-consumer.sh --bootstrap-server 172.23.104.50:9092 --group group1 --topic test1</span><br><span class="line">./kafka-console-producer.sh --bootstrap-server 172.23.104.50:9092 --topic test1</span><br><span class="line">./kafka-topics.sh --alter --zookeeper 172.23.104.50:2181 --partitions 2 --topic test1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-topics.sh --zookeeper zookeeper:2181 --delete --topic test1</span><br><span class="line">./kafka-consumer-groups.sh --bootstrap-server 172.23.104.50:9092 --list</span><br><span class="line"></span><br><span class="line">./kafka-consumer-groups.sh --describe --bootstrap-server 172.23.104.50:9092 --group ds</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">删除以#开头的行</span><br><span class="line">cat ./conf/server.properties | sed -e &apos;/^#/d&apos;</span><br></pre></td></tr></table></figure>
+          <p>es节点可以配置为master或者data。 </p>
+<p>master主要负责集群元数据处理，索引CRUD，管理集群各个节点状态，集群节点协调和调度。</p>
+<p>data主要负责索引数据的存储和查询，数据分片、搜索和整合。</p>
+<h4 id="master是如何选举的？"><a href="#master是如何选举的？" class="headerlink" title="master是如何选举的？"></a>master是如何选举的？</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">org.elasticsearch.discovery.zen.ZenDiscovery</span><br><span class="line">	==》findMaster</span><br><span class="line">	   1、通过ping获取集群节点</span><br><span class="line">	   2、过滤ping相应的节点信息</span><br><span class="line">	   3、筛选activeMasters</span><br><span class="line">	   4、筛选masterCandidates</span><br><span class="line">	   5、如果activeMasters不为空，选举master。否则根据masterCandidates，判断是否满足master选举候选节点数大于(n/2)+1，满足条件则选举master成功，否则循环调用findMaster方法</span><br><span class="line">	   </span><br><span class="line">	   </span><br><span class="line">	   </span><br><span class="line">org.elasticsearch.discovery.zen.MasterFaultDetection.MasterPinger</span><br><span class="line">   ==》此线程，用户master探测，如果master挂了？rejoin</span><br></pre></td></tr></table></figure>
 
+<h4 id="es索引文档是同步写入到primary和replicatoin节点中的。"><a href="#es索引文档是同步写入到primary和replicatoin节点中的。" class="headerlink" title="es索引文档是同步写入到primary和replicatoin节点中的。"></a>es索引文档是同步写入到primary和replicatoin节点中的。</h4><h4 id="es-副本分片恢复"><a href="#es-副本分片恢复" class="headerlink" title="es 副本分片恢复"></a>es 副本分片恢复</h4><p>副本恢复过程比较复杂，涉及到网络交互，有可能会有大量的数据传输。<br>分片恢复涉及到2个对象，RecoveryTarget–待恢复的对象,RecoverySource–恢复数据源。</p>
+<p>整个过程可粗略理解为：</p>
+<p><strong>target将本地分片meta信息发送给source，suorce将target信息与本地数据快照进行比对，然后将需要更新的segment以文件流方式发给target,同时将还未提交的translog也发送给target，target接收并回放translog，恢复完成。</strong></p>
+<p>由于恢复是shard级别，所以真正恢复动作从IndexShard.startRecovery开始</p>
+<p>org.elasticsearch.index.shard.IndexShard#startRecovery</p>
+<p>org.elasticsearch.indices.recovery.PeerRecoveryTargetService#doRecovery</p>
+<p>  ==》StartRecoveryRequest</p>
+<p>  ==》 transportService.submitRequest(request.sourceNode(), <strong>PeerRecoverySourceService.Actions.START_RECOVERY</strong>, request)</p>
+<p>org.elasticsearch.indices.recovery.PeerRecoverySourceService</p>
+<p>  ==》<strong>StartRecoveryTransportRequestHandler.recover</strong></p>
+<p>org.elasticsearch.indices.recovery.RecoverySourceHandler#recoverToTarget</p>
+<p>  ==》phase1 从lucence文件中恢复</p>
+<p>​             final Store.RecoveryDiff diff = recoverySourceMetadata.recoveryDiff(request.metadataSnapshot());</p>
+<p>​            recoveryTarget.receiveFileInfo(response.phase1FileNames, response.phase1FileSizes, </p>
+<p>​            org.elasticsearch.indices.recovery.RemoteRecoveryTargetHandler#receiveFileInfo</p>
+<p>​            transportService.submitRequest(targetNode, <strong>PeerRecoveryTargetService.Actions.FILES_INFO</strong>, recoveryInfoFilesRequest,</p>
+<p>​            <strong>sendFiles</strong>(store, phase1Files.toArray(new StoreFileMetaData[phase1Files.size()]), outputStreamFactories);</p>
+<p>  ==》phase2 从translog恢复  </p>
+<p>​            org.elasticsearch.indices.recovery.RecoverySourceHandler#sendSnapshot</p>
+<h4 id="es核心类"><a href="#es核心类" class="headerlink" title="es核心类"></a>es核心类</h4><p>Node 节点信息，负责核心服务启动</p>
+<p>ClusterState 集群元数据信息</p>
+<p>​    DiscoveryNodes 当前集群节点信息 master data</p>
+<p>​    MetaData 集群元数据信息  (集群settings信息、索引信息、模版信息等)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//MetaData</span><br><span class="line">private final Settings settings;</span><br><span class="line">private final ImmutableOpenMap&lt;String, IndexMetaData&gt; indices;</span><br><span class="line">private final ImmutableOpenMap&lt;String, IndexTemplateMetaData&gt; templates;</span><br><span class="line">private final ImmutableOpenMap&lt;String, Custom&gt; customs;</span><br></pre></td></tr></table></figure>
+
+<p>RoutingTable</p>
+<p>当master 检测到集群ClusterState信息变化后，发送通知信息</p>
+<p>ClusterStateApplier</p>
+<p>ClusterChangedEvent</p>
+<p>ZenDiscovery</p>
+<p>ClusterService</p>
+<p>NodesFaultDetection</p>
+<p>MasterFaultDetection</p>
+<p>DelayedRerouteTask</p>
+<p>AllocationService  </p>
 
       
     </div>
@@ -413,7 +407,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -479,14 +473,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-count">66</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

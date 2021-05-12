@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/21/github/docs/distributed-system/dubbo-serialization-protocol/">
+    <link itemprop="mainEntityOfPage" href="/2019/07/12/redis/redis-info信息/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/04/21/github/docs/distributed-system/dubbo-serialization-protocol/" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/2019/07/12/redis/redis-info信息/" class="post-title-link" itemprop="url">redis info信息</a>
         </h2>
 
         <div class="post-meta">
@@ -173,8 +173,9 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2021-04-21 15:37:08" itemprop="dateCreated datePublished" datetime="2021-04-21T15:37:08+08:00">2021-04-21</time>
+              <time title="Created: 2019-07-12 13:20:20 / Modified: 14:05:50" itemprop="dateCreated datePublished" datetime="2019-07-12T13:20:20+08:00">2019-07-12</time>
             </span>
 
           
@@ -188,80 +189,222 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h2><p>dubbo 支持哪些通信协议？支持哪些序列化协议？说一下 Hessian 的数据结构？PB 知道吗？为什么 PB 的效率是最高的？</p>
-<h2 id="面试官心理分析"><a href="#面试官心理分析" class="headerlink" title="面试官心理分析"></a>面试官心理分析</h2><p>上一个问题，说说 dubbo 的基本工作原理，那是你必须知道的，至少要知道 dubbo 分成哪些层，然后平时怎么发起 rpc 请求的，注册、发现、调用，这些是基本的。</p>
-<p>接着就可以针对底层进行深入的问问了，比如第一步就可以先问问序列化协议这块，就是平时 RPC 的时候怎么走的？</p>
-<h2 id="面试题剖析"><a href="#面试题剖析" class="headerlink" title="面试题剖析"></a>面试题剖析</h2><p><strong>序列化</strong>，就是把数据结构或者是一些对象，转换为二进制串的过程，而<strong>反序列化</strong>是将在序列化过程中所生成的二进制串转换成数据结构或者对象的过程。</p>
-<p><img src="./images/serialize-deserialize.png" alt="serialize-deserialize"></p>
-<h3 id="dubbo-支持不同的通信协议"><a href="#dubbo-支持不同的通信协议" class="headerlink" title="dubbo 支持不同的通信协议"></a>dubbo 支持不同的通信协议</h3><ul>
-<li>dubbo 协议 <code>dubbo://</code></li>
-</ul>
-<p><strong>默认</strong>就是走 dubbo 协议，单一长连接，进行的是 NIO 异步通信，基于 hessian 作为序列化协议。使用的场景是：传输数据量小（每次请求在 100kb 以内），但是并发量很高，以及服务消费者机器数远大于服务提供者机器数的情况。</p>
-<p>为了要支持高并发场景，一般是服务提供者就几台机器，但是服务消费者有上百台，可能每天调用量达到上亿次！此时用长连接是最合适的，就是跟每个服务消费者维持一个长连接就可以，可能总共就 100 个连接。然后后面直接基于长连接 NIO 异步通信，可以支撑高并发请求。</p>
-<p>长连接，通俗点说，就是建立连接过后可以持续发送请求，无须再建立连接。</p>
-<p><img src="./images/dubbo-keep-connection.png" alt="dubbo-keep-connection"></p>
-<p>而短连接，每次要发送请求之前，需要先重新建立一次连接。</p>
-<p><img src="./images/dubbo-not-keep-connection.png" alt="dubbo-not-keep-connection"></p>
-<ul>
-<li>rmi 协议 <code>rmi://</code></li>
-</ul>
-<p>RMI 协议采用 JDK 标准的 java.rmi.* 实现，采用阻塞式短连接和 JDK 标准序列化方式。多个短连接，适合消费者和提供者数量差不多的情况，适用于文件的传输，一般较少用。</p>
-<ul>
-<li>hessian 协议 <code>hessian://</code></li>
-</ul>
-<p>Hessian 1 协议用于集成 Hessian 的服务，Hessian 底层采用 Http 通讯，采用 Servlet 暴露服务，Dubbo 缺省内嵌 Jetty 作为服务器实现。走 hessian 序列化协议，多个短连接，适用于提供者数量比消费者数量还多的情况，适用于文件的传输，一般较少用。</p>
-<ul>
-<li>http 协议 <code>http://</code></li>
-</ul>
-<p>基于 HTTP 表单的远程调用协议，采用 Spring 的 HttpInvoker 实现。走表单序列化。</p>
-<ul>
-<li>thrift 协议 <code>thrift://</code></li>
-</ul>
-<p>当前 dubbo 支持的 thrift 协议是对 thrift 原生协议的扩展，在原生协议的基础上添加了一些额外的头信息，比如 service name，magic number 等。</p>
-<ul>
-<li>webservice <code>webservice://</code></li>
-</ul>
-<p>基于 WebService 的远程调用协议，基于 Apache CXF 的 frontend-simple 和 transports-http 实现。走 SOAP 文本序列化。</p>
-<ul>
-<li>memcached 协议 <code>memcached://</code></li>
-</ul>
-<p>基于 memcached 实现的 RPC 协议。</p>
-<ul>
-<li>redis 协议 <code>redis://</code></li>
-</ul>
-<p>基于 Redis 实现的 RPC 协议。</p>
-<ul>
-<li>rest 协议 <code>rest://</code></li>
-</ul>
-<p>基于标准的 Java REST API——JAX-RS 2.0（Java API for RESTful Web Services 的简写）实现的 REST 调用支持。</p>
-<ul>
-<li>gPRC 协议 <code>grpc://</code></li>
-</ul>
-<p>Dubbo 自 2.7.5 版本开始支持 gRPC 协议，对于计划使用 HTTP/2 通信，或者想利用 gRPC 带来的 Stream、反压、Reactive 编程等能力的开发者来说， 都可以考虑启用 gRPC 协议。</p>
-<h3 id="dubbo-支持的序列化协议"><a href="#dubbo-支持的序列化协议" class="headerlink" title="dubbo 支持的序列化协议"></a>dubbo 支持的序列化协议</h3><p>dubbo 支持 hession、Java 二进制序列化、json、SOAP 文本序列化多种序列化协议。但是 hessian 是其默认的序列化协议。</p>
-<h3 id="说一下-Hessian-的数据结构"><a href="#说一下-Hessian-的数据结构" class="headerlink" title="说一下 Hessian 的数据结构"></a>说一下 Hessian 的数据结构</h3><p>Hessian 的对象序列化机制有 8 种原始类型：</p>
-<ul>
-<li>原始二进制数据</li>
-<li>boolean</li>
-<li>64-bit date（64 位毫秒值的日期）</li>
-<li>64-bit double</li>
-<li>32-bit int</li>
-<li>64-bit long</li>
-<li>null</li>
-<li>UTF-8 编码的 string</li>
-</ul>
-<p>另外还包括 3 种递归类型：</p>
-<ul>
-<li>list for lists and arrays</li>
-<li>map for maps and dictionaries</li>
-<li>object for objects</li>
-</ul>
-<p>还有一种特殊的类型：</p>
-<ul>
-<li>ref：用来表示对共享对象的引用。</li>
-</ul>
-<h3 id="为什么-PB-的效率是最高的？"><a href="#为什么-PB-的效率是最高的？" class="headerlink" title="为什么 PB 的效率是最高的？"></a>为什么 PB 的效率是最高的？</h3><p>其实 PB 之所以性能如此好，主要得益于两个：<strong>第一</strong>，它使用 proto 编译器，自动进行序列化和反序列化，速度非常快，应该比 <code>XML</code> 和 <code>JSON</code> 快上了 <code>20~100</code> 倍；<strong>第二</strong>，它的数据压缩效果好，就是说它序列化后的数据量体积小。因为体积小，传输起来带宽和速度上会有优化。</p>
+          <p>INFO [section]</p>
+<pre><code>以一种易于解释（parse）且易于阅读的格式，返回关于 Redis 服务器的各种信息和统计数值。
 
+通过给定可选的参数 section ，可以让命令只返回某一部分的信息：</code></pre><p>server 部分记录了 Redis 服务器的信息，它包含以下域：</p>
+<pre><code>redis_version : Redis 服务器版本
+redis_git_sha1 : Git SHA1
+redis_git_dirty : Git dirty flag
+os : Redis 服务器的宿主操作系统
+arch_bits : 架构（32 或 64 位）
+multiplexing_api : Redis 所使用的事件处理机制
+gcc_version : 编译 Redis 时所使用的 GCC 版本
+process_id : 服务器进程的 PID
+run_id : Redis 服务器的随机标识符（用于 Sentinel 和集群）
+tcp_port : TCP/IP 监听端口
+uptime_in_seconds : 自 Redis 服务器启动以来，经过的秒数
+uptime_in_days : 自 Redis 服务器启动以来，经过的天数
+lru_clock : 以分钟为单位进行自增的时钟，用于 LRU 管理
+clients 部分记录了已连接客户端的信息，它包含以下域：
+
+connected_clients : 已连接客户端的数量（不包括通过从属服务器连接的客户端）
+client_longest_output_list : 当前连接的客户端当中，最长的输出列表
+client_longest_input_buf : 当前连接的客户端当中，最大输入缓存
+blocked_clients : 正在等待阻塞命令（BLPOP、BRPOP、BRPOPLPUSH）的客户端的数量
+memory 部分记录了服务器的内存信息，它包含以下域：
+
+used_memory : 由 Redis 分配器分配的内存总量，以字节（byte）为单位
+used_memory_human : 以人类可读的格式返回 Redis 分配的内存总量
+used_memory_rss : 从操作系统的角度，返回 Redis 已分配的内存总量（俗称常驻集大小）。这个值和 top 、 ps 等命令的输出一致。
+used_memory_peak : Redis 的内存消耗峰值（以字节为单位）
+used_memory_peak_human : 以人类可读的格式返回 Redis 的内存消耗峰值
+used_memory_lua : Lua 引擎所使用的内存大小（以字节为单位）
+mem_fragmentation_ratio : used_memory_rss 和 used_memory 之间的比率
+mem_allocator : 在编译时指定的， Redis 所使用的内存分配器。可以是 libc 、 jemalloc 或者 tcmalloc 。
+在理想情况下， used_memory_rss 的值应该只比 used_memory 稍微高一点儿。
+当 rss &gt; used ，且两者的值相差较大时，表示存在（内部或外部的）内存碎片。
+内存碎片的比率可以通过 mem_fragmentation_ratio 的值看出。
+当 used &gt; rss 时，表示 Redis 的部分内存被操作系统换出到交换空间了，在这种情况下，操作可能会产生明显的延迟。
+Because Redis does not have control over how its allocations are mapped to memory pages, high used_memory_rss is often the result of a spike in memory usage.
+
+当 Redis 释放内存时，分配器可能会，也可能不会，将内存返还给操作系统。
+如果 Redis 释放了内存，却没有将内存返还给操作系统，那么 used_memory 的值可能和操作系统显示的 Redis 内存占用并不一致。
+查看 used_memory_peak 的值可以验证这种情况是否发生。
+persistence 部分记录了跟 RDB 持久化和 AOF 持久化有关的信息，它包含以下域：
+
+loading : 一个标志值，记录了服务器是否正在载入持久化文件。
+rdb_changes_since_last_save : 距离最近一次成功创建持久化文件之后，经过了多少秒。
+rdb_bgsave_in_progress : 一个标志值，记录了服务器是否正在创建 RDB 文件。
+rdb_last_save_time : 最近一次成功创建 RDB 文件的 UNIX 时间戳。
+rdb_last_bgsave_status : 一个标志值，记录了最近一次创建 RDB 文件的结果是成功还是失败。
+rdb_last_bgsave_time_sec : 记录了最近一次创建 RDB 文件耗费的秒数。
+rdb_current_bgsave_time_sec : 如果服务器正在创建 RDB 文件，那么这个域记录的就是当前的创建操作已经耗费的秒数。
+aof_enabled : 一个标志值，记录了 AOF 是否处于打开状态。
+aof_rewrite_in_progress : 一个标志值，记录了服务器是否正在创建 AOF 文件。
+aof_rewrite_scheduled : 一个标志值，记录了在 RDB 文件创建完毕之后，是否需要执行预约的 AOF 重写操作。
+aof_last_rewrite_time_sec : 最近一次创建 AOF 文件耗费的时长。
+aof_current_rewrite_time_sec : 如果服务器正在创建 AOF 文件，那么这个域记录的就是当前的创建操作已经耗费的秒数。
+aof_last_bgrewrite_status : 一个标志值，记录了最近一次创建 AOF 文件的结果是成功还是失败。
+如果 AOF 持久化功能处于开启状态，那么这个部分还会加上以下域：
+
+aof_current_size : AOF 文件目前的大小。
+aof_base_size : 服务器启动时或者 AOF 重写最近一次执行之后，AOF 文件的大小。
+aof_pending_rewrite : 一个标志值，记录了是否有 AOF 重写操作在等待 RDB 文件创建完毕之后执行。
+aof_buffer_length : AOF 缓冲区的大小。
+aof_rewrite_buffer_length : AOF 重写缓冲区的大小。
+aof_pending_bio_fsync : 后台 I/O 队列里面，等待执行的 fsync 调用数量。
+aof_delayed_fsync : 被延迟的 fsync 调用数量。
+stats 部分记录了一般统计信息，它包含以下域：
+
+total_connections_received : 服务器已接受的连接请求数量。
+total_commands_processed : 服务器已执行的命令数量。
+instantaneous_ops_per_sec : 服务器每秒钟执行的命令数量。
+rejected_connections : 因为最大客户端数量限制而被拒绝的连接请求数量。
+expired_keys : 因为过期而被自动删除的数据库键数量。
+evicted_keys : 因为最大内存容量限制而被驱逐（evict）的键数量。
+keyspace_hits : 查找数据库键成功的次数。
+keyspace_misses : 查找数据库键失败的次数。
+pubsub_channels : 目前被订阅的频道数量。
+pubsub_patterns : 目前被订阅的模式数量。
+latest_fork_usec : 最近一次 fork() 操作耗费的毫秒数。
+replication : 主/从复制信息
+
+role : 如果当前服务器没有在复制任何其他服务器，那么这个域的值就是 master ；否则的话，这个域的值就是 slave 。注意，在创建复制链的时候，一个从服务器也可能是另一个服务器的主服务器。
+如果当前服务器是一个从服务器的话，那么这个部分还会加上以下域：
+
+master_host : 主服务器的 IP 地址。
+master_port : 主服务器的 TCP 监听端口号。
+master_link_status : 复制连接当前的状态， up 表示连接正常， down 表示连接断开。
+master_last_io_seconds_ago : 距离最近一次与主服务器进行通信已经过去了多少秒钟。
+master_sync_in_progress : 一个标志值，记录了主服务器是否正在与这个从服务器进行同步。
+如果同步操作正在进行，那么这个部分还会加上以下域：
+
+master_sync_left_bytes : 距离同步完成还缺少多少字节数据。
+master_sync_last_io_seconds_ago : 距离最近一次因为 SYNC 操作而进行 I/O 已经过去了多少秒。
+如果主从服务器之间的连接处于断线状态，那么这个部分还会加上以下域：
+
+master_link_down_since_seconds : 主从服务器连接断开了多少秒。
+以下是一些总会出现的域：
+
+connected_slaves : 已连接的从服务器数量。
+对于每个从服务器，都会添加以下一行信息：
+
+slaveXXX : ID、IP 地址、端口号、连接状态
+cpu 部分记录了 CPU 的计算量统计信息，它包含以下域：
+
+used_cpu_sys : Redis 服务器耗费的系统 CPU 。
+used_cpu_user : Redis 服务器耗费的用户 CPU 。
+used_cpu_sys_children : 后台进程耗费的系统 CPU 。
+used_cpu_user_children : 后台进程耗费的用户 CPU 。
+commandstats 部分记录了各种不同类型的命令的执行统计信息，比如命令执行的次数、命令耗费的 CPU 时间、执行每个命令耗费的平均 CPU 时间等等。对于每种类型的命令，这个部分都会添加一行以下格式的信息：
+
+cmdstat_XXX:calls=XXX,usec=XXX,usecpercall=XXX
+cluster 部分记录了和集群有关的信息，它包含以下域：
+
+cluster_enabled : 一个标志值，记录集群功能是否已经开启。
+keyspace 部分记录了数据库相关的统计信息，比如数据库的键数量、数据库已经被删除的过期键数量等。对于每个数据库，这个部分都会添加一行以下格式的信息：
+
+dbXXX:keys=XXX,expires=XXX
+除上面给出的这些值以外， section 参数的值还可以是下面这两个：
+
+all : 返回所有信息
+default : 返回默认选择的信息
+当不带参数直接调用 INFO 命令时，使用 default 作为默认参数。
+
+不同版本的 Redis 可能对返回的一些域进行了增加或删减。
+
+因此，一个健壮的客户端程序在对 INFO 命令的输出进行分析时，应该能够跳过不认识的域，并且妥善地处理丢失不见的域。
+
+可用版本：&gt;= 1.0.0时间复杂度：O(1)返回值：具体请参见下面的测试代码。</code></pre><p>redis&gt; INFO</p>
+<pre><code># Server
+redis_version:2.9.11
+redis_git_sha1:937384d0
+redis_git_dirty:0
+redis_build_id:8e9509442863f22
+redis_mode:standalone
+os:Linux 3.13.0-35-generic x86_64
+arch_bits:64
+multiplexing_api:epoll
+gcc_version:4.8.2
+process_id:4716
+run_id:26186aac3f2380aaee9eef21cc50aecd542d97dc
+tcp_port:6379
+uptime_in_seconds:362
+uptime_in_days:0
+hz:10
+lru_clock:1725349
+config_file:
+
+# Clients
+connected_clients:1
+client_longest_output_list:0
+client_biggest_input_buf:0
+blocked_clients:0
+
+# Memory
+used_memory:508536
+used_memory_human:496.62K
+used_memory_rss:7974912
+used_memory_peak:508536
+used_memory_peak_human:496.62K
+used_memory_lua:33792
+mem_fragmentation_ratio:15.68
+mem_allocator:jemalloc-3.2.0
+
+# Persistence
+loading:0
+rdb_changes_since_last_save:6
+rdb_bgsave_in_progress:0
+rdb_last_save_time:1411011131
+rdb_last_bgsave_status:ok
+rdb_last_bgsave_time_sec:-1
+rdb_current_bgsave_time_sec:-1
+aof_enabled:0
+aof_rewrite_in_progress:0
+aof_rewrite_scheduled:0
+aof_last_rewrite_time_sec:-1
+aof_current_rewrite_time_sec:-1
+aof_last_bgrewrite_status:ok
+aof_last_write_status:ok
+
+# Stats
+total_connections_received:2
+total_commands_processed:4
+instantaneous_ops_per_sec:0
+rejected_connections:0
+sync_full:0
+sync_partial_ok:0
+sync_partial_err:0
+expired_keys:0
+evicted_keys:0
+keyspace_hits:0
+keyspace_misses:0
+pubsub_channels:0
+pubsub_patterns:0
+latest_fork_usec:0
+migrate_cached_sockets:0
+
+# Replication
+role:master
+connected_slaves:0
+master_repl_offset:0
+repl_backlog_active:0
+repl_backlog_size:1048576
+repl_backlog_first_byte_offset:0
+repl_backlog_histlen:0
+
+# CPU
+used_cpu_sys:0.21
+used_cpu_user:0.17
+used_cpu_sys_children:0.00
+used_cpu_user_children:0.00
+
+# Cluster
+cluster_enabled:0
+
+# Keyspace
+db0:keys=2,expires=0,avg_ttl=0</code></pre>
       
     </div>
 
@@ -280,7 +423,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/21/github/docs/distributed-system/dubbo-load-balancing/">
+    <link itemprop="mainEntityOfPage" href="/2019/07/12/java/java多线程竞拍/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -294,7 +437,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/04/21/github/docs/distributed-system/dubbo-load-balancing/" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/2019/07/12/java/java多线程竞拍/" class="post-title-link" itemprop="url">阿里云面试题-多线程竞拍</a>
         </h2>
 
         <div class="post-meta">
@@ -304,8 +447,15 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-04-21 15:37:08" itemprop="dateCreated datePublished" datetime="2021-04-21T15:37:08+08:00">2021-04-21</time>
+              <time title="Created: 2019-07-12 12:28:35" itemprop="dateCreated datePublished" datetime="2019-07-12T12:28:35+08:00">2019-07-12</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-01 18:56:07" itemprop="dateModified" datetime="2021-03-01T18:56:07+08:00">2021-03-01</time>
+              </span>
 
           
 
@@ -318,55 +468,131 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h2><p>dubbo 负载均衡策略和集群容错策略都有哪些？动态代理策略呢？</p>
-<h2 id="面试官心理分析"><a href="#面试官心理分析" class="headerlink" title="面试官心理分析"></a>面试官心理分析</h2><p>继续深问吧，这些都是用 dubbo 必须知道的一些东西，你得知道基本原理，知道序列化是什么协议，还得知道具体用 dubbo 的时候，如何负载均衡，如何高可用，如何动态代理。</p>
-<p>说白了，就是看你对 dubbo 熟悉不熟悉：</p>
-<ul>
-<li>dubbo 工作原理：服务注册、注册中心、消费者、代理通信、负载均衡；</li>
-<li>网络通信、序列化：dubbo 协议、长连接、NIO、hessian 序列化协议；</li>
-<li>负载均衡策略、集群容错策略、动态代理策略：dubbo 跑起来的时候一些功能是如何运转的？怎么做负载均衡？怎么做集群容错？怎么生成动态代理？</li>
-<li>dubbo SPI 机制：你了解不了解 dubbo 的 SPI 机制？如何基于 SPI 机制对 dubbo 进行扩展？</li>
-</ul>
-<h2 id="面试题剖析"><a href="#面试题剖析" class="headerlink" title="面试题剖析"></a>面试题剖析</h2><h3 id="dubbo-负载均衡策略"><a href="#dubbo-负载均衡策略" class="headerlink" title="dubbo 负载均衡策略"></a>dubbo 负载均衡策略</h3><h4 id="RandomLoadBalance"><a href="#RandomLoadBalance" class="headerlink" title="RandomLoadBalance"></a>RandomLoadBalance</h4><p>默认情况下，dubbo 是 RandomLoadBalance ，即<strong>随机</strong>调用实现负载均衡，可以对 provider 不同实例<strong>设置不同的权重</strong>，会按照权重来负载均衡，权重越大分配流量越高，一般就用这个默认的就可以了。</p>
-<p>算法思想很简单。假设有一组服务器 servers = <code>[A, B, C]</code>，他们对应的权重为 weights = <code>[5, 3, 2]</code>，权重总和为 10。现在把这些权重值平铺在一维坐标值上，<code>[0, 5)</code> 区间属于服务器 A，<code>[5, 8)</code> 区间属于服务器 B，<code>[8, 10)</code> 区间属于服务器 C。接下来通过随机数生成器生成一个范围在 <code>[0, 10)</code> 之间的随机数，然后计算这个随机数会落到哪个区间上。比如数字 3 会落到服务器 A 对应的区间上，此时返回服务器 A 即可。权重越大的机器，在坐标轴上对应的区间范围就越大，因此随机数生成器生成的数字就会有更大的概率落到此区间内。只要随机数生成器产生的随机数分布性很好，在经过多次选择后，每个服务器被选中的次数比例接近其权重比例。比如，经过一万次选择后，服务器 A 被选中的次数大约为 5000 次，服务器 B 被选中的次数约为 3000 次，服务器 C 被选中的次数约为 2000 次。</p>
-<h4 id="RoundRobinLoadBalance"><a href="#RoundRobinLoadBalance" class="headerlink" title="RoundRobinLoadBalance"></a>RoundRobinLoadBalance</h4><p>这个的话默认就是均匀地将流量打到各个机器上去，但是如果各个机器的性能不一样，容易导致性能差的机器负载过高。所以此时需要调整权重，让性能差的机器承载权重小一些，流量少一些。</p>
-<p>举个栗子。</p>
-<p>跟运维同学申请机器，有的时候，我们运气好，正好公司资源比较充足，刚刚有一批热气腾腾、刚刚做好的虚拟机新鲜出炉，配置都比较高：8 核 + 16G 机器，申请到 2 台。过了一段时间，我们感觉 2 台机器有点不太够，我就去找运维同学说，“哥儿们，你能不能再给我一台机器”，但是这时只剩下一台 4 核 + 8G 的机器。我要还是得要。</p>
-<p>这个时候，可以给两台 8 核 16G 的机器设置权重 4，给剩余 1 台 4 核 8G 的机器设置权重 2。</p>
-<h4 id="LeastActiveLoadBalance"><a href="#LeastActiveLoadBalance" class="headerlink" title="LeastActiveLoadBalance"></a>LeastActiveLoadBalance</h4><p>官网对 <code>LeastActiveLoadBalance</code> 的解释是“<strong>最小活跃数负载均衡</strong>”，活跃调用数越小，表明该服务提供者效率越高，单位时间内可处理更多的请求，那么此时请求会优先分配给该服务提供者。</p>
-<p>最小活跃数负载均衡算法的基本思想是这样的：</p>
-<p>每个服务提供者会对应着一个活跃数 <code>active</code>。初始情况下，所有服务提供者的 <code>active</code> 均为 0。每当收到一个请求，对应的服务提供者的 <code>active</code> 会加 1，处理完请求后，<code>active</code> 会减 1。所以，如果服务提供者性能较好，处理请求的效率就越高，那么 <code>active</code> 也会下降的越快。因此可以给这样的服务提供者优先分配请求。</p>
-<p>当然，除了最小活跃数，<code>LeastActiveLoadBalance</code> 在实现上还引入了权重值。所以准确的来说，<code>LeastActiveLoadBalance</code> 是基于加权最小活跃数算法实现的。</p>
-<h4 id="ConsistentHashLoadBalance"><a href="#ConsistentHashLoadBalance" class="headerlink" title="ConsistentHashLoadBalance"></a>ConsistentHashLoadBalance</h4><p>一致性 Hash 算法，相同参数的请求一定分发到一个 provider 上去，provider 挂掉的时候，会基于虚拟节点均匀分配剩余的流量，抖动不会太大。<strong>如果你需要的不是随机负载均衡</strong>，是要一类请求都到一个节点，那就走这个一致性 Hash 策略。</p>
-<blockquote>
-<p>关于 dubbo 负载均衡策略更加详细的描述，可以查看官网 <a href="http://dubbo.apache.org/zh-cn/docs/source_code_guide/loadbalance.html" target="_blank" rel="noopener">http://dubbo.apache.org/zh-cn/docs/source_code_guide/loadbalance.html</a> 。</p>
-</blockquote>
-<h3 id="dubbo-集群容错策略"><a href="#dubbo-集群容错策略" class="headerlink" title="dubbo 集群容错策略"></a>dubbo 集群容错策略</h3><h4 id="Failover-Cluster-模式"><a href="#Failover-Cluster-模式" class="headerlink" title="Failover Cluster 模式"></a>Failover Cluster 模式</h4><p>失败自动切换，自动重试其他机器，<strong>默认</strong>就是这个，常见于读操作。（失败重试其它机器）</p>
-<p>可以通过以下几种方式配置重试次数：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:service</span> <span class="attr">retries</span>=<span class="string">"2"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+          <p>多线程竞拍</p>
+<pre><code>创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）
 
-<p>或者</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:reference</span> <span class="attr">retries</span>=<span class="string">"2"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
 
-<p>或者</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:reference</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dubbo:method</span> <span class="attr">name</span>=<span class="string">"findFoo"</span> <span class="attr">retries</span>=<span class="string">"2"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dubbo:reference</span>&gt;</span></span><br></pre></td></tr></table></figure>
+所有人的心理上线价位都为 M ，不会出价比M高
 
-<h4 id="Failfast-Cluster-模式"><a href="#Failfast-Cluster-模式" class="headerlink" title="Failfast Cluster 模式"></a>Failfast Cluster 模式</h4><p>一次调用失败就立即失败，常见于非幂等性的写操作，比如新增一条记录（调用失败就立即失败）</p>
-<h4 id="Failsafe-Cluster-模式"><a href="#Failsafe-Cluster-模式" class="headerlink" title="Failsafe Cluster 模式"></a>Failsafe Cluster 模式</h4><p>出现异常时忽略掉，常用于不重要的接口调用，比如记录日志。</p>
-<p>配置示例如下：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:service</span> <span class="attr">cluster</span>=<span class="string">"failsafe"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+每次出价必须比上一次出价高
 
-<p>或者</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dubbo:reference</span> <span class="attr">cluster</span>=<span class="string">"failsafe"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。</code></pre><p>个人觉得主要考察java基础（CountDownLatch、CyclicBarrier）的使用方法</p>
+<pre><code>import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.*;
+import java.util.concurrent.locks.ReentrantLock;
 
-<h4 id="Failback-Cluster-模式"><a href="#Failback-Cluster-模式" class="headerlink" title="Failback Cluster 模式"></a>Failback Cluster 模式</h4><p>失败了后台自动记录请求，然后定时重发，比较适合于写消息队列这种。</p>
-<h4 id="Forking-Cluster-模式"><a href="#Forking-Cluster-模式" class="headerlink" title="Forking Cluster 模式"></a>Forking Cluster 模式</h4><p><strong>并行调用</strong>多个 provider，只要一个成功就立即返回。常用于实时性要求比较高的读操作，但是会浪费更多的服务资源，可通过 <code>forks=&quot;2&quot;</code> 来设置最大并行数。</p>
-<h4 id="Broadcast-Cluster-模式"><a href="#Broadcast-Cluster-模式" class="headerlink" title="Broadcast Cluster 模式"></a>Broadcast Cluster 模式</h4><p>逐个调用所有的 provider。任何一个 provider 出错则报错（从 <code>2.1.0</code> 版本开始支持）。通常用于通知所有提供者更新缓存或日志等本地资源信息。</p>
-<blockquote>
-<p>关于 dubbo 集群容错策略更加详细的描述，可以查看官网 <a href="http://dubbo.apache.org/zh-cn/docs/source_code_guide/cluster.html" target="_blank" rel="noopener">http://dubbo.apache.org/zh-cn/docs/source_code_guide/cluster.html</a> 。</p>
-</blockquote>
-<h3 id="dubbo-动态代理策略"><a href="#dubbo-动态代理策略" class="headerlink" title="dubbo 动态代理策略"></a>dubbo 动态代理策略</h3><p>默认使用 javassist 动态字节码生成，创建代理类。但是可以通过 spi 扩展机制配置自己的动态代理策略。</p>
+public class AuctionTest {
 
+/**
+ * 创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）
+ * 每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
+ * 所有人的心理上线价位都为 M ，不会出价比M高
+ * 每次出价必须比上一次出价高
+ * 经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。
+ */
+static int N = 10; //竞拍人数
+static int M = 100;//所有人的心理上线价位都为 M ，不会出价比M高
+static int AUCTION_NUM = 5; //经过 k 次竞拍后
+
+static ConcurrentHashMap&lt;String, List&lt;Integer&gt;&gt; ACTION_HIST = new ConcurrentHashMap&lt;&gt;();
+
+static ReentrantLock lock = new ReentrantLock();//这个锁是为了保证出价比上一个人出价高
+
+static volatile int CUR_MAX_PRICE = 0;
+
+public static void main(String[] args) throws Exception {
+    CyclicBarrier barrier = new CyclicBarrier(N);//每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
+    CountDownLatch countDownLatch = new CountDownLatch(N);//这里应该是N
+    ThreadPoolExecutor executor = new ThreadPoolExecutor(N, N, 1, TimeUnit.SECONDS, new ArrayBlockingQueue&lt;Runnable&gt;(1), new ThreadFactory() {
+        @Override
+        public Thread newThread(Runnable r) {
+            return new Thread(r, &quot;Auction&quot;);
+        }
+    });
+    int step = M / (AUCTION_NUM * N); //每次出价阶梯
+
+    for (int i = 1; i &lt;= N; i++) {
+        executor.execute(new Auction(barrier, countDownLatch, &quot;P&quot; + i, step));
+    }
+
+    countDownLatch.await();
+
+    String personName = null;
+    int maxPrice = 0;
+    int personId = 0;
+    for (int num = 1; num &lt;= AUCTION_NUM; num++) {
+        for (int i = 1; i &lt;= N; i++) {
+            personName = &quot;P&quot; + i;
+            Integer price = ACTION_HIST.get(personName).get(num - 1);
+            if (num == AUCTION_NUM) {
+                if (maxPrice &lt; price) {
+                    maxPrice = price;
+                    personId = i;
+                }
+            }
+            System.out.println(&quot;第&quot; + num + &quot;次出价人:P&quot; + i + &quot; 出价:&quot; + price);
+        }
+        System.out.println(&quot;-----------------&quot;);
+    }
+    System.out.println(&quot;最终竞价成功人:P&quot; + personId + &quot;,最终出价:&quot; + maxPrice);
+    executor.shutdown();
+}
+
+static class Auction implements Runnable {
+    private String name;
+    private CyclicBarrier barrier;
+    private int step;
+    private CountDownLatch countDownLatch;
+
+    public Auction(CyclicBarrier barrier, CountDownLatch countDownLatch, String name, int step) {
+        this.name = name;
+        this.barrier = barrier;
+        this.step = step;
+        this.countDownLatch = countDownLatch;
+    }
+
+    @Override
+    public void run() {
+        if (!ACTION_HIST.containsKey(name)) {
+            ACTION_HIST.put(name, new ArrayList&lt;&gt;());
+        }
+        lock.lock();
+        int currentPrice = 0;
+        try {
+            currentPrice = getRandPrice(step);
+            CUR_MAX_PRICE = CUR_MAX_PRICE &lt; currentPrice ? currentPrice : CUR_MAX_PRICE;
+        } finally {
+            lock.unlock();
+        }
+
+        ACTION_HIST.get(name).add(currentPrice);
+        int tmp = 1;
+        try {
+            while (tmp &lt; AUCTION_NUM) {
+                barrier.await();
+                currentPrice = getRandPrice(step);
+                currentPrice = currentPrice &gt; M ? M : currentPrice;
+                CUR_MAX_PRICE = CUR_MAX_PRICE &lt; currentPrice ? currentPrice : CUR_MAX_PRICE;
+                ACTION_HIST.get(name).add(currentPrice);
+                tmp++;
+            }
+            countDownLatch.countDown();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }   /**
+     * 当前心里价比上次多多少
+     *
+     * @param step
+     * @return
+     */
+    int getRandPrice(int step) {
+        return CUR_MAX_PRICE + new Random().nextInt(step) + 1;
+    }
+}</code></pre>
       
     </div>
 
@@ -385,7 +611,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/21/github/docs/distributed-system/dubbo-rpc-design/">
+    <link itemprop="mainEntityOfPage" href="/2019/07/12/http/tcp/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -399,7 +625,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/04/21/github/docs/distributed-system/dubbo-rpc-design/" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/2019/07/12/http/tcp/" class="post-title-link" itemprop="url">tcp三次握手、四次挥手</a>
         </h2>
 
         <div class="post-meta">
@@ -409,8 +635,15 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-04-21 15:37:08" itemprop="dateCreated datePublished" datetime="2021-04-21T15:37:08+08:00">2021-04-21</time>
+              <time title="Created: 2019-07-12 12:28:35" itemprop="dateCreated datePublished" datetime="2019-07-12T12:28:35+08:00">2019-07-12</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-02-18 19:03:12" itemprop="dateModified" datetime="2021-02-18T19:03:12+08:00">2021-02-18</time>
+              </span>
 
           
 
@@ -423,24 +656,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h2><p>如何自己设计一个类似 Dubbo 的 RPC 框架？</p>
-<h2 id="面试官心理分析"><a href="#面试官心理分析" class="headerlink" title="面试官心理分析"></a>面试官心理分析</h2><p>说实话，就这问题，其实就跟问你如何自己设计一个 MQ 一样的道理，就考两个：</p>
-<ul>
-<li>你有没有对某个 rpc 框架原理有非常深入的理解。</li>
-<li>你能不能从整体上来思考一下，如何设计一个 rpc 框架，考考你的系统设计能力。</li>
-</ul>
-<h2 id="面试题剖析"><a href="#面试题剖析" class="headerlink" title="面试题剖析"></a>面试题剖析</h2><p>其实问到你这问题，你起码不能认怂，因为是知识的扫盲，那我不可能给你深入讲解什么 kafka 源码剖析，dubbo 源码剖析，何况我就算讲了，你要真的消化理解和吸收，起码个把月以后了。</p>
-<p>所以我给大家一个建议，遇到这类问题，起码从你了解的类似框架的原理入手，自己说说参照 dubbo 的原理，你来设计一下，举个例子，dubbo 不是有那么多分层么？而且每个分层是干啥的，你大概是不是知道？那就按照这个思路大致说一下吧，起码你不能懵逼，要比那些上来就懵，啥也说不出来的人要好一些。</p>
-<p>举个栗子，我给大家说个最简单的回答思路：</p>
-<ul>
-<li>上来你的服务就得去注册中心注册吧，你是不是得有个注册中心，保留各个服务的信息，可以用 zookeeper 来做，对吧。</li>
-<li>然后你的消费者需要去注册中心拿对应的服务信息吧，对吧，而且每个服务可能会存在于多台机器上。</li>
-<li>接着你就该发起一次请求了，咋发起？当然是基于动态代理了，你面向接口获取到一个动态代理，这个动态代理就是接口在本地的一个代理，然后这个代理会找到服务对应的机器地址。</li>
-<li>然后找哪个机器发送请求？那肯定得有个负载均衡算法了，比如最简单的可以随机轮询是不是。</li>
-<li>接着找到一台机器，就可以跟它发送请求了，第一个问题咋发送？你可以说用 netty 了，nio 方式；第二个问题发送啥格式数据？你可以说用 hessian 序列化协议了，或者是别的，对吧。然后请求过去了。</li>
-<li>服务器那边一样的，需要针对你自己的服务生成一个动态代理，监听某个网络端口了，然后代理你本地的服务代码。接收到请求的时候，就调用对应的服务代码，对吧。</li>
-</ul>
-<p>这就是一个最最基本的 rpc 框架的思路，先不说你有多牛逼的技术功底，哪怕这个最简单的思路你先给出来行不行？</p>
+          <p><img src="/2019/07/12/http/tcp/tcp.jpeg" alt="dddd"></p>
 
       
     </div>
@@ -459,7 +675,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/20/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><span class="space">&hellip;</span><a class="page-number" href="/page/47/">47</a><a class="extend next" rel="next" href="/page/22/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/20/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/22/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -525,14 +741,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-count">66</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

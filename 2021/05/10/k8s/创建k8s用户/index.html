@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="新建用户新建一个k8s用户大概可以分为以下几步：  生成用户的证书key 通过用户的证书key，生成用户的证书请求 通过k8s的api的ca证书去签发用户的证书请求，生成用户的证书 配置kubectl config kubectl config set-cluster              //集群配置 kubectl config set-credentials NAME     //用户配">
+<meta name="keywords" content="k8s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="根据证书生成k8s账号信息">
+<meta property="og:url" content="/2021/05/10/k8s/创建k8s用户/index.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="新建用户新建一个k8s用户大概可以分为以下几步：  生成用户的证书key 通过用户的证书key，生成用户的证书请求 通过k8s的api的ca证书去签发用户的证书请求，生成用户的证书 配置kubectl config kubectl config set-cluster              //集群配置 kubectl config set-credentials NAME     //用户配">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-05-11T11:20:21.757Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="根据证书生成k8s账号信息">
+<meta name="twitter:description" content="新建用户新建一个k8s用户大概可以分为以下几步：  生成用户的证书key 通过用户的证书key，生成用户的证书请求 通过k8s的api的ca证书去签发用户的证书请求，生成用户的证书 配置kubectl config kubectl config set-cluster              //集群配置 kubectl config set-credentials NAME     //用户配">
+
+<link rel="canonical" href="/2021/05/10/k8s/创建k8s用户/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>根据证书生成k8s账号信息 | 我的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">我的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/05/10/k8s/创建k8s用户/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          根据证书生成k8s账号信息
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-05-10 12:28:35" itemprop="dateCreated datePublished" datetime="2021-05-10T12:28:35+08:00">2021-05-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-11 19:20:21" itemprop="dateModified" datetime="2021-05-11T19:20:21+08:00">2021-05-11</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="新建用户"><a href="#新建用户" class="headerlink" title="新建用户"></a>新建用户</h4><p>新建一个k8s用户大概可以分为以下几步：</p>
+<ul>
+<li>生成用户的证书key</li>
+<li>通过用户的证书key，生成用户的证书请求</li>
+<li>通过k8s的api的ca证书去签发用户的证书请求，生成用户的证书</li>
+<li>配置kubectl config<ul>
+<li>kubectl config set-cluster              //集群配置</li>
+<li>kubectl config set-credentials NAME     //用户配置</li>
+<li>kubectl config set-context         //context配置</li>
+<li>kubectl config use-context         //切换context</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(umask 077; openssl genrsa -out test.key 2048)      //创建用户证书key</span><br><span class="line">openssl req -new -key test.key -out test.csr -subj &quot;/O=test/CN=test&quot;      //创建用户证书请求，-subj指定组和用户，其中O是组名，CN是用户名</span><br><span class="line">openssl x509 -req -in test.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out test.crt -days 3650      //使用k8s的ca签发用户证书</span><br><span class="line">kubectl config set-credentials test --client-certificate=test.crt --client-key=test.key --embed-certs=true      //用户配置</span><br><span class="line">kubectl config set-context test@kubernetes --cluster=kubernetes --user=test      //context设置</span><br><span class="line"></span><br><span class="line">//可以切换到新用户了，但此时用户啥权限都没有</span><br><span class="line">kubectl config use-context test@kubernetes</span><br></pre></td></tr></table></figure>
+
+<p>简单说明：</p>
+<ul>
+<li>没有使用kubectl config set-cluster ，因为集群就使用本身的集群，也默认使用本集群的默认config文件</li>
+<li>kubectl config set-cluster –kubeconfig=/PATH/TO/SOMEFILE  —kubeconfig=/PATH/TO/SOMEFILE用于创建新的配置文件，如果不加此选项，则内容会添加到家目录下.kube/config文件中，可以使用use-context来切换不同的用户管理k8s集群</li>
+<li>context，就是用什么用户来管理哪个集群，即用户和集群的结合</li>
+</ul>
+<h4 id="用户授权"><a href="#用户授权" class="headerlink" title="用户授权"></a>用户授权</h4><p>k8s的用户授权有很多种，其中最普遍的是RBAC——基于角色的授权机制。</p>
+<ul>
+<li>某个用户属于某个角色</li>
+<li>某个角色拥有某些操作</li>
+<li>某些操作绑定到某些资源上</li>
+</ul>
+<p>即最终效果是：某个用户对某些资源拥有某些操作。下面以上面创建的baison用户为例，让此用户对default空间拥有查看pod与进入到pod里的权限。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl create role only-read-pods --verb=get,list,watch,create --resource=pod,pod/exec</span><br><span class="line">kubectl create rolebinding bind-only-read-pods --role=only-read-pods --user=test</span><br></pre></td></tr></table></figure>
+
+<p>简单说明：</p>
+<ul>
+<li>除了role、rolebinding外，还有cluserrole、clusterrolebinding，他们的区别就是作用域不同，很明显带cluser的作用与整个集群。</li>
+<li>rolebinding可以绑定role，也可以绑定clusterrole，绑定cluserrole的时候，clusterrole作用域降级为namespace级别。</li>
+<li>集群有很多内置role、rolebinding和cluserrole、clusterrolebinding，可以用yaml方式打开作为借鉴。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/k8s/" rel="tag"># k8s</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/30/netty/netty 回调/" rel="prev" title="netty ChannelFuture回调">
+      <i class="fa fa-chevron-left"></i> netty ChannelFuture回调
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/05/10/k8s/kubeadm安装集群/" rel="next" title="kubeadm安装集群">
+      kubeadm安装集群 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#新建用户"><span class="nav-number">1.</span> <span class="nav-text">新建用户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用户授权"><span class="nav-number">2.</span> <span class="nav-text">用户授权</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">hezhengkui</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">66</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hezhengkui</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
