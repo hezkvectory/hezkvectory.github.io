@@ -250,73 +250,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/05/10/k8s/etcd-k8s查看数据/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/10/k8s/etcd-k8s查看数据/" class="post-title-link" itemprop="url">etcd k8s查看数据</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-05-10 12:28:35 / Modified: 19:11:40" itemprop="dateCreated datePublished" datetime="2021-05-10T12:28:35+08:00">2021-05-10</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ol>
-<li>ETCDCTL_API=3 etcdctl <br>–endpoints=<a href="https://127.0.0.1:2379" target="_blank" rel="noopener">https://127.0.0.1:2379</a> <br>–cacert=/etc/kubernetes/pki/etcd/ca.crt <br>–cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt <br>–key=/etc/kubernetes/pki/etcd/healthcheck-client.key <br>get / –prefix –keys-only</li>
-</ol>
-<ol start="2">
-<li>ETCDCTL_API=3 etcdctl <br>–endpoints=<a href="https://127.0.0.1:2379" target="_blank" rel="noopener">https://127.0.0.1:2379</a> <br>–cacert=/etc/kubernetes/pki/etcd/ca.crt <br>–cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt <br>–key=/etc/kubernetes/pki/etcd/healthcheck-client.key <br>get /registry/configmaps/kube-system/kube-flannel-cfg</li>
-</ol>
-<ol start="3">
-<li>ETCDCTL_API=3 etcdctl <br>–cacert=/etc/kubernetes/pki/etcd/ca.crt <br>–cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt <br>–key=/etc/kubernetes/pki/etcd/healthcheck-client.key <br>get /registry/minions/l-vkschedule-server2.pub.dev.ten.dm </li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="/2021/05/10/k8s/kubeadm安装集群/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -393,10 +326,77 @@
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/05/10/k8s/etcd-k8s查看数据/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/10/k8s/etcd-k8s查看数据/" class="post-title-link" itemprop="url">etcd k8s查看数据</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-05-10 12:28:35 / Modified: 19:11:40" itemprop="dateCreated datePublished" datetime="2021-05-10T12:28:35+08:00">2021-05-10</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ol>
+<li>ETCDCTL_API=3 etcdctl <br>–endpoints=<a href="https://127.0.0.1:2379" target="_blank" rel="noopener">https://127.0.0.1:2379</a> <br>–cacert=/etc/kubernetes/pki/etcd/ca.crt <br>–cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt <br>–key=/etc/kubernetes/pki/etcd/healthcheck-client.key <br>get / –prefix –keys-only</li>
+</ol>
+<ol start="2">
+<li>ETCDCTL_API=3 etcdctl <br>–endpoints=<a href="https://127.0.0.1:2379" target="_blank" rel="noopener">https://127.0.0.1:2379</a> <br>–cacert=/etc/kubernetes/pki/etcd/ca.crt <br>–cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt <br>–key=/etc/kubernetes/pki/etcd/healthcheck-client.key <br>get /registry/configmaps/kube-system/kube-flannel-cfg</li>
+</ol>
+<ol start="3">
+<li>ETCDCTL_API=3 etcdctl <br>–cacert=/etc/kubernetes/pki/etcd/ca.crt <br>–cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt <br>–key=/etc/kubernetes/pki/etcd/healthcheck-client.key <br>get /registry/minions/l-vkschedule-server2.pub.dev.ten.dm </li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -462,7 +462,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">66</span>
+          <span class="site-state-item-count">68</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
