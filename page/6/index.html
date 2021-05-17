@@ -150,6 +150,79 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/04/08/java/arthas系列优秀文章/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/08/java/arthas系列优秀文章/" class="post-title-link" itemprop="url">arthas系列优秀文章</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-04-08 10:44:02" itemprop="dateCreated datePublished" datetime="2021-04-08T10:44:02+08:00">2021-04-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-13 16:59:00" itemprop="dateModified" datetime="2021-04-13T16:59:00+08:00">2021-04-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://blog.csdn.net/alisystemsoftware/article/details/109159529" target="_blank" rel="noopener">工商银行打造在线诊断平台的探索与实践</a></p>
+<h4 id="arthas命令"><a href="#arthas命令" class="headerlink" title="arthas命令"></a>arthas命令</h4><h4 id="sc"><a href="#sc" class="headerlink" title="sc"></a>sc</h4><p>查看jvm已加载的类信息</p>
+<h4 id="sm"><a href="#sm" class="headerlink" title="sm"></a>sm</h4><p>查看jvm已加载类的方法信息</p>
+<h5 id="monitor"><a href="#monitor" class="headerlink" title="monitor"></a>monitor</h5><p>方法执行监控，统计被监控方法执行总数、成功、失败、失败率等数据</p>
+<h5 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h5><p>输出当前方法被调用的调用路径</p>
+<p>输出当前方法堆栈信息</p>
+<h5 id="trace"><a href="#trace" class="headerlink" title="trace"></a>trace</h5><p>方法内部调用滤镜，并输出方法路径上的每个节点耗时</p>
+<h5 id="watch"><a href="#watch" class="headerlink" title="watch"></a>watch</h5><p>方法执行数据观测</p>
+<p>观察：入参、返回值、抛出异常</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="/2021/03/31/java/jvm调优工具/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1099,89 +1172,6 @@
 <p>（调用OQL java方法，加“()”会令MAT解释为一个OQL java调用）</p>
 <p>常见的OQL java方法</p>
 <div class="table-box"><table class="mceItemTable       " border="0" style="color:rgb(0,0,0); font-size:14px; line-height:26px; border:1px dashed rgb(187,187,187); font-family:Verdana,Arial,Helvetica,sans-serif"><tbody><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">目标</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">接口</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">属性</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">含义</span></td></tr><tr><td rowspan="2" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">$snapshot</span></td><td rowspan="2" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Isnapshot</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">getClasses()</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">获取所有类的集合</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">getClassesByName(String name,boolean includeSubClasses)</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">获取指定类的集合</span></td></tr><tr><td rowspan="2" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Class object</span></td><td rowspan="2" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Iclass</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">hasSuperClass()</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">如果对象有父类则返回true</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">isArrayType()</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">如果Class是数组类型则返回true</span></td></tr></tbody></table></div>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/28/mybatis/mybatis设计模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/28/mybatis/mybatis设计模式/" class="post-title-link" itemprop="url">mybatis设计模式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-03-28 10:20:20" itemprop="dateCreated datePublished" datetime="2021-03-28T10:20:20+08:00">2021-03-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-29 10:45:00" itemprop="dateModified" datetime="2021-03-29T10:45:00+08:00">2021-03-29</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="Mybatis常用的设计模式"><a href="#Mybatis常用的设计模式" class="headerlink" title="Mybatis常用的设计模式"></a>Mybatis常用的设计模式</h4><p>1、Builder模式</p>
-<p>​     SqlSessionFactoryBuilder、XMLMapperBuilder、XMLConfigBuilder、</p>
-<p>​     XMLStatementBuilder、SqlSourceBuilder、<span style="color:red;"><strong>XMLScriptBuilder</strong></span></p>
-<p>2、工厂模式</p>
-<p>​    SqlSessionFactory、ObjectFactory、MapperProxyFactory</p>
-<p>3、代理模式</p>
-<p>​    MapperProxy、ConnectionLogger</p>
-<p>4、单例模式</p>
-<p>​    ErrorContext、LogFactory</p>
-<p>5、模版模式</p>
-<p>​    BaseExecutor、SimpleExecutor</p>
-<p>6、适配器模式</p>
-<p>​    Log的Mybatis接口和它对jdbc、log4j等各种日志框架的适配实现</p>
-<p>7、迭代器模式</p>
-<p>​    PropertyTokenizer</p>
-<p>8、装饰者模式</p>
-<p>​    Cache包中的cache.decorators子包中等各个装饰者的实现</p>
-<p>9、组合模式</p>
-<p>​    <span style="color:red;"><strong>SqlNode</strong></span>和各个子类ChooseSqlNode等</p>
-
       
     </div>
 
