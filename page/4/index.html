@@ -216,6 +216,74 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/04/19/dubbo/dubbo消费者调用流程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/19/dubbo/dubbo消费者调用流程/" class="post-title-link" itemprop="url">dubbo消费者调用流程</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-04-19 10:28:35 / Modified: 18:15:19" itemprop="dateCreated datePublished" datetime="2021-04-19T10:28:35+08:00">2021-04-19</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="Dubbo消费者"><a href="#Dubbo消费者" class="headerlink" title="Dubbo消费者"></a>Dubbo消费者</h4><h5 id="调用入口"><a href="#调用入口" class="headerlink" title="调用入口"></a>调用入口</h5><p>ReferenceBean</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ReferenceBean</span><br><span class="line">  -&gt; get #获取代理对象</span><br><span class="line">  -&gt; createProxy # 创建代理</span><br><span class="line">    RegistryProtocol</span><br><span class="line">      -&gt; refer # 从注册中心获取invoker</span><br><span class="line">      RegistryFactory.getRegistry</span><br><span class="line">      -&gt; doRefer</span><br><span class="line">      RegistryDirectory.subscribe # 订阅providers, 此处会监听注册中心providers的变化，并重新创建invokers</span><br><span class="line">      Cluster.join</span><br><span class="line">        MockClusterWrapper </span><br><span class="line">          -&gt; join #创建cluster</span><br><span class="line">            FailoverCluster</span><br><span class="line">              -&gt; doInvoke 服务调用</span><br></pre></td></tr></table></figure>
+
+<h5 id="创建消费者代理"><a href="#创建消费者代理" class="headerlink" title="创建消费者代理"></a>创建消费者代理</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&quot;main@1&quot; prio=5 tid=0x1 nid=NA runnable</span><br><span class="line">  java.lang.Thread.State: RUNNABLE</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.RouterChain.&lt;init&gt;(RouterChain.java:53)</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.RouterChain.buildChain(RouterChain.java:46)</span><br><span class="line">	  at org.apache.dubbo.registry.integration.RegistryDirectory.buildRouterChain(RegistryDirectory.java:664)</span><br><span class="line">	  at org.apache.dubbo.registry.integration.RegistryProtocol.doRefer(RegistryProtocol.java:473)</span><br><span class="line">	  at org.apache.dubbo.registry.integration.RegistryProtocol.refer(RegistryProtocol.java:455)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolListenerWrapper.refer(ProtocolListenerWrapper.java:70)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper.refer(ProtocolFilterWrapper.java:159)</span><br><span class="line">	  at org.apache.dubbo.rpc.Protocol$Adaptive.refer(Protocol$Adaptive.java:-1)</span><br><span class="line">	  at org.apache.dubbo.config.ReferenceConfig.createProxy(ReferenceConfig.java:318)</span><br><span class="line">	  at org.apache.dubbo.config.ReferenceConfig.init(ReferenceConfig.java:258)</span><br><span class="line">	  - locked &lt;0xb11&gt; (a org.apache.dubbo.config.spring.ReferenceBean)</span><br><span class="line">	  at org.apache.dubbo.config.ReferenceConfig.get(ReferenceConfig.java:158)</span><br></pre></td></tr></table></figure>
+
+<h5 id="消费者方法调用"><a href="#消费者方法调用" class="headerlink" title="消费者方法调用"></a>消费者方法调用</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&quot;main@1&quot; prio=5 tid=0x1 nid=NA runnable</span><br><span class="line">  java.lang.Thread.State: RUNNABLE</span><br><span class="line">	  at org.apache.dubbo.remoting.transport.AbstractPeer.send(AbstractPeer.java:53)</span><br><span class="line">	  at org.apache.dubbo.remoting.exchange.support.header.HeaderExchangeChannel.request(HeaderExchangeChannel.java:135)</span><br><span class="line">	  at org.apache.dubbo.remoting.exchange.support.header.HeaderExchangeClient.request(HeaderExchangeClient.java:95)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.dubbo.ReferenceCountExchangeClient.request(ReferenceCountExchangeClient.java:91)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.dubbo.DubboInvoker.doInvoke(DubboInvoker.java:105)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.AbstractInvoker.invoke(AbstractInvoker.java:163)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.AsyncToSyncInvoker.invoke(AsyncToSyncInvoker.java:52)</span><br><span class="line">	  at org.apache.dubbo.rpc.listener.ListenerInvokerWrapper.invoke(ListenerInvokerWrapper.java:78)</span><br><span class="line">	  at org.apache.dubbo.monitor.support.MonitorFilter.invoke(MonitorFilter.java:89)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.dubbo.filter.FutureFilter.invoke(FutureFilter.java:51)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.ConsumerContextFilter.invoke(ConsumerContextFilter.java:69)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.InvokerWrapper.invoke(InvokerWrapper.java:56)</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.support.FailoverClusterInvoker.doInvoke(FailoverClusterInvoker.java:82)</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.support.AbstractClusterInvoker.invoke(AbstractClusterInvoker.java:259)</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.interceptor.ClusterInterceptor.intercept(ClusterInterceptor.java:47)</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.support.wrapper.AbstractCluster$InterceptorInvokerNode.invoke(AbstractCluster.java:92)</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.support.wrapper.MockClusterInvoker.invoke(MockClusterInvoker.java:82)</span><br><span class="line">	  at org.apache.dubbo.rpc.proxy.InvokerInvocationHandler.invoke(InvokerInvocationHandler.java:74)</span><br><span class="line">	  at org.apache.dubbo.common.bytecode.proxy0.sayHello(proxy0.java:-1)</span><br><span class="line">	  at org.apache.dubbo.demo.consumer.comp.DemoServiceComponent.sayHello(DemoServiceComponent.java:33)</span><br><span class="line">	  at org.apache.dubbo.demo.consumer.Application.main(Application.java:37)</span><br></pre></td></tr></table></figure>
+
+<p>服务提供者方法调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&quot;DubboServerHandler-172.23.120.26:20880-thread-4@4410&quot; daemon prio=5 tid=0x20 nid=NA runnable</span><br><span class="line">  java.lang.Thread.State: RUNNABLE</span><br><span class="line">	  at org.apache.dubbo.demo.provider.DemoServiceImpl.sayHello(DemoServiceImpl.java:34)</span><br><span class="line">	  at org.apache.dubbo.common.bytecode.Wrapper1.invokeMethod(Wrapper1.java:-1)</span><br><span class="line">	  at org.apache.dubbo.rpc.proxy.javassist.JavassistProxyFactory$1.doInvoke(JavassistProxyFactory.java:47)</span><br><span class="line">	  at org.apache.dubbo.rpc.proxy.AbstractProxyInvoker.invoke(AbstractProxyInvoker.java:84)</span><br><span class="line">	  at org.apache.dubbo.config.invoker.DelegateProviderMetaDataInvoker.invoke(DelegateProviderMetaDataInvoker.java:56)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.InvokerWrapper.invoke(InvokerWrapper.java:56)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.ExceptionFilter.invoke(ExceptionFilter.java:52)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.monitor.support.MonitorFilter.invoke(MonitorFilter.java:89)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.TimeoutFilter.invoke(TimeoutFilter.java:46)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.dubbo.filter.TraceFilter.invoke(TraceFilter.java:77)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.ContextFilter.invoke(ContextFilter.java:129)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.GenericFilter.invoke(GenericFilter.java:152)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.ClassLoaderFilter.invoke(ClassLoaderFilter.java:38)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.EchoFilter.invoke(EchoFilter.java:41)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.dubbo.DubboProtocol$1.reply(DubboProtocol.java:145)</span><br><span class="line">	  at org.apache.dubbo.remoting.exchange.support.header.HeaderExchangeHandler.handleRequest(HeaderExchangeHandler.java:100)</span><br><span class="line">	  at org.apache.dubbo.remoting.exchange.support.header.HeaderExchangeHandler.received(HeaderExchangeHandler.java:175)</span><br><span class="line">	  at org.apache.dubbo.remoting.transport.DecodeHandler.received(DecodeHandler.java:51)</span><br><span class="line">	  at org.apache.dubbo.remoting.transport.dispatcher.ChannelEventRunnable.run(ChannelEventRunnable.java:57)</span><br><span class="line">	  at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)</span><br><span class="line">	  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)</span><br><span class="line">	  at java.lang.Thread.run(Thread.java:748)</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="/2021/04/19/dubbo/dubbo编解码和协议/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -278,87 +346,6 @@
 
 <p><a href="https://dubbo.apache.org/zh/docs/v2.7/dev/implementation/" target="_blank" rel="noopener">dubbo协议</a></p>
 <p><a href="https://mp.weixin.qq.com/s/tl4iSZUYV5GWTqyWhaDkfw" target="_blank" rel="noopener">原文链接</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/15/架构/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/15/架构/" class="post-title-link" itemprop="url">架构</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-04-15 18:45:02" itemprop="dateCreated datePublished" datetime="2021-04-15T18:45:02+08:00">2021-04-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-25 19:45:53" itemprop="dateModified" datetime="2021-04-25T19:45:53+08:00">2021-04-25</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>1、单点故障</p>
-<p>2、系统间依赖复杂</p>
-<p>3、服务补偿</p>
-<p>4、幂等设计</p>
-<p>5、超时设置</p>
-<p>6、流量控制</p>
-<p>7、监控预警</p>
-<p>8、重试策略</p>
-<p>9、系统隔离</p>
-<p>10、代码同步调用</p>
-<p>11、热数据缓存</p>
-<p>12、系统分级</p>
-<p>13、服务降级</p>
-<p>14、灰度和回滚方案</p>
-<p>15、熔断机制</p>
-<p>16、线上压测</p>
-<p>17、代码扫描</p>
 
       
     </div>
@@ -443,7 +430,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-count">71</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

@@ -150,6 +150,109 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/03/08/kafka/kafka之comsumer再分配/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/08/kafka/kafka之comsumer再分配/" class="post-title-link" itemprop="url">kafka之consumer再分配</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-08 11:04:02" itemprop="dateCreated datePublished" datetime="2021-03-08T11:04:02+08:00">2021-03-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-18 11:17:22" itemprop="dateModified" datetime="2021-03-18T11:17:22+08:00">2021-03-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="consumer和Coordinator"><a href="#consumer和Coordinator" class="headerlink" title="consumer和Coordinator"></a>consumer和Coordinator</h4><p>Coordinator是运行在broker上的Group Coordinator，用于管理consumer group中的各个成员，主要用于offset位移管理和consumer rebalance。</p>
+<p>Coordinator存储的信息</p>
+<p>每个consumer group的coordinator都会存储以下信息:</p>
+<ol>
+<li>每个topic，有哪些消费者group订阅</li>
+<li>每个ConsumerGroup元数据：<ol>
+<li>订阅的topic列表</li>
+<li>ConsumerGroup配置信息(session timeout等)</li>
+<li>consumer元数据信息(主机名、consumerId)</li>
+<li>每个topic partition当前的offset</li>
+<li>consumer消费partitions的映射信息</li>
+</ol>
+</li>
+</ol>
+<p>如何确定consumer group的coordinator</p>
+<ol>
+<li>consumergroup位移信息写入_consumers_offsets [topic]哪个分区?<ol>
+<li>_consumers_offsets partition = Math.abs(groupId.hashCode() % offsets.topic.num.paration)， 默认分区50</li>
+</ol>
+</li>
+<li>1⃣️中计算出来的分区所在的broker就是此consumer 的coordinator</li>
+</ol>
+<h4 id="Consumer-rebalance"><a href="#Consumer-rebalance" class="headerlink" title="Consumer rebalance"></a>Consumer rebalance</h4><p>rebalance触发条件</p>
+<ol>
+<li><p>组成员发生变更(新加入、主动离开和consumer崩溃)</p>
+</li>
+<li><p>订阅topic分区数发生变更</p>
+</li>
+<li><p>consumer通过正则匹配订阅topic，新建了对应正则topic</p>
+</li>
+</ol>
+<p>rebalance协议</p>
+<ol>
+<li>HeatBeat请求 (session.timeout.ms)</li>
+<li>LeaveGroup请求</li>
+<li>SyncGroup请求</li>
+<li>JoinGroup请求</li>
+<li>DescribeGroup请求</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="/2021/03/05/kafka/kafka命令/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -278,63 +381,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/05/es/es-template/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/05/es/es-template/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-03-05 16:29:13" itemprop="dateCreated datePublished" datetime="2021-03-05T16:29:13+08:00">2021-03-05</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          {"service_log_template":{"order":0,"template":"service*","settings":{"index":{"number_of_shards":"2","number_of_replicas":"0","refresh_interval":"10s"}},"mappings":{"bible-server-api-error":{"properties":{"@timestamp":{"type":"date"},"application":{"type":"keyword"},"cloud":{"type":"keyword"},"file_name":{"type":"keyword"},"group":{"type":"keyword"},"hostName":{"type":"keyword"},"httpCode":{"type":"long"},"httpMethod":{"type":"keyword"},"httpProtocol":{"type":"keyword"},"httpReferer":{"type":"keyword"},"httpRemoteAddress":{"type":"keyword"},"httpRequestBegin":{"type":"keyword"},"httpRequestType":{"type":"keyword"},"httpResponseEnd":{"type":"keyword"},"httpTime":{"type":"date"},"httpUri":{"type":"keyword"},"httpUserAgent":{"type":"keyword"},"invokeLink":{"type":"keyword"},"message":{"type":"text"},"originProject":{"type":"keyword"},"profile":{"type":"keyword"},"project":{"type":"keyword"},"request_trace_id":{"type":"keyword"},"request_trace_seq":{"type":"keyword"},"source_host":{"type":"keyword"},"source_timestamp":{"type":"date"},"source_date":{"type":"date"},"time_local":{"type":"date","format":"yyyy-MM-dd/HH:mm:ss.SSS"},"topic":{"type":"keyword"}}}},"aliases":{}},"service-template":{"order":0,"template":"service*","settings":{"index":{"number_of_shards":"1","number_of_replicas":"4"}},"mappings":{"_default_":{"_source":{"enabled":false}},"docs":{"properties":{"sold":{"type":"long"},"online_time":{"type":"long"},"price":{"type":"long"},"publish_time":{"type":"long"},"id":{"type":"long"},"catecode":{"type":"integer"},"content":{"index":false,"store":true,"type":"keyword"},"status":{"type":"integer"}}}},"aliases":{}},"ftp_download_log":{"order":0,"template":"te*","settings":{"index":{"number_of_shards":"1"}},"mappings":{"type1":{"_source":{"enabled":false}}},"aliases":{}}}
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -404,7 +450,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-count">71</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

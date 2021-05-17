@@ -20,20 +20,20 @@
     var CONFIG = {"hostname":"","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="核心类讲解 spring代理采用cglib或者jdk proxy cglib核心类ProxyFactory、MethodInterceptor、DynamicAdvisedInterceptor、CglibMethodInvocation Pointcut​    ClassFilter MethodFilter Advice​    MethodBeforeAdvice AfterReturni">
-<meta name="keywords" content="spring">
+  <meta name="description" content="https://leetcode-cn.com/problems/maximum-subarray 给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。 示例 1： 123输入：nums = [-2,1,-3,4,-1,2,1,-5,4]输出：6解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。  示例 2： 12输入：nums = [1">
+<meta name="keywords" content="leetcode">
 <meta property="og:type" content="article">
-<meta property="og:title" content="我的博客">
-<meta property="og:url" content="/2021/04/27/spring/spring-aop/index.html">
+<meta property="og:title" content="53.最大子序和">
+<meta property="og:url" content="/2021/05/17/leetcode/53.最大子序和/index.html">
 <meta property="og:site_name" content="我的博客">
-<meta property="og:description" content="核心类讲解 spring代理采用cglib或者jdk proxy cglib核心类ProxyFactory、MethodInterceptor、DynamicAdvisedInterceptor、CglibMethodInvocation Pointcut​    ClassFilter MethodFilter Advice​    MethodBeforeAdvice AfterReturni">
+<meta property="og:description" content="https://leetcode-cn.com/problems/maximum-subarray 给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。 示例 1： 123输入：nums = [-2,1,-3,4,-1,2,1,-5,4]输出：6解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。  示例 2： 12输入：nums = [1">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-05-17T03:03:16.443Z">
+<meta property="og:updated_time" content="2021-05-17T08:45:08.124Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="我的博客">
-<meta name="twitter:description" content="核心类讲解 spring代理采用cglib或者jdk proxy cglib核心类ProxyFactory、MethodInterceptor、DynamicAdvisedInterceptor、CglibMethodInvocation Pointcut​    ClassFilter MethodFilter Advice​    MethodBeforeAdvice AfterReturni">
+<meta name="twitter:title" content="53.最大子序和">
+<meta name="twitter:description" content="https://leetcode-cn.com/problems/maximum-subarray 给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。 示例 1： 123输入：nums = [-2,1,-3,4,-1,2,1,-5,4]输出：6解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。  示例 2： 12输入：nums = [1">
 
-<link rel="canonical" href="/2021/04/27/spring/spring-aop/">
+<link rel="canonical" href="/2021/05/17/leetcode/53.最大子序和/">
 
 
 <script id="page-configurations">
@@ -46,7 +46,7 @@
   };
 </script>
 
-  <title> | 我的博客</title>
+  <title>53.最大子序和 | 我的博客</title>
   
 
 
@@ -156,7 +156,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/27/spring/spring-aop/">
+    <link itemprop="mainEntityOfPage" href="/2021/05/17/leetcode/53.最大子序和/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -169,7 +169,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          53.最大子序和
         </h1>
 
         <div class="post-meta">
@@ -178,16 +178,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2021-04-27 17:55:00" itemprop="dateCreated datePublished" datetime="2021-04-27T17:55:00+08:00">2021-04-27</time>
+              <time title="Created: 2021-05-17 16:42:01 / Modified: 16:45:08" itemprop="dateCreated datePublished" datetime="2021-05-17T16:42:01+08:00">2021-05-17</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-17 11:03:16" itemprop="dateModified" datetime="2021-05-17T11:03:16+08:00">2021-05-17</time>
-              </span>
 
           
 
@@ -200,13 +194,23 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><strong><a href="https://cloud.tencent.com/developer/article/1497770" target="_blank" rel="noopener">核心类讲解</a></strong></p>
-<p>spring代理采用cglib或者jdk proxy</p>
-<p>cglib核心类ProxyFactory、MethodInterceptor、DynamicAdvisedInterceptor、CglibMethodInvocation</p>
-<h4 id="Pointcut"><a href="#Pointcut" class="headerlink" title="Pointcut"></a>Pointcut</h4><p>​    ClassFilter MethodFilter</p>
-<h4 id="Advice"><a href="#Advice" class="headerlink" title="Advice"></a>Advice</h4><p>​    MethodBeforeAdvice AfterReturningAdvice AspectJAroundAdvice</p>
-<h4 id="Advisor"><a href="#Advisor" class="headerlink" title="Advisor"></a>Advisor</h4><p>​    Advisor 其实它就是 Pointcut 与 Advice 的组合, Advice 是执行的方法, 而要知道方法何时执行, 则 Advice 必需与 Pointcut 组合在一起, 这就诞生了 Advisor 这个类</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">AopProxyUtils.completeProxiedInterfaces(this.advised)</span><br><span class="line">		0 = &#123;Class@521&#125; &quot;interface com.hezk.aop.service.Browser&quot;</span><br><span class="line">		1 = &#123;Class@1152&#125; &quot;interface org.springframework.aop.SpringProxy&quot;</span><br><span class="line">		2 = &#123;Class@511&#125; &quot;interface org.springframework.aop.framework.Advised&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Callback		</span><br><span class="line">	0 = &#123;CglibAopProxy$DynamicAdvisedInterceptor@1184&#125; </span><br><span class="line">	1 = &#123;CglibAopProxy$StaticUnadvisedInterceptor@1198&#125; </span><br><span class="line">	2 = &#123;CglibAopProxy$SerializableNoOp@1218&#125; </span><br><span class="line">	3 = &#123;CglibAopProxy$StaticDispatcher@1206&#125; </span><br><span class="line">	4 = &#123;CglibAopProxy$AdvisedDispatcher@984&#125; </span><br><span class="line">	5 = &#123;CglibAopProxy$EqualsInterceptor@1219&#125; </span><br><span class="line">	6 = &#123;CglibAopProxy$HashCodeInterceptor@1220&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ProxyCallbackFilter</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">interceptorList = &#123;ArrayList@1723&#125;  size = 3</span><br><span class="line"> 0 = &#123;MethodBeforeAdviceInterceptor@1930&#125; </span><br><span class="line"> 1 = &#123;AfterReturningAdviceInterceptor@1931&#125; </span><br><span class="line"> 2 = &#123;BrowserAroundAdvice@975&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> CglibMethodInvocation</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> org.springframework.cglib.core.AbstractClassGenerator.generate 生成代理方法</span><br></pre></td></tr></table></figure>
+        <p><a href="https://leetcode-cn.com/problems/maximum-subarray" target="_blank" rel="noopener">https://leetcode-cn.com/problems/maximum-subarray</a></p>
+<p>给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。</p>
+<p>示例 1：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [-2,1,-3,4,-1,2,1,-5,4]</span><br><span class="line">输出：6</span><br><span class="line">解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。</span><br></pre></td></tr></table></figure>
+
+<p>示例 2：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [1]</span><br><span class="line">输出：1</span><br></pre></td></tr></table></figure>
+
+<p>思路</p>
+<ul>
+<li>这道题用动态规划的思路并不难解决，比较难的是后文提出的用分治法求解，但由于其不是最优解法，所以先不列出来</li>
+<li>动态规划的是首先对数组进行遍历，当前最大连续子序列和为 sum，结果为 ans</li>
+<li>如果 sum &gt; 0，则说明 sum 对结果有增益效果，则 sum 保留并加上当前遍历数字</li>
+<li>如果 sum &lt;= 0，则说明 sum 对结果无增益效果，需要舍弃，则 sum 直接更新为当前遍历数字</li>
+<li>每次比较 sum 和 ans的大小，将最大值置为ans，遍历结束返回结果</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxSubArray</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ans = nums[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> num: nums) &#123;</span><br><span class="line">            <span class="keyword">if</span>(sum &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                sum += num;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                sum = num;</span><br><span class="line">            &#125;</span><br><span class="line">            ans = Math.max(ans, sum);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
     </div>
@@ -217,7 +221,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/spring/" rel="tag"># spring</a>
+              <a href="/tags/leetcode/" rel="tag"># leetcode</a>
           </div>
 
         
@@ -226,13 +230,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/04/19/dubbo/dubbo ExtensionLoader/" rel="prev" title="dubbo ExtensionLoader">
-      <i class="fa fa-chevron-left"></i> dubbo ExtensionLoader
+    <a href="/2021/05/17/leetcode/93.有效ip地址/" rel="prev" title="93.还原有效ip地址">
+      <i class="fa fa-chevron-left"></i> 93.还原有效ip地址
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/04/27/spring/feign-ribbon-loadbalancer/" rel="next" title="spring openfeign ribbon loadbalancer">
-      spring openfeign ribbon loadbalancer <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -291,7 +292,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Pointcut"><span class="nav-number">1.</span> <span class="nav-text">Pointcut</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Advice"><span class="nav-number">2.</span> <span class="nav-text">Advice</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Advisor"><span class="nav-number">3.</span> <span class="nav-text">Advisor</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

@@ -150,6 +150,116 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/02/18/java/Java类加载/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/18/java/Java类加载/" class="post-title-link" itemprop="url">Java类加载</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-02-18 18:44:02 / Modified: 18:59:33" itemprop="dateCreated datePublished" datetime="2021-02-18T18:44:02+08:00">2021-02-18</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a><strong>类加载</strong></h4><p>​        在java代码中，类的加载、连接和初始化过程都是在程序运行期间完成的。（类从磁盘加载到内存中经历的三个阶段）</p>
+<p>提供了更大的灵活性，增加了更多的可能性。</p>
+<h4 id="类加载器深入剖析："><a href="#类加载器深入剖析：" class="headerlink" title="类加载器深入剖析："></a><strong>类加载器深入剖析：</strong></h4><p>Java虚拟机与程序的生命周期</p>
+<p>在如下几种情况下，java虚拟机将结束生命周期</p>
+<p>（1）执行了System.exit()方法</p>
+<p>（2）程序正常执行结束</p>
+<p>（3）程序在执行过程中遇到了异常或错误而异常终止</p>
+<p>（4）由于操作系统出现错误而导致虚拟机进程终止</p>
+<h5 id="类的加载、连接与初始化："><a href="#类的加载、连接与初始化：" class="headerlink" title="类的加载、连接与初始化："></a><strong>类的加载、连接与初始化：</strong></h5><ol>
+<li><p>加载：查找并加载类的二进制数据到java虚拟机中</p>
+</li>
+<li><p>连接：</p>
+<ul>
+<li><p>​    验证 : 确保被加载的类的正确性</p>
+</li>
+<li><p>​    准备：为类的<strong>静态变量</strong>分配内存，并将其初始化为<strong>默认值</strong>，但是到达初始化之前类变量都没有初始化为真正的初始值</p>
+</li>
+<li><p>​    解析：<strong>把类中的符号引用转换为直接引用</strong>，就是在类型的常量池中寻找类、接口、字段和方法的符号引用，把这些符号引用替换成直接引用的过程</p>
+</li>
+</ul>
+</li>
+<li><p>初始化：为类的静态变量赋予正确的初始值</p>
+</li>
+</ol>
+<p><strong>类从磁盘上加载到内存中要经历五个阶段：加载、连接、初始化、使用、卸载</strong></p>
+<p>Java程序对类的使用方式可分为两种</p>
+<ol>
+<li><em>主动使用</em></li>
+<li><em>被动使用</em></li>
+</ol>
+<p>所有的Java虚拟机实现必须在每个类或接口被Java程序“首次主动使用”时才能初始化他们</p>
+<p><strong>主动使用</strong></p>
+<p>（1）创建类的实例</p>
+<p>（2）访问某个类或接口的静态变量 getstatic（助记符），或者对该静态变量赋值 putstatic</p>
+<p>（3）调用类的静态方法 invokestatic</p>
+<p>（4）反射（Class.forName(“com.test.Test”)）</p>
+<p>（5）初始化一个类的子类</p>
+<p>（6）Java虚拟机启动时被标明启动类的类</p>
+<p>（7）JDK1.7开始提供的动态语言支持（了解）</p>
+<p><strong>被动使用</strong></p>
+<p>​    除了上面七种情况外，其他使用java类的方式都被看做是对类的被动使用，都不会导致类的初始化</p>
+<h5 id="类的加载详解："><a href="#类的加载详解：" class="headerlink" title="类的加载详解："></a><strong>类的加载详解：</strong></h5><p>​        类的加载指的是将类的.class文件中的二进制数据读入到内存中，将其放在运行时数据区的方法区内，然后在内存中创建一个java.lang.Class对象（规范并未说明Class对象位于哪里，HotSpot虚拟机将其放在<strong>方法区</strong>中）用来封装内在方法区内的数据结构。</p>
+<p>加载.calss文件的方式</p>
+<p>（1）从本地系统中直接加载</p>
+<p>（2）通过网络下载.class文件</p>
+<p>（3）从zip，jar等归档文件中加载.class文件</p>
+<p>（4）从专用数据库中提取.class文件</p>
+<p>（5）将java源文件动态编译为.class文件</p>
+<h4 id="类加载器双亲委托模型的好处："><a href="#类加载器双亲委托模型的好处：" class="headerlink" title="类加载器双亲委托模型的好处："></a>类加载器双亲委托模型的好处：</h4><p>（1）可以确保Java和核心库的安全：所有的Java应用都会引用java.lang中的类，也就是说在运行期java.lang中的类会被加载到虚拟机中，如果这个加载过程如果是由自己的类加载器所加载，那么很可能就会在JVM中存在多个版本的java.lang中的类，而且这些类是相互不可见的（命名空间的作用）。借助于双亲委托机制，Java核心类库中的类的加载工作都是由启动根加载器去加载，从而确保了Java应用所使用的的都是同一个版本的Java核心类库，他们之间是相互兼容的；</p>
+<p>（2）确保Java核心类库中的类不会被自定义的类所替代；</p>
+<p>（3）不同的类加载器可以为相同名称的类（binary name）创建额外的命名空间。相同名称的类可以并存在Java虚拟机中，只需要用不同的类加载器去加载即可。相当于在Java虚拟机内部建立了一个又一个相互隔离的Java类空间。</p>
+<p>父亲委托机制的优点是能够提高软件系统的安全性。因此在此机制下，用户自定义的类加载器不可能加载应该由父类加载器加载的可靠类，从而防止不可靠甚至恶意的代码代替由父类加载器加载的可靠代码。例如，java.lang.Object类是由跟类加载器加载，其他任何用哪个户自定义的类加载器都不可能加载含有恶意代码的java.lang.Object类。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="/2019/07/15/java/java-nio/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1346,194 +1456,6 @@ db0:keys=2,expires=0,avg_ttl=0</code></pre>
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2019/07/12/java/java多线程竞拍/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/12/java/java多线程竞拍/" class="post-title-link" itemprop="url">阿里云面试题-多线程竞拍</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-07-12 12:28:35" itemprop="dateCreated datePublished" datetime="2019-07-12T12:28:35+08:00">2019-07-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-01 18:56:07" itemprop="dateModified" datetime="2021-03-01T18:56:07+08:00">2021-03-01</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>多线程竞拍</p>
-<pre><code>创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）
-
-每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
-
-所有人的心理上线价位都为 M ，不会出价比M高
-
-每次出价必须比上一次出价高
-
-经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。</code></pre><p>个人觉得主要考察java基础（CountDownLatch、CyclicBarrier）的使用方法</p>
-<pre><code>import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.*;
-import java.util.concurrent.locks.ReentrantLock;
-
-public class AuctionTest {
-
-/**
- * 创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）
- * 每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
- * 所有人的心理上线价位都为 M ，不会出价比M高
- * 每次出价必须比上一次出价高
- * 经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。
- */
-static int N = 10; //竞拍人数
-static int M = 100;//所有人的心理上线价位都为 M ，不会出价比M高
-static int AUCTION_NUM = 5; //经过 k 次竞拍后
-
-static ConcurrentHashMap&lt;String, List&lt;Integer&gt;&gt; ACTION_HIST = new ConcurrentHashMap&lt;&gt;();
-
-static ReentrantLock lock = new ReentrantLock();//这个锁是为了保证出价比上一个人出价高
-
-static volatile int CUR_MAX_PRICE = 0;
-
-public static void main(String[] args) throws Exception {
-    CyclicBarrier barrier = new CyclicBarrier(N);//每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
-    CountDownLatch countDownLatch = new CountDownLatch(N);//这里应该是N
-    ThreadPoolExecutor executor = new ThreadPoolExecutor(N, N, 1, TimeUnit.SECONDS, new ArrayBlockingQueue&lt;Runnable&gt;(1), new ThreadFactory() {
-        @Override
-        public Thread newThread(Runnable r) {
-            return new Thread(r, &quot;Auction&quot;);
-        }
-    });
-    int step = M / (AUCTION_NUM * N); //每次出价阶梯
-
-    for (int i = 1; i &lt;= N; i++) {
-        executor.execute(new Auction(barrier, countDownLatch, &quot;P&quot; + i, step));
-    }
-
-    countDownLatch.await();
-
-    String personName = null;
-    int maxPrice = 0;
-    int personId = 0;
-    for (int num = 1; num &lt;= AUCTION_NUM; num++) {
-        for (int i = 1; i &lt;= N; i++) {
-            personName = &quot;P&quot; + i;
-            Integer price = ACTION_HIST.get(personName).get(num - 1);
-            if (num == AUCTION_NUM) {
-                if (maxPrice &lt; price) {
-                    maxPrice = price;
-                    personId = i;
-                }
-            }
-            System.out.println(&quot;第&quot; + num + &quot;次出价人:P&quot; + i + &quot; 出价:&quot; + price);
-        }
-        System.out.println(&quot;-----------------&quot;);
-    }
-    System.out.println(&quot;最终竞价成功人:P&quot; + personId + &quot;,最终出价:&quot; + maxPrice);
-    executor.shutdown();
-}
-
-static class Auction implements Runnable {
-    private String name;
-    private CyclicBarrier barrier;
-    private int step;
-    private CountDownLatch countDownLatch;
-
-    public Auction(CyclicBarrier barrier, CountDownLatch countDownLatch, String name, int step) {
-        this.name = name;
-        this.barrier = barrier;
-        this.step = step;
-        this.countDownLatch = countDownLatch;
-    }
-
-    @Override
-    public void run() {
-        if (!ACTION_HIST.containsKey(name)) {
-            ACTION_HIST.put(name, new ArrayList&lt;&gt;());
-        }
-        lock.lock();
-        int currentPrice = 0;
-        try {
-            currentPrice = getRandPrice(step);
-            CUR_MAX_PRICE = CUR_MAX_PRICE &lt; currentPrice ? currentPrice : CUR_MAX_PRICE;
-        } finally {
-            lock.unlock();
-        }
-
-        ACTION_HIST.get(name).add(currentPrice);
-        int tmp = 1;
-        try {
-            while (tmp &lt; AUCTION_NUM) {
-                barrier.await();
-                currentPrice = getRandPrice(step);
-                currentPrice = currentPrice &gt; M ? M : currentPrice;
-                CUR_MAX_PRICE = CUR_MAX_PRICE &lt; currentPrice ? currentPrice : CUR_MAX_PRICE;
-                ACTION_HIST.get(name).add(currentPrice);
-                tmp++;
-            }
-            countDownLatch.countDown();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }   /**
-     * 当前心里价比上次多多少
-     *
-     * @param step
-     * @return
-     */
-    int getRandPrice(int step) {
-        return CUR_MAX_PRICE + new Random().nextInt(step) + 1;
-    }
-}</code></pre>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1603,7 +1525,7 @@ static class Auction implements Runnable {
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-count">71</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

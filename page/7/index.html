@@ -150,6 +150,125 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/03/31/java/mat-oql/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/31/java/mat-oql/" class="post-title-link" itemprop="url">mat之OQL</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-31 10:44:02" itemprop="dateCreated datePublished" datetime="2021-03-31T10:44:02+08:00">2021-03-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-01 11:45:23" itemprop="dateModified" datetime="2021-04-01T11:45:23+08:00">2021-04-01</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://help.eclipse.org/2021-03/index.jsp?topic=/org.eclipse.mat.ui.help/welcome.html" target="_blank" rel="noopener">https://help.eclipse.org/2021-03/index.jsp?topic=/org.eclipse.mat.ui.help/welcome.html</a></p>
+<h4 id="OQL"><a href="#OQL" class="headerlink" title="OQL"></a>OQL</h4><h5 id="1、OQL-SELECT"><a href="#1、OQL-SELECT" class="headerlink" title="1、OQL-SELECT"></a>1、OQL-SELECT</h5><ul>
+<li>SELECT * FROM java.lang.String</li>
+<li>SELECT toString(s), s.count, s.value FROM java.lang.String s</li>
+<li>SELECT toString(s) AS Value,s.@usedHeapSize AS “Shallow Size” FROM java.lang.String s<br><strong>（@为属性访问器，可以使用AS起个别名</strong>）</li>
+<li>SELECT AS RETAINED SET * FROM java.lang.String<br>（使用AS RETAINED SET 获得与选择对象相关联的对象集合）</li>
+<li>SELECT OBJECTS dominators(s) FROM java.lang.String s<br>（<strong>OBJECTS 关键字使得dominators 返回二维数组简化为一维对象列表</strong>）</li>
+<li>SELECT DISTINCT OBJECTS classof(s) FROM java.lang.String s<br>（<strong>DISTINCT 去重复</strong>）</li>
+<li>查询所有的异常对象<br>SELECT * FROM INSTANCEOF java.lang.Exception exceptions<br>SELECT exceptions.@displayName, exceptions.detailMessage.toString() FROM INSTANCEOF java.lang.Exception exceptions</li>
+</ul>
+<h5 id="2、OQL-FROM"><a href="#2、OQL-FROM" class="headerlink" title="2、OQL-FROM"></a>2、OQL-FROM</h5><ul>
+<li>SELECT * FROM “java.lang..*”<br>（支持正则）</li>
+<li>SELECT * FROM java.lang.String</li>
+<li>SELECT * FROM 0xe14a100<br>（根据<strong>类对象</strong>在堆转储快照中的地址查询）</li>
+<li>SELECT * FROM 3022<br>（根据对象在堆转储快照中的地址ID）</li>
+<li>SELECT * FROM ( SELECT * FROM java.lang.Class c )</li>
+<li>SELECT * FROM <strong><em>\</em>${snapshot}.getClasses()<br>**</strong>（使用属性访问器）</li>
+<li>SELECT * FROM INSTANCEOF java.lang.ref.Reference<br>（<em>INSTANCEOF</em> 会把指定类的子类也查询出来）</li>
+<li>SELECT * FROM OBJECTS java.lang.String<br>（OBJECTS 禁止OQL把查询范围解释为对象实例，上述结果为java.lang.String对应的Class）</li>
+</ul>
+<h5 id="3、OQL-WHERE"><a href="#3、OQL-WHERE" class="headerlink" title="3、OQL-WHERE"></a>3、OQL-WHERE</h5><ul>
+<li><p>SELECT * FROM java.lang.String s WHERE s.count &gt;= 100</p>
+</li>
+<li><p>SELECT * FROM java.lang.String s WHERE toString(s) LIKE “.*day” </p>
+</li>
+<li><p>SELECT * FROM java.lang.String s WHERE s.value NOT IN dominators(s) </p>
+</li>
+<li><p>SELECT * FROM java.lang.String s WHERE toString(s) = “monday” </p>
+</li>
+<li><p>SELECT * FROM java.lang.String s WHERE s.count &gt; 100 AND s.@retainedHeapSize &gt; s.@usedHeapSize </p>
+</li>
+<li><p>SELECT * FROM java.lang.String s WHERE s.count &gt; 1000 OR s.value.@length &gt;1000 </p>
+</li>
+<li><p>SELECT * FROM java.lang.String s WHERE (s.count &gt; 1000) = true           </p>
+<p>​                                                            WHERE toString(s) = “monday”                              </p>
+<p>​                                                            WHERE dominators(s).size() = 0                             </p>
+<p>​                                                            WHERE s.retainedHeapSize &gt; 1024L                              </p>
+<p>​                                                            WHERE s.@GCRootInfo != null</p>
+</li>
+</ul>
+<h5 id="4、属性访问器"><a href="#4、属性访问器" class="headerlink" title="4、属性访问器"></a>4、属性访问器</h5><ul>
+<li>[<alias>.]<field>.<field>.……</field></field></alias></li>
+</ul>
+<p>（访问堆转储快照中对象的字段）</p>
+<ul>
+<li>[<alias>.]@<attribute>……</attribute></alias></li>
+</ul>
+<p>（访问java bean属性）</p>
+<div class="table-box"><table class="mceItemTable       " border="0" style="color:rgb(0,0,0); font-size:14px; line-height:26px; border:1px dashed rgb(187,187,187); font-family:Verdana,Arial,Helvetica,sans-serif"><tbody><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">目标</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">接口</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">属性</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">含义</span></td></tr><tr><td rowspan="6" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">任意堆中的对象</span></td><td rowspan="6" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Iobject</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">objectId</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">快照中对象的ID</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">objectAddress</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">快照中对象的地址</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Class</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">对象所属的类</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">usedHeapSize</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">对象的shallowSize</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">retainedHeapSize</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">对象的retainedSize</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">displayName</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">对象的显示名称</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">类对象</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Iclass</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">classLoaderId</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">类加载器Id</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">任意数组</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Iarray</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">length</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">数组的长度</span></td></tr></tbody></table></div>
+
+
+
+<h5 id="5、OQL-内建函数"><a href="#5、OQL-内建函数" class="headerlink" title="5、OQL 内建函数"></a>5、OQL 内建函数</h5><p>.[<alias>.]@&lt;方法&gt;([&lt;表达式&gt;,&lt;表达式&gt;])……</alias></p>
+<p>（调用OQL java方法，加“()”会令MAT解释为一个OQL java调用）</p>
+<p>常见的OQL java方法</p>
+<div class="table-box"><table class="mceItemTable       " border="0" style="color:rgb(0,0,0); font-size:14px; line-height:26px; border:1px dashed rgb(187,187,187); font-family:Verdana,Arial,Helvetica,sans-serif"><tbody><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">目标</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">接口</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">属性</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">含义</span></td></tr><tr><td rowspan="2" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">$snapshot</span></td><td rowspan="2" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Isnapshot</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">getClasses()</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">获取所有类的集合</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">getClassesByName(String name,boolean includeSubClasses)</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">获取指定类的集合</span></td></tr><tr><td rowspan="2" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Class object</span></td><td rowspan="2" style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">Iclass</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">hasSuperClass()</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">如果对象有父类则返回true</span></td></tr><tr><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">isArrayType()</span></td><td style="border:1px dashed rgb(187,187,187); margin:8px; font-family:Verdana,Arial,Helvetica,sans-serif"> <span style="font-size:18px">如果Class是数组类型则返回true</span></td></tr></tbody></table></div>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="/2021/03/28/mybatis/mybatis设计模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -327,108 +446,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/23/leetcode/tree/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/23/leetcode/tree/" class="post-title-link" itemprop="url">tree</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-03-23 18:45:02" itemprop="dateCreated datePublished" datetime="2021-03-23T18:45:02+08:00">2021-03-23</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-17 10:18:56" itemprop="dateModified" datetime="2021-05-17T10:18:56+08:00">2021-05-17</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="平衡二叉树"><a href="#平衡二叉树" class="headerlink" title="平衡二叉树"></a>平衡二叉树</h4><p>一个二叉树<em>每个节点</em> 的左右两个子树的高度差的绝对值不超过 1 </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isBalance</span><span class="params">(TreeNode root)</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> Math.abs(helper(root.left) - helper(root.right)) &lt;= <span class="number">1</span> &amp;&amp; isBalance(root.left) &amp;&amp; isBalance(root.right);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">helper</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> Math.max(helper(root.left), helper(root.right)) + <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#### 二叉树先序遍历</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> val;</span><br><span class="line">	TreeNode left, right;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">TreeNode</span><span class="params">(<span class="keyword">int</span> val, TreeNode left, TreeNode right)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.val = val;</span><br><span class="line">		<span class="keyword">this</span>.left = left;</span><br><span class="line">		<span class="keyword">this</span>.right = right;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>​    </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">preorder</span><span class="params">(TreeNode root)</span></span>&#123;</span><br><span class="line">		List&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList();</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> res;</span><br><span class="line">		&#125;</span><br><span class="line">		preorder(root, res);</span><br><span class="line">		<span class="keyword">return</span> res;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">preorder</span><span class="params">(TreeNode root, List&lt;Intger&gt; res)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		res.add(root.val);</span><br><span class="line">		preorder(root.left, res);</span><br><span class="line">		preorder(root.right, res);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>二叉树中序遍历 #94</p>
-<p>二叉树先序遍历 (搜索二叉树，中序遍历，遍历结果是升序排序) #144</p>
-<p>二叉树后序遍历</p>
-<p>二叉树最近公共祖先 #235</p>
-<p>从先序和中序遍历构建二叉树</p>
-<p>对称二叉树</p>
-<p>合并二叉树 #617</p>
-<p>二叉树的深度</p>
-<p>二叉树右视图 #199</p>
-<p>验证二叉搜索树 #98</p>
-<p>二叉树层次遍历 #107</p>
-<p>翻转二叉树 #226</p>
-<p>二叉树路径和 #112  #113 </p>
-<p>二叉树转化为单链表 #114</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">flatten</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">    TreeNode curr = root;</span><br><span class="line">    <span class="keyword">while</span> (curr != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (curr.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">        TreeNode prev = curr.left;</span><br><span class="line">        <span class="keyword">while</span> (prev.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">          prev = prev.right;</span><br><span class="line">        &#125;</span><br><span class="line">        prev.right = curr.right;</span><br><span class="line">        curr.right = curr.left;</span><br><span class="line">        curr.left = <span class="keyword">null</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      curr = curr.right;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">preorder</span><span class="params">(TreeNode root)</span></span>&#123;</span><br><span class="line">		List&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList();</span><br><span class="line">		Stack&lt;TreeNode&gt; stack = <span class="keyword">new</span> Stack();</span><br><span class="line">		<span class="keyword">while</span>(root != <span class="keyword">null</span> || !stack.isEmpty()) &#123;</span><br><span class="line">			<span class="keyword">while</span>(root != <span class="keyword">null</span>) &#123;</span><br><span class="line">				res.add(root.val);</span><br><span class="line">				stack.push(root);</span><br><span class="line">				root = root.left;</span><br><span class="line">			&#125;</span><br><span class="line">			root = stack.pop();</span><br><span class="line">			root = root.right;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> res;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="二叉树中序遍历"><a href="#二叉树中序遍历" class="headerlink" title="二叉树中序遍历"></a>二叉树中序遍历</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">inorder</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">		List&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList();</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> res;</span><br><span class="line">		&#125;</span><br><span class="line">		inorder(root, res);</span><br><span class="line">		<span class="keyword">return</span> res;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">inorder</span><span class="params">(TreeNode root, List&lt;Integer&gt; res)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		inorder(root.left, res);</span><br><span class="line">		res.add(root.val);</span><br><span class="line">		inorder(root.right, res);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">inorder</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">		List&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList();</span><br><span class="line">		Queue&lt;TreeNode&gt; queue = <span class="keyword">new</span> LinkedList();</span><br><span class="line">		<span class="keyword">while</span>(root != <span class="keyword">null</span> || !queue.isEmpty()) &#123;</span><br><span class="line">			<span class="keyword">while</span>(root != <span class="keyword">null</span>) &#123;</span><br><span class="line">				queue.offer(root);</span><br><span class="line">				root = root.left;</span><br><span class="line">			&#125;</span><br><span class="line">			root = root.pop();</span><br><span class="line">			res.add(root.val);</span><br><span class="line">			root = root.right;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="二叉树后序遍历"><a href="#二叉树后序遍历" class="headerlink" title="二叉树后序遍历"></a>二叉树后序遍历</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">postorder</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">		List&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList();</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> res;</span><br><span class="line">		&#125;</span><br><span class="line">		order(root, res);</span><br><span class="line">		<span class="keyword">return</span> res;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">postorder</span><span class="params">(TreeNode root, List&lt;Integer&gt; res)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (root ==  <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		order(root.left, res);</span><br><span class="line">		order(root.right, res);</span><br><span class="line">		res.add(root.val);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>​    </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">postorder</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">		List&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> res;</span><br><span class="line">		&#125;</span><br><span class="line">		Stack&lt;TreeNode&gt; queue = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">		TreeNode prev = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">while</span>(root != <span class="keyword">null</span> || !queue.isEmpty()) &#123;</span><br><span class="line">			<span class="keyword">while</span>(root != <span class="keyword">null</span>) &#123;</span><br><span class="line">				queue.push(root);</span><br><span class="line">				root = root.left;</span><br><span class="line">			&#125;</span><br><span class="line">			root = root.pop();</span><br><span class="line">			<span class="keyword">if</span> (root.right == <span class="keyword">null</span> || root.right == prev) &#123;</span><br><span class="line">				res.add(root.val);</span><br><span class="line">				prev = root;</span><br><span class="line">				root = <span class="keyword">null</span>;</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				queue.push(root);</span><br><span class="line">				root = root.right;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>填充每个节点的下一个右侧节点指针 #116 <strong>#117</strong> (完美二叉树、不完整二叉树)</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connect</span><span class="params">(TreeLinkNode node)</span> </span>&#123;</span><br><span class="line">    TreeLinkNode curr = node;</span><br><span class="line">    <span class="keyword">while</span> (curr.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">      TreeLinkNode head = curr;</span><br><span class="line">      <span class="keyword">while</span> (head != <span class="keyword">null</span>) &#123;</span><br><span class="line">        head.left.next = head.right;</span><br><span class="line">        <span class="keyword">if</span> (head.next != <span class="keyword">null</span>) &#123;</span><br><span class="line">          head.right.next = head.next.left;</span><br><span class="line">        &#125;</span><br><span class="line">        head = head.next;</span><br><span class="line">      &#125;</span><br><span class="line">      curr = curr.left;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</span><br><span class="line">  TreeLinkNode last = <span class="keyword">null</span>, nextStart = <span class="keyword">null</span>;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connect</span><span class="params">(TreeLinkNode root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    TreeLinkNode start = root;</span><br><span class="line">    <span class="keyword">while</span>(start != <span class="keyword">null</span>) &#123;</span><br><span class="line">      last = <span class="keyword">null</span>;</span><br><span class="line">      nextStart = <span class="keyword">null</span>;</span><br><span class="line">      <span class="keyword">for</span>(TreeLinkNode p = start; p != <span class="keyword">null</span>; p = p.next) &#123;</span><br><span class="line">        <span class="keyword">if</span> (p.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">          handler(p.left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (p.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">          handler(p.right);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      start = nextStart;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">handler</span><span class="params">(TreeLinkNode node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (last != <span class="keyword">null</span>) &#123;</span><br><span class="line">      last.next = node;</span><br><span class="line">    &#125;</span><br><span class="line">    last = node;</span><br><span class="line">    <span class="keyword">if</span> (nextStart == <span class="keyword">null</span>) &#123;</span><br><span class="line">      nextStart = node;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">traverse</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">		List&lt;List&lt;Integer&gt;&gt; res = <span class="keyword">new</span> ArrayList();</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> res;</span><br><span class="line">		&#125; </span><br><span class="line">		Queue&lt;TreeNode&gt; queue = <span class="keyword">new</span> LinkedList();</span><br><span class="line">		queue.offer(root); </span><br><span class="line">		<span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">			<span class="keyword">int</span> size = queue.length();</span><br><span class="line">			List&lt;Integer&gt; temp = <span class="keyword">new</span> ArrayList();</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;size;i++) &#123;</span><br><span class="line">				TreeNode node = queue.poll();</span><br><span class="line">				temp.add(node.val);</span><br><span class="line">				<span class="keyword">if</span> (node.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">					queue.offer(node.left);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> (node.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">					queue.offer(node.right);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			res.add(temp);</span><br><span class="line">			<span class="comment">//res.add(0, temp);</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> res;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">traverse</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">		List&lt;List&lt;Integer&gt;&gt; res = <span class="keyword">new</span> ArrayList();</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> res;</span><br><span class="line">		&#125; </span><br><span class="line">		Queue&lt;TreeNode&gt; queue = <span class="keyword">new</span> LinkedList();</span><br><span class="line">		queue.offer(root); </span><br><span class="line">		<span class="keyword">boolean</span> flag = <span class="keyword">true</span>;</span><br><span class="line">		<span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">			<span class="keyword">int</span> size = queue.length();</span><br><span class="line">			List&lt;Integer&gt; temp = <span class="keyword">new</span> ArrayList();</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;size;i++) &#123;</span><br><span class="line">				TreeNode node = queue.poll();</span><br><span class="line">				<span class="keyword">if</span> (flag) &#123;</span><br><span class="line">					temp.add(node.val);</span><br><span class="line">				&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">					temp.add(<span class="number">0</span>, node.val);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> (node.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">					queue.offer(node.left);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> (node.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">					queue.offer(node.right);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			res.add(temp);</span><br><span class="line">			flag = !flag;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> res;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -498,7 +515,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-count">71</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
