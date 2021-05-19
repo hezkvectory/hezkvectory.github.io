@@ -150,6 +150,175 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/03/08/kafka/kafka之comsumer再分配/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/08/kafka/kafka之comsumer再分配/" class="post-title-link" itemprop="url">kafka之consumer再分配</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-08 11:04:02" itemprop="dateCreated datePublished" datetime="2021-03-08T11:04:02+08:00">2021-03-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-18 11:17:22" itemprop="dateModified" datetime="2021-03-18T11:17:22+08:00">2021-03-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="consumer和Coordinator"><a href="#consumer和Coordinator" class="headerlink" title="consumer和Coordinator"></a>consumer和Coordinator</h4><p>Coordinator是运行在broker上的Group Coordinator，用于管理consumer group中的各个成员，主要用于offset位移管理和consumer rebalance。</p>
+<p>Coordinator存储的信息</p>
+<p>每个consumer group的coordinator都会存储以下信息:</p>
+<ol>
+<li>每个topic，有哪些消费者group订阅</li>
+<li>每个ConsumerGroup元数据：<ol>
+<li>订阅的topic列表</li>
+<li>ConsumerGroup配置信息(session timeout等)</li>
+<li>consumer元数据信息(主机名、consumerId)</li>
+<li>每个topic partition当前的offset</li>
+<li>consumer消费partitions的映射信息</li>
+</ol>
+</li>
+</ol>
+<p>如何确定consumer group的coordinator</p>
+<ol>
+<li>consumergroup位移信息写入_consumers_offsets [topic]哪个分区?<ol>
+<li>_consumers_offsets partition = Math.abs(groupId.hashCode() % offsets.topic.num.paration)， 默认分区50</li>
+</ol>
+</li>
+<li>1⃣️中计算出来的分区所在的broker就是此consumer 的coordinator</li>
+</ol>
+<h4 id="Consumer-rebalance"><a href="#Consumer-rebalance" class="headerlink" title="Consumer rebalance"></a>Consumer rebalance</h4><p>rebalance触发条件</p>
+<ol>
+<li><p>组成员发生变更(新加入、主动离开和consumer崩溃)</p>
+</li>
+<li><p>订阅topic分区数发生变更</p>
+</li>
+<li><p>consumer通过正则匹配订阅topic，新建了对应正则topic</p>
+</li>
+</ol>
+<p>rebalance协议</p>
+<ol>
+<li>HeatBeat请求 (session.timeout.ms)</li>
+<li>LeaveGroup请求</li>
+<li>SyncGroup请求</li>
+<li>JoinGroup请求</li>
+<li>DescribeGroup请求</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/03/05/kafka/kafka命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/05/kafka/kafka命令/" class="post-title-link" itemprop="url">kafka生产消费命令</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-05 18:45:02" itemprop="dateCreated datePublished" datetime="2021-03-05T18:45:02+08:00">2021-03-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-18 19:35:12" itemprop="dateModified" datetime="2021-03-18T19:35:12+08:00">2021-03-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">./kafka-console-producer.sh --broker-list 127.0.0.1:9092 --topic test001</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-console-producer.sh --broker-list 127.0.0.1:9092,127.0.0.1:9093 --topic logs_teacher_teacher-app_bible-server-api</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic logs_teacher_teacher-app_bible-server-api --from-beginning</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-topics.sh --create --zookeeper 127.0.0.1:2181 --replication-factor 1 --partitions 2 --topic test001</span><br><span class="line"></span><br><span class="line">./kafka-topics.sh --zookeeper 127.0.0.1:2181 --list</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-console-consumer.sh --bootstrap-server kafka:9092 --group group1 --topic test_1</span><br><span class="line">./kafka-topics.sh --list --bootstrap-server kafka:9092</span><br><span class="line">./kafka-topics.sh --describe --bootstrap-server kafka:9092</span><br><span class="line">./kafka-topics.sh --describe --bootstrap-server 172.23.104.50:9092 --topic test1</span><br><span class="line">./kafka-console-consumer.sh --bootstrap-server 172.23.104.50:9092 --group group1 --topic test1</span><br><span class="line">./kafka-console-producer.sh --bootstrap-server 172.23.104.50:9092 --topic test1</span><br><span class="line">./kafka-topics.sh --alter --zookeeper 172.23.104.50:2181 --partitions 2 --topic test1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">./kafka-topics.sh --zookeeper zookeeper:2181 --delete --topic test1</span><br><span class="line">./kafka-consumer-groups.sh --bootstrap-server 172.23.104.50:9092 --list</span><br><span class="line"></span><br><span class="line">./kafka-consumer-groups.sh --describe --bootstrap-server 172.23.104.50:9092 --group ds</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">删除以#开头的行</span><br><span class="line">cat ./conf/server.properties | sed -e &apos;/^#/d&apos;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="/2021/03/05/spring/eureka命令/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -212,361 +381,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/05/es/es-template/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/05/es/es-template/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-03-05 16:29:13" itemprop="dateCreated datePublished" datetime="2021-03-05T16:29:13+08:00">2021-03-05</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          {"service_log_template":{"order":0,"template":"service*","settings":{"index":{"number_of_shards":"2","number_of_replicas":"0","refresh_interval":"10s"}},"mappings":{"bible-server-api-error":{"properties":{"@timestamp":{"type":"date"},"application":{"type":"keyword"},"cloud":{"type":"keyword"},"file_name":{"type":"keyword"},"group":{"type":"keyword"},"hostName":{"type":"keyword"},"httpCode":{"type":"long"},"httpMethod":{"type":"keyword"},"httpProtocol":{"type":"keyword"},"httpReferer":{"type":"keyword"},"httpRemoteAddress":{"type":"keyword"},"httpRequestBegin":{"type":"keyword"},"httpRequestType":{"type":"keyword"},"httpResponseEnd":{"type":"keyword"},"httpTime":{"type":"date"},"httpUri":{"type":"keyword"},"httpUserAgent":{"type":"keyword"},"invokeLink":{"type":"keyword"},"message":{"type":"text"},"originProject":{"type":"keyword"},"profile":{"type":"keyword"},"project":{"type":"keyword"},"request_trace_id":{"type":"keyword"},"request_trace_seq":{"type":"keyword"},"source_host":{"type":"keyword"},"source_timestamp":{"type":"date"},"source_date":{"type":"date"},"time_local":{"type":"date","format":"yyyy-MM-dd/HH:mm:ss.SSS"},"topic":{"type":"keyword"}}}},"aliases":{}},"service-template":{"order":0,"template":"service*","settings":{"index":{"number_of_shards":"1","number_of_replicas":"4"}},"mappings":{"_default_":{"_source":{"enabled":false}},"docs":{"properties":{"sold":{"type":"long"},"online_time":{"type":"long"},"price":{"type":"long"},"publish_time":{"type":"long"},"id":{"type":"long"},"catecode":{"type":"integer"},"content":{"index":false,"store":true,"type":"keyword"},"status":{"type":"integer"}}}},"aliases":{}},"ftp_download_log":{"order":0,"template":"te*","settings":{"index":{"number_of_shards":"1"}},"mappings":{"type1":{"_source":{"enabled":false}}},"aliases":{}}}
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/05/es/dsl/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/05/es/dsl/" class="post-title-link" itemprop="url">elasticsearch dsl</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-03-05 10:28:35 / Modified: 16:30:31" itemprop="dateCreated datePublished" datetime="2021-03-05T10:28:35+08:00">2021-03-05</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ul>
-<li><p>对于复杂的查询，最好都先校验下，看有没有报错。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_validate/query?explain</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &quot;toothbrush&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>搜索商品名称包含 toothbrush，而且售价大于 400 元，小于 700 的商品</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;bool&quot;: &#123;</span><br><span class="line">      &quot;must&quot;: &#123;</span><br><span class="line">        &quot;match&quot;: &#123;</span><br><span class="line">          &quot;product_name&quot;: &quot;toothbrush&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;filter&quot;: &#123;</span><br><span class="line">        &quot;range&quot;: &#123;</span><br><span class="line">          &quot;price&quot;: &#123;</span><br><span class="line">            &quot;gt&quot;: 400,</span><br><span class="line">            &quot;lt&quot;: 700</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>full-text search 全文检索，倒排索引</p>
-</li>
-<li><p>索引中只要有任意一个匹配拆分后词就可以出现在结果中，只是匹配度越高的排越前面</p>
-</li>
-<li><p>比如查询：PHILIPS toothbrush，会被拆分成两个单词：PHILIPS 和 toothbrush。只要索引中 product_name 中只要含有任意对应单词，都会在搜索结果中，只是如果有数据同时含有这两个单词，则排序在前面。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &quot;PHILIPS toothbrush&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>phrase search 短语搜索</p>
-</li>
-<li><p>索引中必须同时匹配拆分后词就可以出现在结果中</p>
-</li>
-<li><p>比如查询：PHILIPS toothbrush，会被拆分成两个单词：PHILIPS 和 toothbrush。索引中必须有同时有这两个单词的才会在结果中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match_phrase&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &quot;PHILIPS toothbrush&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>range 用法，查询数值、时间区间：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;range&quot;: &#123;</span><br><span class="line">      &quot;price&quot;: &#123;</span><br><span class="line">        &quot;gte&quot;: 30.00</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>match 用法（与 term 进行对比）：</p>
-</li>
-<li><p>查询的字段内容是进行分词处理的，只要分词的单词结果中，在数据中有满足任意的分词结果都会被查询出来</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &quot;PHILIPS toothbrush&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &#123;</span><br><span class="line">        &quot;query&quot;: &quot;PHILIPS toothbrush&quot;,</span><br><span class="line">        &quot;operator&quot;: &quot;and&quot;</span><br><span class="line">      &#125;</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>match 还还有一种情况，就是必须满足分词结果中百分比的词，比如搜索词被分成这样子：java 程序员 书 推荐，这里就有 4 个词，假如要求 50% 命中其中两个词就返回，我们可以这样：</p>
-</li>
-<li><p>当然，这种需求也可以用 must、must_not、should 匹配同一个字段进行组合来查询</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &#123;</span><br><span class="line">        &quot;query&quot;: &quot;java 程序员 书 推荐&quot;,</span><br><span class="line">        &quot;minimum_should_match&quot;: &quot;50%&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>multi_match 用法：</p>
-</li>
-<li><p>查询 product_name 和 product_desc 字段中，只要有：toothbrush 关键字的就查询出来。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;multi_match&quot;: &#123;</span><br><span class="line">      &quot;query&quot;: &quot;toothbrush&quot;,</span><br><span class="line">      &quot;fields&quot;: [</span><br><span class="line">        &quot;product_name&quot;,</span><br><span class="line">        &quot;product_desc&quot;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>multi_match 跨多个 field 查询，表示查询分词必须出现在相同字段中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;multi_match&quot;: &#123;</span><br><span class="line">      &quot;query&quot;: &quot;PHILIPS toothbrush&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;cross_fields&quot;,</span><br><span class="line">      &quot;operator&quot;: &quot;and&quot;,</span><br><span class="line">      &quot;fields&quot;: [</span><br><span class="line">        &quot;product_name&quot;,</span><br><span class="line">        &quot;product_desc&quot;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>multi_match 用法：</p>
-</li>
-<li><p>查询 product_name 和 product_desc 字段中，只要有：toothbrush 关键字的就查询出来。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;multi_match&quot;: &#123;</span><br><span class="line">      &quot;query&quot;: &quot;toothbrush&quot;,</span><br><span class="line">      &quot;fields&quot;: [</span><br><span class="line">        &quot;product_name&quot;,</span><br><span class="line">        &quot;product_desc&quot;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>multi_match 跨多个 field 查询，表示查询分词必须出现在相同字段中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;multi_match&quot;: &#123;</span><br><span class="line">      &quot;query&quot;: &quot;PHILIPS toothbrush&quot;,</span><br><span class="line">      &quot;type&quot;: &quot;cross_fields&quot;,</span><br><span class="line">      &quot;operator&quot;: &quot;and&quot;,</span><br><span class="line">      &quot;fields&quot;: [</span><br><span class="line">        &quot;product_name&quot;,</span><br><span class="line">        &quot;product_desc&quot;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>match_phrase 用法（短语搜索）（与 match 进行对比）：</p>
-</li>
-<li><p>对这个查询词不进行分词，必须完全匹配查询词才可以作为结果显示。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match_phrase&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &quot;PHILIPS toothbrush&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>match_phrase + slop（与 match_phrase 进行对比）：</p>
-</li>
-<li><p>在说 slop 的用法之前，需要先说明原数据是：PHILIPS toothbrush HX6730/02，被分词后至少有：PHILIPS，toothbrush，HX6730 三个 term。</p>
-</li>
-<li><p>match_phrase 的用法我们上面说了，按理说查询的词必须完全匹配才能查询到，PHILIPS HX6730 很明显是不完全匹配的。</p>
-</li>
-<li><p>但是有时候我们就是要这种不完全匹配，只要求他们尽可能靠谱，中间有几个单词是没啥问题的，那就可以用到 slop。slop = 2 表示中间如果间隔 2 个单词以内也算是匹配的结果（）。</p>
-</li>
-<li><p>其实也不能称作间隔，应该说是移位，查询的关键字分词后移动多少位可以跟 doc 内容匹配，移动的次数就是 slop。所以 HX6730 PHILIPS 其实也是可以匹配到 doc 的，只是 slop = 5 才行。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match_phrase&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot; : &#123;</span><br><span class="line">          &quot;query&quot; : &quot;PHILIPS HX6730&quot;,</span><br><span class="line">          &quot;slop&quot; : 1</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>match + match_phrase + slop 组合查询，使查询结果更加精准和结果更多</p>
-</li>
-<li><p>但是 match_phrase 性能没有 match 好，所以一般需要先用 match 第一步进行过滤，然后在用 match_phrase 进行进一步匹配，并且重新打分，这里又用到了：rescore，window_size 表示对前 10 个进行重新打分</p>
-</li>
-<li><p>下面第一个是未重新打分的，第二个是重新打分的</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;bool&quot;: &#123;</span><br><span class="line">      &quot;must&quot;: &#123;</span><br><span class="line">        &quot;match&quot;: &#123;</span><br><span class="line">          &quot;product_name&quot;: &#123;</span><br><span class="line">            &quot;query&quot;: &quot;PHILIPS HX6730&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;should&quot;: &#123;</span><br><span class="line">        &quot;match_phrase&quot;: &#123;</span><br><span class="line">          &quot;product_name&quot;: &#123;</span><br><span class="line">            &quot;query&quot;: &quot;PHILIPS HX6730&quot;,</span><br><span class="line">            &quot;slop&quot;: 10</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;product_name&quot;: &quot;PHILIPS HX6730&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;rescore&quot;: &#123;</span><br><span class="line">    &quot;window_size&quot;: 10,</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">      &quot;rescore_query&quot;: &#123;</span><br><span class="line">        &quot;match_phrase&quot;: &#123;</span><br><span class="line">          &quot;product_name&quot;: &#123;</span><br><span class="line">            &quot;query&quot;: &quot;PHILIPS HX6730&quot;,</span><br><span class="line">            &quot;slop&quot;: 10</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li><p>terms 用法，类似于数据库的 in</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">GET /product_index/product/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;constant_score&quot;: &#123;</span><br><span class="line">      &quot;filter&quot;: &#123;</span><br><span class="line">        &quot;terms&quot;: &#123;</span><br><span class="line">          &quot;product_name&quot;: [</span><br><span class="line">            &quot;toothbrush&quot;,</span><br><span class="line">            &quot;shell&quot;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
-</ul>
-<ul>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>mysql 语法</th>
-<th>es dsl</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>select * from xxx</td>
-<td>/xxx/query<br>{<br>  “query”:{<br>    “match_all”:{<br>    }<br>  }<br>}</td>
-</tr>
-<tr>
-<td>select * from xxx where name=xxx</td>
-<td>/index/query<br>{<br>  “query”:{<br>    “match”:{<br>      “name”: xxx<br>    }<br>  }<br>}</td>
-</tr>
-<tr>
-<td>select * from xxx where name = xxx order by price desc</td>
-<td>/index/query<br>{<br>  “query”:{<br>    “match”:{<br>      “name”: xxx<br>    }<br>  },<br>  “sort”:[<br>    {“price”: “desc”}<br>  ]<br>}</td>
-</tr>
-<tr>
-<td>select f1,f2 from xxx where name = xxx</td>
-<td>/index/query<br>{<br>  “query”:{<br>    “match”:{<br>      “name”: xxx<br>    }<br>  },<br>  “_source”:[<br>    “f1”,<br>    “f2”<br>  ]<br>}</td>
-</tr>
-<tr>
-<td>select * from xxx where name = xxx limit 0,10</td>
-<td>/index/query<br>{<br>  “query”:{<br>    “match”:{<br>      “name”: xxx<br>    }<br>  },<br>  “from”: 0,<br>  “size”: 10<br>}</td>
-</tr>
-<tr>
-<td>select * from xxx where name = xxx and price between 400 and 700</td>
-<td>/index/query<br>{<br>  “query”:{<br>    “bool”:{<br>      “must”:{<br>        “match”:{<br>          “name”: xxx<br>        }<br>      },<br>      “filter”:{<br>        “range”:{<br>          “price”: {<br>            “gt”: 400,<br>            “lt”: 700<br>          }<br>        }<br>      }<br>    }<br>  },<br>}</td>
-</tr>
-<tr>
-<td></td>
-<td>GET /index/_search<br>{<br>  “query”: {<br>    “match_phrase”: {<br>      “product_name”: “PHILIPS toothbrush”<br>    }<br>  }<br>}</td>
-</tr>
-<tr>
-<td></td>
-<td>/index/query<br>{<br>  “query”:{<br>    “range”:{<br>      “price”:{<br>        “lt”: 300<br>      }<br>    }<br>  },<br>}</td>
-</tr>
-<tr>
-<td></td>
-<td>GET /index/_search<br>{<br>  “query”: {<br>    “match”: {<br>      “product_name”: {<br>        “query”: “PHILIPS toothbrush”,<br>        “operator”: “and”<br>      }<br>     }<br>   }<br>}</td>
-</tr>
-<tr>
-<td></td>
-<td>GET /product_index/product/_search<br>{<br>  “query”: {<br>    “match”: {<br>      “product_name”: {<br>        “query”: “java 程序员 书 推荐”,<br>        “minimum_should_match”: “50%”<br>      }<br>    }<br>  }<br>}</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<ul>
-<li>phrase search 短语搜索</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -632,7 +450,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">74</span>
+          <span class="site-state-item-count">76</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
