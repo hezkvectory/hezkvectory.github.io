@@ -164,7 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/05/19/java/方法重载和方法重写/" class="post-title-link" itemprop="url">方法重载荷方法重写</a>
+            <a href="/2021/05/19/java/方法重载和方法重写/" class="post-title-link" itemprop="url">方法重载和方法重写</a>
         </h2>
 
         <div class="post-meta">
@@ -175,7 +175,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-05-19 10:44:02 / Modified: 11:11:15" itemprop="dateCreated datePublished" datetime="2021-05-19T10:44:02+08:00">2021-05-19</time>
+              <time title="Created: 2021-05-19 10:44:02 / Modified: 11:22:00" itemprop="dateCreated datePublished" datetime="2021-05-19T10:44:02+08:00">2021-05-19</time>
             </span>
 
           
@@ -232,14 +232,14 @@
 </ul>
 <p>了解了字节码指令的大概意思，接下来就让我们来演示一下主要的几个执行流程：</p>
 <ul>
-<li>1、代码编译之后大致得到如下的一个Java虚拟机栈,注意这时候操作数栈都是空的(pc寄存器的值在这里暂不考虑 ，实际上调用指令的过程，pc寄存器是会一直发生变化的)<br><img src="https://mmbiz.qpic.cn/mmbiz_png/8KKrHK5ic6XA5bbbxLv7kl0UbYWia9ffU99UKiaHicM7FhWKT9kMSNaVI98924mt1CllIebesP9acx5HpZxn20bREA/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></li>
-<li>2、执行iconst_1和iconst_2两个指令，也就是从本地变量中把整型1和2两个数字压入操作数栈内：<br><img src="https://mmbiz.qpic.cn/mmbiz_png/8KKrHK5ic6XA5bbbxLv7kl0UbYWia9ffU9EpeTkdGulNvCf27ticl9O6ic4cwMKgwxlMiaQv6MFfFDx3nU7SYApYv9Q/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></li>
-<li>3、执行invokestatic指令，调用add方法，会再次创建一个新的栈帧入栈，并且会将参数a和b存入add栈帧中的本地变量表<br><img src="https://mmbiz.qpic.cn/mmbiz_png/8KKrHK5ic6XA5bbbxLv7kl0UbYWia9ffU9NJAl8b40ryjNY4ianvZ5ib2ebpkWvOSjyr4icg0m9QVKeRVFOehRB1vag/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></li>
-<li>4、add栈帧中调用iconst_3指令，从本地变量中将整型3压入操作数栈<br><img src="https://mmbiz.qpic.cn/mmbiz_png/8KKrHK5ic6XA5bbbxLv7kl0UbYWia9ffU9Gg6UrbibczFlEH2pSUqgHPVgQhyzvxsuye3PibS3Unic7jOKDwXTdr8Ww/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></li>
-<li>5、add栈帧中调用istore_0，表示将当前的栈顶元素存入局部变量表index[0]的位置，也就是赋值给a。<br><img src="https://mmbiz.qpic.cn/mmbiz_png/8KKrHK5ic6XA5bbbxLv7kl0UbYWia9ffU9WFa6o3dRYwAmfIV7a8Vt0xTESRPowRurOia37HRQx9t6fWZxX0KsQUg/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></li>
-<li>6、调用iload_0和iload_1，将局部变量表中index[0]和index[1]两个位置的变量压入操作数栈<br><img src="https://mmbiz.qpic.cn/mmbiz_png/8KKrHK5ic6XA5bbbxLv7kl0UbYWia9ffU9fPFJ7Escc2Uwbr5gCywphEbGnKJajnsxB0blYSuceWx62icZoMC1Iaw/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></li>
-<li>7、最后执行iadd指令：将3和2弹出栈后将两个数相加，得到5，并将得到的结果5重新压入栈内<br><img src="https://mmbiz.qpic.cn/mmbiz_png/8KKrHK5ic6XA5bbbxLv7kl0UbYWia9ffU97HHZI2rhc07rc9bvA798Mn83nyIpETS9w1icR7ThIRS49skPaKxdF8g/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"><br>8、执行istore_2指令，将当前栈顶元素弹出存入局部变量表index[2]的位置，并再次调用iload_2从局部变量表内将index[2]位置的数据压入操作数栈内<br><img src="https://mmbiz.qpic.cn/mmbiz_png/8KKrHK5ic6XA5bbbxLv7kl0UbYWia9ffU9OkzCjQrFt22YDDb77rfUx1HRLwlo7yTcBYppnGJliaicLu7bZMMibBmlQ/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></li>
-<li>9、最后执行ireturn命令将结果5返回main栈帧，此时栈帧add被销毁，回到main栈帧继续后续执行<br><img src="https://mmbiz.qpic.cn/mmbiz_png/8KKrHK5ic6XA5bbbxLv7kl0UbYWia9ffU9OrfEazLgrvibFWQSiaHBBb1yYNva09DaHXpvMEHIBNFXFJj2K3n3w0EA/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"><br>方法的调用大致就是不断的入栈和出栈的过程，上述的过程省略了很多细节，只关注了大致流程即可，实际调用比图中要复杂的多。</li>
+<li>1、代码编译之后大致得到如下的一个Java虚拟机栈,注意这时候操作数栈都是空的(pc寄存器的值在这里暂不考虑 ，实际上调用指令的过程，pc寄存器是会一直发生变化的)<br><img src="https://img-blog.csdnimg.cn/20200812062258133.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70" alt="图片"></li>
+<li>2、执行iconst_1和iconst_2两个指令，也就是从本地变量中把整型1和2两个数字压入操作数栈内：<br><img src="https://img-blog.csdnimg.cn/20200812062436923.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70" alt="图片"></li>
+<li>3、执行invokestatic指令，调用add方法，会再次创建一个新的栈帧入栈，并且会将参数a和b存入add栈帧中的本地变量表<br><img src="https://img-blog.csdnimg.cn/20200812125828956.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70#pic_center" alt="图片"></li>
+<li>4、add栈帧中调用iconst_3指令，从本地变量中将整型3压入操作数栈<br><img src="https://img-blog.csdnimg.cn/20200812130046313.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70#pic_center" alt="图片"></li>
+<li>5、add栈帧中调用istore_0，表示将当前的栈顶元素存入局部变量表index[0]的位置，也就是赋值给a。<br><img src="https://img-blog.csdnimg.cn/20200812130202941.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70#pic_center" alt="图片"></li>
+<li>6、调用iload_0和iload_1，将局部变量表中index[0]和index[1]两个位置的变量压入操作数栈<br><img src="https://img-blog.csdnimg.cn/20200812130400501.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70#pic_center" alt="图片"></li>
+<li>7、最后执行iadd指令：将3和2弹出栈后将两个数相加，得到5，并将得到的结果5重新压入栈内<br><img src="https://img-blog.csdnimg.cn/20200812130447517.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70#pic_center" alt="图片"><br>8、执行istore_2指令，将当前栈顶元素弹出存入局部变量表index[2]的位置，并再次调用iload_2从局部变量表内将index[2]位置的数据压入操作数栈内<br><img src="https://img-blog.csdnimg.cn/20200812130819549.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70#pic_center" alt="图片"></li>
+<li>9、最后执行ireturn命令将结果5返回main栈帧，此时栈帧add被销毁，回到main栈帧继续后续执行<br><img src="https://img-blog.csdnimg.cn/20200812064056710.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70" alt="图片"><br>方法的调用大致就是不断的入栈和出栈的过程，上述的过程省略了很多细节，只关注了大致流程即可，实际调用比图中要复杂的多。</li>
 </ul>
 <h1 id="方法调用分析"><a href="#方法调用分析" class="headerlink" title="方法调用分析"></a>方法调用分析</h1><p>我们知道，Java是一种面向对象语言，支持多态，而多态的体现形式就是方法重载和方法重写，那么Java虚拟机又是如何确认我们应该调用哪一个方法的呢？</p>
 <h2 id="方法调用指令"><a href="#方法调用指令" class="headerlink" title="方法调用指令"></a>方法调用指令</h2><p>首先，我们来看一下方法的字节码调用指令，在Java中，提供了4种字节码指令来调用方法(jdk1.7之前)：</p>
