@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/19/dubbo/dubbo消费者调用流程/">
+    <link itemprop="mainEntityOfPage" href="/2021/04/27/spring/spring-aop/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,79 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/04/19/dubbo/dubbo消费者调用流程/" class="post-title-link" itemprop="url">dubbo消费者调用流程</a>
+            <a href="/2021/04/27/spring/spring-aop/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-04-27 17:55:00" itemprop="dateCreated datePublished" datetime="2021-04-27T17:55:00+08:00">2021-04-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-17 11:03:16" itemprop="dateModified" datetime="2021-05-17T11:03:16+08:00">2021-05-17</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><strong><a href="https://cloud.tencent.com/developer/article/1497770" target="_blank" rel="noopener">核心类讲解</a></strong></p>
+<p>spring代理采用cglib或者jdk proxy</p>
+<p>cglib核心类ProxyFactory、MethodInterceptor、DynamicAdvisedInterceptor、CglibMethodInvocation</p>
+<h4 id="Pointcut"><a href="#Pointcut" class="headerlink" title="Pointcut"></a>Pointcut</h4><p>​    ClassFilter MethodFilter</p>
+<h4 id="Advice"><a href="#Advice" class="headerlink" title="Advice"></a>Advice</h4><p>​    MethodBeforeAdvice AfterReturningAdvice AspectJAroundAdvice</p>
+<h4 id="Advisor"><a href="#Advisor" class="headerlink" title="Advisor"></a>Advisor</h4><p>​    Advisor 其实它就是 Pointcut 与 Advice 的组合, Advice 是执行的方法, 而要知道方法何时执行, 则 Advice 必需与 Pointcut 组合在一起, 这就诞生了 Advisor 这个类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">AopProxyUtils.completeProxiedInterfaces(this.advised)</span><br><span class="line">		0 = &#123;Class@521&#125; &quot;interface com.hezk.aop.service.Browser&quot;</span><br><span class="line">		1 = &#123;Class@1152&#125; &quot;interface org.springframework.aop.SpringProxy&quot;</span><br><span class="line">		2 = &#123;Class@511&#125; &quot;interface org.springframework.aop.framework.Advised&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Callback		</span><br><span class="line">	0 = &#123;CglibAopProxy$DynamicAdvisedInterceptor@1184&#125; </span><br><span class="line">	1 = &#123;CglibAopProxy$StaticUnadvisedInterceptor@1198&#125; </span><br><span class="line">	2 = &#123;CglibAopProxy$SerializableNoOp@1218&#125; </span><br><span class="line">	3 = &#123;CglibAopProxy$StaticDispatcher@1206&#125; </span><br><span class="line">	4 = &#123;CglibAopProxy$AdvisedDispatcher@984&#125; </span><br><span class="line">	5 = &#123;CglibAopProxy$EqualsInterceptor@1219&#125; </span><br><span class="line">	6 = &#123;CglibAopProxy$HashCodeInterceptor@1220&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ProxyCallbackFilter</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">interceptorList = &#123;ArrayList@1723&#125;  size = 3</span><br><span class="line"> 0 = &#123;MethodBeforeAdviceInterceptor@1930&#125; </span><br><span class="line"> 1 = &#123;AfterReturningAdviceInterceptor@1931&#125; </span><br><span class="line"> 2 = &#123;BrowserAroundAdvice@975&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> CglibMethodInvocation</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> org.springframework.cglib.core.AbstractClassGenerator.generate 生成代理方法</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/04/19/dubbo/dubbo ExtensionLoader/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/19/dubbo/dubbo ExtensionLoader/" class="post-title-link" itemprop="url">dubbo ExtensionLoader</a>
         </h2>
 
         <div class="post-meta">
@@ -175,7 +247,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-04-19 10:28:35 / Modified: 18:15:19" itemprop="dateCreated datePublished" datetime="2021-04-19T10:28:35+08:00">2021-04-19</time>
+              <time title="Created: 2021-04-19 10:28:35 / Modified: 18:18:03" itemprop="dateCreated datePublished" datetime="2021-04-19T10:28:35+08:00">2021-04-19</time>
             </span>
 
           
@@ -189,15 +261,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h4 id="Dubbo消费者"><a href="#Dubbo消费者" class="headerlink" title="Dubbo消费者"></a>Dubbo消费者</h4><h5 id="调用入口"><a href="#调用入口" class="headerlink" title="调用入口"></a>调用入口</h5><p>ReferenceBean</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ReferenceBean</span><br><span class="line">  -&gt; get #获取代理对象</span><br><span class="line">  -&gt; createProxy # 创建代理</span><br><span class="line">    RegistryProtocol</span><br><span class="line">      -&gt; refer # 从注册中心获取invoker</span><br><span class="line">      RegistryFactory.getRegistry</span><br><span class="line">      -&gt; doRefer</span><br><span class="line">      RegistryDirectory.subscribe # 订阅providers, 此处会监听注册中心providers的变化，并重新创建invokers</span><br><span class="line">      Cluster.join</span><br><span class="line">        MockClusterWrapper </span><br><span class="line">          -&gt; join #创建cluster</span><br><span class="line">            FailoverCluster</span><br><span class="line">              -&gt; doInvoke 服务调用</span><br></pre></td></tr></table></figure>
+          <h4 id="Dubbo-ExtensionLoader"><a href="#Dubbo-ExtensionLoader" class="headerlink" title="Dubbo ExtensionLoader"></a>Dubbo ExtensionLoader</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.alibaba.dubbo.rpc.cluster;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.alibaba.dubbo.common.extension.ExtensionLoader;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Cluster</span>$<span class="title">Adaptive</span> <span class="keyword">implements</span> <span class="title">com</span>.<span class="title">alibaba</span>.<span class="title">dubbo</span>.<span class="title">rpc</span>.<span class="title">cluster</span>.<span class="title">Cluster</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> com.alibaba.dubbo.rpc.<span class="function">Invoker <span class="title">join</span><span class="params">(com.alibaba.dubbo.rpc.cluster.Directory arg0)</span> <span class="keyword">throws</span> com.alibaba.dubbo.rpc.RpcException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (arg0 == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"com.alibaba.dubbo.rpc.cluster.Directory argument == null"</span>);</span><br><span class="line">        <span class="keyword">if</span> (arg0.getUrl() == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"com.alibaba.dubbo.rpc.cluster.Directory argument getUrl() == null"</span>);</span><br><span class="line">        com.alibaba.dubbo.common.URL url = arg0.getUrl();</span><br><span class="line">        String extName = url.getParameter(<span class="string">"cluster"</span>, <span class="string">"failover"</span>);</span><br><span class="line">        <span class="keyword">if</span> (extName == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Fail to get extension(com.alibaba.dubbo.rpc.cluster.Cluster) name from url("</span> + url.toString() + <span class="string">") use keys([cluster])"</span>);</span><br><span class="line">        com.alibaba.dubbo.rpc.cluster.Cluster extension = (com.alibaba.dubbo.rpc.cluster.Cluster) ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.rpc.cluster.Cluster.class).getExtension(extName);</span><br><span class="line">        <span class="keyword">return</span> extension.join(arg0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h5 id="创建消费者代理"><a href="#创建消费者代理" class="headerlink" title="创建消费者代理"></a>创建消费者代理</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&quot;main@1&quot; prio=5 tid=0x1 nid=NA runnable</span><br><span class="line">  java.lang.Thread.State: RUNNABLE</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.RouterChain.&lt;init&gt;(RouterChain.java:53)</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.RouterChain.buildChain(RouterChain.java:46)</span><br><span class="line">	  at org.apache.dubbo.registry.integration.RegistryDirectory.buildRouterChain(RegistryDirectory.java:664)</span><br><span class="line">	  at org.apache.dubbo.registry.integration.RegistryProtocol.doRefer(RegistryProtocol.java:473)</span><br><span class="line">	  at org.apache.dubbo.registry.integration.RegistryProtocol.refer(RegistryProtocol.java:455)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolListenerWrapper.refer(ProtocolListenerWrapper.java:70)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper.refer(ProtocolFilterWrapper.java:159)</span><br><span class="line">	  at org.apache.dubbo.rpc.Protocol$Adaptive.refer(Protocol$Adaptive.java:-1)</span><br><span class="line">	  at org.apache.dubbo.config.ReferenceConfig.createProxy(ReferenceConfig.java:318)</span><br><span class="line">	  at org.apache.dubbo.config.ReferenceConfig.init(ReferenceConfig.java:258)</span><br><span class="line">	  - locked &lt;0xb11&gt; (a org.apache.dubbo.config.spring.ReferenceBean)</span><br><span class="line">	  at org.apache.dubbo.config.ReferenceConfig.get(ReferenceConfig.java:158)</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.alibaba.dubbo.rpc;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.alibaba.dubbo.common.extension.ExtensionLoader;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Protocol</span>$<span class="title">Adaptive</span> <span class="keyword">implements</span> <span class="title">com</span>.<span class="title">alibaba</span>.<span class="title">dubbo</span>.<span class="title">rpc</span>.<span class="title">Protocol</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedOperationException(<span class="string">"method public abstract void com.alibaba.dubbo.rpc.Protocol.destroy() of interface com.alibaba.dubbo.rpc.Protocol is not adaptive method!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getDefaultPort</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnsupportedOperationException(<span class="string">"method public abstract int com.alibaba.dubbo.rpc.Protocol.getDefaultPort() of interface com.alibaba.dubbo.rpc.Protocol is not adaptive method!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> com.alibaba.dubbo.rpc.<span class="function">Exporter <span class="title">export</span><span class="params">(com.alibaba.dubbo.rpc.Invoker arg0)</span> <span class="keyword">throws</span> com.alibaba.dubbo.rpc.RpcException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (arg0 == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"com.alibaba.dubbo.rpc.Invoker argument == null"</span>);</span><br><span class="line">        <span class="keyword">if</span> (arg0.getUrl() == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"com.alibaba.dubbo.rpc.Invoker argument getUrl() == null"</span>);</span><br><span class="line">        com.alibaba.dubbo.common.URL url = arg0.getUrl();</span><br><span class="line">        String extName = (url.getProtocol() == <span class="keyword">null</span> ? <span class="string">"dubbo"</span> : url.getProtocol());</span><br><span class="line">        <span class="keyword">if</span> (extName == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Fail to get extension(com.alibaba.dubbo.rpc.Protocol) name from url("</span> + url.toString() + <span class="string">") use keys([protocol])"</span>);</span><br><span class="line">        com.alibaba.dubbo.rpc.Protocol extension = (com.alibaba.dubbo.rpc.Protocol) ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.rpc.Protocol.class).getExtension(extName);</span><br><span class="line">        <span class="keyword">return</span> extension.export(arg0);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> com.alibaba.dubbo.rpc.<span class="function">Invoker <span class="title">refer</span><span class="params">(java.lang.Class arg0, com.alibaba.dubbo.common.URL arg1)</span> <span class="keyword">throws</span> com.alibaba.dubbo.rpc.RpcException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (arg1 == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"url == null"</span>);</span><br><span class="line">        com.alibaba.dubbo.common.URL url = arg1;</span><br><span class="line">        String extName = (url.getProtocol() == <span class="keyword">null</span> ? <span class="string">"dubbo"</span> : url.getProtocol());</span><br><span class="line">        <span class="keyword">if</span> (extName == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Fail to get extension(com.alibaba.dubbo.rpc.Protocol) name from url("</span> + url.toString() + <span class="string">") use keys([protocol])"</span>);</span><br><span class="line">        com.alibaba.dubbo.rpc.Protocol extension = (com.alibaba.dubbo.rpc.Protocol) ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.rpc.Protocol.class).getExtension(extName);</span><br><span class="line">        <span class="keyword">return</span> extension.refer(arg0, arg1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h5 id="消费者方法调用"><a href="#消费者方法调用" class="headerlink" title="消费者方法调用"></a>消费者方法调用</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&quot;main@1&quot; prio=5 tid=0x1 nid=NA runnable</span><br><span class="line">  java.lang.Thread.State: RUNNABLE</span><br><span class="line">	  at org.apache.dubbo.remoting.transport.AbstractPeer.send(AbstractPeer.java:53)</span><br><span class="line">	  at org.apache.dubbo.remoting.exchange.support.header.HeaderExchangeChannel.request(HeaderExchangeChannel.java:135)</span><br><span class="line">	  at org.apache.dubbo.remoting.exchange.support.header.HeaderExchangeClient.request(HeaderExchangeClient.java:95)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.dubbo.ReferenceCountExchangeClient.request(ReferenceCountExchangeClient.java:91)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.dubbo.DubboInvoker.doInvoke(DubboInvoker.java:105)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.AbstractInvoker.invoke(AbstractInvoker.java:163)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.AsyncToSyncInvoker.invoke(AsyncToSyncInvoker.java:52)</span><br><span class="line">	  at org.apache.dubbo.rpc.listener.ListenerInvokerWrapper.invoke(ListenerInvokerWrapper.java:78)</span><br><span class="line">	  at org.apache.dubbo.monitor.support.MonitorFilter.invoke(MonitorFilter.java:89)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.dubbo.filter.FutureFilter.invoke(FutureFilter.java:51)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.ConsumerContextFilter.invoke(ConsumerContextFilter.java:69)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.InvokerWrapper.invoke(InvokerWrapper.java:56)</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.support.FailoverClusterInvoker.doInvoke(FailoverClusterInvoker.java:82)</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.support.AbstractClusterInvoker.invoke(AbstractClusterInvoker.java:259)</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.interceptor.ClusterInterceptor.intercept(ClusterInterceptor.java:47)</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.support.wrapper.AbstractCluster$InterceptorInvokerNode.invoke(AbstractCluster.java:92)</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.support.wrapper.MockClusterInvoker.invoke(MockClusterInvoker.java:82)</span><br><span class="line">	  at org.apache.dubbo.rpc.proxy.InvokerInvocationHandler.invoke(InvokerInvocationHandler.java:74)</span><br><span class="line">	  at org.apache.dubbo.common.bytecode.proxy0.sayHello(proxy0.java:-1)</span><br><span class="line">	  at org.apache.dubbo.demo.consumer.comp.DemoServiceComponent.sayHello(DemoServiceComponent.java:33)</span><br><span class="line">	  at org.apache.dubbo.demo.consumer.Application.main(Application.java:37)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">package com.alibaba.dubbo.rpc;</span><br><span class="line"></span><br><span class="line">import com.alibaba.dubbo.common.extension.ExtensionLoader;</span><br><span class="line"></span><br><span class="line">public class ProxyFactory$Adaptive implements com.alibaba.dubbo.rpc.ProxyFactory &#123;</span><br><span class="line"></span><br><span class="line">    public java.lang.Object getProxy(com.alibaba.dubbo.rpc.Invoker arg0) throws com.alibaba.dubbo.rpc.RpcException &#123;</span><br><span class="line">        if (arg0 == null) throw new IllegalArgumentException(&quot;com.alibaba.dubbo.rpc.Invoker argument == null&quot;);</span><br><span class="line">        if (arg0.getUrl() == null)</span><br><span class="line">            throw new IllegalArgumentException(&quot;com.alibaba.dubbo.rpc.Invoker argument getUrl() == null&quot;);</span><br><span class="line">        com.alibaba.dubbo.common.URL url = arg0.getUrl();</span><br><span class="line">        String extName = url.getParameter(&quot;proxy&quot;, &quot;javassist&quot;);</span><br><span class="line">        if (extName == null)</span><br><span class="line">            throw new IllegalStateException(&quot;Fail to get extension(com.alibaba.dubbo.rpc.ProxyFactory) name from url(&quot; + url.toString() + &quot;) use keys([proxy])&quot;);</span><br><span class="line">        com.alibaba.dubbo.rpc.ProxyFactory extension = (com.alibaba.dubbo.rpc.ProxyFactory) ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.rpc.ProxyFactory.class).getExtension(extName);</span><br><span class="line">        return extension.getProxy(arg0);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public java.lang.Object getProxy(com.alibaba.dubbo.rpc.Invoker arg0, boolean arg1) throws com.alibaba.dubbo.rpc.RpcException &#123;</span><br><span class="line">        if (arg0 == null) throw new IllegalArgumentException(&quot;com.alibaba.dubbo.rpc.Invoker argument == null&quot;);</span><br><span class="line">        if (arg0.getUrl() == null)</span><br><span class="line">            throw new IllegalArgumentException(&quot;com.alibaba.dubbo.rpc.Invoker argument getUrl() == null&quot;);</span><br><span class="line">        com.alibaba.dubbo.common.URL url = arg0.getUrl();</span><br><span class="line">        String extName = url.getParameter(&quot;proxy&quot;, &quot;javassist&quot;);</span><br><span class="line">        if (extName == null)</span><br><span class="line">            throw new IllegalStateException(&quot;Fail to get extension(com.alibaba.dubbo.rpc.ProxyFactory) name from url(&quot; + url.toString() + &quot;) use keys([proxy])&quot;);</span><br><span class="line">        com.alibaba.dubbo.rpc.ProxyFactory extension = (com.alibaba.dubbo.rpc.ProxyFactory) ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.rpc.ProxyFactory.class).getExtension(extName);</span><br><span class="line">        return extension.getProxy(arg0, arg1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public com.alibaba.dubbo.rpc.Invoker getInvoker(java.lang.Object arg0, java.lang.Class arg1, com.alibaba.dubbo.common.URL arg2) throws com.alibaba.dubbo.rpc.RpcException &#123;</span><br><span class="line">        if (arg2 == null) throw new IllegalArgumentException(&quot;url == null&quot;);</span><br><span class="line">        com.alibaba.dubbo.common.URL url = arg2;</span><br><span class="line">        String extName = url.getParameter(&quot;proxy&quot;, &quot;javassist&quot;);</span><br><span class="line">        if (extName == null)</span><br><span class="line">            throw new IllegalStateException(&quot;Fail to get extension(com.alibaba.dubbo.rpc.ProxyFactory) name from url(&quot; + url.toString() + &quot;) use keys([proxy])&quot;);</span><br><span class="line">        com.alibaba.dubbo.rpc.ProxyFactory extension = (com.alibaba.dubbo.rpc.ProxyFactory) ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.rpc.ProxyFactory.class).getExtension(extName);</span><br><span class="line">        return extension.getInvoker(arg0, arg1, arg2);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>服务提供者方法调用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&quot;DubboServerHandler-172.23.120.26:20880-thread-4@4410&quot; daemon prio=5 tid=0x20 nid=NA runnable</span><br><span class="line">  java.lang.Thread.State: RUNNABLE</span><br><span class="line">	  at org.apache.dubbo.demo.provider.DemoServiceImpl.sayHello(DemoServiceImpl.java:34)</span><br><span class="line">	  at org.apache.dubbo.common.bytecode.Wrapper1.invokeMethod(Wrapper1.java:-1)</span><br><span class="line">	  at org.apache.dubbo.rpc.proxy.javassist.JavassistProxyFactory$1.doInvoke(JavassistProxyFactory.java:47)</span><br><span class="line">	  at org.apache.dubbo.rpc.proxy.AbstractProxyInvoker.invoke(AbstractProxyInvoker.java:84)</span><br><span class="line">	  at org.apache.dubbo.config.invoker.DelegateProviderMetaDataInvoker.invoke(DelegateProviderMetaDataInvoker.java:56)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.InvokerWrapper.invoke(InvokerWrapper.java:56)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.ExceptionFilter.invoke(ExceptionFilter.java:52)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.monitor.support.MonitorFilter.invoke(MonitorFilter.java:89)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.TimeoutFilter.invoke(TimeoutFilter.java:46)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.dubbo.filter.TraceFilter.invoke(TraceFilter.java:77)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.ContextFilter.invoke(ContextFilter.java:129)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.GenericFilter.invoke(GenericFilter.java:152)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.ClassLoaderFilter.invoke(ClassLoaderFilter.java:38)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.EchoFilter.invoke(EchoFilter.java:41)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.dubbo.DubboProtocol$1.reply(DubboProtocol.java:145)</span><br><span class="line">	  at org.apache.dubbo.remoting.exchange.support.header.HeaderExchangeHandler.handleRequest(HeaderExchangeHandler.java:100)</span><br><span class="line">	  at org.apache.dubbo.remoting.exchange.support.header.HeaderExchangeHandler.received(HeaderExchangeHandler.java:175)</span><br><span class="line">	  at org.apache.dubbo.remoting.transport.DecodeHandler.received(DecodeHandler.java:51)</span><br><span class="line">	  at org.apache.dubbo.remoting.transport.dispatcher.ChannelEventRunnable.run(ChannelEventRunnable.java:57)</span><br><span class="line">	  at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)</span><br><span class="line">	  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)</span><br><span class="line">	  at java.lang.Thread.run(Thread.java:748)</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.alibaba.dubbo.common.threadpool;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.alibaba.dubbo.common.extension.ExtensionLoader;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadPool</span>$<span class="title">Adaptive</span> <span class="keyword">implements</span> <span class="title">com</span>.<span class="title">alibaba</span>.<span class="title">dubbo</span>.<span class="title">common</span>.<span class="title">threadpool</span>.<span class="title">ThreadPool</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> java.util.concurrent.<span class="function">Executor <span class="title">getExecutor</span><span class="params">(com.alibaba.dubbo.common.URL arg0)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (arg0 == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"url == null"</span>);</span><br><span class="line">        com.alibaba.dubbo.common.URL url = arg0;</span><br><span class="line">        String extName = url.getParameter(<span class="string">"threadpool"</span>, <span class="string">"fixed"</span>);</span><br><span class="line">        <span class="keyword">if</span> (extName == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Fail to get extension(com.alibaba.dubbo.common.threadpool.ThreadPool) name from url("</span> + url.toString() + <span class="string">") use keys([threadpool])"</span>);</span><br><span class="line">        com.alibaba.dubbo.common.threadpool.ThreadPool extension = (com.alibaba.dubbo.common.threadpool.ThreadPool) ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.common.threadpool.ThreadPool.class).getExtension(extName);</span><br><span class="line">        <span class="keyword">return</span> extension.getExecutor(arg0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
       
@@ -295,91 +365,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/15/架构/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/15/架构/" class="post-title-link" itemprop="url">架构</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-04-15 18:45:02" itemprop="dateCreated datePublished" datetime="2021-04-15T18:45:02+08:00">2021-04-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-25 19:45:53" itemprop="dateModified" datetime="2021-04-25T19:45:53+08:00">2021-04-25</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>1、单点故障</p>
-<p>2、系统间依赖复杂</p>
-<p>3、服务补偿</p>
-<p>4、幂等设计</p>
-<p>5、超时设置</p>
-<p>6、流量控制</p>
-<p>7、监控预警</p>
-<p>8、重试策略</p>
-<p>9、系统隔离</p>
-<p>10、代码同步调用</p>
-<p>11、热数据缓存</p>
-<p>12、系统分级</p>
-<p>13、服务降级</p>
-<p>14、灰度和回滚方案</p>
-<p>15、熔断机制</p>
-<p>16、线上压测</p>
-<p>17、代码扫描</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -445,7 +434,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-count">74</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

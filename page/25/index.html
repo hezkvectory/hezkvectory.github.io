@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/21/github/docs/big-data/sort-the-query-strings-by-counts/">
+    <link itemprop="mainEntityOfPage" href="/2019/07/12/java/java多线程竞拍/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/04/21/github/docs/big-data/sort-the-query-strings-by-counts/" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/2019/07/12/java/java多线程竞拍/" class="post-title-link" itemprop="url">阿里云面试题-多线程竞拍</a>
         </h2>
 
         <div class="post-meta">
@@ -174,8 +174,15 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-04-21 15:37:08" itemprop="dateCreated datePublished" datetime="2021-04-21T15:37:08+08:00">2021-04-21</time>
+              <time title="Created: 2019-07-12 12:28:35" itemprop="dateCreated datePublished" datetime="2019-07-12T12:28:35+08:00">2019-07-12</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-03-01 18:56:07" itemprop="dateModified" datetime="2021-03-01T18:56:07+08:00">2021-03-01</time>
+              </span>
 
           
 
@@ -188,16 +195,131 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="如何按照-query-的频度排序？"><a href="#如何按照-query-的频度排序？" class="headerlink" title="如何按照 query 的频度排序？"></a>如何按照 query 的频度排序？</h2><h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>有 10 个文件，每个文件大小为 1G，每个文件的每一行存放的都是用户的 query，每个文件的 query 都可能重复。要求按照 query 的频度排序。</p>
-<h3 id="解答思路"><a href="#解答思路" class="headerlink" title="解答思路"></a>解答思路</h3><p>如果 query 的重复度比较大，可以考虑一次性把所有 query 读入内存中处理；如果 query 的重复率不高，那么可用内存不足以容纳所有的 query，这时候就需要采用分治法或其他的方法来解决。</p>
-<h4 id="方法一：HashMap-法"><a href="#方法一：HashMap-法" class="headerlink" title="方法一：HashMap 法"></a>方法一：HashMap 法</h4><p>如果 query 重复率高，说明不同 query 总数比较小，可以考虑把所有的 query 都加载到内存中的 HashMap 中。接着就可以按照 query 出现的次数进行排序。</p>
-<h4 id="方法二：分治法"><a href="#方法二：分治法" class="headerlink" title="方法二：分治法"></a>方法二：分治法</h4><p>分治法需要根据数据量大小以及可用内存的大小来确定问题划分的规模。对于这道题，可以顺序遍历 10 个文件中的 query，通过 Hash 函数 <code>hash(query) % 10</code> 把这些 query 划分到 10 个小文件中。之后对每个小文件使用 HashMap 统计 query 出现次数，根据次数排序并写入到零外一个单独文件中。</p>
-<p>接着对所有文件按照 query 的次数进行排序，这里可以使用归并排序（由于无法把所有 query 都读入内存，因此需要使用外排序）。</p>
-<h3 id="方法总结"><a href="#方法总结" class="headerlink" title="方法总结"></a>方法总结</h3><ul>
-<li>内存若够，直接读入进行排序；</li>
-<li>内存不够，先划分为小文件，小文件排好序后，整理使用外排序进行归并。</li>
-</ul>
+          <p>多线程竞拍</p>
+<pre><code>创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）
 
+每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
+
+所有人的心理上线价位都为 M ，不会出价比M高
+
+每次出价必须比上一次出价高
+
+经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。</code></pre><p>个人觉得主要考察java基础（CountDownLatch、CyclicBarrier）的使用方法</p>
+<pre><code>import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.*;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class AuctionTest {
+
+/**
+ * 创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）
+ * 每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
+ * 所有人的心理上线价位都为 M ，不会出价比M高
+ * 每次出价必须比上一次出价高
+ * 经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。
+ */
+static int N = 10; //竞拍人数
+static int M = 100;//所有人的心理上线价位都为 M ，不会出价比M高
+static int AUCTION_NUM = 5; //经过 k 次竞拍后
+
+static ConcurrentHashMap&lt;String, List&lt;Integer&gt;&gt; ACTION_HIST = new ConcurrentHashMap&lt;&gt;();
+
+static ReentrantLock lock = new ReentrantLock();//这个锁是为了保证出价比上一个人出价高
+
+static volatile int CUR_MAX_PRICE = 0;
+
+public static void main(String[] args) throws Exception {
+    CyclicBarrier barrier = new CyclicBarrier(N);//每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
+    CountDownLatch countDownLatch = new CountDownLatch(N);//这里应该是N
+    ThreadPoolExecutor executor = new ThreadPoolExecutor(N, N, 1, TimeUnit.SECONDS, new ArrayBlockingQueue&lt;Runnable&gt;(1), new ThreadFactory() {
+        @Override
+        public Thread newThread(Runnable r) {
+            return new Thread(r, &quot;Auction&quot;);
+        }
+    });
+    int step = M / (AUCTION_NUM * N); //每次出价阶梯
+
+    for (int i = 1; i &lt;= N; i++) {
+        executor.execute(new Auction(barrier, countDownLatch, &quot;P&quot; + i, step));
+    }
+
+    countDownLatch.await();
+
+    String personName = null;
+    int maxPrice = 0;
+    int personId = 0;
+    for (int num = 1; num &lt;= AUCTION_NUM; num++) {
+        for (int i = 1; i &lt;= N; i++) {
+            personName = &quot;P&quot; + i;
+            Integer price = ACTION_HIST.get(personName).get(num - 1);
+            if (num == AUCTION_NUM) {
+                if (maxPrice &lt; price) {
+                    maxPrice = price;
+                    personId = i;
+                }
+            }
+            System.out.println(&quot;第&quot; + num + &quot;次出价人:P&quot; + i + &quot; 出价:&quot; + price);
+        }
+        System.out.println(&quot;-----------------&quot;);
+    }
+    System.out.println(&quot;最终竞价成功人:P&quot; + personId + &quot;,最终出价:&quot; + maxPrice);
+    executor.shutdown();
+}
+
+static class Auction implements Runnable {
+    private String name;
+    private CyclicBarrier barrier;
+    private int step;
+    private CountDownLatch countDownLatch;
+
+    public Auction(CyclicBarrier barrier, CountDownLatch countDownLatch, String name, int step) {
+        this.name = name;
+        this.barrier = barrier;
+        this.step = step;
+        this.countDownLatch = countDownLatch;
+    }
+
+    @Override
+    public void run() {
+        if (!ACTION_HIST.containsKey(name)) {
+            ACTION_HIST.put(name, new ArrayList&lt;&gt;());
+        }
+        lock.lock();
+        int currentPrice = 0;
+        try {
+            currentPrice = getRandPrice(step);
+            CUR_MAX_PRICE = CUR_MAX_PRICE &lt; currentPrice ? currentPrice : CUR_MAX_PRICE;
+        } finally {
+            lock.unlock();
+        }
+
+        ACTION_HIST.get(name).add(currentPrice);
+        int tmp = 1;
+        try {
+            while (tmp &lt; AUCTION_NUM) {
+                barrier.await();
+                currentPrice = getRandPrice(step);
+                currentPrice = currentPrice &gt; M ? M : currentPrice;
+                CUR_MAX_PRICE = CUR_MAX_PRICE &lt; currentPrice ? currentPrice : CUR_MAX_PRICE;
+                ACTION_HIST.get(name).add(currentPrice);
+                tmp++;
+            }
+            countDownLatch.countDown();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }   /**
+     * 当前心里价比上次多多少
+     *
+     * @param step
+     * @return
+     */
+    int getRandPrice(int step) {
+        return CUR_MAX_PRICE + new Random().nextInt(step) + 1;
+    }
+}</code></pre>
       
     </div>
 
@@ -216,7 +338,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/21/github/docs/big-data/find-mid-value-in-500-millions/">
+    <link itemprop="mainEntityOfPage" href="/2019/07/11/zookeeper/zookeeper_expiryQueue/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -230,7 +352,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/04/21/github/docs/big-data/find-mid-value-in-500-millions/" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/2019/07/11/zookeeper/zookeeper_expiryQueue/" class="post-title-link" itemprop="url">zookeeper之ExpiryQueue</a>
         </h2>
 
         <div class="post-meta">
@@ -240,8 +362,15 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-04-21 15:37:08" itemprop="dateCreated datePublished" datetime="2021-04-21T15:37:08+08:00">2021-04-21</time>
+              <time title="Created: 2019-07-11 12:28:35" itemprop="dateCreated datePublished" datetime="2019-07-11T12:28:35+08:00">2019-07-11</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-09 18:31:34" itemprop="dateModified" datetime="2021-04-09T18:31:34+08:00">2021-04-09</time>
+              </span>
 
           
 
@@ -254,113 +383,74 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="如何从-5-亿个数中找出中位数？"><a href="#如何从-5-亿个数中找出中位数？" class="headerlink" title="如何从 5 亿个数中找出中位数？"></a>如何从 5 亿个数中找出中位数？</h2><h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>从 5 亿个数中找出中位数。数据排序后，位置在最中间的数就是中位数。当样本数为奇数时，中位数为 第 <code>(N+1)/2</code> 个数；当样本数为偶数时，中位数为 第 <code>N/2</code> 个数与第 <code>1+N/2</code> 个数的均值。</p>
-<h3 id="解答思路"><a href="#解答思路" class="headerlink" title="解答思路"></a>解答思路</h3><p>如果这道题没有内存大小限制，则可以把所有数读到内存中排序后找出中位数。但是最好的排序算法的时间复杂度都为 <code>O(NlogN)</code> 。这里使用其他方法。</p>
-<h4 id="方法一：双堆法"><a href="#方法一：双堆法" class="headerlink" title="方法一：双堆法"></a>方法一：双堆法</h4><p>维护两个堆，一个大顶堆，一个小顶堆。大顶堆中最大的数<strong>小于等于</strong>小顶堆中最小的数；保证这两个堆中的元素个数的差不超过 1。</p>
-<p>若数据总数为<strong>偶数</strong>，当这两个堆建好之后，<strong>中位数就是这两个堆顶元素的平均值</strong>。当数据总数为<strong>奇数</strong>时，根据两个堆的大小，<strong>中位数一定在数据多的堆的堆顶</strong>。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MedianFinder</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> PriorityQueue&lt;Integer&gt; maxHeap;</span><br><span class="line">    <span class="keyword">private</span> PriorityQueue&lt;Integer&gt; minHeap;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** initialize your data structure here. */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MedianFinder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        maxHeap = <span class="keyword">new</span> PriorityQueue&lt;&gt;(Comparator.reverseOrder());</span><br><span class="line">        minHeap = <span class="keyword">new</span> PriorityQueue&lt;&gt;(Integer::compareTo);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addNum</span><span class="params">(<span class="keyword">int</span> num)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (maxHeap.isEmpty() || maxHeap.peek() &gt; num) &#123;</span><br><span class="line">            maxHeap.offer(num);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            minHeap.offer(num);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> size1 = maxHeap.size();</span><br><span class="line">        <span class="keyword">int</span> size2 = minHeap.size();</span><br><span class="line">        <span class="keyword">if</span> (size1 - size2 &gt; <span class="number">1</span>) &#123;</span><br><span class="line">            minHeap.offer(maxHeap.poll());</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (size2 - size1 &gt; <span class="number">1</span>) &#123;</span><br><span class="line">            maxHeap.offer(minHeap.poll());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">findMedian</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> size1 = maxHeap.size();</span><br><span class="line">        <span class="keyword">int</span> size2 = minHeap.size();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> size1 == size2</span><br><span class="line">            ? (maxHeap.peek() + minHeap.peek()) * <span class="number">1.0</span> / <span class="number">2</span></span><br><span class="line">            : (size1 &gt; size2 ? maxHeap.peek() : minHeap.peek());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <p>zookeeper之ExpiryQueue</p>
+<pre><code>ExpiryQueue是在SessionTrackerImpl中使用的，主要是维护zk中session的队列
+了解ExpiryQueue的实现
 
-<blockquote>
-<p>见 LeetCode No.295：<a href="https://leetcode.com/problems/find-median-from-data-stream/" target="_blank" rel="noopener">https://leetcode.com/problems/find-median-from-data-stream/</a></p>
-</blockquote>
-<p>以上这种方法，需要把所有数据都加载到内存中。当数据量很大时，就不能这样了，因此，这种方法<strong>适用于数据量较小的情况</strong>。5 亿个数，每个数字占用 4B，总共需要 2G 内存。如果可用内存不足 2G，就不能使用这种方法了，下面介绍另一种方法。</p>
-<h4 id="方法二：分治法"><a href="#方法二：分治法" class="headerlink" title="方法二：分治法"></a>方法二：分治法</h4><p>分治法的思想是把一个大的问题逐渐转换为规模较小的问题来求解。</p>
-<p>对于这道题，顺序读取这 5 亿个数字，对于读取到的数字 num，如果它对应的二进制中最高位为 1，则把这个数字写到 f1 中，否则写入 f0 中。通过这一步，可以把这 5 亿个数划分为两部分，而且 f0 中的数都大于 f1 中的数（最高位是符号位）。</p>
-<p>划分之后，可以非常容易地知道中位数是在 f0 还是 f1 中。假设 f1 中有 1 亿个数，那么中位数一定在 f0 中，且是在 f0 中，从小到大排列的第 1.5 亿个数与它后面的一个数的平均值。</p>
-<blockquote>
-<p><strong>提示</strong>，5 亿数的中位数是第 2.5 亿与右边相邻一个数求平均值。若 f1 有一亿个数，那么中位数就是 f0 中从第 1.5 亿个数开始的两个数求得的平均值。</p>
-</blockquote>
-<p>对于 f0 可以用次高位的二进制继续将文件一分为二，如此划分下去，直到划分后的文件可以被加载到内存中，把数据加载到内存中以后直接排序，找出中位数。</p>
-<blockquote>
-<p><strong>注意</strong>，当数据总数为偶数，如果划分后两个文件中的数据有相同个数，那么中位数就是数据较小的文件中的最大值与数据较大的文件中的最小值的平均值。</p>
-</blockquote>
-<h3 id="方法总结"><a href="#方法总结" class="headerlink" title="方法总结"></a>方法总结</h3><p>分治法，真香！</p>
+//ExpiryQueue&lt;SessionImpl&gt; sessionExpiryQueue;
 
-      
-    </div>
+//elemMap保存的是SessionImpl--&gt;过期时间
+private final ConcurrentHashMap&lt;E, Long&gt; elemMap = new ConcurrentHashMap&lt;E, Long&gt;();
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+//expiryMap保存的是 过期时间--&gt;SessionImpl集合
+private final ConcurrentHashMap&lt;Long, Set&lt;E&gt;&gt; expiryMap = new ConcurrentHashMap&lt;Long, Set&lt;E&gt;&gt;();
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/21/github/docs/big-data/find-no-repeat-number/">
+****elemMap和expiryMap是利用空间换时间，方便根据SessionImpl 和 过期时间相互查找****</code></pre><p>ExpiryQueue的remove方法</p>
+<pre><code>ExpiryQueue的实现相当于一个缓存，想起之前面试的一个题目：实现一个缓存fifo,缓存的value可以有过期时间/无过
+期时间，缓存大小一定，当put时，如果缓存满了(达到缓存上线)，优先剔除最近要失效的key-value，如果key都不过
+期，优先剔除最先进来的key，直到能放下新的key-value。这个题可以用ConcurrentHashMap缓存，TreeSet(有序集
+合)过期时间排序，或者二分查找。
+**从这里感觉算法的重要性。时间复杂度、空间复杂度在实际工作中得以应用。**
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
+public Long remove(E elem) {
+     //快速根据SessionImpl获取过期的时间
+    Long expiryTime = elemMap.remove(elem);
+    if (expiryTime != null) {
+        Set&lt;E&gt; set = expiryMap.get(expiryTime);
+        if (set != null) {
+                //从expiryMap中删除
+            set.remove(elem);
+        }
+    }
+    return expiryTime;
+}</code></pre><p>ExpiryQueue的update方法</p>
+<pre><code>public Long update(E elem, int timeout) {
+    Long prevExpiryTime = elemMap.get(elem);
+    long now = Time.currentElapsedTime();
+    Long newExpiryTime = roundToNextInterval(now + timeout);
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/21/github/docs/big-data/find-no-repeat-number/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
+    if (newExpiryTime.equals(prevExpiryTime)) {
+        // No change, so nothing to update
+        return null;
+    }
 
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
+    // First add the elem to the new expiry time bucket in expiryMap.
+    Set&lt;E&gt; set = expiryMap.get(newExpiryTime);
+    //**如果elemMap中不存在，放入到elemMap中
+    if (set == null) {
+        // Construct a ConcurrentHashSet using a ConcurrentHashMap
+        set = Collections.newSetFromMap(
+            new ConcurrentHashMap&lt;E, Boolean&gt;());
+        // Put the new set in the map, but only if another thread
+        // hasn&apos;t beaten us to it
+        Set&lt;E&gt; existingSet = expiryMap.putIfAbsent(newExpiryTime, set);
+        if (existingSet != null) {
+            set = existingSet;
+        }
+    }
+    set.add(elem);
 
-              <time title="Created: 2021-04-21 15:37:08" itemprop="dateCreated datePublished" datetime="2021-04-21T15:37:08+08:00">2021-04-21</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="如何在大量的数据中找出不重复的整数？"><a href="#如何在大量的数据中找出不重复的整数？" class="headerlink" title="如何在大量的数据中找出不重复的整数？"></a>如何在大量的数据中找出不重复的整数？</h2><h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>在 2.5 亿个整数中找出不重复的整数。注意：内存不足以容纳这 2.5 亿个整数。</p>
-<h3 id="解答思路"><a href="#解答思路" class="headerlink" title="解答思路"></a>解答思路</h3><h4 id="方法一：分治法"><a href="#方法一：分治法" class="headerlink" title="方法一：分治法"></a>方法一：分治法</h4><p>与前面的题目方法类似，先将 2.5 亿个数划分到多个小文件，用 HashSet/HashMap 找出每个小文件中不重复的整数，再合并每个子结果，即为最终结果。</p>
-<h4 id="方法二：位图法"><a href="#方法二：位图法" class="headerlink" title="方法二：位图法"></a>方法二：位图法</h4><p><strong>位图</strong>，就是用一个或多个 bit 来标记某个元素对应的值，而键就是该元素。采用位作为单位来存储数据，可以大大节省存储空间。</p>
-<p>位图通过使用位数组来表示某些元素是否存在。它可以用于快速查找，判重，排序等。不是很清楚？我先举个小例子。</p>
-<p>假设我们要对 <code>[0,7]</code> 中的 5 个元素 (6, 4, 2, 1, 5) 进行排序，可以采用位图法。0~7 范围总共有 8 个数，只需要 8bit，即 1 个字节。首先将每个位都置 0：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 0 0 0 0 0 0 0</span><br></pre></td></tr></table></figure>
-
-<p>然后遍历 5 个元素，首先遇到 6，那么将下标为 6 的位的 0 置为 1；接着遇到 4，把下标为 4 的位 的 0 置为 1：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 0 0 0 1 0 1 0</span><br></pre></td></tr></table></figure>
-
-<p>依次遍历，结束后，位数组是这样的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 1 1 0 1 1 1 0</span><br></pre></td></tr></table></figure>
-
-<p>每个为 1 的位，它的下标都表示了一个数：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for i in range(8):</span><br><span class="line">    if bits[i] == 1:</span><br><span class="line">        print(i)</span><br></pre></td></tr></table></figure>
-
-<p>这样我们其实就已经实现了排序。</p>
-<p>对于整数相关的算法的求解，<strong>位图法</strong>是一种非常实用的算法。假设 int 整数占用 4B，即 32bit，那么我们可以表示的整数的个数为 2<sup>32</sup>。</p>
-<p><strong>那么对于这道题</strong>，我们用 2 个 bit 来表示各个数字的状态：</p>
-<ul>
-<li>00 表示这个数字没出现过；</li>
-<li>01 表示这个数字出现过一次（即为题目所找的不重复整数）；</li>
-<li>10 表示这个数字出现了多次。</li>
-</ul>
-<p>那么这 2<sup>32</sup> 个整数，总共所需内存为 2<sup>32</sup>*2b=1GB。因此，当可用内存超过 1GB 时，可以采用位图法。假设内存满足位图法需求，进行下面的操作：</p>
-<p>遍历 2.5 亿个整数，查看位图中对应的位，如果是 00，则变为 01，如果是 01 则变为 10，如果是 10 则保持不变。遍历结束后，查看位图，把对应位是 01 的整数输出即可。</p>
-<p>当然，本题中特别说明：<strong>内存不足以容纳这 2.5 亿个整数</strong>，2.5 亿个整数的内存大小为：2.5e8/1024/1024/1024=0.93G，也即是说内存不足 1G，而位图法所需要的内存大小为 1G，因此，本题并不适合用位图法解决。</p>
-<h3 id="方法总结"><a href="#方法总结" class="headerlink" title="方法总结"></a>方法总结</h3><p><strong>判断数字是否重复的问题</strong>，位图法是一种非常高效的方法，当然前提是：内存要满足位图法所需要的存储空间。</p>
-
+    // Map the elem to the new expiry time. If a different previous
+    // mapping was present, clean up the previous expiry bucket.
+    prevExpiryTime = elemMap.put(elem, newExpiryTime);
+    if (prevExpiryTime != null &amp;&amp; !newExpiryTime.equals(prevExpiryTime)) {
+        Set&lt;E&gt; prevSet = expiryMap.get(prevExpiryTime);
+        if (prevSet != null) {
+            prevSet.remove(elem);
+        }
+    }
+    return newExpiryTime;
+}</code></pre>
       
     </div>
 
@@ -378,7 +468,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/24/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><span class="page-number current">25</span><a class="page-number" href="/page/26/">26</a><span class="space">&hellip;</span><a class="page-number" href="/page/47/">47</a><a class="extend next" rel="next" href="/page/26/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/24/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><span class="page-number current">25</span>
   </nav>
 
 
@@ -444,14 +534,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-count">74</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

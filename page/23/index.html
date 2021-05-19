@@ -150,6 +150,188 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/02/26/skywalking/skywalking-oap服务启动/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/26/skywalking/skywalking-oap服务启动/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-02-26 11:57:28" itemprop="dateCreated datePublished" datetime="2021-02-26T11:57:28+08:00">2021-02-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-29 11:37:01" itemprop="dateModified" datetime="2021-04-29T11:37:01+08:00">2021-04-29</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="idea-启动oap-server服务"><a href="#idea-启动oap-server服务" class="headerlink" title="idea 启动oap server服务"></a>idea 启动oap server服务</h4><p>服务启动入口类： OAPServerStartUp</p>
+<p>启动参数: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-DSW_STORAGE=elasticsearch7 -DSW_STORAGE_ES_CLUSTER_NODES=127.0.0.1:9200  -DSW_OAL_ENGINE_DEBUG=true</span><br><span class="line"></span><br><span class="line">#SW_OAL_ENGINE_DEBUG 用户输出javasist生产metrics类，在server-bootstrap的oal目录</span><br></pre></td></tr></table></figure>
+
+<h5 id="Skywalking-server几个核心类"><a href="#Skywalking-server几个核心类" class="headerlink" title="Skywalking server几个核心类"></a>Skywalking server几个核心类</h5><p>OALRuntime<br>ModuleProvider<br>CoreModuleProvider<br>SourceDispatcher<br>StreamProcessor<br>MetricsStreamProcessor<br>DispatcherManager<br>StreamAnnotationListener<br>Metrics<br>PersistenceTimer</p>
+<p>RemoteSenderService<br>DataCarrier</p>
+<p>SegmentAnalysisListener</p>
+<p>IBatchDAO</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/02/18/java/Java类加载/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/18/java/Java类加载/" class="post-title-link" itemprop="url">Java类加载</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-02-18 18:44:02 / Modified: 18:59:33" itemprop="dateCreated datePublished" datetime="2021-02-18T18:44:02+08:00">2021-02-18</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a><strong>类加载</strong></h4><p>​        在java代码中，类的加载、连接和初始化过程都是在程序运行期间完成的。（类从磁盘加载到内存中经历的三个阶段）</p>
+<p>提供了更大的灵活性，增加了更多的可能性。</p>
+<h4 id="类加载器深入剖析："><a href="#类加载器深入剖析：" class="headerlink" title="类加载器深入剖析："></a><strong>类加载器深入剖析：</strong></h4><p>Java虚拟机与程序的生命周期</p>
+<p>在如下几种情况下，java虚拟机将结束生命周期</p>
+<p>（1）执行了System.exit()方法</p>
+<p>（2）程序正常执行结束</p>
+<p>（3）程序在执行过程中遇到了异常或错误而异常终止</p>
+<p>（4）由于操作系统出现错误而导致虚拟机进程终止</p>
+<h5 id="类的加载、连接与初始化："><a href="#类的加载、连接与初始化：" class="headerlink" title="类的加载、连接与初始化："></a><strong>类的加载、连接与初始化：</strong></h5><ol>
+<li><p>加载：查找并加载类的二进制数据到java虚拟机中</p>
+</li>
+<li><p>连接：</p>
+<ul>
+<li><p>​    验证 : 确保被加载的类的正确性</p>
+</li>
+<li><p>​    准备：为类的<strong>静态变量</strong>分配内存，并将其初始化为<strong>默认值</strong>，但是到达初始化之前类变量都没有初始化为真正的初始值</p>
+</li>
+<li><p>​    解析：<strong>把类中的符号引用转换为直接引用</strong>，就是在类型的常量池中寻找类、接口、字段和方法的符号引用，把这些符号引用替换成直接引用的过程</p>
+</li>
+</ul>
+</li>
+<li><p>初始化：为类的静态变量赋予正确的初始值</p>
+</li>
+</ol>
+<p><strong>类从磁盘上加载到内存中要经历五个阶段：加载、连接、初始化、使用、卸载</strong></p>
+<p>Java程序对类的使用方式可分为两种</p>
+<ol>
+<li><em>主动使用</em></li>
+<li><em>被动使用</em></li>
+</ol>
+<p>所有的Java虚拟机实现必须在每个类或接口被Java程序“首次主动使用”时才能初始化他们</p>
+<p><strong>主动使用</strong></p>
+<p>（1）创建类的实例</p>
+<p>（2）访问某个类或接口的静态变量 getstatic（助记符），或者对该静态变量赋值 putstatic</p>
+<p>（3）调用类的静态方法 invokestatic</p>
+<p>（4）反射（Class.forName(“com.test.Test”)）</p>
+<p>（5）初始化一个类的子类</p>
+<p>（6）Java虚拟机启动时被标明启动类的类</p>
+<p>（7）JDK1.7开始提供的动态语言支持（了解）</p>
+<p><strong>被动使用</strong></p>
+<p>​    除了上面七种情况外，其他使用java类的方式都被看做是对类的被动使用，都不会导致类的初始化</p>
+<h5 id="类的加载详解："><a href="#类的加载详解：" class="headerlink" title="类的加载详解："></a><strong>类的加载详解：</strong></h5><p>​        类的加载指的是将类的.class文件中的二进制数据读入到内存中，将其放在运行时数据区的方法区内，然后在内存中创建一个java.lang.Class对象（规范并未说明Class对象位于哪里，HotSpot虚拟机将其放在<strong>方法区</strong>中）用来封装内在方法区内的数据结构。</p>
+<p>加载.calss文件的方式</p>
+<p>（1）从本地系统中直接加载</p>
+<p>（2）通过网络下载.class文件</p>
+<p>（3）从zip，jar等归档文件中加载.class文件</p>
+<p>（4）从专用数据库中提取.class文件</p>
+<p>（5）将java源文件动态编译为.class文件</p>
+<h4 id="类加载器双亲委托模型的好处："><a href="#类加载器双亲委托模型的好处：" class="headerlink" title="类加载器双亲委托模型的好处："></a>类加载器双亲委托模型的好处：</h4><p>（1）可以确保Java和核心库的安全：所有的Java应用都会引用java.lang中的类，也就是说在运行期java.lang中的类会被加载到虚拟机中，如果这个加载过程如果是由自己的类加载器所加载，那么很可能就会在JVM中存在多个版本的java.lang中的类，而且这些类是相互不可见的（命名空间的作用）。借助于双亲委托机制，Java核心类库中的类的加载工作都是由启动根加载器去加载，从而确保了Java应用所使用的的都是同一个版本的Java核心类库，他们之间是相互兼容的；</p>
+<p>（2）确保Java核心类库中的类不会被自定义的类所替代；</p>
+<p>（3）不同的类加载器可以为相同名称的类（binary name）创建额外的命名空间。相同名称的类可以并存在Java虚拟机中，只需要用不同的类加载器去加载即可。相当于在Java虚拟机内部建立了一个又一个相互隔离的Java类空间。</p>
+<p>父亲委托机制的优点是能够提高软件系统的安全性。因此在此机制下，用户自定义的类加载器不可能加载应该由父类加载器加载的可靠类，从而防止不可靠甚至恶意的代码代替由父类加载器加载的可靠代码。例如，java.lang.Object类是由跟类加载器加载，其他任何用哪个户自定义的类加载器都不可能加载含有恶意代码的java.lang.Object类。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="/2019/07/15/java/java-nio/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1073,471 +1255,10 @@ protected boolean isSocketOpen() {
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2019/07/12/redis/redis-info信息/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/12/redis/redis-info信息/" class="post-title-link" itemprop="url">redis info信息</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2019-07-12 13:20:20 / Modified: 14:05:50" itemprop="dateCreated datePublished" datetime="2019-07-12T13:20:20+08:00">2019-07-12</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>INFO [section]</p>
-<pre><code>以一种易于解释（parse）且易于阅读的格式，返回关于 Redis 服务器的各种信息和统计数值。
-
-通过给定可选的参数 section ，可以让命令只返回某一部分的信息：</code></pre><p>server 部分记录了 Redis 服务器的信息，它包含以下域：</p>
-<pre><code>redis_version : Redis 服务器版本
-redis_git_sha1 : Git SHA1
-redis_git_dirty : Git dirty flag
-os : Redis 服务器的宿主操作系统
-arch_bits : 架构（32 或 64 位）
-multiplexing_api : Redis 所使用的事件处理机制
-gcc_version : 编译 Redis 时所使用的 GCC 版本
-process_id : 服务器进程的 PID
-run_id : Redis 服务器的随机标识符（用于 Sentinel 和集群）
-tcp_port : TCP/IP 监听端口
-uptime_in_seconds : 自 Redis 服务器启动以来，经过的秒数
-uptime_in_days : 自 Redis 服务器启动以来，经过的天数
-lru_clock : 以分钟为单位进行自增的时钟，用于 LRU 管理
-clients 部分记录了已连接客户端的信息，它包含以下域：
-
-connected_clients : 已连接客户端的数量（不包括通过从属服务器连接的客户端）
-client_longest_output_list : 当前连接的客户端当中，最长的输出列表
-client_longest_input_buf : 当前连接的客户端当中，最大输入缓存
-blocked_clients : 正在等待阻塞命令（BLPOP、BRPOP、BRPOPLPUSH）的客户端的数量
-memory 部分记录了服务器的内存信息，它包含以下域：
-
-used_memory : 由 Redis 分配器分配的内存总量，以字节（byte）为单位
-used_memory_human : 以人类可读的格式返回 Redis 分配的内存总量
-used_memory_rss : 从操作系统的角度，返回 Redis 已分配的内存总量（俗称常驻集大小）。这个值和 top 、 ps 等命令的输出一致。
-used_memory_peak : Redis 的内存消耗峰值（以字节为单位）
-used_memory_peak_human : 以人类可读的格式返回 Redis 的内存消耗峰值
-used_memory_lua : Lua 引擎所使用的内存大小（以字节为单位）
-mem_fragmentation_ratio : used_memory_rss 和 used_memory 之间的比率
-mem_allocator : 在编译时指定的， Redis 所使用的内存分配器。可以是 libc 、 jemalloc 或者 tcmalloc 。
-在理想情况下， used_memory_rss 的值应该只比 used_memory 稍微高一点儿。
-当 rss &gt; used ，且两者的值相差较大时，表示存在（内部或外部的）内存碎片。
-内存碎片的比率可以通过 mem_fragmentation_ratio 的值看出。
-当 used &gt; rss 时，表示 Redis 的部分内存被操作系统换出到交换空间了，在这种情况下，操作可能会产生明显的延迟。
-Because Redis does not have control over how its allocations are mapped to memory pages, high used_memory_rss is often the result of a spike in memory usage.
-
-当 Redis 释放内存时，分配器可能会，也可能不会，将内存返还给操作系统。
-如果 Redis 释放了内存，却没有将内存返还给操作系统，那么 used_memory 的值可能和操作系统显示的 Redis 内存占用并不一致。
-查看 used_memory_peak 的值可以验证这种情况是否发生。
-persistence 部分记录了跟 RDB 持久化和 AOF 持久化有关的信息，它包含以下域：
-
-loading : 一个标志值，记录了服务器是否正在载入持久化文件。
-rdb_changes_since_last_save : 距离最近一次成功创建持久化文件之后，经过了多少秒。
-rdb_bgsave_in_progress : 一个标志值，记录了服务器是否正在创建 RDB 文件。
-rdb_last_save_time : 最近一次成功创建 RDB 文件的 UNIX 时间戳。
-rdb_last_bgsave_status : 一个标志值，记录了最近一次创建 RDB 文件的结果是成功还是失败。
-rdb_last_bgsave_time_sec : 记录了最近一次创建 RDB 文件耗费的秒数。
-rdb_current_bgsave_time_sec : 如果服务器正在创建 RDB 文件，那么这个域记录的就是当前的创建操作已经耗费的秒数。
-aof_enabled : 一个标志值，记录了 AOF 是否处于打开状态。
-aof_rewrite_in_progress : 一个标志值，记录了服务器是否正在创建 AOF 文件。
-aof_rewrite_scheduled : 一个标志值，记录了在 RDB 文件创建完毕之后，是否需要执行预约的 AOF 重写操作。
-aof_last_rewrite_time_sec : 最近一次创建 AOF 文件耗费的时长。
-aof_current_rewrite_time_sec : 如果服务器正在创建 AOF 文件，那么这个域记录的就是当前的创建操作已经耗费的秒数。
-aof_last_bgrewrite_status : 一个标志值，记录了最近一次创建 AOF 文件的结果是成功还是失败。
-如果 AOF 持久化功能处于开启状态，那么这个部分还会加上以下域：
-
-aof_current_size : AOF 文件目前的大小。
-aof_base_size : 服务器启动时或者 AOF 重写最近一次执行之后，AOF 文件的大小。
-aof_pending_rewrite : 一个标志值，记录了是否有 AOF 重写操作在等待 RDB 文件创建完毕之后执行。
-aof_buffer_length : AOF 缓冲区的大小。
-aof_rewrite_buffer_length : AOF 重写缓冲区的大小。
-aof_pending_bio_fsync : 后台 I/O 队列里面，等待执行的 fsync 调用数量。
-aof_delayed_fsync : 被延迟的 fsync 调用数量。
-stats 部分记录了一般统计信息，它包含以下域：
-
-total_connections_received : 服务器已接受的连接请求数量。
-total_commands_processed : 服务器已执行的命令数量。
-instantaneous_ops_per_sec : 服务器每秒钟执行的命令数量。
-rejected_connections : 因为最大客户端数量限制而被拒绝的连接请求数量。
-expired_keys : 因为过期而被自动删除的数据库键数量。
-evicted_keys : 因为最大内存容量限制而被驱逐（evict）的键数量。
-keyspace_hits : 查找数据库键成功的次数。
-keyspace_misses : 查找数据库键失败的次数。
-pubsub_channels : 目前被订阅的频道数量。
-pubsub_patterns : 目前被订阅的模式数量。
-latest_fork_usec : 最近一次 fork() 操作耗费的毫秒数。
-replication : 主/从复制信息
-
-role : 如果当前服务器没有在复制任何其他服务器，那么这个域的值就是 master ；否则的话，这个域的值就是 slave 。注意，在创建复制链的时候，一个从服务器也可能是另一个服务器的主服务器。
-如果当前服务器是一个从服务器的话，那么这个部分还会加上以下域：
-
-master_host : 主服务器的 IP 地址。
-master_port : 主服务器的 TCP 监听端口号。
-master_link_status : 复制连接当前的状态， up 表示连接正常， down 表示连接断开。
-master_last_io_seconds_ago : 距离最近一次与主服务器进行通信已经过去了多少秒钟。
-master_sync_in_progress : 一个标志值，记录了主服务器是否正在与这个从服务器进行同步。
-如果同步操作正在进行，那么这个部分还会加上以下域：
-
-master_sync_left_bytes : 距离同步完成还缺少多少字节数据。
-master_sync_last_io_seconds_ago : 距离最近一次因为 SYNC 操作而进行 I/O 已经过去了多少秒。
-如果主从服务器之间的连接处于断线状态，那么这个部分还会加上以下域：
-
-master_link_down_since_seconds : 主从服务器连接断开了多少秒。
-以下是一些总会出现的域：
-
-connected_slaves : 已连接的从服务器数量。
-对于每个从服务器，都会添加以下一行信息：
-
-slaveXXX : ID、IP 地址、端口号、连接状态
-cpu 部分记录了 CPU 的计算量统计信息，它包含以下域：
-
-used_cpu_sys : Redis 服务器耗费的系统 CPU 。
-used_cpu_user : Redis 服务器耗费的用户 CPU 。
-used_cpu_sys_children : 后台进程耗费的系统 CPU 。
-used_cpu_user_children : 后台进程耗费的用户 CPU 。
-commandstats 部分记录了各种不同类型的命令的执行统计信息，比如命令执行的次数、命令耗费的 CPU 时间、执行每个命令耗费的平均 CPU 时间等等。对于每种类型的命令，这个部分都会添加一行以下格式的信息：
-
-cmdstat_XXX:calls=XXX,usec=XXX,usecpercall=XXX
-cluster 部分记录了和集群有关的信息，它包含以下域：
-
-cluster_enabled : 一个标志值，记录集群功能是否已经开启。
-keyspace 部分记录了数据库相关的统计信息，比如数据库的键数量、数据库已经被删除的过期键数量等。对于每个数据库，这个部分都会添加一行以下格式的信息：
-
-dbXXX:keys=XXX,expires=XXX
-除上面给出的这些值以外， section 参数的值还可以是下面这两个：
-
-all : 返回所有信息
-default : 返回默认选择的信息
-当不带参数直接调用 INFO 命令时，使用 default 作为默认参数。
-
-不同版本的 Redis 可能对返回的一些域进行了增加或删减。
-
-因此，一个健壮的客户端程序在对 INFO 命令的输出进行分析时，应该能够跳过不认识的域，并且妥善地处理丢失不见的域。
-
-可用版本：&gt;= 1.0.0时间复杂度：O(1)返回值：具体请参见下面的测试代码。</code></pre><p>redis&gt; INFO</p>
-<pre><code># Server
-redis_version:2.9.11
-redis_git_sha1:937384d0
-redis_git_dirty:0
-redis_build_id:8e9509442863f22
-redis_mode:standalone
-os:Linux 3.13.0-35-generic x86_64
-arch_bits:64
-multiplexing_api:epoll
-gcc_version:4.8.2
-process_id:4716
-run_id:26186aac3f2380aaee9eef21cc50aecd542d97dc
-tcp_port:6379
-uptime_in_seconds:362
-uptime_in_days:0
-hz:10
-lru_clock:1725349
-config_file:
-
-# Clients
-connected_clients:1
-client_longest_output_list:0
-client_biggest_input_buf:0
-blocked_clients:0
-
-# Memory
-used_memory:508536
-used_memory_human:496.62K
-used_memory_rss:7974912
-used_memory_peak:508536
-used_memory_peak_human:496.62K
-used_memory_lua:33792
-mem_fragmentation_ratio:15.68
-mem_allocator:jemalloc-3.2.0
-
-# Persistence
-loading:0
-rdb_changes_since_last_save:6
-rdb_bgsave_in_progress:0
-rdb_last_save_time:1411011131
-rdb_last_bgsave_status:ok
-rdb_last_bgsave_time_sec:-1
-rdb_current_bgsave_time_sec:-1
-aof_enabled:0
-aof_rewrite_in_progress:0
-aof_rewrite_scheduled:0
-aof_last_rewrite_time_sec:-1
-aof_current_rewrite_time_sec:-1
-aof_last_bgrewrite_status:ok
-aof_last_write_status:ok
-
-# Stats
-total_connections_received:2
-total_commands_processed:4
-instantaneous_ops_per_sec:0
-rejected_connections:0
-sync_full:0
-sync_partial_ok:0
-sync_partial_err:0
-expired_keys:0
-evicted_keys:0
-keyspace_hits:0
-keyspace_misses:0
-pubsub_channels:0
-pubsub_patterns:0
-latest_fork_usec:0
-migrate_cached_sockets:0
-
-# Replication
-role:master
-connected_slaves:0
-master_repl_offset:0
-repl_backlog_active:0
-repl_backlog_size:1048576
-repl_backlog_first_byte_offset:0
-repl_backlog_histlen:0
-
-# CPU
-used_cpu_sys:0.21
-used_cpu_user:0.17
-used_cpu_sys_children:0.00
-used_cpu_user_children:0.00
-
-# Cluster
-cluster_enabled:0
-
-# Keyspace
-db0:keys=2,expires=0,avg_ttl=0</code></pre>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2019/07/12/java/java多线程竞拍/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/12/java/java多线程竞拍/" class="post-title-link" itemprop="url">阿里云面试题-多线程竞拍</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-07-12 12:28:35" itemprop="dateCreated datePublished" datetime="2019-07-12T12:28:35+08:00">2019-07-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-01 18:56:07" itemprop="dateModified" datetime="2021-03-01T18:56:07+08:00">2021-03-01</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>多线程竞拍</p>
-<pre><code>创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）
-
-每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
-
-所有人的心理上线价位都为 M ，不会出价比M高
-
-每次出价必须比上一次出价高
-
-经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。</code></pre><p>个人觉得主要考察java基础（CountDownLatch、CyclicBarrier）的使用方法</p>
-<pre><code>import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.*;
-import java.util.concurrent.locks.ReentrantLock;
-
-public class AuctionTest {
-
-/**
- * 创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）
- * 每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
- * 所有人的心理上线价位都为 M ，不会出价比M高
- * 每次出价必须比上一次出价高
- * 经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。
- */
-static int N = 10; //竞拍人数
-static int M = 100;//所有人的心理上线价位都为 M ，不会出价比M高
-static int AUCTION_NUM = 5; //经过 k 次竞拍后
-
-static ConcurrentHashMap&lt;String, List&lt;Integer&gt;&gt; ACTION_HIST = new ConcurrentHashMap&lt;&gt;();
-
-static ReentrantLock lock = new ReentrantLock();//这个锁是为了保证出价比上一个人出价高
-
-static volatile int CUR_MAX_PRICE = 0;
-
-public static void main(String[] args) throws Exception {
-    CyclicBarrier barrier = new CyclicBarrier(N);//每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
-    CountDownLatch countDownLatch = new CountDownLatch(N);//这里应该是N
-    ThreadPoolExecutor executor = new ThreadPoolExecutor(N, N, 1, TimeUnit.SECONDS, new ArrayBlockingQueue&lt;Runnable&gt;(1), new ThreadFactory() {
-        @Override
-        public Thread newThread(Runnable r) {
-            return new Thread(r, &quot;Auction&quot;);
-        }
-    });
-    int step = M / (AUCTION_NUM * N); //每次出价阶梯
-
-    for (int i = 1; i &lt;= N; i++) {
-        executor.execute(new Auction(barrier, countDownLatch, &quot;P&quot; + i, step));
-    }
-
-    countDownLatch.await();
-
-    String personName = null;
-    int maxPrice = 0;
-    int personId = 0;
-    for (int num = 1; num &lt;= AUCTION_NUM; num++) {
-        for (int i = 1; i &lt;= N; i++) {
-            personName = &quot;P&quot; + i;
-            Integer price = ACTION_HIST.get(personName).get(num - 1);
-            if (num == AUCTION_NUM) {
-                if (maxPrice &lt; price) {
-                    maxPrice = price;
-                    personId = i;
-                }
-            }
-            System.out.println(&quot;第&quot; + num + &quot;次出价人:P&quot; + i + &quot; 出价:&quot; + price);
-        }
-        System.out.println(&quot;-----------------&quot;);
-    }
-    System.out.println(&quot;最终竞价成功人:P&quot; + personId + &quot;,最终出价:&quot; + maxPrice);
-    executor.shutdown();
-}
-
-static class Auction implements Runnable {
-    private String name;
-    private CyclicBarrier barrier;
-    private int step;
-    private CountDownLatch countDownLatch;
-
-    public Auction(CyclicBarrier barrier, CountDownLatch countDownLatch, String name, int step) {
-        this.name = name;
-        this.barrier = barrier;
-        this.step = step;
-        this.countDownLatch = countDownLatch;
-    }
-
-    @Override
-    public void run() {
-        if (!ACTION_HIST.containsKey(name)) {
-            ACTION_HIST.put(name, new ArrayList&lt;&gt;());
-        }
-        lock.lock();
-        int currentPrice = 0;
-        try {
-            currentPrice = getRandPrice(step);
-            CUR_MAX_PRICE = CUR_MAX_PRICE &lt; currentPrice ? currentPrice : CUR_MAX_PRICE;
-        } finally {
-            lock.unlock();
-        }
-
-        ACTION_HIST.get(name).add(currentPrice);
-        int tmp = 1;
-        try {
-            while (tmp &lt; AUCTION_NUM) {
-                barrier.await();
-                currentPrice = getRandPrice(step);
-                currentPrice = currentPrice &gt; M ? M : currentPrice;
-                CUR_MAX_PRICE = CUR_MAX_PRICE &lt; currentPrice ? currentPrice : CUR_MAX_PRICE;
-                ACTION_HIST.get(name).add(currentPrice);
-                tmp++;
-            }
-            countDownLatch.countDown();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }   /**
-     * 当前心里价比上次多多少
-     *
-     * @param step
-     * @return
-     */
-    int getRandPrice(int step) {
-        return CUR_MAX_PRICE + new Random().nextInt(step) + 1;
-    }
-}</code></pre>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/22/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><span class="page-number current">23</span><a class="page-number" href="/page/24/">24</a><a class="extend next" rel="next" href="/page/24/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/22/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><span class="page-number current">23</span><a class="page-number" href="/page/24/">24</a><a class="page-number" href="/page/25/">25</a><a class="extend next" rel="next" href="/page/24/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1603,7 +1324,7 @@ static class Auction implements Runnable {
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-count">74</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

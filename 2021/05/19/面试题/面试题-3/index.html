@@ -20,20 +20,22 @@
     var CONFIG = {"hostname":"","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="核心类讲解 spring代理采用cglib或者jdk proxy cglib核心类ProxyFactory、MethodInterceptor、DynamicAdvisedInterceptor、CglibMethodInvocation Pointcut​    ClassFilter MethodFilter Advice​    MethodBeforeAdvice AfterReturni">
-<meta name="keywords" content="spring">
+  <meta name="description" content="曾经见过一套面试题，从原理到架构都考了，但是公司负责人跟我说，并不需要大家都会而是考一个思维和态度。 面试官主要会问到的就是：项目难点是什么，设计是什么，如何解决某一个点，为什么这么解决，还有什么方法可以解决。你在这个项目中的优势是什么。 我们应该关注的是：自己的全局观，以及发现问题和解决问题的能力 技术要为业务服务，业务倒逼技术发展 有计划、执行力和效率 时间、计划、行动、学习、思维、才能和成功">
+<meta name="keywords" content="面试">
 <meta property="og:type" content="article">
-<meta property="og:title" content="我的博客">
-<meta property="og:url" content="/2021/04/27/spring/spring-aop/index.html">
+<meta property="og:title" content="面试题3">
+<meta property="og:url" content="/2021/05/19/面试题/面试题-3/index.html">
 <meta property="og:site_name" content="我的博客">
-<meta property="og:description" content="核心类讲解 spring代理采用cglib或者jdk proxy cglib核心类ProxyFactory、MethodInterceptor、DynamicAdvisedInterceptor、CglibMethodInvocation Pointcut​    ClassFilter MethodFilter Advice​    MethodBeforeAdvice AfterReturni">
+<meta property="og:description" content="曾经见过一套面试题，从原理到架构都考了，但是公司负责人跟我说，并不需要大家都会而是考一个思维和态度。 面试官主要会问到的就是：项目难点是什么，设计是什么，如何解决某一个点，为什么这么解决，还有什么方法可以解决。你在这个项目中的优势是什么。 我们应该关注的是：自己的全局观，以及发现问题和解决问题的能力 技术要为业务服务，业务倒逼技术发展 有计划、执行力和效率 时间、计划、行动、学习、思维、才能和成功">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-05-17T03:03:16.443Z">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-af83d67b951cd18bee1ffde6a5a86209_1440w.jpg?source=1940ef5c">
+<meta property="og:updated_time" content="2021-05-19T06:14:20.198Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="我的博客">
-<meta name="twitter:description" content="核心类讲解 spring代理采用cglib或者jdk proxy cglib核心类ProxyFactory、MethodInterceptor、DynamicAdvisedInterceptor、CglibMethodInvocation Pointcut​    ClassFilter MethodFilter Advice​    MethodBeforeAdvice AfterReturni">
+<meta name="twitter:title" content="面试题3">
+<meta name="twitter:description" content="曾经见过一套面试题，从原理到架构都考了，但是公司负责人跟我说，并不需要大家都会而是考一个思维和态度。 面试官主要会问到的就是：项目难点是什么，设计是什么，如何解决某一个点，为什么这么解决，还有什么方法可以解决。你在这个项目中的优势是什么。 我们应该关注的是：自己的全局观，以及发现问题和解决问题的能力 技术要为业务服务，业务倒逼技术发展 有计划、执行力和效率 时间、计划、行动、学习、思维、才能和成功">
+<meta name="twitter:image" content="https://pic4.zhimg.com/80/v2-af83d67b951cd18bee1ffde6a5a86209_1440w.jpg?source=1940ef5c">
 
-<link rel="canonical" href="/2021/04/27/spring/spring-aop/">
+<link rel="canonical" href="/2021/05/19/面试题/面试题-3/">
 
 
 <script id="page-configurations">
@@ -46,7 +48,7 @@
   };
 </script>
 
-  <title> | 我的博客</title>
+  <title>面试题3 | 我的博客</title>
   
 
 
@@ -156,7 +158,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/27/spring/spring-aop/">
+    <link itemprop="mainEntityOfPage" href="/2021/05/19/面试题/面试题-3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -169,7 +171,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
+          面试题3
         </h1>
 
         <div class="post-meta">
@@ -178,16 +180,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2021-04-27 17:55:00" itemprop="dateCreated datePublished" datetime="2021-04-27T17:55:00+08:00">2021-04-27</time>
+              <time title="Created: 2021-05-19 18:45:02 / Modified: 14:14:20" itemprop="dateCreated datePublished" datetime="2021-05-19T18:45:02+08:00">2021-05-19</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-17 11:03:16" itemprop="dateModified" datetime="2021-05-17T11:03:16+08:00">2021-05-17</time>
-              </span>
 
           
 
@@ -200,14 +196,22 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><strong><a href="https://cloud.tencent.com/developer/article/1497770" target="_blank" rel="noopener">核心类讲解</a></strong></p>
-<p>spring代理采用cglib或者jdk proxy</p>
-<p>cglib核心类ProxyFactory、MethodInterceptor、DynamicAdvisedInterceptor、CglibMethodInvocation</p>
-<h4 id="Pointcut"><a href="#Pointcut" class="headerlink" title="Pointcut"></a>Pointcut</h4><p>​    ClassFilter MethodFilter</p>
-<h4 id="Advice"><a href="#Advice" class="headerlink" title="Advice"></a>Advice</h4><p>​    MethodBeforeAdvice AfterReturningAdvice AspectJAroundAdvice</p>
-<h4 id="Advisor"><a href="#Advisor" class="headerlink" title="Advisor"></a>Advisor</h4><p>​    Advisor 其实它就是 Pointcut 与 Advice 的组合, Advice 是执行的方法, 而要知道方法何时执行, 则 Advice 必需与 Pointcut 组合在一起, 这就诞生了 Advisor 这个类</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">AopProxyUtils.completeProxiedInterfaces(this.advised)</span><br><span class="line">		0 = &#123;Class@521&#125; &quot;interface com.hezk.aop.service.Browser&quot;</span><br><span class="line">		1 = &#123;Class@1152&#125; &quot;interface org.springframework.aop.SpringProxy&quot;</span><br><span class="line">		2 = &#123;Class@511&#125; &quot;interface org.springframework.aop.framework.Advised&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Callback		</span><br><span class="line">	0 = &#123;CglibAopProxy$DynamicAdvisedInterceptor@1184&#125; </span><br><span class="line">	1 = &#123;CglibAopProxy$StaticUnadvisedInterceptor@1198&#125; </span><br><span class="line">	2 = &#123;CglibAopProxy$SerializableNoOp@1218&#125; </span><br><span class="line">	3 = &#123;CglibAopProxy$StaticDispatcher@1206&#125; </span><br><span class="line">	4 = &#123;CglibAopProxy$AdvisedDispatcher@984&#125; </span><br><span class="line">	5 = &#123;CglibAopProxy$EqualsInterceptor@1219&#125; </span><br><span class="line">	6 = &#123;CglibAopProxy$HashCodeInterceptor@1220&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ProxyCallbackFilter</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">interceptorList = &#123;ArrayList@1723&#125;  size = 3</span><br><span class="line"> 0 = &#123;MethodBeforeAdviceInterceptor@1930&#125; </span><br><span class="line"> 1 = &#123;AfterReturningAdviceInterceptor@1931&#125; </span><br><span class="line"> 2 = &#123;BrowserAroundAdvice@975&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> CglibMethodInvocation</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> org.springframework.cglib.core.AbstractClassGenerator.generate 生成代理方法</span><br></pre></td></tr></table></figure>
-
+        <p>曾经见过一套面试题，从原理到架构都考了，但是公司负责人跟我说，并不需要大家都会而是考一个思维和态度。</p>
+<p>面试官主要会问到的就是：项目难点是什么，设计是什么，如何解决某一个点，为什么这么解决，还有什么方法可以解决。你在这个项目中的优势是什么。</p>
+<p>我们应该关注的是：自己的<strong>全局观</strong>，以及<strong>发现问题</strong>和<strong>解决问题</strong>的能力</p>
+<p>技术要为业务服务，业务倒逼技术发展</p>
+<p>有计划、执行力和效率</p>
+<p>时间、计划、行动、学习、思维、才能和成功</p>
+<p><em>STAR法则</em>是情境(situation)、任务（task）、行动(action)、结果(result)四项的缩写</p>
+<p>What（发生了什么）Who（利益相关方）Where（哪里有问题）When（什么时候发生的）Why（为什么会这样）</p>
+<p><strong>What（干什么）和How（怎么干）</strong></p>
+<ol>
+<li><strong>确立可量化的目标</strong></li>
+<li><strong>结构化思维拆解目标</strong></li>
+<li><strong>具体执行</strong></li>
+</ol>
+<p>设定目标需要遵循 SMART（Specific, Measurable, Actionable, Relevant, Time limit  具体、可衡量、可实现、相关、时限）</p>
+<p><img src="https://pic4.zhimg.com/80/v2-af83d67b951cd18bee1ffde6a5a86209_1440w.jpg?source=1940ef5c" alt="img"></p>
 
     </div>
 
@@ -217,7 +221,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/spring/" rel="tag"># spring</a>
+              <a href="/tags/面试/" rel="tag"># 面试</a>
           </div>
 
         
@@ -226,13 +230,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/04/19/dubbo/dubbo ExtensionLoader/" rel="prev" title="dubbo ExtensionLoader">
-      <i class="fa fa-chevron-left"></i> dubbo ExtensionLoader
+    <a href="/2021/05/19/leetcode/30. 串联所有单词的子串/" rel="prev" title="30. 串联所有单词的子串">
+      <i class="fa fa-chevron-left"></i> 30. 串联所有单词的子串
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/04/27/spring/feign-ribbon-loadbalancer/" rel="next" title="spring openfeign ribbon loadbalancer">
-      spring openfeign ribbon loadbalancer <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -291,7 +292,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Pointcut"><span class="nav-number">1.</span> <span class="nav-text">Pointcut</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Advice"><span class="nav-number">2.</span> <span class="nav-text">Advice</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Advisor"><span class="nav-number">3.</span> <span class="nav-text">Advisor</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
