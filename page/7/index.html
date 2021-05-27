@@ -150,6 +150,186 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/05/10/k8s/kubeadm安装集群/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/10/k8s/kubeadm安装集群/" class="post-title-link" itemprop="url">kubeadm安装集群</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-05-10 12:28:35 / Modified: 19:13:02" itemprop="dateCreated datePublished" datetime="2021-05-10T12:28:35+08:00">2021-05-10</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>1、添加k8s项目的yum, kubernetes.repo</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cat &lt;&lt;EOF &gt; kubernetes.repo</span><br><span class="line">[kubernetes]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">repo_gpgcheck=1</span><br><span class="line">gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 安装最新的kubelet和kubectl以及kubeadm</span><br><span class="line">yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes</span><br><span class="line"># 设置启动策略</span><br><span class="line">systemctl daemon-reload &amp;&amp; systemctl enable kubelet &amp;&amp; systemctl start kubelet</span><br><span class="line">systemctl daemon-reload &amp;&amp; systemctl restart kubelet &amp;&amp; systemctl status kubelet</span><br></pre></td></tr></table></figure>
+
+<p>此时可能出现kubelet启动失败的问题， 通过下面命令查看error日志</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">journalctl -xefu kubelet</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubelet cgroup driver: \&quot;cgroupfs\&quot; is different from docker cgroup driver: \&quot;systemd\&quot;&quot;</span><br></pre></td></tr></table></figure>
+
+<p>文件<strong>/etc/docker/daemon.json</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;exec-opts&quot;: [&quot;native.cgroupdriver=systemd&quot;]</span><br></pre></td></tr></table></figure>
+
+<p> 文件<strong>/usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExecStart=/usr/bin/kubelet --cgroup-driver=systemd $KUBELET_KUBECONFIG_ARGS $KUBELET_CONFIG_ARGS $KUBELET_KUBEADM_ARGS $KUBELET_EXTRA_ARGS</span><br></pre></td></tr></table></figure>
+
+<p><strong>彻底清理kubeadm配置文件</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">sudo kubeadm reset -f</span><br><span class="line">sudo rm -rvf $HOME/.kube</span><br><span class="line">sudo rm -rvf ~/.kube/</span><br><span class="line">sudo rm -rvf /etc/kubernetes/</span><br><span class="line">sudo rm -rvf /etc/systemd/system/kubelet.service.d</span><br><span class="line">sudo rm -rvf /etc/systemd/system/kubelet.service</span><br><span class="line">sudo rm -rvf /usr/bin/kube*</span><br><span class="line">sudo rm -rvf /etc/cni</span><br><span class="line">sudo rm -rvf /opt/cni</span><br><span class="line">sudo rm -rvf /var/lib/etcd</span><br><span class="line">sudo rm -rvf /var/etcd</span><br><span class="line">sudo apt-get remove kube*</span><br></pre></td></tr></table></figure>
+
+<p><strong>查看kubeadm join命令</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubeadm token create --print-join-command</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/05/10/k8s/创建k8s用户/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/10/k8s/创建k8s用户/" class="post-title-link" itemprop="url">根据证书生成k8s账号信息</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-05-10 12:28:35" itemprop="dateCreated datePublished" datetime="2021-05-10T12:28:35+08:00">2021-05-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-11 19:20:21" itemprop="dateModified" datetime="2021-05-11T19:20:21+08:00">2021-05-11</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="新建用户"><a href="#新建用户" class="headerlink" title="新建用户"></a>新建用户</h4><p>新建一个k8s用户大概可以分为以下几步：</p>
+<ul>
+<li>生成用户的证书key</li>
+<li>通过用户的证书key，生成用户的证书请求</li>
+<li>通过k8s的api的ca证书去签发用户的证书请求，生成用户的证书</li>
+<li>配置kubectl config<ul>
+<li>kubectl config set-cluster              //集群配置</li>
+<li>kubectl config set-credentials NAME     //用户配置</li>
+<li>kubectl config set-context         //context配置</li>
+<li>kubectl config use-context         //切换context</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(umask 077; openssl genrsa -out test.key 2048)      //创建用户证书key</span><br><span class="line">openssl req -new -key test.key -out test.csr -subj &quot;/O=test/CN=test&quot;      //创建用户证书请求，-subj指定组和用户，其中O是组名，CN是用户名</span><br><span class="line">openssl x509 -req -in test.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out test.crt -days 3650      //使用k8s的ca签发用户证书</span><br><span class="line">kubectl config set-credentials test --client-certificate=test.crt --client-key=test.key --embed-certs=true      //用户配置</span><br><span class="line">kubectl config set-context test@kubernetes --cluster=kubernetes --user=test      //context设置</span><br><span class="line"></span><br><span class="line">//可以切换到新用户了，但此时用户啥权限都没有</span><br><span class="line">kubectl config use-context test@kubernetes</span><br></pre></td></tr></table></figure>
+
+<p>简单说明：</p>
+<ul>
+<li>没有使用kubectl config set-cluster ，因为集群就使用本身的集群，也默认使用本集群的默认config文件</li>
+<li>kubectl config set-cluster –kubeconfig=/PATH/TO/SOMEFILE  —kubeconfig=/PATH/TO/SOMEFILE用于创建新的配置文件，如果不加此选项，则内容会添加到家目录下.kube/config文件中，可以使用use-context来切换不同的用户管理k8s集群</li>
+<li>context，就是用什么用户来管理哪个集群，即用户和集群的结合</li>
+</ul>
+<h4 id="用户授权"><a href="#用户授权" class="headerlink" title="用户授权"></a>用户授权</h4><p>k8s的用户授权有很多种，其中最普遍的是RBAC——基于角色的授权机制。</p>
+<ul>
+<li>某个用户属于某个角色</li>
+<li>某个角色拥有某些操作</li>
+<li>某些操作绑定到某些资源上</li>
+</ul>
+<p>即最终效果是：某个用户对某些资源拥有某些操作。下面以上面创建的baison用户为例，让此用户对default空间拥有查看pod与进入到pod里的权限。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl create role only-read-pods --verb=get,list,watch,create --resource=pod,pod/exec</span><br><span class="line">kubectl create rolebinding bind-only-read-pods --role=only-read-pods --user=test</span><br></pre></td></tr></table></figure>
+
+<p>简单说明：</p>
+<ul>
+<li>除了role、rolebinding外，还有cluserrole、clusterrolebinding，他们的区别就是作用域不同，很明显带cluser的作用与整个集群。</li>
+<li>rolebinding可以绑定role，也可以绑定clusterrole，绑定cluserrole的时候，clusterrole作用域降级为namespace级别。</li>
+<li>集群有很多内置role、rolebinding和cluserrole、clusterrolebinding，可以用yaml方式打开作为借鉴。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="/2021/04/30/netty/netty 回调/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -219,188 +399,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/29/技术文档格式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/29/技术文档格式/" class="post-title-link" itemprop="url">技术文档</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-04-29 18:45:02 / Modified: 16:35:55" itemprop="dateCreated datePublished" datetime="2021-04-29T18:45:02+08:00">2021-04-29</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="一、背景介绍"><a href="#一、背景介绍" class="headerlink" title="一、背景介绍"></a>一、背景介绍</h4><h4 id="二、技术选型"><a href="#二、技术选型" class="headerlink" title="二、技术选型"></a>二、技术选型</h4><h4 id="三、技术介绍"><a href="#三、技术介绍" class="headerlink" title="三、技术介绍"></a>三、技术介绍</h4><h4 id="四、功能介绍"><a href="#四、功能介绍" class="headerlink" title="四、功能介绍"></a>四、功能介绍</h4><h4 id="五、系统架构"><a href="#五、系统架构" class="headerlink" title="五、系统架构"></a>五、系统架构</h4><h5 id="交互图"><a href="#交互图" class="headerlink" title="交互图"></a>交互图</h5><h5 id="模块划分"><a href="#模块划分" class="headerlink" title="模块划分"></a>模块划分</h5><h5 id="交互、通信机制"><a href="#交互、通信机制" class="headerlink" title="交互、通信机制"></a>交互、通信机制</h5><h5 id="核心功能设计"><a href="#核心功能设计" class="headerlink" title="核心功能设计"></a>核心功能设计</h5><h4 id="六、系统改造、升级"><a href="#六、系统改造、升级" class="headerlink" title="六、系统改造、升级"></a>六、系统改造、升级</h4><h5 id="技术核心功能优化"><a href="#技术核心功能优化" class="headerlink" title="技术核心功能优化"></a>技术核心功能优化</h5><h4 id="七、快速升级、迁移"><a href="#七、快速升级、迁移" class="headerlink" title="七、快速升级、迁移"></a>七、快速升级、迁移</h4>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/27/spring/feign-ribbon-loadbalancer/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/27/spring/feign-ribbon-loadbalancer/" class="post-title-link" itemprop="url">spring openfeign ribbon loadbalancer</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-04-27 17:55:00" itemprop="dateCreated datePublished" datetime="2021-04-27T17:55:00+08:00">2021-04-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-17 12:09:12" itemprop="dateModified" datetime="2021-05-17T12:09:12+08:00">2021-05-17</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="Ribbon的负载均衡策略"><a href="#Ribbon的负载均衡策略" class="headerlink" title="Ribbon的负载均衡策略"></a>Ribbon的负载均衡策略</h4><table>
-<thead>
-<tr>
-<th>类</th>
-<th>命名</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>RoundRobinRule</td>
-<td>轮询策略</td>
-<td>Ribbon的默认负载均衡策略</td>
-</tr>
-<tr>
-<td>RandomRule</td>
-<td>随机策略</td>
-<td>从所有可用的提供者中随机选择一个</td>
-</tr>
-<tr>
-<td>RetryRule</td>
-<td>重试策略</td>
-<td>从所有可用的提供者中随机选择一个,若获取失败的话，则可以在指定的时间内重试，默认为500毫秒</td>
-</tr>
-<tr>
-<td>BestAvailableRule</td>
-<td>最低并发策略</td>
-<td>选择并发量最小的 提供者</td>
-</tr>
-<tr>
-<td>AvailabilityFilteringRule</td>
-<td>可用过滤策略</td>
-<td>过滤掉处于被标记为circuit tripped状态的提供者，或已经超过连接极限的 提供者,对剩余 provider 采用轮询策略</td>
-</tr>
-<tr>
-<td>ZoneAvoidanceRule</td>
-<td>复合判断策略</td>
-<td>判断提供所在区域的性能及 provider 的可用性选择服务器。</td>
-</tr>
-<tr>
-<td>WeightedResponseTimeRule</td>
-<td>权重响应时间策略</td>
-<td>根据每个 提供的平均响应时间计算其权重，响应时间越快权重越大，被选中的机率就越高。在刚启动时采用轮询策略。后面就会根据权重进行选择了。</td>
-</tr>
-</tbody></table>
-<h4 id="spring-openfeign"><a href="#spring-openfeign" class="headerlink" title="spring-openfeign"></a>spring-openfeign</h4><p>openfeign发送请求主要是通过<strong>FeignLoadBalancer</strong>进行请求封装和调用，类图如下，负载均衡请求逻辑主要方法在</p>
-<p>com.netflix.client.AbstractLoadBalancerAwareClient#executeWithLoadBalancer(S, com.netflix.client.config.IClientConfig)</p>
-<p>通过LoadBalancerCommand.submit方法，从注册中心根据IRule策略，选择合适的Server并发送请求到对应的机器。</p>
-<p>在submit方法中，有ServerStatus类进行对应的qps、rts、错误率等指标统计，IRule根据此指标，选择合适的Server。</p>
-<h5 id="feign调用流程"><a href="#feign调用流程" class="headerlink" title="feign调用流程"></a>feign调用流程</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">FeignClientFactoryBean </span><br><span class="line">-&gt; getTarget</span><br><span class="line">-&gt; Targeter.target(FeignContext|Client)</span><br><span class="line">-&gt; ReflectiveFeign</span><br><span class="line">-&gt; InvocationHandler(FeignInvocationHandler) </span><br><span class="line">-&gt; SynchronousMethodHandler.invoke </span><br><span class="line">-&gt; executeAndDecode </span><br><span class="line">-&gt; feign.Client#execute</span><br><span class="line">-&gt; org.springframework.cloud.openfeign.ribbon.LoadBalancerFeignClient#execute</span><br><span class="line">-&gt; com.netflix.client.AbstractLoadBalancerAwareClient#executeWithLoadBalancer(S, com.netflix.client.config.IClientConfig)</span><br><span class="line">-&gt; com.netflix.client.IClient#execute</span><br></pre></td></tr></table></figure>
-
-<p>LoadBalancerFeignClient</p>
-<p><img src="/2021/04/27/spring/feign-ribbon-loadbalancer/openfeign-ribbon.jpg" alt></p>
-<h4 id="如何从eureka-client加载并缓存Server信息"><a href="#如何从eureka-client加载并缓存Server信息" class="headerlink" title="如何从eureka-client加载并缓存Server信息"></a>如何从eureka-client加载并缓存Server信息</h4><p>DynamicServerListLoadBalancer</p>
-<p>此类中有一个定时任务，updateListOfServers方法，从eureka-client客户端缓存中加载对应的Server信息。</p>
-<p>PollingServerListUpdater</p>
-<p>CommonClientConfigKey</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/28/">28</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -466,7 +468,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">84</span>
+          <span class="site-state-item-count">86</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
