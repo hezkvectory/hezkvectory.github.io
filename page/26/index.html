@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/02/26/shell/url数据检测脚本/">
+    <link itemprop="mainEntityOfPage" href="/2021/02/26/技术栈/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,67 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/02/26/shell/url数据检测脚本/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-02-26 11:57:28 / Modified: 18:02:34" itemprop="dateCreated datePublished" datetime="2021-02-26T11:57:28+08:00">2021-02-26</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">/bin/bash</span></span><br><span class="line"></span><br><span class="line">MYSQL=mysql </span><br><span class="line">USER='xxx'    </span><br><span class="line">PASSWORD='xxx' </span><br><span class="line">DB='xxx'  </span><br><span class="line">HOST='xxx'</span><br><span class="line"></span><br><span class="line">COMMAND=" SELECT  ip FROM  broker" </span><br><span class="line">declare list=`$MYSQL  -h$&#123;HOST&#125; -u$&#123;USER&#125; -p$&#123;PASSWORD&#125; -D $&#123;DB&#125; -e "$&#123;COMMAND&#125;" --skip-column-name` </span><br><span class="line">for item in $list                                                                                                      </span><br><span class="line">do</span><br><span class="line">	port=8080</span><br><span class="line">	if [ "$test"x = "xxx"x ]; then	</span><br><span class="line">		port=22778</span><br><span class="line">	fi</span><br><span class="line">	echo " the item is $item"</span><br><span class="line">	url="http://$item:$port/stats"</span><br><span class="line">	curl $url | jq .data.brokerMaster</span><br><span class="line">done </span><br><span class="line"></span><br><span class="line">for i in $@</span><br><span class="line">do</span><br><span class="line">	url = "http://$i:8080/stats"</span><br><span class="line">   	curl $url | jq .data.brokerMaster</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/02/26/sentinel/sentinel原理/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/26/sentinel/sentinel原理/" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/2021/02/26/技术栈/" class="post-title-link" itemprop="url">java技术</a>
         </h2>
 
         <div class="post-meta">
@@ -234,14 +174,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-02-26 11:57:28" itemprop="dateCreated datePublished" datetime="2021-02-26T11:57:28+08:00">2021-02-26</time>
+              <time title="Created: 2021-02-26 14:18:00" itemprop="dateCreated datePublished" datetime="2021-02-26T14:18:00+08:00">2021-02-26</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-01 14:46:57" itemprop="dateModified" datetime="2021-04-01T14:46:57+08:00">2021-04-01</time>
+                <time title="Modified: 2021-05-13 19:25:57" itemprop="dateModified" datetime="2021-05-13T19:25:57+08:00">2021-05-13</time>
               </span>
 
           
@@ -255,10 +195,110 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">NodeSelectorSlot -- DefaultNode</span><br><span class="line">ClusterBuilderSlot -- ClusterNode (response time, qps, thread count, exception)</span><br><span class="line">LogSlot</span><br><span class="line">StatisticSlot  逻辑执行完毕,metrics统计</span><br><span class="line">AuthoritySlot</span><br><span class="line">SystemSlot</span><br><span class="line">FlowSlot</span><br><span class="line">DegradeSlot</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ArrayMetric</span><br><span class="line">LeapArray</span><br></pre></td></tr></table></figure>
-
+          <h3 id="Java技术"><a href="#Java技术" class="headerlink" title="Java技术"></a>Java技术</h3><ol>
+<li><p>java</p>
+</li>
+<li><p>spring、springboot、springcloud</p>
+<ol>
+<li>eureka</li>
+<li>open-feign</li>
+<li>ribbon</li>
+<li>sleuth、zipkin</li>
+<li>智能路由</li>
+<li>spring-cloud-gateway、zuul</li>
+<li>spring-security</li>
+</ol>
+</li>
+<li><p>mybatis、sharing-jdbc</p>
+</li>
+<li><p>hystrix、sentinel</p>
+</li>
+<li><p>arthas、jconsole、profile</p>
+</li>
+<li><p>Redis</p>
+</li>
+<li><p>mysql</p>
+</li>
+<li><p>dubbo、motan</p>
+</li>
+<li><p>xxl-job、quartz</p>
+</li>
+<li><p>rocketmq、kafka</p>
+<ol>
+<li>kafka客户端原理</li>
+</ol>
+</li>
+<li><p>spring-kafka</p>
+</li>
+<li><p>netty、nio、t-io</p>
+</li>
+<li><p>skywalking、zipkin、cat</p>
+</li>
+<li><p>apollo、nacos</p>
+</li>
+<li><p>canal</p>
+</li>
+<li><p>zookeeper、etcd</p>
+</li>
+<li><p>nginx</p>
+</li>
+<li><p>prometheus、grafana</p>
+</li>
+<li><p>数据结构和算法-leetcode</p>
+</li>
+<li><p>elk</p>
+<ol>
+<li>elasticsearch</li>
+<li>logstash、filebeat、flume</li>
+<li>kibana</li>
+</ol>
+</li>
+<li><p>kubernetes</p>
+</li>
+</ol>
+<p>高并发架构</p>
+<ul>
+<li>系统拆分</li>
+<li>缓存</li>
+<li>MQ</li>
+<li>分库分表</li>
+<li>读写分离</li>
+<li>ElasticSearch</li>
+</ul>
+<p>高可用(99.99%)</p>
+<ul>
+<li>code review</li>
+<li>集群</li>
+<li>限流</li>
+<li>超时和重试机制</li>
+<li>熔断+降级</li>
+<li>异步</li>
+<li>监控告警</li>
+<li>缓存</li>
+<li>灰度</li>
+<li>备份</li>
+</ul>
+<p>算法思想</p>
+<ul>
+<li>双指针</li>
+<li>排序</li>
+<li>贪心思想</li>
+<li>二分查找</li>
+<li>分治</li>
+<li>搜索</li>
+<li>动态规划</li>
+</ul>
+<p>数据结构相关</p>
+<ul>
+<li>链表</li>
+<li>树</li>
+<li>栈和队列</li>
+<li>哈希表</li>
+<li>字符串</li>
+<li>数组和矩阵</li>
+<li>图</li>
+<li>位运算</li>
+</ul>
 
       
     </div>
@@ -531,10 +571,76 @@
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/02/26/shell/shell查看jvm cpu高脚步/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/26/shell/shell查看jvm cpu高脚步/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-02-26 11:57:28" itemprop="dateCreated datePublished" datetime="2021-02-26T11:57:28+08:00">2021-02-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-20 16:49:57" itemprop="dateModified" datetime="2021-05-20T16:49:57+08:00">2021-05-20</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">TID=`ps H -eo user,pid,ppid,tid,time,%cpu,cmd --sort=%cpu | tail -n 10 | head -n 1 | awk '&#123;print $4&#125;'`</span><br><span class="line">echo $TID</span><br><span class="line">SIX=`printf '%x\n' $TID`</span><br><span class="line">echo $SIX</span><br><span class="line">jstack  2918 | grep $SIX -A 20</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/25/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><span class="page-number current">26</span><a class="page-number" href="/page/27/">27</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><a class="extend next" rel="next" href="/page/27/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/25/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><span class="page-number current">26</span><a class="page-number" href="/page/27/">27</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/27/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -600,7 +706,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-count">88</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

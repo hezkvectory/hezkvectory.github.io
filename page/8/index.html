@@ -150,6 +150,159 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/05/10/k8s/kubeadm安装集群/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/10/k8s/kubeadm安装集群/" class="post-title-link" itemprop="url">kubeadm安装集群</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-05-10 12:28:35 / Modified: 19:13:02" itemprop="dateCreated datePublished" datetime="2021-05-10T12:28:35+08:00">2021-05-10</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>1、添加k8s项目的yum, kubernetes.repo</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cat &lt;&lt;EOF &gt; kubernetes.repo</span><br><span class="line">[kubernetes]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">repo_gpgcheck=1</span><br><span class="line">gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 安装最新的kubelet和kubectl以及kubeadm</span><br><span class="line">yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes</span><br><span class="line"># 设置启动策略</span><br><span class="line">systemctl daemon-reload &amp;&amp; systemctl enable kubelet &amp;&amp; systemctl start kubelet</span><br><span class="line">systemctl daemon-reload &amp;&amp; systemctl restart kubelet &amp;&amp; systemctl status kubelet</span><br></pre></td></tr></table></figure>
+
+<p>此时可能出现kubelet启动失败的问题， 通过下面命令查看error日志</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">journalctl -xefu kubelet</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubelet cgroup driver: \&quot;cgroupfs\&quot; is different from docker cgroup driver: \&quot;systemd\&quot;&quot;</span><br></pre></td></tr></table></figure>
+
+<p>文件<strong>/etc/docker/daemon.json</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;exec-opts&quot;: [&quot;native.cgroupdriver=systemd&quot;]</span><br></pre></td></tr></table></figure>
+
+<p> 文件<strong>/usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExecStart=/usr/bin/kubelet --cgroup-driver=systemd $KUBELET_KUBECONFIG_ARGS $KUBELET_CONFIG_ARGS $KUBELET_KUBEADM_ARGS $KUBELET_EXTRA_ARGS</span><br></pre></td></tr></table></figure>
+
+<p><strong>彻底清理kubeadm配置文件</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">sudo kubeadm reset -f</span><br><span class="line">sudo rm -rvf $HOME/.kube</span><br><span class="line">sudo rm -rvf ~/.kube/</span><br><span class="line">sudo rm -rvf /etc/kubernetes/</span><br><span class="line">sudo rm -rvf /etc/systemd/system/kubelet.service.d</span><br><span class="line">sudo rm -rvf /etc/systemd/system/kubelet.service</span><br><span class="line">sudo rm -rvf /usr/bin/kube*</span><br><span class="line">sudo rm -rvf /etc/cni</span><br><span class="line">sudo rm -rvf /opt/cni</span><br><span class="line">sudo rm -rvf /var/lib/etcd</span><br><span class="line">sudo rm -rvf /var/etcd</span><br><span class="line">sudo apt-get remove kube*</span><br></pre></td></tr></table></figure>
+
+<p><strong>查看kubeadm join命令</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubeadm token create --print-join-command</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/04/30/netty/netty 回调/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/30/netty/netty 回调/" class="post-title-link" itemprop="url">netty ChannelFuture回调</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-04-30 13:20:20" itemprop="dateCreated datePublished" datetime="2021-04-30T13:20:20+08:00">2021-04-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-06 10:47:11" itemprop="dateModified" datetime="2021-05-06T10:47:11+08:00">2021-05-06</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="ChannelInboundHandler-read方法写数据到socket"><a href="#ChannelInboundHandler-read方法写数据到socket" class="headerlink" title="ChannelInboundHandler#read方法写数据到socket"></a>ChannelInboundHandler#read方法写数据到socket</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&quot;nioEventLoopGroup-3-1@1242&quot; prio=10 tid=0xf nid=NA runnable</span><br><span class="line">  java.lang.Thread.State: RUNNABLE</span><br><span class="line">	  at com.hezk.netty.echo.server.EchoServerHandler$1.operationComplete(EchoServerHandler.java:19)</span><br><span class="line">	  at com.hezk.netty.echo.server.EchoServerHandler$1.operationComplete(EchoServerHandler.java:16)</span><br><span class="line">	  at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:578)</span><br><span class="line">	  at io.netty.util.concurrent.DefaultPromise.notifyListenersNow(DefaultPromise.java:552)</span><br><span class="line">	  at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:491)</span><br><span class="line">	  at io.netty.util.concurrent.DefaultPromise.setValue0(DefaultPromise.java:616)</span><br><span class="line">	  at io.netty.util.concurrent.DefaultPromise.setSuccess0(DefaultPromise.java:605)</span><br><span class="line">	  at io.netty.util.concurrent.DefaultPromise.trySuccess(DefaultPromise.java:104)</span><br><span class="line">	  at io.netty.util.internal.PromiseNotificationUtil.trySuccess(PromiseNotificationUtil.java:48)</span><br><span class="line">	  at io.netty.channel.ChannelOutboundBuffer.safeSuccess(ChannelOutboundBuffer.java:717)</span><br><span class="line">	  at io.netty.channel.ChannelOutboundBuffer.remove(ChannelOutboundBuffer.java:272)</span><br><span class="line">	  at io.netty.channel.ChannelOutboundBuffer.removeBytes(ChannelOutboundBuffer.java:352)</span><br><span class="line">	  at io.netty.channel.socket.nio.NioSocketChannel.doWrite(NioSocketChannel.java:414)</span><br><span class="line">	  at io.netty.channel.AbstractChannel$AbstractUnsafe.flush0(AbstractChannel.java:941)</span><br><span class="line">	  at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.flush0(AbstractNioChannel.java:354)</span><br><span class="line">	  at io.netty.channel.AbstractChannel$AbstractUnsafe.flush(AbstractChannel.java:905)</span><br><span class="line">	  at io.netty.channel.DefaultChannelPipeline$HeadContext.flush(DefaultChannelPipeline.java:1372)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.invokeFlush0(AbstractChannelHandlerContext.java:750)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.invokeFlush(AbstractChannelHandlerContext.java:742)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.flush(AbstractChannelHandlerContext.java:728)</span><br><span class="line">	  at com.hezk.netty.echo.server.EchoServerHandler.channelRead(EchoServerHandler.java:22)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)</span><br><span class="line">	  at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)</span><br><span class="line">	  at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)</span><br><span class="line">	  at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)</span><br><span class="line">	  at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:719)</span><br><span class="line">	  at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:655)</span><br><span class="line">	  at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:581)</span><br><span class="line">	  at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:493)</span><br><span class="line">	  at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:989)</span><br><span class="line">	  at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)</span><br><span class="line">	  at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)</span><br><span class="line">	  at java.lang.Thread.run(Thread.java:748)</span><br></pre></td></tr></table></figure>
+
+<h4 id="netty核心类"><a href="#netty核心类" class="headerlink" title="netty核心类"></a>netty核心类</h4><p>AbstractNioByteChannel<br>NioByteUnsafe<br>PooledByteBufAllocator<br>Bootstrap<br>ServerBootstrap<br>EventLoopGroup<br>NioEventLoopGroup<br>NioEventLoop<br>ChannelOption</p>
+<p>ChannelPipeline<br>ServerBootstrapAcceptor<br>ChannelInboundHandler<br>ChannelOutboundHandler<br>ChannelHandlerContext<br>ChannelInitializer<br>ByteToMessageDecoder<br>DefaultChannelPipeline<br>MessageToMessageDecoder</p>
+<p>DefaultPromise<br>DefaultChannelPromise</p>
+<p>NioSocketChannel</p>
+<p>NioServerSocketChannel<br>ReferenceCountUtil<br>ResourceLeakTracker<br>HashedWheelTimer<br>FastThreadLocal</p>
+<h4 id="核心功能"><a href="#核心功能" class="headerlink" title="核心功能"></a>核心功能</h4><p>心跳检测</p>
+<p>断线重连</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="/2021/04/29/技术文档格式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -204,202 +357,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/27/spring/feign-ribbon-loadbalancer/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/27/spring/feign-ribbon-loadbalancer/" class="post-title-link" itemprop="url">spring openfeign ribbon loadbalancer</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-04-27 17:55:00" itemprop="dateCreated datePublished" datetime="2021-04-27T17:55:00+08:00">2021-04-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-17 12:09:12" itemprop="dateModified" datetime="2021-05-17T12:09:12+08:00">2021-05-17</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="Ribbon的负载均衡策略"><a href="#Ribbon的负载均衡策略" class="headerlink" title="Ribbon的负载均衡策略"></a>Ribbon的负载均衡策略</h4><table>
-<thead>
-<tr>
-<th>类</th>
-<th>命名</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>RoundRobinRule</td>
-<td>轮询策略</td>
-<td>Ribbon的默认负载均衡策略</td>
-</tr>
-<tr>
-<td>RandomRule</td>
-<td>随机策略</td>
-<td>从所有可用的提供者中随机选择一个</td>
-</tr>
-<tr>
-<td>RetryRule</td>
-<td>重试策略</td>
-<td>从所有可用的提供者中随机选择一个,若获取失败的话，则可以在指定的时间内重试，默认为500毫秒</td>
-</tr>
-<tr>
-<td>BestAvailableRule</td>
-<td>最低并发策略</td>
-<td>选择并发量最小的 提供者</td>
-</tr>
-<tr>
-<td>AvailabilityFilteringRule</td>
-<td>可用过滤策略</td>
-<td>过滤掉处于被标记为circuit tripped状态的提供者，或已经超过连接极限的 提供者,对剩余 provider 采用轮询策略</td>
-</tr>
-<tr>
-<td>ZoneAvoidanceRule</td>
-<td>复合判断策略</td>
-<td>判断提供所在区域的性能及 provider 的可用性选择服务器。</td>
-</tr>
-<tr>
-<td>WeightedResponseTimeRule</td>
-<td>权重响应时间策略</td>
-<td>根据每个 提供的平均响应时间计算其权重，响应时间越快权重越大，被选中的机率就越高。在刚启动时采用轮询策略。后面就会根据权重进行选择了。</td>
-</tr>
-</tbody></table>
-<h4 id="spring-openfeign"><a href="#spring-openfeign" class="headerlink" title="spring-openfeign"></a>spring-openfeign</h4><p>openfeign发送请求主要是通过<strong>FeignLoadBalancer</strong>进行请求封装和调用，类图如下，负载均衡请求逻辑主要方法在</p>
-<p>com.netflix.client.AbstractLoadBalancerAwareClient#executeWithLoadBalancer(S, com.netflix.client.config.IClientConfig)</p>
-<p>通过LoadBalancerCommand.submit方法，从注册中心根据IRule策略，选择合适的Server并发送请求到对应的机器。</p>
-<p>在submit方法中，有ServerStatus类进行对应的qps、rts、错误率等指标统计，IRule根据此指标，选择合适的Server。</p>
-<h5 id="feign调用流程"><a href="#feign调用流程" class="headerlink" title="feign调用流程"></a>feign调用流程</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">FeignClientFactoryBean </span><br><span class="line">-&gt; getTarget</span><br><span class="line">-&gt; Targeter.target(FeignContext|Client)</span><br><span class="line">-&gt; ReflectiveFeign</span><br><span class="line">-&gt; InvocationHandler(FeignInvocationHandler) </span><br><span class="line">-&gt; SynchronousMethodHandler.invoke </span><br><span class="line">-&gt; executeAndDecode </span><br><span class="line">-&gt; feign.Client#execute</span><br><span class="line">-&gt; org.springframework.cloud.openfeign.ribbon.LoadBalancerFeignClient#execute</span><br><span class="line">-&gt; com.netflix.client.AbstractLoadBalancerAwareClient#executeWithLoadBalancer(S, com.netflix.client.config.IClientConfig)</span><br><span class="line">-&gt; com.netflix.client.IClient#execute</span><br></pre></td></tr></table></figure>
-
-<p>LoadBalancerFeignClient</p>
-<p><img src="/2021/04/27/spring/feign-ribbon-loadbalancer/openfeign-ribbon.jpg" alt></p>
-<h4 id="如何从eureka-client加载并缓存Server信息"><a href="#如何从eureka-client加载并缓存Server信息" class="headerlink" title="如何从eureka-client加载并缓存Server信息"></a>如何从eureka-client加载并缓存Server信息</h4><p>DynamicServerListLoadBalancer</p>
-<p>此类中有一个定时任务，updateListOfServers方法，从eureka-client客户端缓存中加载对应的Server信息。</p>
-<p>PollingServerListUpdater</p>
-<p>CommonClientConfigKey</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/27/spring/spring-aop/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/27/spring/spring-aop/" class="post-title-link" itemprop="url">Untitled</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-04-27 17:55:00" itemprop="dateCreated datePublished" datetime="2021-04-27T17:55:00+08:00">2021-04-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-17 11:03:16" itemprop="dateModified" datetime="2021-05-17T11:03:16+08:00">2021-05-17</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><strong><a href="https://cloud.tencent.com/developer/article/1497770" target="_blank" rel="noopener">核心类讲解</a></strong></p>
-<p>spring代理采用cglib或者jdk proxy</p>
-<p>cglib核心类ProxyFactory、MethodInterceptor、DynamicAdvisedInterceptor、CglibMethodInvocation</p>
-<h4 id="Pointcut"><a href="#Pointcut" class="headerlink" title="Pointcut"></a>Pointcut</h4><p>​    ClassFilter MethodFilter</p>
-<h4 id="Advice"><a href="#Advice" class="headerlink" title="Advice"></a>Advice</h4><p>​    MethodBeforeAdvice AfterReturningAdvice AspectJAroundAdvice</p>
-<h4 id="Advisor"><a href="#Advisor" class="headerlink" title="Advisor"></a>Advisor</h4><p>​    Advisor 其实它就是 Pointcut 与 Advice 的组合, Advice 是执行的方法, 而要知道方法何时执行, 则 Advice 必需与 Pointcut 组合在一起, 这就诞生了 Advisor 这个类</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">AopProxyUtils.completeProxiedInterfaces(this.advised)</span><br><span class="line">		0 = &#123;Class@521&#125; &quot;interface com.hezk.aop.service.Browser&quot;</span><br><span class="line">		1 = &#123;Class@1152&#125; &quot;interface org.springframework.aop.SpringProxy&quot;</span><br><span class="line">		2 = &#123;Class@511&#125; &quot;interface org.springframework.aop.framework.Advised&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Callback		</span><br><span class="line">	0 = &#123;CglibAopProxy$DynamicAdvisedInterceptor@1184&#125; </span><br><span class="line">	1 = &#123;CglibAopProxy$StaticUnadvisedInterceptor@1198&#125; </span><br><span class="line">	2 = &#123;CglibAopProxy$SerializableNoOp@1218&#125; </span><br><span class="line">	3 = &#123;CglibAopProxy$StaticDispatcher@1206&#125; </span><br><span class="line">	4 = &#123;CglibAopProxy$AdvisedDispatcher@984&#125; </span><br><span class="line">	5 = &#123;CglibAopProxy$EqualsInterceptor@1219&#125; </span><br><span class="line">	6 = &#123;CglibAopProxy$HashCodeInterceptor@1220&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ProxyCallbackFilter</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">interceptorList = &#123;ArrayList@1723&#125;  size = 3</span><br><span class="line"> 0 = &#123;MethodBeforeAdviceInterceptor@1930&#125; </span><br><span class="line"> 1 = &#123;AfterReturningAdviceInterceptor@1931&#125; </span><br><span class="line"> 2 = &#123;BrowserAroundAdvice@975&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> CglibMethodInvocation</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> org.springframework.cglib.core.AbstractClassGenerator.generate 生成代理方法</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -465,7 +426,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">86</span>
+          <span class="site-state-item-count">88</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
