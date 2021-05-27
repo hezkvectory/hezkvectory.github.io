@@ -150,6 +150,91 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/05/21/spring/hystrix metrics总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/21/spring/hystrix metrics总结/" class="post-title-link" itemprop="url">hystrix metrics总结</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-05-21 10:55:00 / Modified: 11:39:09" itemprop="dateCreated datePublished" datetime="2021-05-21T10:55:00+08:00">2021-05-21</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>hystrix metrics监控是基于rxjava设计的，基础指标监控包含Health(请求成功、失败)、Concurrency(并发)、Distribution(Histogram柱状图，采集P50、P99、平均响应时间)、线程池ThreadPool(执行、拒绝)、Collapser等指标</p>
+<p>指标数据是通过rxjava的BehaviorSubject类(getValue)方法记录并返回的</p>
+<p>指标监控入口可以看类AbstractCommand.executeCommandWithSpecifiedIsolation，通过</p>
+<p>metrics.markCommandStart(commandKey, threadPoolKey, ExecutionIsolationStrategy.THREAD)方法，统计指标</p>
+<p>关键类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">HystrixCommandMetrics</span><br><span class="line">HystrixThreadPoolMetrics</span><br><span class="line">HystrixCollapserMetrics</span><br><span class="line">AbstractCommand   具体执行指标和业务入口</span><br><span class="line">HystrixCommandAspect  拦截@HystrixCommand相关类</span><br><span class="line">HystrixMetricsStreamServlet</span><br><span class="line">SerialHystrixDashboardData  指标聚合成json类</span><br><span class="line">HystrixCommandProperties 配置相关类</span><br></pre></td></tr></table></figure>
+
+<p>熔断相关类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HystrixCircuitBreaker.allowRequest</span><br></pre></td></tr></table></figure>
+
+<p>判断熔断开关是否打开逻辑</p>
+<ol>
+<li>判断当前command总请求数是否小于默认20，小于则表示未打开</li>
+<li>判断当前command错误率是否小雨默认50%，是则表示未打开</li>
+<li>熔断器如果未打开，则设置为true，并设置熔断器最近打开时间</li>
+<li>如果熔断器打开，再判断是否允许单个请求通过、<ol>
+<li>熔断器打开，并且熔断器最近打开时间和当前时间相差大于默认配置5s，则通过此请求</li>
+<li>更新熔断器最近打开时间为当前时间</li>
+</ol>
+</li>
+</ol>
+<p>熔断相关配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">circuitBreaker.sleepWindowInMilliseconds</span><br><span class="line">circuitBreaker.errorThresholdPercentage</span><br><span class="line">circuitBreaker.requestVolumeThreshold</span><br></pre></td></tr></table></figure>
+
+<p>熔断相关类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">allowRequest</span><span class="params">()</span> </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (properties.circuitBreakerForceOpen().get()) &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">if</span> (properties.circuitBreakerForceClosed().get()) &#123;</span><br><span class="line">              isOpen();</span><br><span class="line">              <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> !isOpen() || allowSingleTest();</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isOpen</span><span class="params">()</span> </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (circuitOpen.get()) &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          HealthCounts health = metrics.getHealthCounts();</span><br><span class="line"></span><br><span class="line">          <span class="keyword">if</span> (health.getTotalRequests() &lt; properties.circuitBreakerRequestVolumeThreshold().get()) &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">if</span> (health.getErrorPercentage() &lt; properties.circuitBreakerErrorThresholdPercentage().get()) &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              <span class="keyword">if</span> (circuitOpen.compareAndSet(<span class="keyword">false</span>, <span class="keyword">true</span>)) &#123;</span><br><span class="line">                  circuitOpenedOrLastTestedTime.set(System.currentTimeMillis());</span><br><span class="line">                  <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">              &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                  <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">allowSingleTest</span><span class="params">()</span> </span>&#123;</span><br><span class="line">          <span class="keyword">long</span> timeCircuitOpenedOrWasLastTested = circuitOpenedOrLastTestedTime.get();</span><br><span class="line">          <span class="keyword">if</span> (circuitOpen.get() &amp;&amp; System.currentTimeMillis() &gt; timeCircuitOpenedOrWasLastTested + properties.circuitBreakerSleepWindowInMilliseconds().get()) &#123;</span><br><span class="line">              <span class="keyword">if</span> (circuitOpenedOrLastTestedTime.compareAndSet(timeCircuitOpenedOrWasLastTested, System.currentTimeMillis())) &#123;</span><br><span class="line">                  <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="/2021/05/19/面试题/面试题-3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -273,75 +358,6 @@
 
 <p>双指针 + 哈希表(滑动窗口)</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstringTwoDistinct</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (s.length() &lt; <span class="number">1</span>) &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          Map&lt;Character, Integer&gt; index = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">          <span class="keyword">int</span> lo = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">int</span> hi = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">int</span> maxLength = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">while</span> (hi &lt; s.length()) &#123;</span><br><span class="line">              <span class="keyword">if</span> (index.size() &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">                  <span class="keyword">char</span> c = s.charAt(hi);</span><br><span class="line">                  index.put(c, hi);</span><br><span class="line">                  hi++;</span><br><span class="line">              &#125;</span><br><span class="line">              <span class="keyword">if</span> (index.size() &gt; <span class="number">2</span>) &#123;</span><br><span class="line">                  <span class="keyword">int</span> leftMost = s.length();</span><br><span class="line">                  <span class="keyword">for</span> (<span class="keyword">int</span> i : index.values()) &#123;</span><br><span class="line">                      leftMost = Math.min(leftMost, i);</span><br><span class="line">                  &#125;</span><br><span class="line">                  <span class="keyword">char</span> c = s.charAt(leftMost);</span><br><span class="line">                  index.remove(c);</span><br><span class="line">                  lo = leftMost + <span class="number">1</span>;</span><br><span class="line">              &#125;</span><br><span class="line">              maxLength = Math.max(maxLength, hi - lo);</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> maxLength;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/05/19/leetcode/76. 最小覆盖子串/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/19/leetcode/76. 最小覆盖子串/" class="post-title-link" itemprop="url">76. 最小覆盖子串</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-05-19 12:42:01 / Modified: 16:44:27" itemprop="dateCreated datePublished" datetime="2021-05-19T12:42:01+08:00">2021-05-19</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a href="https://leetcode-cn.com/problems/minimum-window-substring" target="_blank" rel="noopener">https://leetcode-cn.com/problems/minimum-window-substring</a></p>
-<p>给你一个字符串 s 、一个字符串 t 。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 “” 。</p>
-<p>注意：如果 s 中存在这样的子串，我们保证它是唯一的答案。</p>
-<p>示例 1：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：s = &quot;ADOBECODEBANC&quot;, t = &quot;ABC&quot;</span><br><span class="line">输出：&quot;BANC&quot;</span><br></pre></td></tr></table></figure>
-
-<p>示例 2：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：s = &quot;a&quot;, t = &quot;a&quot;</span><br><span class="line">输出：&quot;a&quot;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">       <span class="function"><span class="keyword">public</span> String <span class="title">minWindow</span><span class="params">(String s, String t)</span> </span>&#123;</span><br><span class="line">           <span class="keyword">int</span>[] counts = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">256</span>];</span><br><span class="line">           <span class="keyword">for</span> (<span class="keyword">char</span> c : t.toCharArray()) &#123;</span><br><span class="line">               counts[c]++;</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">           <span class="keyword">int</span> start = <span class="number">0</span>;</span><br><span class="line">           <span class="keyword">int</span> end = <span class="number">0</span>;</span><br><span class="line">           <span class="keyword">int</span> minStart = <span class="number">0</span>;</span><br><span class="line">           <span class="keyword">int</span> minLen = Integer.MAX_VALUE;</span><br><span class="line">           <span class="keyword">int</span> counter = t.length();</span><br><span class="line">           <span class="keyword">while</span> (end &lt; s.length()) &#123;</span><br><span class="line">               <span class="keyword">if</span> (counts[s.charAt(end)] &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                   counter--;</span><br><span class="line">               &#125;</span><br><span class="line"></span><br><span class="line">               counts[s.charAt(end)]--;</span><br><span class="line">               end++;</span><br><span class="line"></span><br><span class="line">               <span class="keyword">while</span> (counter == <span class="number">0</span>) &#123;</span><br><span class="line">                   <span class="keyword">if</span> (end - start &lt; minLen) &#123;</span><br><span class="line">                       minStart = start;</span><br><span class="line">                       minLen = end - start;</span><br><span class="line">                   &#125;</span><br><span class="line">                   counts[s.charAt(start)]++;</span><br><span class="line">                   <span class="keyword">if</span> (counts[s.charAt(start)] &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                       counter++;</span><br><span class="line">                   &#125;</span><br><span class="line">                   start++;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">           <span class="keyword">if</span> (minLen == Integer.MAX_VALUE) &#123;</span><br><span class="line">               <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">return</span> s.substring(minStart, minStart + minLen);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 
 
       

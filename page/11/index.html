@@ -150,6 +150,854 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/03/31/java/jvm调优工具/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/31/java/jvm调优工具/" class="post-title-link" itemprop="url">JVM调优工具</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-03-31 18:44:02 / Modified: 17:50:55" itemprop="dateCreated datePublished" datetime="2021-03-31T18:44:02+08:00">2021-03-31</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="内存分析"><a href="#内存分析" class="headerlink" title="内存分析"></a>内存分析</h4><h5 id="dump-内存"><a href="#dump-内存" class="headerlink" title="dump 内存"></a>dump 内存</h5><p>获取内存的3中方法</p>
+<p>1、获取内存详情：jmap -dump:format=b,file=e.bin pid</p>
+<p>这种方式可以用 jvisualvm.exe 进行内存分析，或者采用 Eclipse Memory Analysis Tools (MAT)这个工具</p>
+<ol>
+<li>获取内存dump： jmap -histo:live pid</li>
+</ol>
+<p>这种方式会先出发fullgc，所有如果不希望触发fullgc 可以使用jmap -histo pid</p>
+<p>3.第三种方式：jdk启动加参数：</p>
+<p>-XX:+HeapDumpBeforeFullGC</p>
+<p>-XX:HeapDumpPath=/httx/logs/dump</p>
+<p>这种方式会产生dump日志，再通过jvisualvm.exe 或者Eclipse Memory Analysis Tools 工具进行分析</p>
+<hr>
+<h3 id="jmap-使用"><a href="#jmap-使用" class="headerlink" title="jmap 使用"></a>jmap 使用</h3><ul>
+<li>-F<ul>
+<li>强迫.在pid没有响应的时候使用-dump或者-histo参数. 在这个模式下,live子参数无效.</li>
+</ul>
+</li>
+<li>J<ul>
+<li>传递参数给jmap启动的jvm.</li>
+</ul>
+</li>
+</ul>
+<h4 id="heap"><a href="#heap" class="headerlink" title="-heap"></a>-heap</h4><p>打印heap（堆）的概要信息，GC使用的算法，heap的配置及wise heap的使用情况.</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">C:\WINDOWS\system32&gt;jmap -heap <span class="number">9196</span></span><br><span class="line">Attaching to <span class="keyword">process</span> ID <span class="number">9196</span>, please wait...</span><br><span class="line">Debugger attached successfully.</span><br><span class="line">Server compiler detected.</span><br><span class="line">JVM version is <span class="number">25.131</span>-b11</span><br><span class="line"></span><br><span class="line">using thread-local object allocation.</span><br><span class="line">Parallel GC with <span class="number">4</span> thread(s)</span><br><span class="line"></span><br><span class="line">Heap Configuration:</span><br><span class="line">   MinHeapFreeRatio         = <span class="number">0</span></span><br><span class="line">   MaxHeapFreeRatio         = <span class="number">100</span></span><br><span class="line">   MaxHeapSize              = <span class="number">4278190080</span> (<span class="number">4080.0</span>MB)</span><br><span class="line">   NewSize                  = <span class="number">89128960</span> (<span class="number">85.0</span>MB)</span><br><span class="line">   MaxNewSize               = <span class="number">1426063360</span> (<span class="number">1360.0</span>MB)</span><br><span class="line">   OldSize                  = <span class="number">179306496</span> (<span class="number">171.0</span>MB)</span><br><span class="line">   NewRatio                 = <span class="number">2</span></span><br><span class="line">   SurvivorRatio            = <span class="number">8</span></span><br><span class="line">   MetaspaceSize            = <span class="number">134217728</span> (<span class="number">128.0</span>MB)</span><br><span class="line">   CompressedClassSpaceSize = <span class="number">1073741824</span> (<span class="number">1024.0</span>MB)</span><br><span class="line">   MaxMetaspaceSize         = <span class="number">134217728</span> (<span class="number">128.0</span>MB)</span><br><span class="line">   G1HeapRegionSize         = <span class="number">0</span> (<span class="number">0.0</span>MB)</span><br><span class="line"></span><br><span class="line">Heap Usage:</span><br><span class="line">PS Young Generation</span><br><span class="line">Eden Space:</span><br><span class="line">   capacity = <span class="number">268435456</span> (<span class="number">256.0</span>MB)</span><br><span class="line">   used     = <span class="number">240676256</span> (<span class="number">229.52676391601562</span>MB)</span><br><span class="line">   free     = <span class="number">27759200</span> (<span class="number">26.473236083984375</span>MB)</span><br><span class="line">   <span class="number">89.6588921546936</span>% used</span><br><span class="line">From Space:</span><br><span class="line">   capacity = <span class="number">11010048</span> (<span class="number">10.5</span>MB)</span><br><span class="line">   used     = <span class="number">10981440</span> (<span class="number">10.47271728515625</span>MB)</span><br><span class="line">   free     = <span class="number">28608</span> (<span class="number">0.02728271484375</span>MB)</span><br><span class="line">   <span class="number">99.74016462053571</span>% used</span><br><span class="line">To Space:</span><br><span class="line">   capacity = <span class="number">43515904</span> (<span class="number">41.5</span>MB)</span><br><span class="line">   used     = <span class="number">0</span> (<span class="number">0.0</span>MB)</span><br><span class="line">   free     = <span class="number">43515904</span> (<span class="number">41.5</span>MB)</span><br><span class="line">   <span class="number">0.0</span>% used</span><br><span class="line">PS Old Generation</span><br><span class="line">   capacity = <span class="number">179306496</span> (<span class="number">171.0</span>MB)</span><br><span class="line">   used     = <span class="number">50697656</span> (<span class="number">48.34905242919922</span>MB)</span><br><span class="line">   free     = <span class="number">128608840</span> (<span class="number">122.65094757080078</span>MB)</span><br><span class="line">   <span class="number">28.274299666198374</span>% used</span><br><span class="line"></span><br><span class="line"><span class="number">25447</span> interned Strings occupying <span class="number">3283176</span> bytes.</span><br></pre></td></tr></table></figure>
+
+<h5 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h5><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MinHeapFreeRatio</td>
+<td>#-XX:MinHeapFreeRatio设置JVM堆最小空闲比率</td>
+</tr>
+<tr>
+<td>MaxHeapFreeRatio</td>
+<td>#-XX:MaxHeapFreeRatio设置JVM堆最大空闲比率</td>
+</tr>
+<tr>
+<td>MaxHeapSize</td>
+<td>#-XX:MaxHeapSize=设置JVM堆的最大大小</td>
+</tr>
+<tr>
+<td>NewSize</td>
+<td>#-XX:NewSize=设置JVM堆的‘新生代’的默认大小</td>
+</tr>
+<tr>
+<td>MaxNewSize</td>
+<td>#-XX:MaxNewSize=设置JVM堆的‘新生代’的最大大小</td>
+</tr>
+<tr>
+<td>OldSize</td>
+<td>#-XX:OldSize=设置JVM堆的‘老生代’的大小</td>
+</tr>
+<tr>
+<td>NewRatio</td>
+<td>#-XX:NewRatio=:‘新生代’和‘老生代’的大小比率</td>
+</tr>
+<tr>
+<td>SurvivorRatio</td>
+<td>#-XX:SurvivorRatio=设置年轻代中Eden区与Survivor区的大小比值</td>
+</tr>
+<tr>
+<td>MetaspaceSize</td>
+<td>-XX:MaxMetaspaceSize= 元数据空间</td>
+</tr>
+<tr>
+<td>CompressedClassSpaceSize</td>
+<td>只有当-XX:+UseCompressedClassPointers开启了才有效，</td>
+</tr>
+<tr>
+<td>PermSize</td>
+<td>#-XX:PermSize=:设置JVM堆的‘持久代’的初始大小</td>
+</tr>
+<tr>
+<td>MaxPermSize</td>
+<td>#-XX:MaxPermSize=:设置JVM堆的‘持久代’的最大大小</td>
+</tr>
+<tr>
+<td>PS Young Generation</td>
+<td>#新生代区内存分布，包含伊甸园区+1个Survivor区</td>
+</tr>
+<tr>
+<td>Eden Space</td>
+<td>伊甸园区 内容分布</td>
+</tr>
+<tr>
+<td>From Space</td>
+<td>Survivor from 区的内存分布</td>
+</tr>
+<tr>
+<td>To Space</td>
+<td>Survivor to 区的内存分布</td>
+</tr>
+<tr>
+<td>PS Old Generation</td>
+<td>当前的Old区内存分布</td>
+</tr>
+<tr>
+<td>capacity</td>
+<td>总容量</td>
+</tr>
+<tr>
+<td>used</td>
+<td>已使用</td>
+</tr>
+<tr>
+<td>free</td>
+<td>未使用</td>
+</tr>
+<tr>
+<td>PS Perm Generation</td>
+<td>持久代大小 <strong>1.8 已经移除，用Metaspace 进行替代管理</strong></td>
+</tr>
+</tbody></table>
+<p>内存计算：</p>
+<ul>
+<li>年轻代：Eden Space + From Space + To Space</li>
+<li>老年代：PS Old Generation</li>
+<li>最大堆内存大小：年轻代大小+老年代大小</li>
+<li>java应用程序占用内存大小：最大堆内存大小+持久代大小</li>
+</ul>
+<hr>
+<h4 id="dump"><a href="#dump" class="headerlink" title="-dump"></a>-dump</h4><p> 这个命令执行，JVM会将整个heap的信息dump写入到一个文件，heap（堆）如果比较大的话，就会导致这个过程比较耗时，并且执行的过程中为了保证dump的信息是可靠的，所以会暂停应用。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如果只dump heap中的存活对象，则加上选项-live。 </span></span><br><span class="line"><span class="comment"># 这种方式会先出发fullgc，所有如果不希望触发fullgc 可以使用jmap  -histo pid</span></span><br><span class="line">C:\WINDOWS\system32&gt;jmap -dump:live,format=b,file=a.hprof <span class="number">9196</span></span><br><span class="line">Dumping heap to C:\Windows\System32\a.bin ...</span><br><span class="line">Heap dump file created</span><br><span class="line"></span><br><span class="line"><span class="comment"># 这种方式可以用 jvisualvm.exe 进行内存分析，或者采用 Eclipse Memory Analysis Tools (MAT)这个工具</span></span><br><span class="line">C:\WINDOWS\system32&gt;jmap -dump,format=b,file=b.hprof <span class="number">9196</span></span><br><span class="line">Dumping heap to C:\Windows\System32\a.bin ...</span><br><span class="line">Heap dump file created</span><br></pre></td></tr></table></figure>
+
+<h5 id="参数配置"><a href="#参数配置" class="headerlink" title="参数配置"></a>参数配置</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-XX:+HeapDumpBeforeFullGC </span><br><span class="line"></span><br><span class="line">-XX:HeapDumpPath=/httx/logs/dump</span><br><span class="line"></span><br><span class="line">让JVM在遇到OutOfMemoryError时自动生成Dump文件</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="histo"><a href="#histo" class="headerlink" title="-histo"></a>-histo</h4><p> 打印每个class的实例数目,内存占用,类全名信息. VM的内部类名字开头会加上前缀”*”. 如果live子参数加上后,只统计活的对象数量.</p>
+<p>instances（实例数）、bytes（大小）、classs name（类名）。它基本是按照使用使用大小逆序排列的。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">C:\WINDOWS\system32&gt;jmap -histo 9196</span><br><span class="line"></span><br><span class="line"> num     #instances         #bytes  class name</span><br><span class="line">----------------------------------------------</span><br><span class="line">   1:        527171       84318160  [C</span><br><span class="line">   2:        103023       56034400  [Ljava.lang.Object;</span><br><span class="line">   3:        214858       47519096  [I</span><br><span class="line">   4:        105922       34715680  [B</span><br><span class="line">   5:        375666        9015984  java.lang.String</span><br><span class="line">   6:        251237        6029688  java.util.LinkedList$Node</span><br><span class="line">   7:        169334        5418688  java.util.HashMap$Node</span><br><span class="line">   8:        122315        2935560  java.util.ArrayList</span><br><span class="line">   .......</span><br><span class="line">   .......</span><br><span class="line">   Total       3090439      316004152</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 可以观察heap中所有对象的情况（heap中所有生存的对象的情况）。包括对象数量和所占空间大小。 可以将其保存到文本中去，在一段时间后，使用文本对比工具，可以对比出GC回收了哪些对象。</span><br><span class="line"></span><br><span class="line">jmap -histo:live 这个命令执行，JVM会先触发gc，然后再统计信息。</span><br><span class="line">C:\WINDOWS\system32&gt;jmap -histo:live 9196</span><br><span class="line"></span><br><span class="line"> num     #instances         #bytes  class name</span><br><span class="line">----------------------------------------------</span><br><span class="line">   1:         91735        9084568  [C</span><br><span class="line">   2:        138588        4434816  java.util.HashMap$Node</span><br><span class="line">   3:         37733        2374384  [Ljava.lang.Object;</span><br><span class="line">   4:         90330        2167920  java.lang.String</span><br><span class="line">   5:          5036        1337104  [Ljava.util.HashMap$Node;</span><br><span class="line">   6:          8141         906712  java.lang.Class</span><br><span class="line">   7:         32702         784848  java.util.ArrayList</span><br><span class="line">   8:         31471         755304  io.termd.core.term.Feature</span><br><span class="line">   9:         30539         488624  io.termd.core.term.OpCode$Literal</span><br><span class="line">  10:         13726         439232  java.util.concurrent.ConcurrentHashMap$Node</span><br><span class="line">  11:         26476         423616  io.termd.core.term.Sequence</span><br><span class="line">  12:         10377         415080  java.util.LinkedHashMap$Entry</span><br><span class="line">  13:          4202         369776  java.lang.reflect.Method</span><br><span class="line">  14:          2761         363968  [I</span><br><span class="line">  15:          1085         321728  [B</span><br><span class="line">  16:          3255         182280  java.util.LinkedHashMap</span><br><span class="line">  17:          9977         159632  java.lang.Object</span><br><span class="line">  18:           123         157680  [Ljava.util.concurrent.ConcurrentHashMap$Node;</span><br><span class="line">  19:          2975         142800  java.util.HashMap</span><br><span class="line">  20:          4412         141184  io.netty.util.Recycler$DefaultHandle</span><br><span class="line">  21:          1840         105928  [Ljava.lang.String;</span><br><span class="line">  .......</span><br><span class="line">  .......</span><br><span class="line">  Total       3090439      316004152</span><br><span class="line">linux 环境下 查看对象数最多的对象，并按降序排序输出</span><br></pre></td></tr></table></figure>
+
+<h5 id="名称解释"><a href="#名称解释" class="headerlink" title="名称解释"></a>名称解释</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#instance 是对象的实例个数 </span><br><span class="line">#bytes 是总占用的字节数 </span><br><span class="line">class name 对应的就是 Class 文件里的 class 的标识 </span><br><span class="line">B 代表 byte</span><br><span class="line">C 代表 char</span><br><span class="line">D 代表 double</span><br><span class="line">F 代表 float</span><br><span class="line">I 代表 int</span><br><span class="line">J 代表 long</span><br><span class="line">Z 代表 boolean</span><br><span class="line">前边有 [ 代表数组， [I 就相当于 int[]</span><br><span class="line">对象用 [L+ 类名表示</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>:live</td>
+<td>存活对象</td>
+</tr>
+</tbody></table>
+<p>上面的输出中[C对象占用Heap这么多，往往跟String有关，String其内部使用final char[]数组来保存数据的</p>
+<hr>
+<h4 id="permstat"><a href="#permstat" class="headerlink" title="-permstat"></a>-permstat</h4><p> clstats是-permstat的替代方案，在JDK8之前，-permstat用来打印类加载器的数据 打印Java堆内存的永久保存区域的类加载器的智能统计信息。对于每个类加载器而言，它的名称、活跃度、地址、父类加载器、它所加载的类的数量和大小都会被打印。此外，包含的字符串数量和大小也会被打印。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">C:\WINDOWS\system32&gt;jmap -clstats  9196</span><br><span class="line">Attaching to process ID 9196, please <span class="built_in">wait</span>...</span><br><span class="line">Debugger attached successfully.</span><br><span class="line">Server compiler detected.</span><br><span class="line">JVM version is 25.131-b11</span><br><span class="line">finding class loader instances ..<span class="keyword">done</span>.</span><br><span class="line">computing per loader <span class="built_in">stat</span> ..<span class="keyword">done</span>.</span><br><span class="line">please <span class="built_in">wait</span>.. computing liveness.liveness analysis may be inaccurate ...</span><br><span class="line">class_loader    classes bytes   parent_loader   alive?  <span class="built_in">type</span></span><br><span class="line"></span><br><span class="line">&lt;bootstrap&gt;     2555    4328024   null          live    &lt;internal&gt;</span><br><span class="line">0x00000006c1589498      1       880     0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c288e208      1       880       null          dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c288fbc8      1       1473    0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c1596518      1       1473    0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c28d9a88      1       1471    0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c17661b0      1       880     0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c15f5c58      1       880     0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c1589790      1       880     0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c1589f90      1       880     0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c1603428      1       880     0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c288ff40      1       1473    0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c1595ad0      1       880     0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c15c3d90      1       1473    0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c15c3fd0      1       1473    0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c16650a8      1       1473    0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c1766278      1       880     0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c1767378      1       880     0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c22e1420      3871    6591266 0x00000006c22e1480      dead    sun/misc/Launcher<span class="variable">$AppClassLoader</span>@0x00000007c000f6a0</span><br><span class="line">0x00000006c288f358      1       1505      null          dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c288fe18      1       1473    0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c28d9958      1       880       null          dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c1766020      1       880     0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c16ffa78      0       0       0x00000006c22e1420      dead    java/util/ResourceBundle<span class="variable">$RBClassLoader</span>@0x00000007c00f3c18</span><br><span class="line">0x00000006c17086a8      8       31426   0x00000006c22e1420      dead    sun/reflect/misc/MethodUtil@0x00000007c0447148</span><br><span class="line">0x00000006c162cd78      1       1476    0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line">0x00000006c163acf8      1       1471    0x00000006c22e1420      dead    sun/reflect/DelegatingClassLoader@0x00000007c0009df8</span><br><span class="line"></span><br><span class="line">total = 48      7662    13151889            N/A         alive=1, dead=47            N/A</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="finalizerinfo"><a href="#finalizerinfo" class="headerlink" title="-finalizerinfo"></a>-finalizerinfo</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">finalizerinfo 打印等待回收的对象信息</span><br><span class="line">C:\WINDOWS\system32&gt;jmap -finalizerinfo  9196</span><br><span class="line">Attaching to process ID 9196, please wait...</span><br><span class="line">Debugger attached successfully.</span><br><span class="line">Server compiler detected.</span><br><span class="line">JVM version is 25.131-b11</span><br><span class="line">Number of objects pending for finalization: 0</span><br></pre></td></tr></table></figure>
+
+<p>最后一句表明当前F-QUEUE队列中没有等待Finalizer线程执行finalizer方法的对象</p>
+<h3 id="jstat-使用"><a href="#jstat-使用" class="headerlink" title="jstat 使用"></a>jstat 使用</h3><p> jstat命令可以查看堆内存各部分的使用量，以及加载类的数量。命令的格式如下：</p>
+<p>jstat <strong>[ 观察类型 ]</strong> <strong>[PID]</strong> <strong>[间隔时间（毫秒）] \</strong> **[ 次数]**</p>
+<h5 id="–class"><a href="#–class" class="headerlink" title="–class"></a>–class</h5><p>查看class 加载信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\daocr&gt;jstat -class 13388  1000  10</span><br><span class="line">Loaded  Bytes  Unloaded  Bytes     Time</span><br><span class="line">  6313 11329.1        0     0.0       2.15</span><br><span class="line">  6313 11329.1        0     0.0       2.15</span><br><span class="line">  6313 11329.1        0     0.0       2.15</span><br></pre></td></tr></table></figure>
+
+<p><strong>名称解释</strong></p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Loaded</td>
+<td>加载class 数量</td>
+</tr>
+<tr>
+<td>Bytes(第一个)</td>
+<td>加载的大小</td>
+</tr>
+<tr>
+<td>Unloaded</td>
+<td>卸载class 数量</td>
+</tr>
+<tr>
+<td>Bytes(第二个)</td>
+<td>卸载大小</td>
+</tr>
+<tr>
+<td>Time</td>
+<td>执行加载和卸载所花费的时间</td>
+</tr>
+</tbody></table>
+<hr>
+<h5 id="compiler"><a href="#compiler" class="headerlink" title="-compiler"></a>-compiler</h5><p>查看class 编译信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\daocr&gt;jstat -compiler 13388  1000  3</span><br><span class="line">Compiled Failed Invalid   Time   FailedType FailedMethod</span><br><span class="line">    3039      0       0     0.70          0</span><br><span class="line">    3039      0       0     0.70          0</span><br><span class="line">    3039      0       0     0.70          0</span><br></pre></td></tr></table></figure>
+
+<p><strong>名称解释</strong></p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>官方解释</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Compiled</td>
+<td>Number of compilation tasks performed.</td>
+<td>执行编译任务数量</td>
+</tr>
+<tr>
+<td>Failed</td>
+<td>Number of compilations tasks failed.</td>
+<td>执行编译任务失败数量</td>
+</tr>
+<tr>
+<td>Invalid</td>
+<td>Number of compilation tasks that were invalidated.</td>
+<td>失效的编译任务数量</td>
+</tr>
+<tr>
+<td>Time</td>
+<td>Time spent performing compilation tasks.</td>
+<td>编译耗费的时间</td>
+</tr>
+<tr>
+<td>FailedType</td>
+<td>Compile type of the last failed compilation.</td>
+<td>上次编译失败的类型</td>
+</tr>
+<tr>
+<td>FailedMethod</td>
+<td>Class name and method of the last failed compilation.</td>
+<td>上次编译失败的类名和方法</td>
+</tr>
+</tbody></table>
+<hr>
+<h5 id="gc"><a href="#gc" class="headerlink" title="-gc"></a>-gc</h5><p>垃圾收集统计信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\daocr&gt;jstat -gc 13388  1000  3</span><br><span class="line"> S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">14848.0 10752.0  0.0   10730.5 91136.0   5157.0   112640.0   13722.3   32128.0 30417.7 4480.0 4140.9      5    0.046   1      0.040    0.086</span><br><span class="line">14848.0 10752.0  0.0   10730.5 91136.0   5157.0   112640.0   13722.3   32128.0 30417.7 4480.0 4140.9      5    0.046   1      0.040    0.086</span><br><span class="line">14848.0 10752.0  0.0   10730.5 91136.0   5157.0   112640.0   13722.3   32128.0 30417.7 4480.0 4140.9      5    0.046   1      0.040    0.086</span><br></pre></td></tr></table></figure>
+
+<p><strong>名称解释</strong></p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>官方解释</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S0C</td>
+<td>Current survivor space 0 capacity (kB).</td>
+<td>当前 ServivorTo（S0）总容量大小</td>
+</tr>
+<tr>
+<td>S1C</td>
+<td>Current survivor space 1 capacity (kB).</td>
+<td>当前 ServivorFrom（S1）总容量大小</td>
+</tr>
+<tr>
+<td>S0U</td>
+<td>Survivor space 0 utilization (kB).</td>
+<td>当前 ServivorTo（S0）使用大小</td>
+</tr>
+<tr>
+<td>S1U</td>
+<td>Survivor space 1 utilization (kB).</td>
+<td>当前 ServivorFrom（S1）使用大小</td>
+</tr>
+<tr>
+<td>EC</td>
+<td>Current eden space capacity (kB).</td>
+<td>Eden （伊甸园区的） 总容量大小</td>
+</tr>
+<tr>
+<td>EU</td>
+<td>Eden space utilization (kB).</td>
+<td>Eden （伊甸园区的） 使用大小</td>
+</tr>
+<tr>
+<td>OC</td>
+<td>Current old space capacity (kB).</td>
+<td>Old（老年的带）容量大小</td>
+</tr>
+<tr>
+<td>OU</td>
+<td>Old space utilization (kB).</td>
+<td>Old（老年的带）使用大小</td>
+</tr>
+<tr>
+<td>MC</td>
+<td>Metaspace capacity (kB).</td>
+<td>Method Area (方法区) 容量大小</td>
+</tr>
+<tr>
+<td>MU</td>
+<td>Metacspace utilization (kB).</td>
+<td>Method Area (方法区) 使用大小</td>
+</tr>
+<tr>
+<td>CCSC</td>
+<td>Compressed class space capacity (kB).</td>
+<td>CCS（压缩空间）容量大小</td>
+</tr>
+<tr>
+<td>CCSU</td>
+<td>Compressed class space used (kB).</td>
+<td>CCS（压缩空间）使用大小</td>
+</tr>
+<tr>
+<td>YGC</td>
+<td>Number of young generation garbage collection events.</td>
+<td>YGC (年轻的gc) 次数</td>
+</tr>
+<tr>
+<td>YGCT</td>
+<td>Young generation garbage collection time.</td>
+<td>YGC (年轻的gc) 消耗时间</td>
+</tr>
+<tr>
+<td>FGC</td>
+<td>Number of full GC events.</td>
+<td>Full GC 次数</td>
+</tr>
+<tr>
+<td>FGCT</td>
+<td>Full garbage collection time.</td>
+<td>Full GC 消耗时间</td>
+</tr>
+<tr>
+<td>GCT</td>
+<td>Total garbage collection time.</td>
+<td>GC 总消耗时间</td>
+</tr>
+</tbody></table>
+<hr>
+<h5 id="gccapacity"><a href="#gccapacity" class="headerlink" title="-gccapacity"></a>-gccapacity</h5><p> 堆内存容量统计</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\daocr&gt;jstat -gccapacity  13388  1000  1000</span><br><span class="line"> NGCMN    NGCMX     NGC     S0C   S1C       EC      OGCMN      OGCMX       OGC         OC       MCMN     MCMX      MC     CCSMN    CCSMX     CCSC    YGC    FGC</span><br><span class="line"> 87040.0 1392640.0 156160.0 14848.0 10752.0  91136.0   175104.0  2785280.0   112640.0   112640.0      0.0 1077248.0  32128.0      0.0 1048576.0   4480.0      5     1</span><br><span class="line"> 87040.0 1392640.0 156160.0 14848.0 10752.0  91136.0   175104.0  2785280.0   112640.0   112640.0      0.0 1077248.0  32128.0      0.0 1048576.0   4480.0      5     1</span><br><span class="line"> 87040.0 1392640.0 156160.0 14848.0 10752.0  91136.0   175104.0  2785280.0   112640.0   112640.0      0.0 1077248.0  32128.0      0.0 1048576.0   4480.0      5     1</span><br><span class="line"> 87040.0 1392640.0 156160.0 14848.0 10752.0  91136.0   175104.0  2785280.0   112640.0   112640.0      0.0 1077248.0  32128.0      0.0 1048576.0   4480.0      5     1</span><br></pre></td></tr></table></figure>
+
+<p><strong>名称解释</strong></p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>官方解释</th>
+<th>解释 <strong>(单位：kb)</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NGCMN</td>
+<td>Minimum new generation capacity (kB).</td>
+<td>新生代最小容量</td>
+</tr>
+<tr>
+<td>NGCMX</td>
+<td>Maximum new generation capacity (kB).</td>
+<td>新生代最大容量</td>
+</tr>
+<tr>
+<td>NGC</td>
+<td>Current new generation capacity (kB).</td>
+<td>当前新生代容量</td>
+</tr>
+<tr>
+<td>S0C</td>
+<td>Current survivor space 0 capacity (kB).</td>
+<td>第一个幸存区（S0）容量</td>
+</tr>
+<tr>
+<td>S1C</td>
+<td>Current survivor space 1 capacity (kB).</td>
+<td>第二个幸存区（S1）容量</td>
+</tr>
+<tr>
+<td>EC</td>
+<td>Current eden space capacity (kB).</td>
+<td>伊甸园区的容量</td>
+</tr>
+<tr>
+<td>OGCMN</td>
+<td>Minimum old generation capacity (kB).</td>
+<td>老年代最小容量</td>
+</tr>
+<tr>
+<td>OGCMX</td>
+<td>Maximum old generation capacity (kB).</td>
+<td>老年代最大容量</td>
+</tr>
+<tr>
+<td>OGC</td>
+<td>Current old generation capacity (kB).</td>
+<td>当前老年代容量</td>
+</tr>
+<tr>
+<td>OC</td>
+<td>Current old space capacity (kB).</td>
+<td>当前老年代使用 容量</td>
+</tr>
+<tr>
+<td>MCMN</td>
+<td>Minimum metaspace capacity (kB).</td>
+<td>最小 metaspace 容量</td>
+</tr>
+<tr>
+<td>MCMX</td>
+<td>Maximum metaspace capacity (kB).</td>
+<td>最大 metaspace 容量</td>
+</tr>
+<tr>
+<td>MC</td>
+<td>Metaspace capacity (kB).</td>
+<td>当前 metaspace 容量</td>
+</tr>
+<tr>
+<td>CCSMN</td>
+<td>Compressed class space minimum capacity (kB).</td>
+<td>类压缩空间最小 容量</td>
+</tr>
+<tr>
+<td>CCSMX</td>
+<td>Compressed class space maximum capacity (kB).</td>
+<td>类压缩空间最大 容量</td>
+</tr>
+<tr>
+<td>CCSC</td>
+<td>Compressed class space capacity (kB).</td>
+<td>当前类压缩空间 容量</td>
+</tr>
+<tr>
+<td>YGC</td>
+<td>Number of young generation GC events.</td>
+<td>YGC 次数</td>
+</tr>
+<tr>
+<td>FGC</td>
+<td>Number of full GC events.</td>
+<td>FGC 次数</td>
+</tr>
+</tbody></table>
+<hr>
+<h5 id="gcnew"><a href="#gcnew" class="headerlink" title="-gcnew"></a>-gcnew</h5><p><strong>新生代垃圾回收统计</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\daocr&gt;jstat -gcnew   13388  1000  1000</span><br><span class="line"> S0C    S1C    S0U    S1U   TT MTT  DSS      EC       EU     YGC     YGCT</span><br><span class="line">14848.0 10752.0    0.0 10730.5  6  15 14848.0  91136.0   7526.5      5    0.046</span><br><span class="line">14848.0 10752.0    0.0 10730.5  6  15 14848.0  91136.0   7526.5      5    0.046</span><br></pre></td></tr></table></figure>
+
+<p><strong>名称解释</strong></p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>官方解释</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S0C</td>
+<td>Current survivor space 0 capacity (kB).</td>
+<td>survivor (S0) 总容量</td>
+</tr>
+<tr>
+<td>S1C</td>
+<td>Current survivor space 1 capacity (kB).</td>
+<td>survivor (S1) 总容量</td>
+</tr>
+<tr>
+<td>S0U</td>
+<td>Survivor space 0 utilization (kB).</td>
+<td>survivor (S0) 已使用容量</td>
+</tr>
+<tr>
+<td>S1U</td>
+<td>Survivor space 1 utilization (kB).</td>
+<td>survivor (S1) 已使用容量</td>
+</tr>
+<tr>
+<td>TT</td>
+<td>Tenuring threshold.</td>
+<td>对象在新生代存活的次数</td>
+</tr>
+<tr>
+<td>MTT</td>
+<td>Maximum tenuring threshold.</td>
+<td>-XX:MaxTenuringThreshold 对象在新生代存活的最大次数</td>
+</tr>
+<tr>
+<td>DSS</td>
+<td>Desired survivor size (kB).</td>
+<td>期望的幸存区大小</td>
+</tr>
+<tr>
+<td>EC</td>
+<td>Current eden space capacity (kB).</td>
+<td>伊甸园区的大小</td>
+</tr>
+<tr>
+<td>EU</td>
+<td>Eden space utilization (kB).</td>
+<td>伊甸园区的使用大小</td>
+</tr>
+<tr>
+<td>YGC</td>
+<td>Number of young generation GC events.</td>
+<td>年轻代垃圾回收次数</td>
+</tr>
+<tr>
+<td>YGCT</td>
+<td>Young generation garbage collection time.</td>
+<td>年轻代垃圾回收消耗时间</td>
+</tr>
+</tbody></table>
+<h5 id="gccause"><a href="#gccause" class="headerlink" title="-gccause"></a>-gccause</h5><h5 id="gcnewcapacity"><a href="#gcnewcapacity" class="headerlink" title="-gcnewcapacity"></a>-gcnewcapacity</h5><p>年轻代对象的信息及其占用量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\daocr&gt;jstat -gcnewcapacity   13388  1000  1000</span><br><span class="line">  NGCMN      NGCMX       NGC      S0CMX     S0C     S1CMX     S1C       ECMX        EC      YGC   FGC</span><br><span class="line">   87040.0  1392640.0   156160.0 463872.0  14848.0 463872.0  10752.0  1391616.0    91136.0     5     1</span><br><span class="line">   87040.0  1392640.0   156160.0 463872.0  14848.0 463872.0  10752.0  1391616.0    91136.0     5     1</span><br></pre></td></tr></table></figure>
+
+<p><strong>名称解释</strong></p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>官方解释</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NGCMN</td>
+<td>Minimum new generation capacity (kB).</td>
+<td>新生代最小容量</td>
+</tr>
+<tr>
+<td>NGCMX</td>
+<td>Maximum new generation capacity (kB).</td>
+<td>新生代最大容量</td>
+</tr>
+<tr>
+<td>NGC</td>
+<td>Current new generation capacity (kB).</td>
+<td>当前新生代已使用容量</td>
+</tr>
+<tr>
+<td>S0CMX</td>
+<td>Maximum survivor space 0 capacity (kB).</td>
+<td>S0 最大容量</td>
+</tr>
+<tr>
+<td>S0C</td>
+<td>Current survivor space 0 capacity (kB).</td>
+<td>S0 已使用容量</td>
+</tr>
+<tr>
+<td>S1CMX</td>
+<td>Maximum survivor space 1 capacity (kB).</td>
+<td>S1 最大容量</td>
+</tr>
+<tr>
+<td>S1C</td>
+<td>Current survivor space 1 capacity (kB).</td>
+<td>S1 已使用容量</td>
+</tr>
+<tr>
+<td>ECMX</td>
+<td>Maximum eden space capacity (kB).</td>
+<td>eden 最大容量</td>
+</tr>
+<tr>
+<td>EC</td>
+<td>Current eden space capacity (kB).</td>
+<td>eden 当前使用容量</td>
+</tr>
+<tr>
+<td>YGC</td>
+<td>Number of young generation GC events.</td>
+<td>ygc 次数</td>
+</tr>
+<tr>
+<td>FGC</td>
+<td>Number of full GC events.</td>
+<td>full gc 次数</td>
+</tr>
+</tbody></table>
+<hr>
+<h5 id="gcold"><a href="#gcold" class="headerlink" title="-gcold"></a>-gcold</h5><p>old 区和 matespace 内存区域信息统计</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\daocr&gt;jstat -gcold   13388  1000  1000</span><br><span class="line">   MC       MU      CCSC     CCSU       OC          OU       YGC    FGC    FGCT     GCT</span><br><span class="line"> 32128.0  30417.7   4480.0   4140.9    112640.0     13722.3      5     1    0.040    0.086</span><br><span class="line"> 32128.0  30417.7   4480.0   4140.9    112640.0     13722.3      5     1    0.040    0.086</span><br></pre></td></tr></table></figure>
+
+<p>名称解释</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>官方解释</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MC</td>
+<td>Metaspace capacity (kB).</td>
+<td></td>
+</tr>
+<tr>
+<td>MU</td>
+<td>Metaspace utilization (kB).</td>
+<td></td>
+</tr>
+<tr>
+<td>CCSC</td>
+<td>Compressed class space capacity (kB).</td>
+<td></td>
+</tr>
+<tr>
+<td>CCSU</td>
+<td>Compressed class space used (kB).</td>
+<td></td>
+</tr>
+<tr>
+<td>OC</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>OU</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>YGC</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>FGC</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>FGCT</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>GCT</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h5 id="参考地址"><a href="#参考地址" class="headerlink" title="参考地址"></a>参考地址</h5><ul>
+<li>官方地址<ul>
+<li><a href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/jstat.html" target="_blank" rel="noopener">https://docs.oracle.com/javase/8/docs/technotes/tools/windows/jstat.html</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="线程分析"><a href="#线程分析" class="headerlink" title="线程分析"></a>线程分析</h1><p><strong>线程状态</strong></p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NEW</td>
+<td>创建</td>
+</tr>
+<tr>
+<td>RUNNABLE</td>
+<td>可运行的</td>
+</tr>
+<tr>
+<td>BLOCKED</td>
+<td>阻塞状态</td>
+</tr>
+<tr>
+<td>WAITING</td>
+<td>等待状态</td>
+</tr>
+<tr>
+<td>TIMED_WAITING</td>
+<td>线程等待指定的时间</td>
+</tr>
+<tr>
+<td>TERMINATED</td>
+<td>线程终止</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>NEW</strong>（新建）</li>
+</ul>
+<blockquote>
+<p> 线程刚刚被创建，也就是已经new过了，但是还没有调用start()方法，<strong>jstack命令不会列出处于此状态的线程信息</strong> .</p>
+</blockquote>
+<ul>
+<li><strong>RUNNABLE</strong>（可运行）</li>
+</ul>
+<blockquote>
+<p><strong>RUNNABLE #java.lang.Thread.State: RUNNABLE</strong></p>
+<p>RUNNABLE这个名字很具有欺骗性，很容易让人误以为处于这个状态的线程正在运行。事实上，这个状态只是表示，线程是可运行的。我们已经无数次提到过，一个单核CPU在同一时刻，只能运行一个线程.</p>
+</blockquote>
+<ul>
+<li><strong>BLOCKED</strong>（堵塞状态）</li>
+</ul>
+<blockquote>
+<p><strong># java.lang.Thread.State: BLOCKED (on object monitor)</strong></p>
+<p> 线程处于阻塞状态，正在等待一个monitor lock。通常情况下，是因为本线程与其他线程公用了一个锁。其他在线程正在使用这个锁进入某个synchronized同步方法块或者方法，而本线程进入这个同步代码块也需要这个锁，最终导致本线程处于阻塞状态。</p>
+</blockquote>
+<ul>
+<li><p>WAITING</p>
+<p>（等待状态）</p>
+<ul>
+<li><code>Object.wait</code> 不指定超时时间 <code># java.lang.Thread.State: WAITING (on object monitor)</code></li>
+<li><code>Thread.join</code> with no timeout</li>
+<li><code>LockSupport.park #java.lang.Thread.State: WAITING (parking)</code></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p> 例如：对于wait()方法，一个线程处于等待状态，通常是在等待其他线程完成某个操作。本线程调用某个对象的wait()方法，其他线程处于完成之后，调用同一个对象的notify或者notifyAll()方法。Object.wait()方法只能够在同步代码块中调用。调用了wait()方法后，会释放锁。</p>
+</blockquote>
+<ul>
+<li><strong>TIMED_WAITING</strong><ul>
+<li><code>Thread.sleep #java.lang.Thread.State: TIMED_WAITING (sleeping)</code></li>
+<li><code>Object.wait</code> 指定超时时间 #java.lang.Thread.State: TIMED_WAITING (on object monitor)</li>
+<li><code>Thread.join</code> with timeout</li>
+<li><code>LockSupport.parkNanos #java.lang.Thread.State: TIMED_WAITING (parking)</code></li>
+<li><code>LockSupport.parkUntil #java.lang.Thread.State: TIMED_WAITING (parking)</code></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p> 线程等待指定的时间，对于以下方法的调用，可能会导致线程处于这个状态</p>
+</blockquote>
+<ul>
+<li><strong>TERMINATED</strong> （线程终止）</li>
+</ul>
+<hr>
+<p> 说明，对于 <strong>java.lang.Thread.State: WAITING (on object monitor)\</strong>和<strong>java.lang.Thread.State: TIMED_WAITING (on object monitor)</strong>，对于这两个状态，是因为调用了Object的<strong>wait</strong>方法(前者没有指定超时，后者指定了超时)，由于wait方法肯定要在<strong>syncronized</strong>代码中编写，因此肯定是如类似以下代码导致：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">synchronized</span>(obj) &#123;</span><br><span class="line">               .........</span><br><span class="line">               obj.wait();</span><br><span class="line">               .........</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因此通常的堆栈信息中，必然后一个lock标记，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">CM1<span class="string">" #21 daemon prio=5 os_prio=0 tid=0x00007f02f0d6d800 nid=0x3d48 in Object.wait() [0x00007f02fefef000]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">   java.lang.Thread.State: WAITING (on object monitor)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        at java.lang.Object.wait(Native Method)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        at java.lang.Object.wait(Object.java:502)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        at java.util.TimerThread.mainLoop(Timer.java:526)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        - locked &lt;0x00000000eca75aa8&gt; (a java.util.TaskQueue)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        at java.util.TimerThread.run(Timer.java:505)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="查看线程"><a href="#查看线程" class="headerlink" title="查看线程"></a>查看线程</h2><p>线程状态</p>
+<h3 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h3><p>观察jvm中当前所有线程的运行情况和线程当前状态。</p>
+<p>系统崩溃了？如果java程序崩溃生成core文件，jstack工具可以用来获得core文件的java stack和native stack的信息，从而可以轻松地知道java程序是如何崩溃和在程序何处发生问题。</p>
+<p>系统hung（挂起）住了？jstack工具还可以附属到正在运行的java程序中，看到当时运行的java程序的java stack和native stack的信息, 如果现在运行的java程序呈现hung的状态，jstack是非常有用的。</p>
+<hr>
+<p>jstack主要用来查看某个Java进程内的线程堆栈信息。语法格式如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\daorc&gt;jstack -h</span><br><span class="line">Usage:</span><br><span class="line">    jstack [-l] &lt;pid&gt;</span><br><span class="line">        (to connect to running process)</span><br><span class="line">    jstack -F [-m] [-l] &lt;pid&gt;</span><br><span class="line">        (to connect to a hung process)</span><br><span class="line">    jstack [-m] [-l] &lt;executable&gt; &lt;core&gt;</span><br><span class="line">        (to connect to a core file)</span><br><span class="line">    jstack [-m] [-l] [server_id@]&lt;remote server IP or hostname&gt;</span><br><span class="line">        (to connect to a remote debug server)</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">    -F  to force a thread dump. Use when jstack &lt;pid&gt; does not respond (process is hung)</span><br><span class="line">    -m  to print both java and native frames (mixed mode)</span><br><span class="line">    -l  long listing. Prints additional information about locks</span><br><span class="line">    -h or -help to print this help message</span><br></pre></td></tr></table></figure>
+
+<h4 id="无参数"><a href="#无参数" class="headerlink" title="无参数"></a>无参数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\daorc&gt;jstack 12176</span><br><span class="line">.....省略</span><br><span class="line"></span><br><span class="line">&quot;main&quot; #1 prio=5 os_prio=0 tid=0x0000000002b9e000 nid=0xb40 waiting on condition [0x0000000002c9f000]</span><br><span class="line">   java.lang.Thread.State: TIMED_WAITING (sleeping)</span><br><span class="line">        at java.lang.Thread.sleep(Native Method)</span><br><span class="line">        at org.totoro.boot.Test.main(Test.java:12)</span><br><span class="line"></span><br><span class="line">........省略</span><br></pre></td></tr></table></figure>
+
+<h5 id="名词解释-1"><a href="#名词解释-1" class="headerlink" title="名词解释"></a>名词解释</h5><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>“main”</td>
+<td>线程名称</td>
+</tr>
+<tr>
+<td>prio</td>
+<td>优先级</td>
+</tr>
+<tr>
+<td>daemon</td>
+<td>是否是守护线程</td>
+</tr>
+<tr>
+<td>os_prio</td>
+<td></td>
+</tr>
+<tr>
+<td>tid</td>
+<td>java 线程id</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p><a href="https://gitee.com/adminxl/document/blob/master/JVM%20%E8%B0%83%E4%BC%98%E5%B7%A5%E5%85%B7.md" target="_blank" rel="noopener">文档来源</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="/2021/03/31/java/mat-oql/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -333,104 +1181,6 @@
 <p>​    Cache包中的cache.decorators子包中等各个装饰者的实现</p>
 <p>9、组合模式</p>
 <p>​    <span style="color:red;"><strong>SqlNode</strong></span>和各个子类ChooseSqlNode等</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/24/杂文/格局/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/24/杂文/格局/" class="post-title-link" itemprop="url">格局</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-03-24 18:45:02 / Modified: 14:43:48" itemprop="dateCreated datePublished" datetime="2021-03-24T18:45:02+08:00">2021-03-24</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="从小格局到大格局，人必经的四个阶段"><a href="#从小格局到大格局，人必经的四个阶段" class="headerlink" title="从小格局到大格局，人必经的四个阶段"></a><strong>从小格局到大格局，人必经的四个阶段</strong></h3><p>很多人都谈论格局，到底什么是格局？</p>
-<p>当我们夸赞一个人有格局的时候，通常是说他跳出<strong>自我的狭隘</strong>，站在<strong>更广阔</strong>、<strong>更高层的视角</strong>看待问题。</p>
-<p>格局的本质，就是一个人<strong>自上而下</strong>的<strong>兼容性</strong>。</p>
-<h4 id="大格局对小格局，是一种降维打击"><a href="#大格局对小格局，是一种降维打击" class="headerlink" title="大格局对小格局，是一种降维打击"></a>大格局对小格局，是一种降维打击</h4><p>得其大者，可以兼其小。</p>
-<p>格局大的人对格局小的人，就是一种“降维打击”。</p>
-<p>比如，如果你遇到一个人信息密度和知识层面，都远高于你，并且愿意俯下身去，平等地跟你交流，尊重你的想法，时不时提出一些你没有听过并点头称叹的想法。那么这个人的格局，一定高于你。</p>
-<p>归结到自身，道理类似。</p>
-<p>我们所有的痛苦，都不是痛苦本身，都是<strong>面对人生问题的看不穿，想不通，说不透</strong>。换言之，也就是格局不够。</p>
-<p>困囿于自身的时候，才会一叶障目；</p>
-<p>境界、想法提升之后，人生才会豁然开朗。</p>
-<p>当你打开了自己的世界，提升了自己的思维眼界，从小格局走向大格局，相对于过去的你，也是一种“降维打击”。</p>
-<p>这才是一个人越来越强大的终极密码。</p>
-<h4 id="为什么要提升自己的格局？"><a href="#为什么要提升自己的格局？" class="headerlink" title="为什么要提升自己的格局？"></a>为什么要提升自己的格局？</h4><p>很多人会问：为什么要提升自己的格局，保持简单不好吗？</p>
-<p>这当然没有问题。</p>
-<p>但当你的格局提升，层次提高，你就会发现：</p>
-<p><strong>格局越大的人，越会互相尊重，互相关照和支持；</strong></p>
-<p><strong>而越是底层的人，越是互相倾轧，互相拆台，</strong>并不希望你过得比他们好。</p>
-<p>格局提升，决定你会呆在什么样的环境，遇见什么样的人。</p>
-<p>你一定要远离那些见不得你好，诋毁你、消耗你的人。跟有格局的人一起同行，才是你最该走的路。</p>
-<h4 id="提升格局的四个阶段"><a href="#提升格局的四个阶段" class="headerlink" title="提升格局的四个阶段"></a>提升格局的四个阶段</h4><h5 id="读万卷书"><a href="#读万卷书" class="headerlink" title="读万卷书"></a>读万卷书</h5><p>想要提升自己的见识，<strong>读书</strong>是门槛最低的一种方式。读什么样的书有助于提升格局？</p>
-<p><strong>知识类</strong>的书，帮你不断拓展认识世界的过程；</p>
-<p><strong>技能类</strong>的书，帮你能更顺畅地工作，不被时代抛弃；</p>
-<p><strong>思维类</strong>的书，帮你建立完善的思考认知体系，懂得如何解决问题，提升认知深度；</p>
-<p><strong>审美类</strong>的书，帮你提高文学素养，能去拥抱更高远的世界；</p>
-<p><strong>历史类</strong>的书，在人类文明的这些宝贵财富面前，你读到的每一句话，都可能拥有引导你改变人生格局的力量。</p>
-<h5 id="行万里路"><a href="#行万里路" class="headerlink" title="行万里路"></a>行万里路</h5><p>一个人要扩大格局，要敢于走出舒适区，去见那些未曾见过的风土人情，去经历未曾经历的人生。</p>
-<p>千万不要把行万里路理解为简单的“上车睡觉，下车拍照”式的旅游。行路最重要的，是经历。</p>
-<p>人生的很多成长都是由经历带来的。当然，经历只是诱因，归根结底还是<strong>思考</strong>。没有思考，经历再多，也不会改变。</p>
-<h5 id="阅人无数"><a href="#阅人无数" class="headerlink" title="阅人无数"></a>阅人无数</h5><p>一个格局大的人一定有<strong>开放的思维</strong>，懂得用<strong>欣赏的眼光</strong>去<strong>看待他人</strong>，不会因小事而与人斤斤计较，更不会吝于承认别人的优秀。</p>
-<p>与人交往时，不先入为主，不以己度人，不随意对他人做论断。</p>
-<p>沟通交流时，懂得出言有尺、说话有德、嬉闹有度。</p>
-<p>发表见解时，谨记换位思考，不让人难堪。</p>
-<p>与人合作时，能宽以待人，严于律己，以身作则。</p>
-<h5 id="高人指路"><a href="#高人指路" class="headerlink" title="高人指路"></a>高人指路</h5><p>有人说：“也许你的极限，只是别人的起点。”</p>
-<p>有时候， 高人的一句话，胜过我们几年摸索。</p>
-<p>在你陷入困境的时候，你就需要高人指路。高人能够指出你存在的隐藏缺陷，告诉你当前的状态是一个必经过程，解除你的迷茫和困惑，为你指出正确和合适的努力方向。</p>
-<p>当然，高人是否愿意为你“指路”，就要看你的<strong>潜力</strong>、<strong>人品</strong>和<strong>毅力</strong>。要么让他们看到你能成就事业的潜力，要么让他们欣赏你的人品，又或者你凭借锲而不舍的毅力打动他们。</p>
-<p>在没有遇到高人之前，可以按照上面的三点去做好自己。</p>
-<p><strong>心中有大格局的人，如同站立高地，望得见前路坦荡，亦深知歧路叠嶂。</strong></p>
-<p><a href="https://m.gmw.cn/toutiao/2021-03/22/content_1302180130.htm?tt_from=weixin&tt_group_id=6942254461230252557&utm_campaign=client_share&wxshare_count=1&timestamp=1616563389&app=news_article&utm_source=weixin&utm_medium=toutiao_android&use_new_style=1&req_id=202103241323080101501760422525A2B2&share_token=3427dcf1-3339-40a2-947b-30ba2057c552&group_id=6942254461230252557" target="_blank" rel="noopener">文章来源</a></p>
 
       
     </div>
