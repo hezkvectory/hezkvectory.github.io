@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="介绍本项目包含 LeetCode、《剑指 Offer（第 2 版）》、《程序员面试金典（第 6 版）》等题目的相关题解。 站点 Netlify: https://lc.netlify.app Gitee Pages: https://doocs.gitee.io/leetcode GitHub Pages: https://doocs.github.io/leetcode  LeetCode 全解">
+<meta name="keywords" content="面试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="leetcode">
+<meta property="og:url" content="/2021/05/27/面试题/leetcode-1/index.html">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="介绍本项目包含 LeetCode、《剑指 Offer（第 2 版）》、《程序员面试金典（第 6 版）》等题目的相关题解。 站点 Netlify: https://lc.netlify.app Gitee Pages: https://doocs.gitee.io/leetcode GitHub Pages: https://doocs.github.io/leetcode  LeetCode 全解">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-05-27T02:44:50.731Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="leetcode">
+<meta name="twitter:description" content="介绍本项目包含 LeetCode、《剑指 Offer（第 2 版）》、《程序员面试金典（第 6 版）》等题目的相关题解。 站点 Netlify: https://lc.netlify.app Gitee Pages: https://doocs.gitee.io/leetcode GitHub Pages: https://doocs.github.io/leetcode  LeetCode 全解">
+
+<link rel="canonical" href="/2021/05/27/面试题/leetcode-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>leetcode | 我的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">我的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/05/27/面试题/leetcode-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          leetcode
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-05-27 18:45:02 / Modified: 10:44:50" itemprop="dateCreated datePublished" datetime="2021-05-27T18:45:02+08:00">2021-05-27</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>本项目包含 <a href="https://leetcode-cn.com/problemset/all/" target="_blank" rel="noopener">LeetCode</a>、<a href="https://leetcode-cn.com/problemset/lcof/" target="_blank" rel="noopener">《剑指 Offer（第 2 版）》</a>、<a href="https://leetcode-cn.com/problemset/lcci/" target="_blank" rel="noopener">《程序员面试金典（第 6 版）》</a>等题目的相关题解。</p>
+<h2 id="站点"><a href="#站点" class="headerlink" title="站点"></a>站点</h2><ul>
+<li>Netlify: <a href="https://lc.netlify.app" target="_blank" rel="noopener">https://lc.netlify.app</a></li>
+<li>Gitee Pages: <a href="https://doocs.gitee.io/leetcode" target="_blank" rel="noopener">https://doocs.gitee.io/leetcode</a></li>
+<li>GitHub Pages: <a href="https://doocs.github.io/leetcode" target="_blank" rel="noopener">https://doocs.github.io/leetcode</a></li>
+</ul>
+<h2 id="LeetCode-全解"><a href="#LeetCode-全解" class="headerlink" title="LeetCode 全解"></a>LeetCode 全解</h2><ul>
+<li><a href="/solution/README.md">LeetCode</a></li>
+<li><a href="/lcof/README.md">LeetCode 《剑指 Offer（第 2 版）》</a></li>
+<li><a href="/lcci/README.md">LeetCode 《程序员面试金典（第 6 版）》</a></li>
+</ul>
+<h2 id="基础算法通关"><a href="#基础算法通关" class="headerlink" title="基础算法通关"></a>基础算法通关</h2><h3 id="排序算法"><a href="#排序算法" class="headerlink" title="排序算法"></a>排序算法</h3><ul>
+<li><a href="/basic/sorting/BubbleSort/README.md">冒泡排序</a></li>
+<li><a href="/basic/sorting/InsertionSort/README.md">插入排序</a></li>
+<li><a href="/basic/sorting/SelectionSort/README.md">选择排序</a></li>
+<li><a href="/basic/sorting/MergeSort/README.md">归并排序</a></li>
+<li><a href="/basic/sorting/QuickSort/README.md">快速排序</a></li>
+<li><a href="/basic/sorting/ShellSort/README.md">希尔排序</a></li>
+</ul>
+<h3 id="查找算法"><a href="#查找算法" class="headerlink" title="查找算法"></a>查找算法</h3><ul>
+<li><a href="/basic/searching/BinarySearch/README.md">二分查找</a></li>
+<li><a href="/basic/searching/BinarySearch-II/README.md">二分查找 II</a></li>
+</ul>
+<h2 id="高频考题"><a href="#高频考题" class="headerlink" title="高频考题"></a>高频考题</h2><h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><ul>
+<li><a href="/solution/0000-0099/0026.Remove%20Duplicates%20from%20Sorted%20Array/README.md">删除排序数组中的重复项</a></li>
+<li><a href="/solution/0000-0099/0080.Remove%20Duplicates%20from%20Sorted%20Array%20II/README.md">删除排序数组中的重复项 II</a></li>
+<li><a href="/solution/0000-0099/0027.Remove%20Element/README.md">移除元素</a></li>
+<li><a href="/solution/0200-0299/0283.Move%20Zeroes/README.md">移动零</a></li>
+<li><a href="/lcof/面试题03.%20数组中重复的数字/README.md">数组中重复的数字</a></li>
+<li><a href="/solution/0100-0199/0189.Rotate%20Array/README.md">旋转数组</a></li>
+<li><a href="/solution/0000-0099/0054.Spiral%20Matrix/README.md">螺旋矩阵</a></li>
+<li><a href="/solution/0000-0099/0001.Two%20Sum/README.md">两数之和</a></li>
+<li><a href="/solution/0000-0099/0015.3Sum/README.md">三数之和</a></li>
+<li><a href="/solution/0000-0099/0018.4Sum/README.md">四数之和</a></li>
+<li><a href="/solution/0200-0299/0259.3Sum%20Smaller/README.md">较小的三数之和</a></li>
+<li><a href="/solution/0000-0099/0016.3Sum%20Closest/README.md">最接近的三数之和</a></li>
+<li><a href="/solution/0000-0099/0088.Merge%20Sorted%20Array/README.md">合并两个有序数组</a></li>
+<li><a href="/solution/0100-0199/0153.Find%20Minimum%20in%20Rotated%20Sorted%20Array/README.md">寻找旋转排序数组中的最小值</a></li>
+<li><a href="/solution/0100-0199/0154.Find%20Minimum%20in%20Rotated%20Sorted%20Array%20II/README.md">寻找旋转排序数组中的最小值 II</a></li>
+<li><a href="/solution/0200-0299/0238.Product%20of%20Array%20Except%20Self/README.md">除自身以外数组的乘积</a></li>
+</ul>
+<h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><ul>
+<li><a href="/solution/0000-0099/0003.Longest%20Substring%20Without%20Repeating%20Characters/README.md">无重复字符的最长子串</a></li>
+<li><a href="/solution/0000-0099/0014.Longest%20Common%20Prefix/README.md">最长公共前缀</a></li>
+<li><a href="/solution/0300-0399/0345.Reverse%20Vowels%20of%20a%20String/README.md">反转字符串中的元音字母</a></li>
+<li><a href="/solution/0000-0099/0008.String%20to%20Integer%20%28atoi%29/README.md">字符串转换整数 (atoi)</a></li>
+<li><a href="/solution/0300-0399/0383.Ransom%20Note/README.md">赎金信</a></li>
+</ul>
+<h3 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h3><ul>
+<li><a href="/solution/0000-0099/0002.Add%20Two%20Numbers/README.md">两数相加</a></li>
+<li><a href="/solution/0400-0499/0445.Add%20Two%20Numbers%20II/README.md">两数相加 II</a></li>
+<li><a href="/lcof/面试题06.%20从尾到头打印链表/README.md">从尾到头打印链表</a></li>
+<li><a href="/solution/0200-0299/0237.Delete%20Node%20in%20a%20Linked%20List/README.md">删除链表中的节点</a></li>
+<li><a href="/solution/0000-0099/0083.Remove%20Duplicates%20from%20Sorted%20List/README.md">删除排序链表中的重复元素</a></li>
+<li><a href="/solution/0000-0099/0082.Remove%20Duplicates%20from%20Sorted%20List%20II/README.md">删除排序链表中的重复元素 II</a></li>
+<li><a href="/solution/0200-0299/0203.Remove%20Linked%20List%20Elements/README.md">移除链表元素</a></li>
+<li><a href="/lcci/02.02.Kth%20Node%20From%20End%20of%20List/README.md">链表中倒数第 k 个节点</a></li>
+<li><a href="/solution/0000-0099/0024.Swap%20Nodes%20in%20Pairs/README.md">两两交换链表中的节点</a></li>
+<li><a href="/solution/0000-0099/0021.Merge%20Two%20Sorted%20Lists/README.md">合并两个有序链表</a></li>
+<li><a href="/solution/0000-0099/0023.Merge%20k%20Sorted%20Lists/README.md">合并 K 个排序链表</a></li>
+<li><a href="/solution/0100-0199/0147.Insertion%20Sort%20List/README.md">对链表进行插入排序</a></li>
+<li><a href="/solution/0100-0199/0148.Sort%20List/README.md">排序链表</a></li>
+<li><a href="/solution/0200-0299/0206.Reverse%20Linked%20List/README.md">反转链表</a></li>
+<li><a href="/solution/0000-0099/0092.Reverse%20Linked%20List%20II/README.md">反转链表 II</a></li>
+<li><a href="/solution/0100-0199/0143.Reorder%20List/README.md">重排链表</a></li>
+<li><a href="/solution/0000-0099/0061.Rotate%20List/README.md">旋转链表</a></li>
+<li><a href="/solution/0200-0299/0234.Palindrome%20Linked%20List/README.md">回文链表</a></li>
+<li><a href="/solution/0100-0199/0160.Intersection%20of%20Two%20Linked%20Lists/README.md">相交链表</a></li>
+<li><a href="/solution/0300-0399/0328.Odd%20Even%20Linked%20List/README.md">奇偶链表</a></li>
+<li><a href="/solution/0100-0199/0141.Linked%20List%20Cycle/README.md">环形链表</a></li>
+<li><a href="/solution/0100-0199/0142.Linked%20List%20Cycle%20II/README.md">环形链表 II</a></li>
+<li><a href="/solution/0700-0799/0707.Design%20Linked%20List/README.md">设计链表</a></li>
+</ul>
+<h3 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h3><ul>
+<li><a href="/solution/0100-0199/0144.Binary%20Tree%20Preorder%20Traversal/README.md">二叉树的前序遍历</a></li>
+<li><a href="/solution/0100-0199/0145.Binary%20Tree%20Postorder%20Traversal/README.md">二叉树的后序遍历</a></li>
+<li><a href="/solution/0000-0099/0094.Binary%20Tree%20Inorder%20Traversal/README.md">二叉树的中序遍历</a></li>
+<li><a href="/solution/0100-0199/0101.Symmetric%20Tree/README.md">对称二叉树</a></li>
+<li><a href="/lcof/面试题26.%20树的子结构/README.md">树的子结构</a></li>
+<li><a href="/solution/0200-0299/0226.Invert%20Binary%20Tree/README.md">翻转二叉树</a></li>
+<li><a href="/solution/0100-0199/0102.Binary%20Tree%20Level%20Order%20Traversal/README.md">二叉树的层次遍历</a></li>
+<li><a href="/solution/0100-0199/0107.Binary%20Tree%20Level%20Order%20Traversal%20II/README.md">二叉树的层次遍历 II</a></li>
+<li><a href="/solution/0100-0199/0199.Binary%20Tree%20Right%20Side%20View/README.md">二叉树的右视图</a></li>
+<li><a href="/solution/0100-0199/0104.Maximum%20Depth%20of%20Binary%20Tree/README.md">二叉树的最大深度</a></li>
+<li><a href="/solution/0100-0199/0111.Minimum%20Depth%20of%20Binary%20Tree/README.md">二叉树的最小深度</a></li>
+<li><a href="/solution/0200-0299/0257.Binary%20Tree%20Paths/README.md">二叉树的所有路径</a></li>
+<li><a href="/solution/0100-0199/0112.Path%20Sum/README.md">路径总和</a></li>
+<li><a href="/solution/0100-0199/0113.Path%20Sum%20II/README.md">路径总和 II</a></li>
+<li><a href="/solution/0100-0199/0105.Construct%20Binary%20Tree%20from%20Preorder%20and%20Inorder%20Traversal/README.md">从前序与中序遍历序列构造二叉树</a></li>
+<li><a href="/solution/0100-0199/0106.Construct%20Binary%20Tree%20from%20Inorder%20and%20Postorder%20Traversal/README.md">从中序与后序遍历序列构造二叉树</a></li>
+<li><a href="/lcof/面试题33.%20二叉搜索树的后序遍历序列/README.md">二叉搜索树的后序遍历序列</a></li>
+<li><a href="/solution/0100-0199/0173.Binary%20Search%20Tree%20Iterator/README.md">二叉搜索树迭代器</a></li>
+<li><a href="/solution/0200-0299/0235.Lowest%20Common%20Ancestor%20of%20a%20Binary%20Search%20Tree/README.md">二叉树的最近公共祖先</a></li>
+<li><a href="/solution/0200-0299/0236.Lowest%20Common%20Ancestor%20of%20a%20Binary%20Tree/README.md">二叉搜索树的最近公共祖先</a></li>
+<li><a href="/lcci/17.12.BiNode/README.md">将二叉搜索树转换为单链表</a></li>
+<li><a href="/solution/0400-0499/0426.Convert%20Binary%20Search%20Tree%20to%20Sorted%20Doubly%20Linked%20List/README.md">将二叉搜索树转化为排序的双向链表</a></li>
+</ul>
+<h3 id="数学"><a href="#数学" class="headerlink" title="数学"></a>数学</h3><ul>
+<li><a href="/solution/0000-0099/0012.Integer%20to%20Roman/README.md">整数转罗马数字</a></li>
+<li><a href="/solution/0000-0099/0013.Roman%20to%20Integer/README.md">罗马数字转整数</a></li>
+<li><a href="/solution/0100-0199/0136.Single%20Number/README.md">只出现一次的数字</a></li>
+<li><a href="/solution/0100-0199/0137.Single%20Number%20II/README.md">只出现一次的数字 II</a></li>
+<li><a href="/solution/0200-0299/0260.Single%20Number%20III/README.md">只出现一次的数字 III</a></li>
+<li><a href="/solution/0600-0699/0645.Set%20Mismatch/README.md">错误的集合</a></li>
+<li><a href="/solution/0100-0199/0191.Number%20of%201%20Bits/README.md">位 1 的个数</a></li>
+<li><a href="/solution/0200-0299/0204.Count%20Primes/README.md">计数质数</a></li>
+<li><a href="/lcof/面试题65.%20不用加减乘除做加法/README.md">不用加减乘除做加法</a></li>
+<li><a href="/solution/0200-0299/0268.Missing%20Number/README.md">丢失的数字</a></li>
+</ul>
+<h3 id="栈和队列"><a href="#栈和队列" class="headerlink" title="栈和队列"></a>栈和队列</h3><ul>
+<li><a href="/solution/0000-0099/0020.Valid%20Parentheses/README.md">有效的括号</a></li>
+<li><a href="/solution/0100-0199/0155.Min%20Stack/README.md">最小栈</a></li>
+<li><a href="/lcof/面试题59%20-%20II.%20队列的最大值/README.md">队列的最大值</a></li>
+<li><a href="/solution/0200-0299/0232.Implement%20Queue%20using%20Stacks/README.md">用栈实现队列</a></li>
+<li><a href="/solution/0200-0299/0225.Implement%20Stack%20using%20Queues/README.md">用队列实现栈</a></li>
+<li><a href="/solution/0100-0199/0150.Evaluate%20Reverse%20Polish%20Notation/README.md">逆波兰表达式求值</a></li>
+<li><a href="/solution/0900-0999/0933.Number%20of%20Recent%20Calls/README.md">最近的请求次数</a></li>
+<li><a href="/solution/0700-0799/0739.Daily%20Temperatures/README.md">每日温度</a></li>
+<li><a href="/solution/0200-0299/0227.Basic%20Calculator%20II/README.md">基本计算器 II</a></li>
+<li><a href="/solution/0400-0499/0496.Next%20Greater%20Element%20I/README.md">下一个更大元素 I</a></li>
+<li><a href="/solution/0500-0599/0503.Next%20Greater%20Element%20II/README.md">下一个更大元素 II</a></li>
+</ul>
+<h3 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h3><ul>
+<li><a href="/solution/0000-0099/0070.Climbing%20Stairs/README.md">爬楼梯</a></li>
+<li><a href="/solution/0000-0099/0042.Trapping%20Rain%20Water/README.md">接雨水</a></li>
+<li><a href="/solution/0000-0099/0053.Maximum%20Subarray/README.md">最大子序和</a></li>
+<li><a href="/lcof/面试题47.%20礼物的最大价值/README.md">礼物的最大价值</a></li>
+<li><a href="/solution/0000-0099/0064.Minimum%20Path%20Sum/README.md">最小路径和</a></li>
+<li><a href="/solution/0000-0099/0091.Decode%20Ways/README.md">解码方法</a></li>
+<li><a href="/solution/0100-0199/0152.Maximum%20Product%20Subarray/README.md">乘积最大子序列</a></li>
+<li><a href="/solution/0100-0199/0198.House%20Robber/README.md">打家劫舍</a></li>
+<li><a href="/solution/0200-0299/0213.House%20Robber%20II/README.md">打家劫舍 II</a></li>
+<li><a href="/solution/0300-0399/0300.Longest%20Increasing%20Subsequence/README.md">最长上升子序列</a></li>
+<li><a href="/solution/0300-0399/0354.Russian%20Doll%20Envelopes/README.md">俄罗斯套娃信封问题</a></li>
+<li><a href="/solution/1100-1199/1143.Longest%20Common%20Subsequence/README.md">最长公共子序列</a></li>
+</ul>
+<h3 id="回溯算法"><a href="#回溯算法" class="headerlink" title="回溯算法"></a>回溯算法</h3><ul>
+<li><a href="/solution/0000-0099/0078.Subsets/README.md">子集</a></li>
+<li><a href="/solution/0000-0099/0090.Subsets%20II/README.md">子集 II</a></li>
+</ul>
+<h3 id="设计"><a href="#设计" class="headerlink" title="设计"></a>设计</h3><ul>
+<li><a href="/solution/0100-0199/0146.Lru%20Cache/README.md">LRU 缓存机制</a></li>
+<li><a href="/solution/0200-0299/0208.Implement%20Trie%20%28Prefix%20Tree%29/README.md">实现 Trie (前缀树)</a></li>
+<li><a href="/solution/1800-1899/1804.Implement%20Trie%20II%20%28Prefix%20Tree%29/README.md">实现 Trie （前缀树） II</a></li>
+<li><a href="/solution/0600-0699/0622.Design%20Circular%20Queue/README.md">设计循环队列</a></li>
+<li><a href="/solution/0600-0699/0641.Design%20Circular%20Deque/README.md">设计循环双端队列</a></li>
+<li><a href="/solution/0700-0799/0705.Design%20HashSet/README.md">设计哈希集合</a></li>
+<li><a href="/solution/0700-0799/0706.Design%20HashMap/README.md">设计哈希映射</a></li>
+</ul>
+<h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h3><ul>
+<li><a href="/solution/0100-0199/0175.Combine%20Two%20Tables/README.md">组合两个表</a></li>
+<li><a href="/solution/0100-0199/0176.Second%20Highest%20Salary/README.md">第二高的薪水</a></li>
+<li><a href="/solution/0100-0199/0177.Nth%20Highest%20Salary/README.md">第 N 高的薪水</a></li>
+<li><a href="/solution/0100-0199/0178.Rank%20Scores/README.md">分数排名</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/面试/" rel="tag"># 面试</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/05/27/redis/redis数据结构/" rel="prev" title="redis数据结构">
+      <i class="fa fa-chevron-left"></i> redis数据结构
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#站点"><span class="nav-number">2.</span> <span class="nav-text">站点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LeetCode-全解"><span class="nav-number">3.</span> <span class="nav-text">LeetCode 全解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基础算法通关"><span class="nav-number">4.</span> <span class="nav-text">基础算法通关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#排序算法"><span class="nav-number">4.1.</span> <span class="nav-text">排序算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找算法"><span class="nav-number">4.2.</span> <span class="nav-text">查找算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高频考题"><span class="nav-number">5.</span> <span class="nav-text">高频考题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数组"><span class="nav-number">5.1.</span> <span class="nav-text">数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串"><span class="nav-number">5.2.</span> <span class="nav-text">字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链表"><span class="nav-number">5.3.</span> <span class="nav-text">链表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二叉树"><span class="nav-number">5.4.</span> <span class="nav-text">二叉树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数学"><span class="nav-number">5.5.</span> <span class="nav-text">数学</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#栈和队列"><span class="nav-number">5.6.</span> <span class="nav-text">栈和队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态规划"><span class="nav-number">5.7.</span> <span class="nav-text">动态规划</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#回溯算法"><span class="nav-number">5.8.</span> <span class="nav-text">回溯算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设计"><span class="nav-number">5.9.</span> <span class="nav-text">设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库"><span class="nav-number">5.10.</span> <span class="nav-text">数据库</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">hezhengkui</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">84</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hezhengkui</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
