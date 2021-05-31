@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/28/mybatis/mybatis设计模式/">
+    <link itemprop="mainEntityOfPage" href="/2021/05/19/java/方法重载和方法重写/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,90 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/03/28/mybatis/mybatis设计模式/" class="post-title-link" itemprop="url">mybatis设计模式</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-03-28 10:20:20" itemprop="dateCreated datePublished" datetime="2021-03-28T10:20:20+08:00">2021-03-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-29 10:45:00" itemprop="dateModified" datetime="2021-03-29T10:45:00+08:00">2021-03-29</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="Mybatis常用的设计模式"><a href="#Mybatis常用的设计模式" class="headerlink" title="Mybatis常用的设计模式"></a>Mybatis常用的设计模式</h4><p>1、Builder模式</p>
-<p>​     SqlSessionFactoryBuilder、XMLMapperBuilder、XMLConfigBuilder、</p>
-<p>​     XMLStatementBuilder、SqlSourceBuilder、<span style="color:red;"><strong>XMLScriptBuilder</strong></span></p>
-<p>2、工厂模式</p>
-<p>​    SqlSessionFactory、ObjectFactory、MapperProxyFactory</p>
-<p>3、代理模式</p>
-<p>​    MapperProxy、ConnectionLogger</p>
-<p>4、单例模式</p>
-<p>​    ErrorContext、LogFactory</p>
-<p>5、模版模式</p>
-<p>​    BaseExecutor、SimpleExecutor</p>
-<p>6、适配器模式</p>
-<p>​    Log的Mybatis接口和它对jdbc、log4j等各种日志框架的适配实现</p>
-<p>7、迭代器模式</p>
-<p>​    PropertyTokenizer</p>
-<p>8、装饰者模式</p>
-<p>​    Cache包中的cache.decorators子包中等各个装饰者的实现</p>
-<p>9、组合模式</p>
-<p>​    <span style="color:red;"><strong>SqlNode</strong></span>和各个子类ChooseSqlNode等</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/24/杂文/格局/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/24/杂文/格局/" class="post-title-link" itemprop="url">格局</a>
+            <a href="/2021/05/19/java/方法重载和方法重写/" class="post-title-link" itemprop="url">方法重载和方法重写</a>
         </h2>
 
         <div class="post-meta">
@@ -258,7 +175,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-03-24 18:45:02 / Modified: 14:43:48" itemprop="dateCreated datePublished" datetime="2021-03-24T18:45:02+08:00">2021-03-24</time>
+              <time title="Created: 2021-05-19 10:44:02 / Modified: 11:22:00" itemprop="dateCreated datePublished" datetime="2021-05-19T10:44:02+08:00">2021-05-19</time>
             </span>
 
           
@@ -272,46 +189,141 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h3 id="从小格局到大格局，人必经的四个阶段"><a href="#从小格局到大格局，人必经的四个阶段" class="headerlink" title="从小格局到大格局，人必经的四个阶段"></a><strong>从小格局到大格局，人必经的四个阶段</strong></h3><p>很多人都谈论格局，到底什么是格局？</p>
-<p>当我们夸赞一个人有格局的时候，通常是说他跳出<strong>自我的狭隘</strong>，站在<strong>更广阔</strong>、<strong>更高层的视角</strong>看待问题。</p>
-<p>格局的本质，就是一个人<strong>自上而下</strong>的<strong>兼容性</strong>。</p>
-<h4 id="大格局对小格局，是一种降维打击"><a href="#大格局对小格局，是一种降维打击" class="headerlink" title="大格局对小格局，是一种降维打击"></a>大格局对小格局，是一种降维打击</h4><p>得其大者，可以兼其小。</p>
-<p>格局大的人对格局小的人，就是一种“降维打击”。</p>
-<p>比如，如果你遇到一个人信息密度和知识层面，都远高于你，并且愿意俯下身去，平等地跟你交流，尊重你的想法，时不时提出一些你没有听过并点头称叹的想法。那么这个人的格局，一定高于你。</p>
-<p>归结到自身，道理类似。</p>
-<p>我们所有的痛苦，都不是痛苦本身，都是<strong>面对人生问题的看不穿，想不通，说不透</strong>。换言之，也就是格局不够。</p>
-<p>困囿于自身的时候，才会一叶障目；</p>
-<p>境界、想法提升之后，人生才会豁然开朗。</p>
-<p>当你打开了自己的世界，提升了自己的思维眼界，从小格局走向大格局，相对于过去的你，也是一种“降维打击”。</p>
-<p>这才是一个人越来越强大的终极密码。</p>
-<h4 id="为什么要提升自己的格局？"><a href="#为什么要提升自己的格局？" class="headerlink" title="为什么要提升自己的格局？"></a>为什么要提升自己的格局？</h4><p>很多人会问：为什么要提升自己的格局，保持简单不好吗？</p>
-<p>这当然没有问题。</p>
-<p>但当你的格局提升，层次提高，你就会发现：</p>
-<p><strong>格局越大的人，越会互相尊重，互相关照和支持；</strong></p>
-<p><strong>而越是底层的人，越是互相倾轧，互相拆台，</strong>并不希望你过得比他们好。</p>
-<p>格局提升，决定你会呆在什么样的环境，遇见什么样的人。</p>
-<p>你一定要远离那些见不得你好，诋毁你、消耗你的人。跟有格局的人一起同行，才是你最该走的路。</p>
-<h4 id="提升格局的四个阶段"><a href="#提升格局的四个阶段" class="headerlink" title="提升格局的四个阶段"></a>提升格局的四个阶段</h4><h5 id="读万卷书"><a href="#读万卷书" class="headerlink" title="读万卷书"></a>读万卷书</h5><p>想要提升自己的见识，<strong>读书</strong>是门槛最低的一种方式。读什么样的书有助于提升格局？</p>
-<p><strong>知识类</strong>的书，帮你不断拓展认识世界的过程；</p>
-<p><strong>技能类</strong>的书，帮你能更顺畅地工作，不被时代抛弃；</p>
-<p><strong>思维类</strong>的书，帮你建立完善的思考认知体系，懂得如何解决问题，提升认知深度；</p>
-<p><strong>审美类</strong>的书，帮你提高文学素养，能去拥抱更高远的世界；</p>
-<p><strong>历史类</strong>的书，在人类文明的这些宝贵财富面前，你读到的每一句话，都可能拥有引导你改变人生格局的力量。</p>
-<h5 id="行万里路"><a href="#行万里路" class="headerlink" title="行万里路"></a>行万里路</h5><p>一个人要扩大格局，要敢于走出舒适区，去见那些未曾见过的风土人情，去经历未曾经历的人生。</p>
-<p>千万不要把行万里路理解为简单的“上车睡觉，下车拍照”式的旅游。行路最重要的，是经历。</p>
-<p>人生的很多成长都是由经历带来的。当然，经历只是诱因，归根结底还是<strong>思考</strong>。没有思考，经历再多，也不会改变。</p>
-<h5 id="阅人无数"><a href="#阅人无数" class="headerlink" title="阅人无数"></a>阅人无数</h5><p>一个格局大的人一定有<strong>开放的思维</strong>，懂得用<strong>欣赏的眼光</strong>去<strong>看待他人</strong>，不会因小事而与人斤斤计较，更不会吝于承认别人的优秀。</p>
-<p>与人交往时，不先入为主，不以己度人，不随意对他人做论断。</p>
-<p>沟通交流时，懂得出言有尺、说话有德、嬉闹有度。</p>
-<p>发表见解时，谨记换位思考，不让人难堪。</p>
-<p>与人合作时，能宽以待人，严于律己，以身作则。</p>
-<h5 id="高人指路"><a href="#高人指路" class="headerlink" title="高人指路"></a>高人指路</h5><p>有人说：“也许你的极限，只是别人的起点。”</p>
-<p>有时候， 高人的一句话，胜过我们几年摸索。</p>
-<p>在你陷入困境的时候，你就需要高人指路。高人能够指出你存在的隐藏缺陷，告诉你当前的状态是一个必经过程，解除你的迷茫和困惑，为你指出正确和合适的努力方向。</p>
-<p>当然，高人是否愿意为你“指路”，就要看你的<strong>潜力</strong>、<strong>人品</strong>和<strong>毅力</strong>。要么让他们看到你能成就事业的潜力，要么让他们欣赏你的人品，又或者你凭借锲而不舍的毅力打动他们。</p>
-<p>在没有遇到高人之前，可以按照上面的三点去做好自己。</p>
-<p><strong>心中有大格局的人，如同站立高地，望得见前路坦荡，亦深知歧路叠嶂。</strong></p>
-<p><a href="https://m.gmw.cn/toutiao/2021-03/22/content_1302180130.htm?tt_from=weixin&tt_group_id=6942254461230252557&utm_campaign=client_share&wxshare_count=1&timestamp=1616563389&app=news_article&utm_source=weixin&utm_medium=toutiao_android&use_new_style=1&req_id=202103241323080101501760422525A2B2&share_token=3427dcf1-3339-40a2-947b-30ba2057c552&group_id=6942254461230252557" target="_blank" rel="noopener">文章来源</a></p>
+          <p><a href="https://blog.csdn.net/zwx900102/article/details/108027295" target="_blank" rel="noopener">https://blog.csdn.net/zwx900102/article/details/108027295</a></p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>JVM执行字节码指令是基于栈的架构，就是说所有的操作数都必须先入栈，然后再根据需要出栈进行操作计算，再把结果进行入栈，这个流程和基于寄存器的架构是有本质区别的，而基于寄存器架构来实现，在不同的机器上可能会无法做到完全兼容，这也是Java会选择基于栈的设计的原因之一。</p>
+<h1 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h1><p>我们思考下，当我们调用一个方法时，参数是怎么传递的，返回值又是怎么保存的，一个方法调用之后又是如何继续下一个方法调用的呢？调用过程中肯定会存储一些方法的参数和返回值等信息，这些信息存储在哪里呢？</p>
+<p>我们知道，每次调用一个方法就会产生一个栈帧，所以我们肯定可以想到栈帧就存储了所有调用过程中需要使用到的数据。现在就让我们深入的去了解一下Java虚拟机栈中的栈帧吧。</p>
+<h1 id="栈帧"><a href="#栈帧" class="headerlink" title="栈帧"></a>栈帧</h1><p>当我们调用一个方法的时候，就会产生一个栈帧，当一个方法调用完成时，它所对应的栈帧将被销毁，无论这种完成是正常的还是突然的(抛出一个未捕获的异常)。</p>
+<p>每个栈帧中包括局部变量表(Local Variables)、操作数栈(Operand Stack)、动态链接(Dynamic Linking)、方法返回地址(Return Address)和额外的附加信息。</p>
+<p>在给定的线程当中，永远只有一个栈帧是活动的，所以活动的栈帧又称之为当前栈帧，而其对应的方法则称之为当前方法，定义了当前方法的类则称之为当前类。当一个方法调用结束时，其对应的栈帧也会被丢弃。</p>
+<h2 id="局部变量表-Local-Variables"><a href="#局部变量表-Local-Variables" class="headerlink" title="局部变量表(Local Variables)"></a>局部变量表(Local Variables)</h2><p>局部变量表是以数组的形式存储的，而且当前栈帧的方法所需要分配的最大长度是在编译时就确定了。局部变量表通过index来寻址，变量从index[0]开始传递。</p>
+<p>局部变量表的数组中，每一个位置可以保存一个32位的数据类型：boolean、byte、char、short、int、float、reference或returnAddress类型的值。而对于64位的数据类型long和double则需要两个位置来存储，但是因为局部变量表是属于线程私有的，所以虽然被分割为2个变量存储，依然不用担心会出现安全性问题。</p>
+<p>对于64位的数据类型，假如其占用了数组中的index[n]和index[n+1]两个位置，那么不允许单独访问其中的某一个位置，Java虚拟机规范中规定，如果出现一个64位的数据被单独访问某一部分时，则在类加载机制中的校验阶段就应该抛出异常。</p>
+<p>Java虚拟机在方法调用时使用局部变量进行传递参数。在类方法(static方法)调用中，所有参数都以从局部变量中的index[0]开始进行参数传递。而在实例方法调用上，index[0]固定用来传递方法所属于的对象实例，其余所有参数则在从局部变量表内index[1]的位置开始进行传递。</p>
+<p>注意：局部变量表中的变量不可以直接使用，如需要使用的话，必须通过相关指令将其加载至操作数栈中作为操作数才能使用</p>
+<h2 id="操作数栈-Operand-Stacks"><a href="#操作数栈-Operand-Stacks" class="headerlink" title="操作数栈(Operand Stacks)"></a>操作数栈(Operand Stacks)</h2><p>操作数栈，在上下文语义清晰时，也可以称之为操作栈（Operand Stack），是一个后进先出(Last In First Out,LIFO)栈，同局部变量表一样，操作数栈的最大深度也是在编译时就确定的。</p>
+<p>操作数栈在刚被创建时(也就是方法刚被执行的时候)是空的，然后在执行方法的过程中，通过虚拟机指令将常量/值从局部变量表或字段加载到操作数栈中，然后对其进行操作，并将操作结果压入栈内。</p>
+<p>操作数堆栈上的每个条目都可以保存任何Java虚拟机类型的值，包括long或double类型的值。</p>
+<p>注意：我们必须以适合其类型的方式对操作数堆栈中的值进行操作。例如，不可能将两个int类型的值压入栈后将其视为long类型，也不可能将两个float类型值压入栈内后使用iadd指令将其添加。</p>
+<h2 id="动态连接-Dynamic-Linking"><a href="#动态连接-Dynamic-Linking" class="headerlink" title="动态连接(Dynamic Linking)"></a>动态连接(Dynamic Linking)</h2><p>每个栈帧都包含一个指向运行时常量池中该栈帧所属方法的引用，持有这个引用是为了支持方法调用过程中的动态连接。</p>
+<p>在Class文件中的常量池中存有大量的符号引用，字节码中的方法调用指令就以常量池中指向方法的符号引用作为参数，这些符号引用一部分会在类加载阶段或者第一次使用的时候就转化为直接引用，这种就称为静态解析。而另外一部分则会在每一次运行期间才会转化为直接引用，这部分就称为动态连接。</p>
+<h2 id="方法返回地址"><a href="#方法返回地址" class="headerlink" title="方法返回地址"></a>方法返回地址</h2><p>当一个方法开始执行后，只有两种方式可以退出：一种是遇到方法返回的字节码指令；一种是遇见异常，并且这个异常没有在方法体内得到处理。</p>
+<h3 id="正常退出-Normal-Method-Invocation-Completion"><a href="#正常退出-Normal-Method-Invocation-Completion" class="headerlink" title="正常退出(Normal Method Invocation Completion)"></a>正常退出(Normal Method Invocation Completion)</h3><p>如果对当前方法的调用正常完成，则可能会向调用方法返回一个值。当被调用的方法执行其中一个返回指令时，返回指令的选择必须与被返回值的类型相匹配(如果有的话)。</p>
+<p>方法正常退出时，当前栈帧通过将调用者的pc程序计数器适当的并跳过当前的调用指令来恢复调用程序的状态，包括它的局部变量表和操作数堆栈。然后继续在调用方法的栈帧来执行后续流程，如果有返回值的话则需要将返回值压入操作数栈。</p>
+<h3 id="异常终止-Abrupt-Method-Invocation-Completion"><a href="#异常终止-Abrupt-Method-Invocation-Completion" class="headerlink" title="异常终止(Abrupt Method Invocation Completion)"></a>异常终止(Abrupt Method Invocation Completion)</h3><p>如果在方法中执行Java虚拟机指令导致Java虚拟机抛出异常，并且该异常没有在方法中处理，那么方法调用会突然结束，因为异常导致的方法突然结束永远不会有返回值返回给它的调用者。</p>
+<h2 id="其他附加信息"><a href="#其他附加信息" class="headerlink" title="其他附加信息"></a>其他附加信息</h2><p>这一部分具体要看虚拟机产商是如何实现的，虚拟机规范并没有对这部分进行描述。</p>
+<h1 id="方法调用流程演示"><a href="#方法调用流程演示" class="headerlink" title="方法调用流程演示"></a>方法调用流程演示</h1><p>上面的概念听起来有点抽象，下面我们就通过一个简单的例子来演示一下方法的执行流程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">package com.zwx.jvm;</span><br><span class="line"></span><br><span class="line">public class JVMDemo &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        int sum = add(1, 2);</span><br><span class="line">        print(sum);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static int add(int a, int b) &#123;</span><br><span class="line">        a = 3;</span><br><span class="line">        int result = a + b;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void print(int num) &#123;</span><br><span class="line">        System.out.println(num);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>要想了解Java虚拟机的执行流程，那么我们必须要对类进行编译，得到字节码文件，执行如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javap -c xxx\xxx\JVMDemo.class &gt;1.txt</span><br></pre></td></tr></table></figure>
+
+<p>将JVMDemo.class生成的字节码指令输出到1.txt文件中，然后打开，看到如下字节码指令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">Compiled from &quot;JVMDemo.java&quot;</span><br><span class="line">public class com.zwx.jvm.JVMDemo &#123;</span><br><span class="line">  public com.zwx.jvm.JVMDemo();</span><br><span class="line">    Code:</span><br><span class="line">       0: aload_0</span><br><span class="line">       1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">       4: return</span><br><span class="line"></span><br><span class="line">  public static void main(java.lang.String[]);</span><br><span class="line">    Code:</span><br><span class="line">       0: iconst_1</span><br><span class="line">       1: iconst_2</span><br><span class="line">       2: invokestatic  #2                  // Method add:(II)I</span><br><span class="line">       5: istore_1</span><br><span class="line">       6: iload_1</span><br><span class="line">       7: invokestatic  #3                  // Method print:(I)V</span><br><span class="line">      10: return</span><br><span class="line"></span><br><span class="line">  public static int add(int, int);</span><br><span class="line">    Code:</span><br><span class="line">       0: iconst_3</span><br><span class="line">       1: istore_0</span><br><span class="line">       2: iload_0</span><br><span class="line">       3: iload_1</span><br><span class="line">       4: iadd</span><br><span class="line">       5: istore_2</span><br><span class="line">       6: iload_2</span><br><span class="line">       7: ireturn</span><br><span class="line"></span><br><span class="line">  public static void print(int);</span><br><span class="line">    Code:</span><br><span class="line">       0: getstatic     #4                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">       3: iload_0</span><br><span class="line">       4: invokevirtual #5                  // Method java/io/PrintStream.println:(I)V</span><br><span class="line">       7: return</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果是第一次接触可能指令看不太懂，但是大致的类结构还是很清晰的，我们先来对用到的字节码指令大致说明一下：</p>
+<ul>
+<li>iconst_i<br>表示将整型数字i压入操作数栈，注意，这里i的返回只有-1~5，如果不在这个范围会采用其他指令，如当int取值范围是[-128,127]时，会采用bipush指令。</li>
+<li>invokestatic<br>表示调用一个静态方法</li>
+<li>istore_n<br>这里表示将一个整型数字存入局部变量表的索引n位置，因为局部变量表是通过一个数组形式来存储变量的</li>
+<li>iload_n<br>表示将局部变量位置n的变量压入操作数栈</li>
+<li>ireturn<br>将当前方法的结果返回到上一个栈帧</li>
+<li>invokevirtual<br>调用虚方法</li>
+</ul>
+<p>了解了字节码指令的大概意思，接下来就让我们来演示一下主要的几个执行流程：</p>
+<ul>
+<li>1、代码编译之后大致得到如下的一个Java虚拟机栈,注意这时候操作数栈都是空的(pc寄存器的值在这里暂不考虑 ，实际上调用指令的过程，pc寄存器是会一直发生变化的)<br><img src="https://img-blog.csdnimg.cn/20200812062258133.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70" alt="图片"></li>
+<li>2、执行iconst_1和iconst_2两个指令，也就是从本地变量中把整型1和2两个数字压入操作数栈内：<br><img src="https://img-blog.csdnimg.cn/20200812062436923.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70" alt="图片"></li>
+<li>3、执行invokestatic指令，调用add方法，会再次创建一个新的栈帧入栈，并且会将参数a和b存入add栈帧中的本地变量表<br><img src="https://img-blog.csdnimg.cn/20200812125828956.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70#pic_center" alt="图片"></li>
+<li>4、add栈帧中调用iconst_3指令，从本地变量中将整型3压入操作数栈<br><img src="https://img-blog.csdnimg.cn/20200812130046313.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70#pic_center" alt="图片"></li>
+<li>5、add栈帧中调用istore_0，表示将当前的栈顶元素存入局部变量表index[0]的位置，也就是赋值给a。<br><img src="https://img-blog.csdnimg.cn/20200812130202941.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70#pic_center" alt="图片"></li>
+<li>6、调用iload_0和iload_1，将局部变量表中index[0]和index[1]两个位置的变量压入操作数栈<br><img src="https://img-blog.csdnimg.cn/20200812130400501.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70#pic_center" alt="图片"></li>
+<li>7、最后执行iadd指令：将3和2弹出栈后将两个数相加，得到5，并将得到的结果5重新压入栈内<br><img src="https://img-blog.csdnimg.cn/20200812130447517.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70#pic_center" alt="图片"><br>8、执行istore_2指令，将当前栈顶元素弹出存入局部变量表index[2]的位置，并再次调用iload_2从局部变量表内将index[2]位置的数据压入操作数栈内<br><img src="https://img-blog.csdnimg.cn/20200812130819549.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70#pic_center" alt="图片"></li>
+<li>9、最后执行ireturn命令将结果5返回main栈帧，此时栈帧add被销毁，回到main栈帧继续后续执行<br><img src="https://img-blog.csdnimg.cn/20200812064056710.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70" alt="图片"><br>方法的调用大致就是不断的入栈和出栈的过程，上述的过程省略了很多细节，只关注了大致流程即可，实际调用比图中要复杂的多。</li>
+</ul>
+<h1 id="方法调用分析"><a href="#方法调用分析" class="headerlink" title="方法调用分析"></a>方法调用分析</h1><p>我们知道，Java是一种面向对象语言，支持多态，而多态的体现形式就是方法重载和方法重写，那么Java虚拟机又是如何确认我们应该调用哪一个方法的呢？</p>
+<h2 id="方法调用指令"><a href="#方法调用指令" class="headerlink" title="方法调用指令"></a>方法调用指令</h2><p>首先，我们来看一下方法的字节码调用指令，在Java中，提供了4种字节码指令来调用方法(jdk1.7之前)：</p>
+<ul>
+<li>1、invokestatic：调用静态方法</li>
+<li>2、invokespecial：调用实例构造器方法，私有方法，父类方法</li>
+<li>3、invokevirtual：调用所有的虚方法</li>
+<li>4、invokeinterface：调用接口方法（运行时会确定一个实现了接口的对象）</li>
+</ul>
+<p>注意：在JDK1.7开始，Java新增了一个指令invokedynamic，这个是为了实现“动态类型语言”而引入的，在这里我们暂不讨论</p>
+<h2 id="方法解析"><a href="#方法解析" class="headerlink" title="方法解析"></a>方法解析</h2><p>在类加载机制中的解析阶段，主要做的事情就是将符号引用转为直接引用，但是，对方法的调用而言，有一个前提，那就是在方法真正运行之前就可以唯一确定具体要调用哪一个方法，而且这个方法在运行期间是不可变的。只有满足这个前提的方法才会在解析阶段直接被替换为直接引用，否则只能等到运行时才能最终确定。</p>
+<h2 id="非虚方法"><a href="#非虚方法" class="headerlink" title="非虚方法"></a>非虚方法</h2><p>在Java语言中，满足“编译器可知，运行期不可变”这个前提的方法，被称之为非虚方法。非虚方法在类加载机制中的解析阶段就可以直接将符号引用转化为直接引用。非虚方法有4种：</p>
+<ul>
+<li>1、静态方法</li>
+<li>2、私有方法</li>
+<li>3、实例构造器方法</li>
+<li>4、父类方法(通过super.xxx调用，因为Java是单继承，只有一个父类，所以可以确定方法的唯一)</li>
+</ul>
+<p>除了非虚方法之外的非final方法就被称之为虚方法，虚方法需要运行时才能确定真正调用哪一个方法。Java语言规范中明确指出，final方法是一种非虚方法，但是final又属于比较特殊的存在，因为final方法和其他非虚方法调用的字节码指令不一样。</p>
+<p>知道了虚方法的类型，再结合上面的方法的调用指令，我们可以知道，虚方法就是通过字节码指令invokestatic和invokespecial调用的，而final方法又是一个例外，final方法是通过字节码指令invokevirtual调用的，但是因为final方法的特性就是不可被重写，无法覆盖，所以必然是唯一的，虽然调用指令不同，但是依然属于非虚方法的范畴。</p>
+<h2 id="方法重载"><a href="#方法重载" class="headerlink" title="方法重载"></a>方法重载</h2><p>先来看一个方法重载的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">package com.zwx.jvm.overload;</span><br><span class="line"></span><br><span class="line">public class OverloadDemo &#123;</span><br><span class="line">    static class Human &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    static class Man extends Human &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    static class WoMan extends Human &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void hello(Human human) &#123;</span><br><span class="line">        System.out.println(&quot;Hi,Human&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void hello(Man man) &#123;</span><br><span class="line">        System.out.println(&quot;Hi,Man&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void hello(WoMan woMan) &#123;</span><br><span class="line">        System.out.println(&quot;Hi,Women&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        OverloadDemo overloadDemo = new OverloadDemo();</span><br><span class="line">        Human man = new Man();</span><br><span class="line">        Human woman = new WoMan();</span><br><span class="line"></span><br><span class="line">        overloadDemo.hello(man);</span><br><span class="line">        overloadDemo.hello(woman);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Hi,Human</span><br><span class="line">Hi,Human</span><br></pre></td></tr></table></figure>
+
+<p>这里，Java虚拟机为什么会选择参数为Human的方法来进行调用呢？</p>
+<p>在解释这个问题之前，我们先来介绍一个概念：宗量</p>
+<h2 id="宗量"><a href="#宗量" class="headerlink" title="宗量"></a>宗量</h2><p><strong>方法的接收者(调用者)和方法参数统称为宗量</strong>。而最终决定方法的分派就是基于宗量来选择的，故而根据基于多少种宗量来选择方法又可以分为：</p>
+<ul>
+<li>单分派：根据1个宗量对方法进行选择</li>
+<li>多分派：根据1个以上的宗量对方法进行选择</li>
+</ul>
+<p>知道了方法的分派是基于宗量来进行的，那我们再回到上面的例子中就很好理解了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">overloadDemo.hello(man);</span><br></pre></td></tr></table></figure>
+
+<p>这句代码中overloadDemo表示接收者，man表示参数，而接收者是确定唯一的，就是overloadDemo实例，所以决定调用哪个方法的只有参数(包括参数类型和个数和顺序)这一个宗量。我们再看看参数类型：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Human man = new Man();</span><br></pre></td></tr></table></figure>
+
+<p>这句话中，Human称之为变量的静态类型，而Man则称之为变量的实际类型，而Java虚拟机在确认重载方法时是基于参数的静态类型来作为判断依据的，故而最终实际上不管你右边new的对象是哪个，调用的都是参数类型为Human的方法。</p>
+<h2 id="静态分派"><a href="#静态分派" class="headerlink" title="静态分派"></a>静态分派</h2><p>所有依赖变量的静态类型来定位方法执行的分派动作就称之为静态分派。<strong>静态分派最典型的应用就是方法重载。</strong></p>
+<p>方法重载在编译期就能确定方法的唯一，不过虽然如此，但是在有些情况下，这个重载版本不是唯一的，甚至是有点模糊的。产生这个原因就是因为字面量并不需要定义，所以字面量就没有今天类型，比如我们直接调用一个方法：xxx.xxx(‘1’)，这个字面量1就是模糊的，并没有对应静态类型。我们再来看一个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">package com.zwx.jvm.overload;</span><br><span class="line"></span><br><span class="line">import java.io.Serializable;</span><br><span class="line"></span><br><span class="line">public class OverloadDemo2 &#123;</span><br><span class="line"></span><br><span class="line">    public static void hello(Object a)&#123;</span><br><span class="line">        System.out.println(&quot;Hello,Object&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void hello(double a)&#123;</span><br><span class="line">        System.out.println(&quot;Hello,double&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void hello(Double a)&#123;</span><br><span class="line">        System.out.println(&quot;Hello,Double&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void hello(float a)&#123;</span><br><span class="line">        System.out.println(&quot;Hello,float&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void hello(long a)&#123;</span><br><span class="line">        System.out.println(&quot;Hello,long&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void hello(int a)&#123;</span><br><span class="line">        System.out.println(&quot;Hello,int&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void hello(Character a)&#123;</span><br><span class="line">        System.out.println(&quot;Hello,Character&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void hello(char a)&#123;</span><br><span class="line">        System.out.println(&quot;Hello,char&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void hello(char ...a)&#123;</span><br><span class="line">        System.out.println(&quot;Hello,chars&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void hello(Serializable a)&#123;</span><br><span class="line">        System.out.println(&quot;Hello,Serializable&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        OverloadDemo2.hello(&apos;1&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的输出结果是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello,char</span><br></pre></td></tr></table></figure>
+
+<p>然后如果把该方法注释掉，就会输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello,int</span><br></pre></td></tr></table></figure>
+
+<p>再把int方法注释掉，那么会依次按照如下顺序进行方法调用输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">char-&gt;int-&gt;long-&gt;float-&gt;double-&gt;Character-&gt;Serializable-&gt;Object-&gt;chars</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，多参数的优先级最低，之所以会输出Serializable是因为包装类Character实现了Serializable接口，注意示例中double的包装类Double，并不会被执行。</p>
+<h2 id="方法重写"><a href="#方法重写" class="headerlink" title="方法重写"></a>方法重写</h2><p>我们把上面第1个例子修改一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">package com.zwx.jvm.override;</span><br><span class="line"></span><br><span class="line">public class OverrideDemo &#123;</span><br><span class="line">    static class Human &#123;</span><br><span class="line">        public void hello(Human human) &#123;</span><br><span class="line">            System.out.println(&quot;Hi,Human&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static class Man extends Human &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void hello(Human human) &#123;</span><br><span class="line">            System.out.println(&quot;Hi,Man&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static class WoMan extends Human &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void hello(Human human) &#123;</span><br><span class="line">            System.out.println(&quot;Hi,Women&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Human man = new Man();</span><br><span class="line">        Human woman = new WoMan();</span><br><span class="line"></span><br><span class="line">        man.hello(man);</span><br><span class="line">        man.hello(woman);</span><br><span class="line">        woman.hello(woman);</span><br><span class="line">        woman.hello(man);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Hi,Man</span><br><span class="line">Hi,Man</span><br><span class="line">Hi,Women</span><br><span class="line">Hi,Women</span><br></pre></td></tr></table></figure>
+
+<p>这里静态类型都是Human，但是却输出了两种结果，所以肯定不是按照静态类型来分派方法了，而从结果来看应该是按照了调用者的实际类型来进行的判断。</p>
+<p>执行javap命令把类转换成字节码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">Compiled from &quot;OverrideDemo.java&quot;</span><br><span class="line">public class com.zwx.jvm.override.OverrideDemo &#123;</span><br><span class="line">  public com.zwx.jvm.override.OverrideDemo();</span><br><span class="line">    Code:</span><br><span class="line">       0: aload_0</span><br><span class="line">       1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">       4: return</span><br><span class="line"></span><br><span class="line">  public static void main(java.lang.String[]);</span><br><span class="line">    Code:</span><br><span class="line">       0: new           #2                  // class com/zwx/jvm/override/OverrideDemo$Man</span><br><span class="line">       3: dup</span><br><span class="line">       4: invokespecial #3                  // Method com/zwx/jvm/override/OverrideDemo$Man.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">       7: astore_1</span><br><span class="line">       8: new           #4                  // class com/zwx/jvm/override/OverrideDemo$WoMan</span><br><span class="line">      11: dup</span><br><span class="line">      12: invokespecial #5                  // Method com/zwx/jvm/override/OverrideDemo$WoMan.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">      15: astore_2</span><br><span class="line">      16: aload_1</span><br><span class="line">      17: aload_1</span><br><span class="line">      18: invokevirtual #6                  // Method com/zwx/jvm/override/OverrideDemo$Human.hello:(Lcom/zwx/jvm/override/OverrideDemo$Human;)V</span><br><span class="line">      21: aload_1</span><br><span class="line">      22: aload_2</span><br><span class="line">      23: invokevirtual #6                  // Method com/zwx/jvm/override/OverrideDemo$Human.hello:(Lcom/zwx/jvm/override/OverrideDemo$Human;)V</span><br><span class="line">      26: aload_2</span><br><span class="line">      27: aload_2</span><br><span class="line">      28: invokevirtual #6                  // Method com/zwx/jvm/override/OverrideDemo$Human.hello:(Lcom/zwx/jvm/override/OverrideDemo$Human;)V</span><br><span class="line">      31: aload_2</span><br><span class="line">      32: aload_1</span><br><span class="line">      33: invokevirtual #6                  // Method com/zwx/jvm/override/OverrideDemo$Human.hello:(Lcom/zwx/jvm/override/OverrideDemo$Human;)V</span><br><span class="line">      36: return</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以发现这里的方法调用使用了指令invokevirtual来调用，因为根据上面的分类可以判断，hello方法均是虚方法。</p>
+<blockquote>
+<p>main方法大概解释一下，main方法中，第7行(Code列序号)和第15行是分别把Man对象实例和Women对象实例存入局部变量变的index[1]和index[2]两个位置，然后16,17两行，21,22两行，26,27两行，31,32两行分别是把需要用到的方法调用者和参数压入操作数栈，然后调用invokevirtual指令调用方法。</p>
+</blockquote>
+<p>所以上面最关键的就是invokevirtual指令到底是如何工作的呢？invokevirtual主要是按照如下步骤进行方法选择的：</p>
+<ul>
+<li>1、找到当前操作数栈中的方法接收者(调用者)，记下来，比如叫Caller</li>
+<li>2、然后在类型Caller中去找方法，如果找到方法签名一致的方法，则停止搜索，开始对方法校验，校验通过直接调用，校验不通过，直接抛IllegalAccessError异常</li>
+<li>3、如果在Caller中没有找到方法签名一致的方法，则往上找父类，以此类推，直到找到为止，如果到顶了还没找到匹配的方法，则抛出AbstractMethodError异常</li>
+</ul>
+<h2 id="动态分派"><a href="#动态分派" class="headerlink" title="动态分派"></a>动态分派</h2><p>上面的方法重写例子中，在运行期间才能根据实际类型来确定方法的执行版本的分派过程就称之为动态分派。</p>
+<h2 id="单分派与多分派"><a href="#单分派与多分派" class="headerlink" title="单分派与多分派"></a>单分派与多分派</h2><p>上面方法重载的第1个示例中，是一个静态分派过程，静态分配过程中Java虚拟机选择目标方法有两点：</p>
+<ul>
+<li>1、静态类型</li>
+<li>2、方法参数</li>
+</ul>
+<p>也就是用到了2个宗量来进行分派，所以是一个静态多分派的过程。</p>
+<p>而上面方法重写的例子中，因为方法签名是固定的，也就是参数是固定的，那么就只有一个宗量-静态类型，能最终确定方法的调用，所以属于动态单分派。</p>
+<p>所以可以得出对Java而言：Java是一门静态多分派，动态单分派语言</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本文主要介绍了一下Java虚拟机中，方法的执行流程以及方法执行过程中时，Java虚拟机栈中的内存布局，并从字节码的角度诠释了Java虚拟机是如何针对方法重载和方法重写来做出最终调用方法的选择的。</p>
 
       
     </div>
@@ -331,7 +343,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/23/leetcode/tree/">
+    <link itemprop="mainEntityOfPage" href="/2021/05/18/leetcode/字符串/3. 无重复字符的最长子串/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -345,7 +357,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/03/23/leetcode/tree/" class="post-title-link" itemprop="url">tree</a>
+            <a href="/2021/05/18/leetcode/字符串/3. 无重复字符的最长子串/" class="post-title-link" itemprop="url">3. 无重复字符的最长子串</a>
         </h2>
 
         <div class="post-meta">
@@ -355,14 +367,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-03-23 18:45:02" itemprop="dateCreated datePublished" datetime="2021-03-23T18:45:02+08:00">2021-03-23</time>
+              <time title="Created: 2021-05-18 16:42:01" itemprop="dateCreated datePublished" datetime="2021-05-18T16:42:01+08:00">2021-05-18</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-17 10:18:56" itemprop="dateModified" datetime="2021-05-17T10:18:56+08:00">2021-05-17</time>
+                <time title="Modified: 2021-05-31 16:24:42" itemprop="dateModified" datetime="2021-05-31T16:24:42+08:00">2021-05-31</time>
               </span>
 
           
@@ -376,43 +388,108 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h4 id="平衡二叉树"><a href="#平衡二叉树" class="headerlink" title="平衡二叉树"></a>平衡二叉树</h4><p>一个二叉树<em>每个节点</em> 的左右两个子树的高度差的绝对值不超过 1 </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isBalance</span><span class="params">(TreeNode root)</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> Math.abs(helper(root.left) - helper(root.right)) &lt;= <span class="number">1</span> &amp;&amp; isBalance(root.left) &amp;&amp; isBalance(root.right);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">helper</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> Math.max(helper(root.left), helper(root.right)) + <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#### 二叉树先序遍历</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> val;</span><br><span class="line">	TreeNode left, right;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">TreeNode</span><span class="params">(<span class="keyword">int</span> val, TreeNode left, TreeNode right)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.val = val;</span><br><span class="line">		<span class="keyword">this</span>.left = left;</span><br><span class="line">		<span class="keyword">this</span>.right = right;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <p><a href="https://leetcode-cn.com/problems/longest-substring-without-repeating-characters" target="_blank" rel="noopener">https://leetcode-cn.com/problems/longest-substring-without-repeating-characters</a></p>
+<p>给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。</p>
+<p>示例 1:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: s = &quot;abcabcbb&quot;</span><br><span class="line">输出: 3 </span><br><span class="line">解释: 因为无重复字符的最长子串是 &quot;abc&quot;，所以其长度为 3。</span><br></pre></td></tr></table></figure>
 
-<p>​    </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">preorder</span><span class="params">(TreeNode root)</span></span>&#123;</span><br><span class="line">		List&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList();</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> res;</span><br><span class="line">		&#125;</span><br><span class="line">		preorder(root, res);</span><br><span class="line">		<span class="keyword">return</span> res;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">preorder</span><span class="params">(TreeNode root, List&lt;Intger&gt; res)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		res.add(root.val);</span><br><span class="line">		preorder(root.left, res);</span><br><span class="line">		preorder(root.right, res);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>示例 2:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: s = &quot;bbbbb&quot;</span><br><span class="line">输出: 1</span><br><span class="line">解释: 因为无重复字符的最长子串是 &quot;b&quot;，所以其长度为 1。</span><br></pre></td></tr></table></figure>
 
-<p>二叉树中序遍历 #94</p>
-<p>二叉树先序遍历 (搜索二叉树，中序遍历，遍历结果是升序排序) #144</p>
-<p>二叉树后序遍历</p>
-<p>二叉树最近公共祖先 #235</p>
-<p>从先序和中序遍历构建二叉树</p>
-<p>对称二叉树</p>
-<p>合并二叉树 #617</p>
-<p>二叉树的深度</p>
-<p>二叉树右视图 #199</p>
-<p>验证二叉搜索树 #98</p>
-<p>二叉树层次遍历 #107</p>
-<p>翻转二叉树 #226</p>
-<p>二叉树路径和 #112  #113 </p>
-<p>二叉树转化为单链表 #114</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">flatten</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">    TreeNode curr = root;</span><br><span class="line">    <span class="keyword">while</span> (curr != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (curr.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">        TreeNode prev = curr.left;</span><br><span class="line">        <span class="keyword">while</span> (prev.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">          prev = prev.right;</span><br><span class="line">        &#125;</span><br><span class="line">        prev.right = curr.right;</span><br><span class="line">        curr.right = curr.left;</span><br><span class="line">        curr.left = <span class="keyword">null</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      curr = curr.right;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">preorder</span><span class="params">(TreeNode root)</span></span>&#123;</span><br><span class="line">		List&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList();</span><br><span class="line">		Stack&lt;TreeNode&gt; stack = <span class="keyword">new</span> Stack();</span><br><span class="line">		<span class="keyword">while</span>(root != <span class="keyword">null</span> || !stack.isEmpty()) &#123;</span><br><span class="line">			<span class="keyword">while</span>(root != <span class="keyword">null</span>) &#123;</span><br><span class="line">				res.add(root.val);</span><br><span class="line">				stack.push(root);</span><br><span class="line">				root = root.left;</span><br><span class="line">			&#125;</span><br><span class="line">			root = stack.pop();</span><br><span class="line">			root = root.right;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> res;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>示例 3:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入: s = &quot;pwwkew&quot;</span><br><span class="line">输出: 3</span><br><span class="line">解释: 因为无重复字符的最长子串是 &quot;wke&quot;，所以其长度为 3。</span><br><span class="line">     请注意，你的答案必须是 子串 的长度，&quot;pwke&quot; 是一个子序列，不是子串。</span><br></pre></td></tr></table></figure>
 
-<h4 id="二叉树中序遍历"><a href="#二叉树中序遍历" class="headerlink" title="二叉树中序遍历"></a>二叉树中序遍历</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">inorder</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">		List&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList();</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> res;</span><br><span class="line">		&#125;</span><br><span class="line">		inorder(root, res);</span><br><span class="line">		<span class="keyword">return</span> res;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">inorder</span><span class="params">(TreeNode root, List&lt;Integer&gt; res)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		inorder(root.left, res);</span><br><span class="line">		res.add(root.val);</span><br><span class="line">		inorder(root.right, res);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>示例 4:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: s = &quot;&quot;</span><br><span class="line">输出: 0</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">inorder</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">		List&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList();</span><br><span class="line">		Queue&lt;TreeNode&gt; queue = <span class="keyword">new</span> LinkedList();</span><br><span class="line">		<span class="keyword">while</span>(root != <span class="keyword">null</span> || !queue.isEmpty()) &#123;</span><br><span class="line">			<span class="keyword">while</span>(root != <span class="keyword">null</span>) &#123;</span><br><span class="line">				queue.offer(root);</span><br><span class="line">				root = root.left;</span><br><span class="line">			&#125;</span><br><span class="line">			root = root.pop();</span><br><span class="line">			res.add(root.val);</span><br><span class="line">			root = root.right;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>滑动窗口（双指针）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution5</span> </span>&#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (s.length() == <span class="number">0</span>) &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">boolean</span>[] used = <span class="keyword">new</span> <span class="keyword">boolean</span>[<span class="number">256</span>];</span><br><span class="line">          <span class="keyword">int</span> max = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">int</span> left = <span class="number">0</span>, right = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">int</span> len = s.length();</span><br><span class="line">          <span class="keyword">while</span> (right &lt; len) &#123;</span><br><span class="line">              <span class="keyword">if</span> (used[s.charAt(right)]) &#123;</span><br><span class="line">                  max = Math.max(max, right - left);</span><br><span class="line">                  <span class="keyword">while</span> (left &lt; right &amp;&amp; s.charAt(left) != s.charAt(right)) &#123;</span><br><span class="line">                      used[s.charAt(left)] = <span class="keyword">false</span>;</span><br><span class="line">                      left++;</span><br><span class="line">                  &#125;</span><br><span class="line">                  left++;</span><br><span class="line">                  right++;</span><br><span class="line">              &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                  used[s.charAt(right++)] = <span class="keyword">true</span>;</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line">          max = Math.max(max, right - left);</span><br><span class="line">          <span class="keyword">return</span> max;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">int</span> n = s.length();</span><br><span class="line">          Set&lt;Character&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">          <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">while</span> (i &lt; n &amp;&amp; j &lt; n) &#123;</span><br><span class="line">              <span class="comment">/**Try to extend the range i, j*/</span></span><br><span class="line">              <span class="keyword">if</span> (!set.contains(s.charAt(j))) &#123;</span><br><span class="line">                  set.add(s.charAt(j++));</span><br><span class="line">                  result = Math.max(result, j - i);</span><br><span class="line">              &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                  set.remove(s.charAt(i++));</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> result;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 
-<h4 id="二叉树后序遍历"><a href="#二叉树后序遍历" class="headerlink" title="二叉树后序遍历"></a>二叉树后序遍历</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">postorder</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">		List&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList();</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> res;</span><br><span class="line">		&#125;</span><br><span class="line">		order(root, res);</span><br><span class="line">		<span class="keyword">return</span> res;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">postorder</span><span class="params">(TreeNode root, List&lt;Integer&gt; res)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (root ==  <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		order(root.left, res);</span><br><span class="line">		order(root.right, res);</span><br><span class="line">		res.add(root.val);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="滑动窗口题目"><a href="#滑动窗口题目" class="headerlink" title="滑动窗口题目:"></a>滑动窗口题目:</h4><ul>
+<li>[3. 无重复字符的最长子串.md](3. 无重复字符的最长子串.md) </li>
+<li>[30. 串联所有单词的子串.md](30. 串联所有单词的子串.md) </li>
+<li>[76. 最小覆盖子串.md](76. 最小覆盖子串.md) </li>
+<li><a href="159.至多包含两个不同字符的最长子串.md">159.至多包含两个不同字符的最长子串.md</a> </li>
+<li><a href="632.最小区间.md">632.最小区间.md</a> </li>
+<li>[209. 长度最小的子数组.md](209. 长度最小的子数组.md) </li>
+<li>[239. 滑动窗口最大值.md](239. 滑动窗口最大值.md) </li>
+<li><a href="567.字符串排列.md">567.字符串排列.md</a> </li>
+</ul>
 
-<p>​    </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">postorder</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">		List&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> res;</span><br><span class="line">		&#125;</span><br><span class="line">		Stack&lt;TreeNode&gt; queue = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">		TreeNode prev = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">while</span>(root != <span class="keyword">null</span> || !queue.isEmpty()) &#123;</span><br><span class="line">			<span class="keyword">while</span>(root != <span class="keyword">null</span>) &#123;</span><br><span class="line">				queue.push(root);</span><br><span class="line">				root = root.left;</span><br><span class="line">			&#125;</span><br><span class="line">			root = root.pop();</span><br><span class="line">			<span class="keyword">if</span> (root.right == <span class="keyword">null</span> || root.right == prev) &#123;</span><br><span class="line">				res.add(root.val);</span><br><span class="line">				prev = root;</span><br><span class="line">				root = <span class="keyword">null</span>;</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				queue.push(root);</span><br><span class="line">				root = root.right;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
 
-<p>填充每个节点的下一个右侧节点指针 #116 <strong>#117</strong> (完美二叉树、不完整二叉树)</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connect</span><span class="params">(TreeLinkNode node)</span> </span>&#123;</span><br><span class="line">    TreeLinkNode curr = node;</span><br><span class="line">    <span class="keyword">while</span> (curr.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">      TreeLinkNode head = curr;</span><br><span class="line">      <span class="keyword">while</span> (head != <span class="keyword">null</span>) &#123;</span><br><span class="line">        head.left.next = head.right;</span><br><span class="line">        <span class="keyword">if</span> (head.next != <span class="keyword">null</span>) &#123;</span><br><span class="line">          head.right.next = head.next.left;</span><br><span class="line">        &#125;</span><br><span class="line">        head = head.next;</span><br><span class="line">      &#125;</span><br><span class="line">      curr = curr.left;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</span><br><span class="line">  TreeLinkNode last = <span class="keyword">null</span>, nextStart = <span class="keyword">null</span>;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connect</span><span class="params">(TreeLinkNode root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    TreeLinkNode start = root;</span><br><span class="line">    <span class="keyword">while</span>(start != <span class="keyword">null</span>) &#123;</span><br><span class="line">      last = <span class="keyword">null</span>;</span><br><span class="line">      nextStart = <span class="keyword">null</span>;</span><br><span class="line">      <span class="keyword">for</span>(TreeLinkNode p = start; p != <span class="keyword">null</span>; p = p.next) &#123;</span><br><span class="line">        <span class="keyword">if</span> (p.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">          handler(p.left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (p.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">          handler(p.right);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      start = nextStart;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">handler</span><span class="params">(TreeLinkNode node)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (last != <span class="keyword">null</span>) &#123;</span><br><span class="line">      last.next = node;</span><br><span class="line">    &#125;</span><br><span class="line">    last = node;</span><br><span class="line">    <span class="keyword">if</span> (nextStart == <span class="keyword">null</span>) &#123;</span><br><span class="line">      nextStart = node;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">traverse</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">		List&lt;List&lt;Integer&gt;&gt; res = <span class="keyword">new</span> ArrayList();</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> res;</span><br><span class="line">		&#125; </span><br><span class="line">		Queue&lt;TreeNode&gt; queue = <span class="keyword">new</span> LinkedList();</span><br><span class="line">		queue.offer(root); </span><br><span class="line">		<span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">			<span class="keyword">int</span> size = queue.length();</span><br><span class="line">			List&lt;Integer&gt; temp = <span class="keyword">new</span> ArrayList();</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;size;i++) &#123;</span><br><span class="line">				TreeNode node = queue.poll();</span><br><span class="line">				temp.add(node.val);</span><br><span class="line">				<span class="keyword">if</span> (node.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">					queue.offer(node.left);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> (node.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">					queue.offer(node.right);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			res.add(temp);</span><br><span class="line">			<span class="comment">//res.add(0, temp);</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> res;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/05/17/leetcode/53.最大子序和/">
 
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">traverse</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">		List&lt;List&lt;Integer&gt;&gt; res = <span class="keyword">new</span> ArrayList();</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> res;</span><br><span class="line">		&#125; </span><br><span class="line">		Queue&lt;TreeNode&gt; queue = <span class="keyword">new</span> LinkedList();</span><br><span class="line">		queue.offer(root); </span><br><span class="line">		<span class="keyword">boolean</span> flag = <span class="keyword">true</span>;</span><br><span class="line">		<span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line">			<span class="keyword">int</span> size = queue.length();</span><br><span class="line">			List&lt;Integer&gt; temp = <span class="keyword">new</span> ArrayList();</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;size;i++) &#123;</span><br><span class="line">				TreeNode node = queue.poll();</span><br><span class="line">				<span class="keyword">if</span> (flag) &#123;</span><br><span class="line">					temp.add(node.val);</span><br><span class="line">				&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">					temp.add(<span class="number">0</span>, node.val);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> (node.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">					queue.offer(node.left);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> (node.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">					queue.offer(node.right);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			res.add(temp);</span><br><span class="line">			flag = !flag;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> res;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/17/leetcode/53.最大子序和/" class="post-title-link" itemprop="url">53.最大子序和</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-05-17 16:42:01 / Modified: 18:33:42" itemprop="dateCreated datePublished" datetime="2021-05-17T16:42:01+08:00">2021-05-17</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://leetcode-cn.com/problems/maximum-subarray" target="_blank" rel="noopener">https://leetcode-cn.com/problems/maximum-subarray</a></p>
+<p>给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。</p>
+<p>示例 1：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [-2,1,-3,4,-1,2,1,-5,4]</span><br><span class="line">输出：6</span><br><span class="line">解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。</span><br></pre></td></tr></table></figure>
+
+<p>示例 2：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [1]</span><br><span class="line">输出：1</span><br></pre></td></tr></table></figure>
+
+<p>思路</p>
+<ul>
+<li>这道题用动态规划的思路并不难解决，比较难的是后文提出的用分治法求解，但由于其不是最优解法，所以先不列出来</li>
+<li>动态规划的是首先对数组进行遍历，当前最大连续子序列和为 sum，结果为 ans</li>
+<li>如果 sum &gt; 0，则说明 sum 对结果有增益效果，则 sum 保留并加上当前遍历数字</li>
+<li>如果 sum &lt;= 0，则说明 sum 对结果无增益效果，需要舍弃，则 sum 直接更新为当前遍历数字</li>
+<li>每次比较 sum 和 ans的大小，将最大值置为ans，遍历结束返回结果</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxSubArray</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ans = nums[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> num: nums) &#123;</span><br><span class="line">            <span class="keyword">if</span>(sum &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                sum += num;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                sum = num;</span><br><span class="line">            &#125;</span><br><span class="line">            ans = Math.max(ans, sum);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
       
@@ -432,7 +509,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/37/">37</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -498,14 +575,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">88</span>
+          <span class="site-state-item-count">110</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/09/es/es-基本类型/">
+    <link itemprop="mainEntityOfPage" href="/2021/04/27/spring/spring-aop/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,344 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/03/09/es/es-基本类型/" class="post-title-link" itemprop="url">elasticsearch级别类型</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-03-09 11:27:35 / Modified: 15:00:10" itemprop="dateCreated datePublished" datetime="2021-03-09T11:27:35+08:00">2021-03-09</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="Object类型"><a href="#Object类型" class="headerlink" title="Object类型"></a>Object类型</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index/my_type/1</span><br><span class="line">&#123; </span><br><span class="line">  &quot;region&quot;: &quot;US&quot;,</span><br><span class="line">  &quot;manager&quot;: &#123; </span><br><span class="line">    &quot;age&quot;:     30,</span><br><span class="line">    &quot;name&quot;: &#123; </span><br><span class="line">      &quot;first&quot;: &quot;John&quot;,</span><br><span class="line">      &quot;last&quot;:  &quot;Smith&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">上面的文档中，整体是一个JSON，JSON中包含一个manager,manager又包含一个name。最终，文档会被索引成一平的key-value对：</span><br><span class="line">&#123;</span><br><span class="line">  &quot;region&quot;:             &quot;US&quot;,</span><br><span class="line">  &quot;manager.age&quot;:        30,</span><br><span class="line">  &quot;manager.name.first&quot;: &quot;John&quot;,</span><br><span class="line">  &quot;manager.name.last&quot;:  &quot;Smith&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;manager&quot;: &#123;</span><br><span class="line">          &quot;properties&quot;: &#123;</span><br><span class="line">            &quot;age&quot;: &#123;</span><br><span class="line">              &quot;type&quot;: &quot;integer&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;name&quot;: &#123;</span><br><span class="line">              &quot;properties&quot;: &#123;</span><br><span class="line">                &quot;first&quot;: &#123;</span><br><span class="line">                  &quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">                &#125;,</span><br><span class="line">                &quot;last&quot;: &#123;</span><br><span class="line">                  &quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;region&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="date类型"><a href="#date类型" class="headerlink" title="date类型"></a>date类型</h4><p>JSON中没有日期类型，所以在ELasticsearch中，日期类型可以是以下几种：</p>
-<ol>
-<li>日期格式的字符串：e.g. “2015-01-01” or “2015/01/01 12:10:30”.</li>
-<li>long类型的毫秒数( milliseconds-since-the-epoch)</li>
-<li>integer的秒数(seconds-since-the-epoch)</li>
-</ol>
-<p>日期格式可以自定义，如果没有自定义，默认格式如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;strict_date_optional_time||epoch_millis&quot;</span><br></pre></td></tr></table></figure>
-
-<h4 id="Array类型"><a href="#Array类型" class="headerlink" title="Array类型"></a>Array类型</h4><p>ELasticsearch没有专用的数组类型，默认情况下任何字段都可以包含一个或者多个值，但是一个数组中的值要是同一种类型。例如：</p>
-<ol>
-<li>字符数组: [ “one”, “two” ]</li>
-<li>整型数组：[1,3]</li>
-<li>嵌套数组：[1,[2,3]],等价于[1,2,3]</li>
-<li>对象数组：[ { “name”: “Mary”, “age”: 12 }, { “name”: “John”, “age”: 10 }]</li>
-</ol>
-<p>注意事项：</p>
-<ul>
-<li>动态添加数据时，数组的第一个值的类型决定整个数组的类型</li>
-<li>混合数组类型是不支持的，比如：[1,”abc”]</li>
-<li>数组可以包含null值，空数组[ ]会被当做missing field对待。</li>
-</ul>
-<h4 id="binary类型"><a href="#binary类型" class="headerlink" title="binary类型"></a>binary类型</h4><p>binary类型接受base64编码的字符串，默认不存储也不可搜索</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;name&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;blob&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;binary&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT my_index/my_type/1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;: &quot;Some binary blob&quot;,</span><br><span class="line">  &quot;blob&quot;: &quot;U29tZSBiaW5hcnkgYmxvYg==&quot; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="ip类型"><a href="#ip类型" class="headerlink" title="ip类型"></a>ip类型</h4><h4 id="range类型"><a href="#range类型" class="headerlink" title="range类型"></a>range类型</h4><table>
-<thead>
-<tr>
-<th align="left">类型</th>
-<th align="left">范围</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">integer_range</td>
-<td align="left">-2^31至2^31-1</td>
-</tr>
-<tr>
-<td align="left">float_range</td>
-<td align="left">32-bit IEEE 754</td>
-</tr>
-<tr>
-<td align="left">long_range</td>
-<td align="left">-2^63至2^63-1</td>
-</tr>
-<tr>
-<td align="left">double_range</td>
-<td align="left">64-bit IEEE 754</td>
-</tr>
-<tr>
-<td align="left">date_range</td>
-<td align="left">64位整数，毫秒计时</td>
-</tr>
-</tbody></table>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">PUT range_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;expected_attendees&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;integer_range&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;time_frame&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;date_range&quot;, </span><br><span class="line">          &quot;format&quot;: &quot;yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT range_index/my_type/1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;expected_attendees&quot; : &#123; </span><br><span class="line">    &quot;gte&quot; : 10,</span><br><span class="line">    &quot;lte&quot; : 20</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;time_frame&quot; : &#123; </span><br><span class="line">    &quot;gte&quot; : &quot;2015-10-31 12:00:00&quot;, </span><br><span class="line">    &quot;lte&quot; : &quot;2015-11-01&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="nested类型"><a href="#nested类型" class="headerlink" title="nested类型"></a>nested类型</h4><p>nested嵌套类型是object中的一个特例，可以让array类型的Object独立索引和查询。 使用Object类型有时会出现问题，比如文档 my_index/my_type/1的结构如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index/my_type/1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;group&quot; : &quot;fans&quot;,</span><br><span class="line">  &quot;user&quot; : [ </span><br><span class="line">    &#123;</span><br><span class="line">      &quot;first&quot; : &quot;John&quot;,</span><br><span class="line">      &quot;last&quot; :  &quot;Smith&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;first&quot; : &quot;Alice&quot;,</span><br><span class="line">      &quot;last&quot; :  &quot;White&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;user&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;nested&quot; </span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT my_index/my_type/1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;group&quot; : &quot;fans&quot;,</span><br><span class="line">  &quot;user&quot; : [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;first&quot; : &quot;John&quot;,</span><br><span class="line">      &quot;last&quot; :  &quot;Smith&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;first&quot; : &quot;Alice&quot;,</span><br><span class="line">      &quot;last&quot; :  &quot;White&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">GET my_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;nested&quot;: &#123;</span><br><span class="line">      &quot;path&quot;: &quot;user&quot;,</span><br><span class="line">      &quot;query&quot;: &#123;</span><br><span class="line">        &quot;bool&quot;: &#123;</span><br><span class="line">          &quot;must&quot;: [</span><br><span class="line">            &#123; &quot;match&quot;: &#123; &quot;user.first&quot;: &quot;Alice&quot; &#125;&#125;,</span><br><span class="line">            &#123; &quot;match&quot;: &#123; &quot;user.last&quot;:  &quot;Smith&quot; &#125;&#125; </span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">GET my_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;nested&quot;: &#123;</span><br><span class="line">      &quot;path&quot;: &quot;user&quot;,</span><br><span class="line">      &quot;query&quot;: &#123;</span><br><span class="line">        &quot;bool&quot;: &#123;</span><br><span class="line">          &quot;must&quot;: [</span><br><span class="line">            &#123; &quot;match&quot;: &#123; &quot;user.first&quot;: &quot;Alice&quot; &#125;&#125;,</span><br><span class="line">            &#123; &quot;match&quot;: &#123; &quot;user.last&quot;:  &quot;White&quot; &#125;&#125; </span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;inner_hits&quot;: &#123; </span><br><span class="line">        &quot;highlight&quot;: &#123;</span><br><span class="line">          &quot;fields&quot;: &#123;</span><br><span class="line">            &quot;user.first&quot;: &#123;&#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="token-count类型"><a href="#token-count类型" class="headerlink" title="token_count类型"></a>token_count类型</h4><p>token_count用于统计词频：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;name&quot;: &#123; </span><br><span class="line">          &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">          &quot;fields&quot;: &#123;</span><br><span class="line">            &quot;length&quot;: &#123; </span><br><span class="line">              &quot;type&quot;:     &quot;token_count&quot;,</span><br><span class="line">              &quot;analyzer&quot;: &quot;standard&quot;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT my_index/my_type/1</span><br><span class="line">&#123; &quot;name&quot;: &quot;John Smith&quot; &#125;</span><br><span class="line"> </span><br><span class="line">PUT my_index/my_type/2</span><br><span class="line">&#123; &quot;name&quot;: &quot;Rachel Alice Williams&quot; &#125;</span><br><span class="line"> </span><br><span class="line">GET my_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;term&quot;: &#123;</span><br><span class="line">      &quot;name.length&quot;: 3 </span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="Mapping参数"><a href="#Mapping参数" class="headerlink" title="Mapping参数"></a>Mapping参数</h4><h5 id="analyzer"><a href="#analyzer" class="headerlink" title="analyzer"></a>analyzer</h5><p>指定分词器(分析器更合理)，对索引和查询都有效。如下，指定ik分词的配置：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;content&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">          &quot;analyzer&quot;: &quot;ik_max_word&quot;,</span><br><span class="line">          &quot;search_analyzer&quot;: &quot;ik_max_word&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="normalizer"><a href="#normalizer" class="headerlink" title="normalizer"></a>normalizer</h5><p>normalizer用于解析前的标准化配置，比如把所有的字符转化为小写等。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">PUT index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;analysis&quot;: &#123;</span><br><span class="line">      &quot;normalizer&quot;: &#123;</span><br><span class="line">        &quot;my_normalizer&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;custom&quot;,</span><br><span class="line">          &quot;char_filter&quot;: [],</span><br><span class="line">          &quot;filter&quot;: [&quot;lowercase&quot;, &quot;asciifolding&quot;]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;foo&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;keyword&quot;,</span><br><span class="line">          &quot;normalizer&quot;: &quot;my_normalizer&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT index/type/1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;foo&quot;: &quot;BÀR&quot;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT index/type/2</span><br><span class="line">&#123;</span><br><span class="line">  &quot;foo&quot;: &quot;bar&quot;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT index/type/3</span><br><span class="line">&#123;</span><br><span class="line">  &quot;foo&quot;: &quot;baz&quot;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">POST index/_refresh</span><br><span class="line"> </span><br><span class="line">GET index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;foo&quot;: &quot;BAR&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="boost"><a href="#boost" class="headerlink" title="boost"></a>boost</h5><p>boost字段用于设置字段的权重，比如，关键字出现在title字段的权重是出现在content字段中权重的2倍，设置mapping如下，其中content字段的默认权重是1.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;title&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">          &quot;boost&quot;: 2 </span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;content&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>同样，在查询时指定权重也是一样的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">POST _search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;match&quot; : &#123;</span><br><span class="line">            &quot;title&quot;: &#123;</span><br><span class="line">                &quot;query&quot;: &quot;quick brown fox&quot;,</span><br><span class="line">                &quot;boost&quot;: 2</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>推荐在查询时指定boost，第一中在mapping中写死，如果不重新索引文档，权重无法修改，使用查询可以实现同样的效果。</p>
-<h5 id="coerce"><a href="#coerce" class="headerlink" title="coerce"></a>coerce</h5><p>coerce属性用于清除脏数据，coerce的默认值是true。</p>
-<p>整型数字5有可能会被写成字符串“5”或者浮点数5.0.coerce属性可以用来清除脏数据：</p>
-<ul>
-<li>字符串会被强制转换为整数</li>
-<li>浮点数被强制转换为整数</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;number_one&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;integer&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;number_two&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;integer&quot;,</span><br><span class="line">          &quot;coerce&quot;: false</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT my_index/my_type/1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;number_one&quot;: &quot;10&quot; </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT my_index/my_type/2</span><br><span class="line">&#123;</span><br><span class="line">  &quot;number_two&quot;: &quot;10&quot; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>mapping中指定number_one字段是integer类型，虽然插入的数据类型是String，但依然可以插入成功。number_two字段关闭了coerce，因此插入失败。</p>
-<h5 id="copy-to"><a href="#copy-to" class="headerlink" title="copy_to"></a>copy_to</h5><p>copy_to属性用于配置自定义的_all字段。换言之，就是多个字段可以合并成一个超级字段。比如，first_name和last_name可以合并为full_name字段。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;first_name&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">          &quot;copy_to&quot;: &quot;full_name&quot; </span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;last_name&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">          &quot;copy_to&quot;: &quot;full_name&quot; </span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;full_name&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT my_index/my_type/1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;first_name&quot;: &quot;John&quot;,</span><br><span class="line">  &quot;last_name&quot;: &quot;Smith&quot;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">GET my_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;full_name&quot;: &#123; </span><br><span class="line">        &quot;query&quot;: &quot;John Smith&quot;,</span><br><span class="line">        &quot;operator&quot;: &quot;and&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="doc-values"><a href="#doc-values" class="headerlink" title="doc_values"></a>doc_values</h5><p>doc_values是为了加快排序、聚合操作，在建立倒排索引的时候，额外增加一个列式存储映射，是一个空间换时间的做法。默认是开启的，对于确定不需要聚合或者排序的字段可以关闭。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;status_code&quot;: &#123; </span><br><span class="line">          &quot;type&quot;:       &quot;keyword&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;session_id&quot;: &#123; </span><br><span class="line">          &quot;type&quot;:       &quot;keyword&quot;,</span><br><span class="line">          &quot;doc_values&quot;: false</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>注: <strong>text类型不支持doc_values。</strong></p>
-<h5 id="dynamic"><a href="#dynamic" class="headerlink" title="dynamic"></a>dynamic</h5><p>dynamic属性用于检测新发现的字段，有三个取值：</p>
-<ul>
-<li>true:新发现的字段添加到映射中。（默认）</li>
-<li>flase:新检测的字段被忽略。必须显式添加新字段。</li>
-<li>strict:如果检测到新字段，就会引发异常并拒绝文档。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;dynamic&quot;: false, </span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;user&quot;: &#123; </span><br><span class="line">          &quot;properties&quot;: &#123;</span><br><span class="line">            &quot;name&quot;: &#123;</span><br><span class="line">              &quot;type&quot;: &quot;text&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;social_networks&quot;: &#123; </span><br><span class="line">              &quot;dynamic&quot;: true,</span><br><span class="line">              &quot;properties&quot;: &#123;&#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>取值为strict，非布尔值要加引号。</strong></p>
-<h5 id="enabled"><a href="#enabled" class="headerlink" title="enabled"></a>enabled</h5><p>ELasticseaech默认会索引所有的字段，enabled设为false的字段，es会跳过字段内容，该字段只能从_source中获取，但是不可搜。而且字段可以是任意类型。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;session&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;user_id&quot;: &#123;</span><br><span class="line">          &quot;type&quot;:  &quot;keyword&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;last_updated&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;date&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;session_data&quot;: &#123; </span><br><span class="line">          &quot;enabled&quot;: false</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT my_index/session/session_1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;user_id&quot;: &quot;kimchy&quot;,</span><br><span class="line">  &quot;session_data&quot;: &#123; </span><br><span class="line">    &quot;arbitrary_object&quot;: &#123;</span><br><span class="line">      &quot;some_array&quot;: [ &quot;foo&quot;, &quot;bar&quot;, &#123; &quot;baz&quot;: 2 &#125; ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;last_updated&quot;: &quot;2015-12-06T18:20:22&quot;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT my_index/session/session_2</span><br><span class="line">&#123;</span><br><span class="line">  &quot;user_id&quot;: &quot;jpountz&quot;,</span><br><span class="line">  &quot;session_data&quot;: &quot;none&quot;, </span><br><span class="line">  &quot;last_updated&quot;: &quot;2015-12-06T18:22:13&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="fielddata"><a href="#fielddata" class="headerlink" title="fielddata"></a>fielddata</h5><p>搜索要解决的问题是“包含查询关键词的文档有哪些？”，聚合恰恰相反，聚合要解决的问题是“文档包含哪些词项”，大多数字段再索引时生成doc_values，但是text字段不支持doc_values。</p>
-<p>取而代之，text字段在查询时会生成一个fielddata的数据结构，fielddata在字段首次被聚合、排序、或者使用脚本的时候生成。ELasticsearch通过读取磁盘上的倒排记录表重新生成文档词项关系，最后在Java堆内存中排序。</p>
-<p>text字段的fielddata属性默认是关闭的，开启fielddata非常消耗内存。在你开启text字段以前，想清楚为什么要在text类型的字段上做聚合、排序操作。大多数情况下这么做是没有意义的。</p>
-<p>“New York”会被分析成“new”和“york”，在text类型上聚合会分成“new”和“york”2个桶，也许你需要的是一个“New York”。这是可以加一个不分析的keyword字段：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;my_field&quot;: &#123; </span><br><span class="line">          &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">          &quot;fields&quot;: &#123;</span><br><span class="line">            &quot;keyword&quot;: &#123; </span><br><span class="line">              &quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="format"><a href="#format" class="headerlink" title="format"></a>format</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;date&quot;: &#123;</span><br><span class="line">          &quot;type&quot;:   &quot;date&quot;,</span><br><span class="line">          &quot;format&quot;: &quot;yyyy-MM-dd&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="ignore-above"><a href="#ignore-above" class="headerlink" title="ignore_above"></a>ignore_above</h5><p>ignore_above用于指定字段索引和存储的长度最大值，超过最大值的会被忽略：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;message&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;keyword&quot;,</span><br><span class="line">          &quot;ignore_above&quot;: 15</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT my_index/my_type/1 </span><br><span class="line">&#123;</span><br><span class="line">  &quot;message&quot;: &quot;Syntax error&quot;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT my_index/my_type/2 </span><br><span class="line">&#123;</span><br><span class="line">  &quot;message&quot;: &quot;Syntax error with some long stacktrace&quot;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">GET my_index/_search </span><br><span class="line">&#123;</span><br><span class="line">  &quot;size&quot;: 0, </span><br><span class="line">  &quot;aggs&quot;: &#123;</span><br><span class="line">    &quot;messages&quot;: &#123;</span><br><span class="line">      &quot;terms&quot;: &#123;</span><br><span class="line">        &quot;field&quot;: &quot;message&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="ignore-malformed"><a href="#ignore-malformed" class="headerlink" title="ignore_malformed"></a>ignore_malformed</h5><p>ignore_malformed可以忽略不规则数据，对于login字段，有人可能填写的是date类型，也有人填写的是邮件格式。给一个字段索引不合适的数据类型发生异常，导致整个文档索引失败。如果ignore_malformed参数设为true，异常会被忽略，出异常的字段不会被索引，其它字段正常索引。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;number_one&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;integer&quot;,</span><br><span class="line">          &quot;ignore_malformed&quot;: true</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;number_two&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;integer&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT my_index/my_type/1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;text&quot;:       &quot;Some text value&quot;,</span><br><span class="line">  &quot;number_one&quot;: &quot;foo&quot; </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT my_index/my_type/2</span><br><span class="line">&#123;</span><br><span class="line">  &quot;text&quot;:       &quot;Some text value&quot;,</span><br><span class="line">  &quot;number_two&quot;: &quot;foo&quot; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="include-in-all"><a href="#include-in-all" class="headerlink" title="include_in_all"></a>include_in_all</h5><p>include_in_all属性用于指定字段是否包含在_all字段里面，默认开启，除索引时index属性为no。<br>例子如下，title和content字段包含在_all字段里，date不包含。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;title&quot;: &#123; </span><br><span class="line">          &quot;type&quot;: &quot;text&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;content&quot;: &#123; </span><br><span class="line">          &quot;type&quot;: &quot;text&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;date&quot;: &#123; </span><br><span class="line">          &quot;type&quot;: &quot;date&quot;,</span><br><span class="line">          &quot;include_in_all&quot;: false</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>include_in_all也可用于字段级别，如下my_type下的所有字段都排除在_all字段之外，</p>
-<p>author.first_name 和author.last_name 包含在in _all中：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;include_in_all&quot;: false, </span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;title&quot;:          &#123; &quot;type&quot;: &quot;text&quot; &#125;,</span><br><span class="line">        &quot;author&quot;: &#123;</span><br><span class="line">          &quot;include_in_all&quot;: true, </span><br><span class="line">          &quot;properties&quot;: &#123;</span><br><span class="line">            &quot;first_name&quot;: &#123; &quot;type&quot;: &quot;text&quot; &#125;,</span><br><span class="line">            &quot;last_name&quot;:  &#123; &quot;type&quot;: &quot;text&quot; &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;editor&quot;: &#123;</span><br><span class="line">          &quot;properties&quot;: &#123;</span><br><span class="line">            &quot;first_name&quot;: &#123; &quot;type&quot;: &quot;text&quot; &#125;, </span><br><span class="line">            &quot;last_name&quot;:  &#123; &quot;type&quot;: &quot;text&quot;, &quot;include_in_all&quot;: true &#125; </span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="index"><a href="#index" class="headerlink" title="index"></a>index</h5><p>index属性指定字段是否索引，不索引也就不可搜索，取值可以为true或者false。</p>
-<h5 id="index-options"><a href="#index-options" class="headerlink" title="index_options"></a>index_options</h5><p>index_options控制索引时存储哪些信息到倒排索引中，接受以下配置：</p>
-<table>
-<thead>
-<tr>
-<th>参数</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>docs</td>
-<td>只存储文档编号</td>
-</tr>
-<tr>
-<td>freqs</td>
-<td>存储文档编号和词项频率</td>
-</tr>
-<tr>
-<td>positions</td>
-<td>文档编号、词项频率、词项的位置被存储，偏移位置可用于临近搜索和短语查询</td>
-</tr>
-<tr>
-<td>offsets</td>
-<td>文档编号、词项频率、词项的位置、词项开始和结束的字符位置都被存储，offsets设为true会使用Postings highlighter</td>
-</tr>
-</tbody></table>
-<h5 id="fields"><a href="#fields" class="headerlink" title="fields"></a>fields</h5><p>fields可以让同一文本有多种不同的索引方式，比如一个String类型的字段，可以使用text类型做全文检索，使用keyword类型做聚合和排序。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;city&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">          &quot;fields&quot;: &#123;</span><br><span class="line">            &quot;raw&quot;: &#123; </span><br><span class="line">              &quot;type&quot;:  &quot;keyword&quot;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT my_index/my_type/1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;city&quot;: &quot;New York&quot;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT my_index/my_type/2</span><br><span class="line">&#123;</span><br><span class="line">  &quot;city&quot;: &quot;York&quot;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">GET my_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;city&quot;: &quot;york&quot; </span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;sort&quot;: &#123;</span><br><span class="line">    &quot;city.raw&quot;: &quot;asc&quot; </span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;aggs&quot;: &#123;</span><br><span class="line">    &quot;Cities&quot;: &#123;</span><br><span class="line">      &quot;terms&quot;: &#123;</span><br><span class="line">        &quot;field&quot;: &quot;city.raw&quot; </span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="norms"><a href="#norms" class="headerlink" title="norms"></a>norms</h5><p>norms参数用于标准化文档，以便查询时计算文档的相关性。norms虽然对评分有用，但是会消耗较多的磁盘空间，如果不需要对某个字段进行评分，最好不要开启norms。</p>
-<h5 id="null-value"><a href="#null-value" class="headerlink" title="null_value"></a>null_value</h5><p>值为null的字段不索引也不可以搜索，null_value参数可以让值为null的字段显式的可索引、可搜索。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;status_code&quot;: &#123;</span><br><span class="line">          &quot;type&quot;:       &quot;keyword&quot;,</span><br><span class="line">          &quot;null_value&quot;: &quot;NULL&quot; </span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT my_index/my_type/1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;status_code&quot;: null</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT my_index/my_type/2</span><br><span class="line">&#123;</span><br><span class="line">  &quot;status_code&quot;: [] </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">GET my_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;term&quot;: &#123;</span><br><span class="line">      &quot;status_code&quot;: &quot;NULL&quot; </span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="position-increment-gap"><a href="#position-increment-gap" class="headerlink" title="position_increment_gap"></a>position_increment_gap</h5><h5 id="search-analyzer"><a href="#search-analyzer" class="headerlink" title="search_analyzer"></a>search_analyzer</h5><p>大多数情况下索引和搜索的时候应该指定相同的分析器，确保query解析以后和索引中的词项一致。但是有时候也需要指定不同的分析器，例如使用edge_ngram过滤器实现自动补全。</p>
-<p>默认情况下查询会使用analyzer属性指定的分析器，但也可以被search_analyzer覆盖</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;analysis&quot;: &#123;</span><br><span class="line">      &quot;filter&quot;: &#123;</span><br><span class="line">        &quot;autocomplete_filter&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;edge_ngram&quot;,</span><br><span class="line">          &quot;min_gram&quot;: 1,</span><br><span class="line">          &quot;max_gram&quot;: 20</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;analyzer&quot;: &#123;</span><br><span class="line">        &quot;autocomplete&quot;: &#123; </span><br><span class="line">          &quot;type&quot;: &quot;custom&quot;,</span><br><span class="line">          &quot;tokenizer&quot;: &quot;standard&quot;,</span><br><span class="line">          &quot;filter&quot;: [</span><br><span class="line">            &quot;lowercase&quot;,</span><br><span class="line">            &quot;autocomplete_filter&quot;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;text&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">          &quot;analyzer&quot;: &quot;autocomplete&quot;, </span><br><span class="line">          &quot;search_analyzer&quot;: &quot;standard&quot; </span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT my_index/my_type/1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;text&quot;: &quot;Quick Brown Fox&quot; </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">GET my_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;text&quot;: &#123;</span><br><span class="line">        &quot;query&quot;: &quot;Quick Br&quot;, </span><br><span class="line">        &quot;operator&quot;: &quot;and&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="similarity"><a href="#similarity" class="headerlink" title="similarity"></a>similarity</h5><p>similarity参数用于指定文档评分模型，参数有三个：</p>
-<ul>
-<li>BM25 ：ES和Lucene默认的评分模型</li>
-<li>classic ：TF/IDF评分</li>
-<li>boolean：布尔模型评分 </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;default_field&quot;: &#123; </span><br><span class="line">          &quot;type&quot;: &quot;text&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;classic_field&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">          &quot;similarity&quot;: &quot;classic&quot; </span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;boolean_sim_field&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">          &quot;similarity&quot;: &quot;boolean&quot; </span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>default_field自动使用BM25评分模型，classic_field使用TF/IDF经典评分模型，boolean_sim_field使用布尔评分模型。</p>
-<h5 id="store"><a href="#store" class="headerlink" title="store"></a>store</h5><p>默认情况下，自动是被索引的也可以搜索，但是不存储，这也没关系，因为_source字段里面保存了一份原始文档。在某些情况下，store参数有意义，比如一个文档里面有title、date和超大的content字段，如果只想获取title和date</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">PUT my_index</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;my_type&quot;: &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;title&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">          &quot;store&quot;: true </span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;date&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;date&quot;,</span><br><span class="line">          &quot;store&quot;: true </span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;content&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;text&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">PUT my_index/my_type/1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;title&quot;:   &quot;Some short title&quot;,</span><br><span class="line">  &quot;date&quot;:    &quot;2015-01-01&quot;,</span><br><span class="line">  &quot;content&quot;: &quot;A very long content field...&quot;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">GET my_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;stored_fields&quot;: [ &quot;title&quot;, &quot;date&quot; ] </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="term-vector"><a href="#term-vector" class="headerlink" title="term_vector"></a>term_vector</h5><p>词向量包含了文本被解析以后的以下信息：</p>
-<ul>
-<li>词项集合</li>
-<li>词项位置</li>
-<li>词项的起始字符映射到原始文档中的位置。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/08/es/es-添加文档过程/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/08/es/es-添加文档过程/" class="post-title-link" itemprop="url">es-添加文档过程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-03-08 13:28:35 / Modified: 18:04:55" itemprop="dateCreated datePublished" datetime="2021-03-08T13:28:35+08:00">2021-03-08</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>es是如何从一条curl命令，把文本添加到es 索引文档中的，下面通过源码进行分析。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">RestIndexAction</span><br><span class="line">NodeClient</span><br><span class="line">TransportIndexAction</span><br><span class="line">TransportSingleItemBulkWriteAction</span><br><span class="line">TransportBulkAction</span><br><span class="line">TransportReplicationAction</span><br><span class="line">	ReroutePhase</span><br><span class="line">	</span><br><span class="line">TransportService</span><br><span class="line">	TransportReplicationAction</span><br><span class="line">		PrimaryOperationTransportHandler</span><br><span class="line">			AsyncPrimaryAction</span><br><span class="line">			ReplicationOperation</span><br><span class="line">			TransportShardBulkAction</span><br><span class="line">			TransportSingleItemBulkWriteAction</span><br><span class="line">			IndexShard</span><br><span class="line">			InternalEngine</span><br></pre></td></tr></table></figure>
-
-<p>创建索引的过程：</p>
-<ol>
-<li><p>执行curl</p>
-</li>
-<li><p>进入到RestIndexAction，解析请求参数，封装IndexRequest</p>
-</li>
-<li><p>然后进入org.elasticsearch.action.bulk.TransportBulkAction</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">executeBulk(task, bulkRequest, startTime, listener, responses, indicesThatCannotBeCreated);</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">new BulkOperation(task, bulkRequest, listener, responses, startTimeNanos, indicesThatCannotBeCreated).run();</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>org.elasticsearch.action.bulk.TransportShardBulkAction</p>
-</li>
-</ol>
-<ol>
-<li>org.elasticsearch.action.bulk.TransportShardBulkAction#executeBulkItemRequest</li>
-<li>org.elasticsearch.index.shard.IndexShard#index(org.elasticsearch.index.engine.Engine.Index)</li>
-<li>org.elasticsearch.index.engine.InternalEngine#index(org.elasticsearch.index.engine.Engine.Index)</li>
-</ol>
-<p>es添加索引文档</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> curl -X PUT &apos;localhost:9200/index_name/type_name/5&apos; -H &apos;Content-Type: application/json&apos; -d &apos;</span><br><span class="line">&#123;</span><br><span class="line">  &quot;title&quot;: &quot;我是文件标题，可被搜索到&quot;,</span><br><span class="line">  &quot;text&quot;:  &quot;文本内容，ES时如何索引一个文档的&quot;,</span><br><span class="line">  &quot;date&quot;:  &quot;2019/01/01&quot;</span><br><span class="line">&#125;&apos;</span><br></pre></td></tr></table></figure>
-
-<p>执行以上这条命令后，请求会进入到 <strong>org.elasticsearch.rest.action.document.RestIndexAction#prepareRequest</strong> 方法</p>
-<ol>
-<li><p>执行NodeClient.index方法</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">client.index(indexRequest, new RestStatusToXContentListener&lt;&gt;(channel, r -&gt; r.getLocation(indexRequest.routing())))</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>org.elasticsearch.client.node.NodeClient#executeLocally(org.elasticsearch.action.GenericAction&lt;Request,Response&gt;, Request, org.elasticsearch.action.ActionListener<response>)</response></p>
-</li>
-<li><p>org.elasticsearch.action.support.TransportAction#execute(Request, org.elasticsearch.action.ActionListener<response>)</response></p>
-</li>
-<li><p>org.elasticsearch.action.bulk.TransportBulkAction#doExecute(org.elasticsearch.tasks.Task, org.elasticsearch.action.bulk.BulkRequest, org.elasticsearch.action.ActionListener&lt;org.elasticsearch.action.bulk.BulkResponse&gt;)</p>
-</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/08/kafka/kafka之comsumer再分配/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/08/kafka/kafka之comsumer再分配/" class="post-title-link" itemprop="url">kafka之consumer再分配</a>
+            <a href="/2021/04/27/spring/spring-aop/" class="post-title-link" itemprop="url">Untitled</a>
         </h2>
 
         <div class="post-meta">
@@ -511,14 +174,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-03-08 11:04:02" itemprop="dateCreated datePublished" datetime="2021-03-08T11:04:02+08:00">2021-03-08</time>
+              <time title="Created: 2021-04-27 17:55:00" itemprop="dateCreated datePublished" datetime="2021-04-27T17:55:00+08:00">2021-04-27</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-18 11:17:22" itemprop="dateModified" datetime="2021-03-18T11:17:22+08:00">2021-03-18</time>
+                <time title="Modified: 2021-05-17 11:03:16" itemprop="dateModified" datetime="2021-05-17T11:03:16+08:00">2021-05-17</time>
               </span>
 
           
@@ -532,45 +195,215 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h4 id="consumer和Coordinator"><a href="#consumer和Coordinator" class="headerlink" title="consumer和Coordinator"></a>consumer和Coordinator</h4><p>Coordinator是运行在broker上的Group Coordinator，用于管理consumer group中的各个成员，主要用于offset位移管理和consumer rebalance。</p>
-<p>Coordinator存储的信息</p>
-<p>每个consumer group的coordinator都会存储以下信息:</p>
-<ol>
-<li>每个topic，有哪些消费者group订阅</li>
-<li>每个ConsumerGroup元数据：<ol>
-<li>订阅的topic列表</li>
-<li>ConsumerGroup配置信息(session timeout等)</li>
-<li>consumer元数据信息(主机名、consumerId)</li>
-<li>每个topic partition当前的offset</li>
-<li>consumer消费partitions的映射信息</li>
-</ol>
-</li>
-</ol>
-<p>如何确定consumer group的coordinator</p>
-<ol>
-<li>consumergroup位移信息写入_consumers_offsets [topic]哪个分区?<ol>
-<li>_consumers_offsets partition = Math.abs(groupId.hashCode() % offsets.topic.num.paration)， 默认分区50</li>
-</ol>
-</li>
-<li>1⃣️中计算出来的分区所在的broker就是此consumer 的coordinator</li>
-</ol>
-<h4 id="Consumer-rebalance"><a href="#Consumer-rebalance" class="headerlink" title="Consumer rebalance"></a>Consumer rebalance</h4><p>rebalance触发条件</p>
-<ol>
-<li><p>组成员发生变更(新加入、主动离开和consumer崩溃)</p>
-</li>
-<li><p>订阅topic分区数发生变更</p>
-</li>
-<li><p>consumer通过正则匹配订阅topic，新建了对应正则topic</p>
-</li>
-</ol>
-<p>rebalance协议</p>
-<ol>
-<li>HeatBeat请求 (session.timeout.ms)</li>
-<li>LeaveGroup请求</li>
-<li>SyncGroup请求</li>
-<li>JoinGroup请求</li>
-<li>DescribeGroup请求</li>
-</ol>
+          <p><strong><a href="https://cloud.tencent.com/developer/article/1497770" target="_blank" rel="noopener">核心类讲解</a></strong></p>
+<p>spring代理采用cglib或者jdk proxy</p>
+<p>cglib核心类ProxyFactory、MethodInterceptor、DynamicAdvisedInterceptor、CglibMethodInvocation</p>
+<h4 id="Pointcut"><a href="#Pointcut" class="headerlink" title="Pointcut"></a>Pointcut</h4><p>​    ClassFilter MethodFilter</p>
+<h4 id="Advice"><a href="#Advice" class="headerlink" title="Advice"></a>Advice</h4><p>​    MethodBeforeAdvice AfterReturningAdvice AspectJAroundAdvice</p>
+<h4 id="Advisor"><a href="#Advisor" class="headerlink" title="Advisor"></a>Advisor</h4><p>​    Advisor 其实它就是 Pointcut 与 Advice 的组合, Advice 是执行的方法, 而要知道方法何时执行, 则 Advice 必需与 Pointcut 组合在一起, 这就诞生了 Advisor 这个类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">AopProxyUtils.completeProxiedInterfaces(this.advised)</span><br><span class="line">		0 = &#123;Class@521&#125; &quot;interface com.hezk.aop.service.Browser&quot;</span><br><span class="line">		1 = &#123;Class@1152&#125; &quot;interface org.springframework.aop.SpringProxy&quot;</span><br><span class="line">		2 = &#123;Class@511&#125; &quot;interface org.springframework.aop.framework.Advised&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Callback		</span><br><span class="line">	0 = &#123;CglibAopProxy$DynamicAdvisedInterceptor@1184&#125; </span><br><span class="line">	1 = &#123;CglibAopProxy$StaticUnadvisedInterceptor@1198&#125; </span><br><span class="line">	2 = &#123;CglibAopProxy$SerializableNoOp@1218&#125; </span><br><span class="line">	3 = &#123;CglibAopProxy$StaticDispatcher@1206&#125; </span><br><span class="line">	4 = &#123;CglibAopProxy$AdvisedDispatcher@984&#125; </span><br><span class="line">	5 = &#123;CglibAopProxy$EqualsInterceptor@1219&#125; </span><br><span class="line">	6 = &#123;CglibAopProxy$HashCodeInterceptor@1220&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ProxyCallbackFilter</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">interceptorList = &#123;ArrayList@1723&#125;  size = 3</span><br><span class="line"> 0 = &#123;MethodBeforeAdviceInterceptor@1930&#125; </span><br><span class="line"> 1 = &#123;AfterReturningAdviceInterceptor@1931&#125; </span><br><span class="line"> 2 = &#123;BrowserAroundAdvice@975&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> CglibMethodInvocation</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> org.springframework.cglib.core.AbstractClassGenerator.generate 生成代理方法</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/04/27/spring/feign-ribbon-loadbalancer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/27/spring/feign-ribbon-loadbalancer/" class="post-title-link" itemprop="url">spring openfeign ribbon loadbalancer</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-04-27 17:55:00" itemprop="dateCreated datePublished" datetime="2021-04-27T17:55:00+08:00">2021-04-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-17 12:09:12" itemprop="dateModified" datetime="2021-05-17T12:09:12+08:00">2021-05-17</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="Ribbon的负载均衡策略"><a href="#Ribbon的负载均衡策略" class="headerlink" title="Ribbon的负载均衡策略"></a>Ribbon的负载均衡策略</h4><table>
+<thead>
+<tr>
+<th>类</th>
+<th>命名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RoundRobinRule</td>
+<td>轮询策略</td>
+<td>Ribbon的默认负载均衡策略</td>
+</tr>
+<tr>
+<td>RandomRule</td>
+<td>随机策略</td>
+<td>从所有可用的提供者中随机选择一个</td>
+</tr>
+<tr>
+<td>RetryRule</td>
+<td>重试策略</td>
+<td>从所有可用的提供者中随机选择一个,若获取失败的话，则可以在指定的时间内重试，默认为500毫秒</td>
+</tr>
+<tr>
+<td>BestAvailableRule</td>
+<td>最低并发策略</td>
+<td>选择并发量最小的 提供者</td>
+</tr>
+<tr>
+<td>AvailabilityFilteringRule</td>
+<td>可用过滤策略</td>
+<td>过滤掉处于被标记为circuit tripped状态的提供者，或已经超过连接极限的 提供者,对剩余 provider 采用轮询策略</td>
+</tr>
+<tr>
+<td>ZoneAvoidanceRule</td>
+<td>复合判断策略</td>
+<td>判断提供所在区域的性能及 provider 的可用性选择服务器。</td>
+</tr>
+<tr>
+<td>WeightedResponseTimeRule</td>
+<td>权重响应时间策略</td>
+<td>根据每个 提供的平均响应时间计算其权重，响应时间越快权重越大，被选中的机率就越高。在刚启动时采用轮询策略。后面就会根据权重进行选择了。</td>
+</tr>
+</tbody></table>
+<h4 id="spring-openfeign"><a href="#spring-openfeign" class="headerlink" title="spring-openfeign"></a>spring-openfeign</h4><p>openfeign发送请求主要是通过<strong>FeignLoadBalancer</strong>进行请求封装和调用，类图如下，负载均衡请求逻辑主要方法在</p>
+<p>com.netflix.client.AbstractLoadBalancerAwareClient#executeWithLoadBalancer(S, com.netflix.client.config.IClientConfig)</p>
+<p>通过LoadBalancerCommand.submit方法，从注册中心根据IRule策略，选择合适的Server并发送请求到对应的机器。</p>
+<p>在submit方法中，有ServerStatus类进行对应的qps、rts、错误率等指标统计，IRule根据此指标，选择合适的Server。</p>
+<h5 id="feign调用流程"><a href="#feign调用流程" class="headerlink" title="feign调用流程"></a>feign调用流程</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">FeignClientFactoryBean </span><br><span class="line">-&gt; getTarget</span><br><span class="line">-&gt; Targeter.target(FeignContext|Client)</span><br><span class="line">-&gt; ReflectiveFeign</span><br><span class="line">-&gt; InvocationHandler(FeignInvocationHandler) </span><br><span class="line">-&gt; SynchronousMethodHandler.invoke </span><br><span class="line">-&gt; executeAndDecode </span><br><span class="line">-&gt; feign.Client#execute</span><br><span class="line">-&gt; org.springframework.cloud.openfeign.ribbon.LoadBalancerFeignClient#execute</span><br><span class="line">-&gt; com.netflix.client.AbstractLoadBalancerAwareClient#executeWithLoadBalancer(S, com.netflix.client.config.IClientConfig)</span><br><span class="line">-&gt; com.netflix.client.IClient#execute</span><br></pre></td></tr></table></figure>
+
+<p>LoadBalancerFeignClient</p>
+<p><img src="/2021/04/27/spring/feign-ribbon-loadbalancer/openfeign-ribbon.jpg" alt></p>
+<h4 id="如何从eureka-client加载并缓存Server信息"><a href="#如何从eureka-client加载并缓存Server信息" class="headerlink" title="如何从eureka-client加载并缓存Server信息"></a>如何从eureka-client加载并缓存Server信息</h4><p>DynamicServerListLoadBalancer</p>
+<p>此类中有一个定时任务，updateListOfServers方法，从eureka-client客户端缓存中加载对应的Server信息。</p>
+<p>PollingServerListUpdater</p>
+<p>CommonClientConfigKey</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/04/19/dubbo/dubbo编解码和协议/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/19/dubbo/dubbo编解码和协议/" class="post-title-link" itemprop="url">dubbo编解码和协议</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-04-19 10:28:35 / Modified: 10:41:06" itemprop="dateCreated datePublished" datetime="2021-04-19T10:28:35+08:00">2021-04-19</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="Dubbo编解码"><a href="#Dubbo编解码" class="headerlink" title="Dubbo编解码"></a>Dubbo编解码</h4><h5 id="消费者入口"><a href="#消费者入口" class="headerlink" title="消费者入口"></a>消费者入口</h5><p>消费者口在NettyClient#doOpen方法发起连接，初始化BootStrap时，会在Netty的pipeline里添加不同类型的ChannelHandler，其中就有编解码器。</p>
+<p>同理，提供者在NettyServer#doOpen方法提供服务，初始化ServerBootstrap时，会添加编解码器。（adapter.getDecoder（）- 解码器，adapater.getEncoder（） - 编码器）。</p>
+<p><strong>NettyClient</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Init bootstrap</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> Throwable</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doOpen</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    bootstrap = <span class="keyword">new</span> Bootstrap();</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    bootstrap.handler(<span class="keyword">new</span> ChannelInitializer&lt;SocketChannel&gt;() &#123;</span><br><span class="line"> </span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(SocketChannel ch)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">            ch.pipeline()</span><br><span class="line">                    .addLast(<span class="string">"decoder"</span>, adapter.getDecoder())</span><br><span class="line">                    .addLast(<span class="string">"encoder"</span>, adapter.getEncoder())</span><br><span class="line">                    .addLast(<span class="string">"client-idle-handler"</span>, <span class="keyword">new</span> IdleStateHandler(heartbeatInterval, <span class="number">0</span>, <span class="number">0</span>, MILLISECONDS))</span><br><span class="line">                    .addLast(<span class="string">"handler"</span>, nettyClientHandler);</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="NettyServer"><a href="#NettyServer" class="headerlink" title="NettyServer"></a>NettyServer</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Init and start netty server</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> Throwable</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doOpen</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    bootstrap = <span class="keyword">new</span> ServerBootstrap();</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"> </span><br><span class="line">    bootstrap.group(bossGroup, workerGroup)</span><br><span class="line">            .channel(NettyEventLoopFactory.serverSocketChannelClass())</span><br><span class="line">            .option(ChannelOption.SO_REUSEADDR, Boolean.TRUE)</span><br><span class="line">            .childOption(ChannelOption.TCP_NODELAY, Boolean.TRUE)</span><br><span class="line">            .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)</span><br><span class="line">            .childHandler(<span class="keyword">new</span> ChannelInitializer&lt;SocketChannel&gt;() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(SocketChannel ch)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                    <span class="comment">// ...</span></span><br><span class="line">                    ch.pipeline()</span><br><span class="line">                            .addLast(<span class="string">"decoder"</span>, adapter.getDecoder())</span><br><span class="line">                            .addLast(<span class="string">"encoder"</span>, adapter.getEncoder())</span><br><span class="line">                            .addLast(<span class="string">"server-idle-handler"</span>, <span class="keyword">new</span> IdleStateHandler(<span class="number">0</span>, <span class="number">0</span>, idleTimeout, MILLISECONDS))</span><br><span class="line">                            .addLast(<span class="string">"handler"</span>, nettyServerHandler);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="消费端链路"><a href="#消费端链路" class="headerlink" title="消费端链路"></a>消费端链路</h5><p>消费者在发送消息时编码，接收响应时解码。</p>
+<p><strong>发送消息</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ChannelInboundHandler</span><br><span class="line">...</span><br><span class="line">NettyCodecAdapter#getEncoder()</span><br><span class="line">    -&gt;NettyCodecAdapter$InternalEncoder#encode</span><br><span class="line">         -&gt;DubboCountCodec#encode</span><br><span class="line">             -&gt;DubboCodec#encode</span><br><span class="line">                -&gt;ExchangeCodec#encode</span><br><span class="line">                -&gt;ExchangeCodec#encodeRequest</span><br><span class="line"> </span><br><span class="line">DubboCountCodec类实际引用的是DubboCodec，因DubboCodec继承于ExchangeCodec，并未重写encode方法，所以实际代码跳转会直接进入ExchangeCodec#encode方法</span><br></pre></td></tr></table></figure>
+
+<p><strong>接收响应</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">NettyCodecAdapter#getDecoder()</span><br><span class="line">    -&gt;NettyCodecAdapter$InternalDecoder#decode</span><br><span class="line">         -&gt;DubboCountCodec#decode</span><br><span class="line">             -&gt;DubboCodec#decode</span><br><span class="line">                 -&gt;ExchangeCodec#decode</span><br><span class="line">             -&gt;DubboCodec#decodeBody</span><br><span class="line">...</span><br><span class="line">MultiMessageHandler#received</span><br><span class="line">    -&gt;HeartbeatHadnler#received</span><br><span class="line">        -&gt;AllChannelHandler#received</span><br><span class="line">...</span><br><span class="line">ChannelEventRunnable#run</span><br><span class="line">    -&gt;DecodeHandler#received</span><br><span class="line">    -&gt;DecodeHandler#decode</span><br><span class="line">        -&gt;DecodeableRpcResult#decode</span><br><span class="line"> </span><br><span class="line">解码链路相对复杂，过程中做了两次解码，在一次DubboCodec#decodeBody内，并未实际解码channel的数据，而是构建成DecodeableRpcResult对象，然后在业务处理的Handler里通过异步线程进行实际解码。</span><br></pre></td></tr></table></figure>
+
+<h5 id="提供端链路"><a href="#提供端链路" class="headerlink" title="提供端链路"></a>提供端链路</h5><p>提供者在接收消息时解码，回复响应时编码。</p>
+<p><strong>接收消息</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">NettyCodecAdapter#getDecoder()</span><br><span class="line">    -&gt;NettyCodecAdapter$InternalDecoder#decode</span><br><span class="line">         -&gt;DubboCountCodec#decode</span><br><span class="line">             -&gt;DubboCodec#decode</span><br><span class="line">                 -&gt;ExchangeCodec#decode</span><br><span class="line">             -&gt;DubboCodec#decodeBody</span><br><span class="line">...</span><br><span class="line">MultiMessageHandler#received</span><br><span class="line">    -&gt;HeartbeatHadnler#received</span><br><span class="line">        -&gt;AllChannelHandler#received</span><br><span class="line">...</span><br><span class="line">ChannelEventRunnable#run</span><br><span class="line">    -&gt;DecodeHandler#received</span><br><span class="line">    -&gt;DecodeHandler#decode</span><br><span class="line">        -&gt;DecodeableRpcInvocation#decode</span><br><span class="line"> </span><br><span class="line">提供端解码链路与消费端的类似，区别在于实际解码对象不一样，DecodeableRpcResult 替换成 DecodeableRpcInvocation。</span><br><span class="line"> </span><br><span class="line">体现了Dubbo代码里的良好设计，抽象处理链路，屏蔽处理细节，流程清晰可复用。</span><br></pre></td></tr></table></figure>
+
+<p><strong>回复响应</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">NettyCodecAdapter#getEncoder()</span><br><span class="line">    -&gt;NettyCodecAdapter$InternalEncoder#encode</span><br><span class="line">         -&gt;DubboCountCodec#encode</span><br><span class="line">             -&gt;DubboCodec#encode</span><br><span class="line">                -&gt;ExchangeCodec#encode</span><br><span class="line">                -&gt;ExchangeCodec#encodeResponse</span><br><span class="line"> </span><br><span class="line">与消费方发送消息链路一致，区别在于最后一步区分Request和Response，进行不同内容编码</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://dubbo.apache.org/zh/docs/v2.7/dev/implementation/" target="_blank" rel="noopener">dubbo协议</a></p>
+<p><a href="https://mp.weixin.qq.com/s/tl4iSZUYV5GWTqyWhaDkfw" target="_blank" rel="noopener">原文链接</a></p>
 
       
     </div>
@@ -589,7 +422,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/15/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/17/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/15/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><span class="space">&hellip;</span><a class="page-number" href="/page/37/">37</a><a class="extend next" rel="next" href="/page/17/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -655,14 +488,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">88</span>
+          <span class="site-state-item-count">110</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

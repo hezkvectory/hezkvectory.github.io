@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/02/18/java/Java类加载/">
+    <link itemprop="mainEntityOfPage" href="/2021/03/02/leetcode/树/110. 平衡二叉树/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,117 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/02/18/java/Java类加载/" class="post-title-link" itemprop="url">Java类加载</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-02-18 18:44:02 / Modified: 18:59:33" itemprop="dateCreated datePublished" datetime="2021-02-18T18:44:02+08:00">2021-02-18</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a><strong>类加载</strong></h4><p>​        在java代码中，类的加载、连接和初始化过程都是在程序运行期间完成的。（类从磁盘加载到内存中经历的三个阶段）</p>
-<p>提供了更大的灵活性，增加了更多的可能性。</p>
-<h4 id="类加载器深入剖析："><a href="#类加载器深入剖析：" class="headerlink" title="类加载器深入剖析："></a><strong>类加载器深入剖析：</strong></h4><p>Java虚拟机与程序的生命周期</p>
-<p>在如下几种情况下，java虚拟机将结束生命周期</p>
-<p>（1）执行了System.exit()方法</p>
-<p>（2）程序正常执行结束</p>
-<p>（3）程序在执行过程中遇到了异常或错误而异常终止</p>
-<p>（4）由于操作系统出现错误而导致虚拟机进程终止</p>
-<h5 id="类的加载、连接与初始化："><a href="#类的加载、连接与初始化：" class="headerlink" title="类的加载、连接与初始化："></a><strong>类的加载、连接与初始化：</strong></h5><ol>
-<li><p>加载：查找并加载类的二进制数据到java虚拟机中</p>
-</li>
-<li><p>连接：</p>
-<ul>
-<li><p>​    验证 : 确保被加载的类的正确性</p>
-</li>
-<li><p>​    准备：为类的<strong>静态变量</strong>分配内存，并将其初始化为<strong>默认值</strong>，但是到达初始化之前类变量都没有初始化为真正的初始值</p>
-</li>
-<li><p>​    解析：<strong>把类中的符号引用转换为直接引用</strong>，就是在类型的常量池中寻找类、接口、字段和方法的符号引用，把这些符号引用替换成直接引用的过程</p>
-</li>
-</ul>
-</li>
-<li><p>初始化：为类的静态变量赋予正确的初始值</p>
-</li>
-</ol>
-<p><strong>类从磁盘上加载到内存中要经历五个阶段：加载、连接、初始化、使用、卸载</strong></p>
-<p>Java程序对类的使用方式可分为两种</p>
-<ol>
-<li><em>主动使用</em></li>
-<li><em>被动使用</em></li>
-</ol>
-<p>所有的Java虚拟机实现必须在每个类或接口被Java程序“首次主动使用”时才能初始化他们</p>
-<p><strong>主动使用</strong></p>
-<p>（1）创建类的实例</p>
-<p>（2）访问某个类或接口的静态变量 getstatic（助记符），或者对该静态变量赋值 putstatic</p>
-<p>（3）调用类的静态方法 invokestatic</p>
-<p>（4）反射（Class.forName(“com.test.Test”)）</p>
-<p>（5）初始化一个类的子类</p>
-<p>（6）Java虚拟机启动时被标明启动类的类</p>
-<p>（7）JDK1.7开始提供的动态语言支持（了解）</p>
-<p><strong>被动使用</strong></p>
-<p>​    除了上面七种情况外，其他使用java类的方式都被看做是对类的被动使用，都不会导致类的初始化</p>
-<h5 id="类的加载详解："><a href="#类的加载详解：" class="headerlink" title="类的加载详解："></a><strong>类的加载详解：</strong></h5><p>​        类的加载指的是将类的.class文件中的二进制数据读入到内存中，将其放在运行时数据区的方法区内，然后在内存中创建一个java.lang.Class对象（规范并未说明Class对象位于哪里，HotSpot虚拟机将其放在<strong>方法区</strong>中）用来封装内在方法区内的数据结构。</p>
-<p>加载.calss文件的方式</p>
-<p>（1）从本地系统中直接加载</p>
-<p>（2）通过网络下载.class文件</p>
-<p>（3）从zip，jar等归档文件中加载.class文件</p>
-<p>（4）从专用数据库中提取.class文件</p>
-<p>（5）将java源文件动态编译为.class文件</p>
-<h4 id="类加载器双亲委托模型的好处："><a href="#类加载器双亲委托模型的好处：" class="headerlink" title="类加载器双亲委托模型的好处："></a>类加载器双亲委托模型的好处：</h4><p>（1）可以确保Java和核心库的安全：所有的Java应用都会引用java.lang中的类，也就是说在运行期java.lang中的类会被加载到虚拟机中，如果这个加载过程如果是由自己的类加载器所加载，那么很可能就会在JVM中存在多个版本的java.lang中的类，而且这些类是相互不可见的（命名空间的作用）。借助于双亲委托机制，Java核心类库中的类的加载工作都是由启动根加载器去加载，从而确保了Java应用所使用的的都是同一个版本的Java核心类库，他们之间是相互兼容的；</p>
-<p>（2）确保Java核心类库中的类不会被自定义的类所替代；</p>
-<p>（3）不同的类加载器可以为相同名称的类（binary name）创建额外的命名空间。相同名称的类可以并存在Java虚拟机中，只需要用不同的类加载器去加载即可。相当于在Java虚拟机内部建立了一个又一个相互隔离的Java类空间。</p>
-<p>父亲委托机制的优点是能够提高软件系统的安全性。因此在此机制下，用户自定义的类加载器不可能加载应该由父类加载器加载的可靠类，从而防止不可靠甚至恶意的代码代替由父类加载器加载的可靠代码。例如，java.lang.Object类是由跟类加载器加载，其他任何用哪个户自定义的类加载器都不可能加载含有恶意代码的java.lang.Object类。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2019/07/15/java/java-nio/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/07/15/java/java-nio/" class="post-title-link" itemprop="url">java-nio-server</a>
+            <a href="/2021/03/02/leetcode/树/110. 平衡二叉树/" class="post-title-link" itemprop="url">(面试题)校验平衡二叉树</a>
         </h2>
 
         <div class="post-meta">
@@ -284,14 +174,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2019-07-15 14:49:35" itemprop="dateCreated datePublished" datetime="2019-07-15T14:49:35+08:00">2019-07-15</time>
+              <time title="Created: 2021-03-02 14:45:02" itemprop="dateCreated datePublished" datetime="2021-03-02T14:45:02+08:00">2021-03-02</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-09 18:33:33" itemprop="dateModified" datetime="2021-04-09T18:33:33+08:00">2021-04-09</time>
+                <time title="Modified: 2021-05-31 15:57:49" itemprop="dateModified" datetime="2021-05-31T15:57:49+08:00">2021-05-31</time>
               </span>
 
           
@@ -305,870 +195,29 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>之前对Java nio的了解局限于简答的socket数据传输，对tcp沾包、拆包有一些简单的了解，但是没有深入的研究。后来<br>简单的了解了一些tcp知识，例如：tcp滑动窗口。</p>
-<p>最近粗略的看了一下zookeeper的源码，了解了zookeeper的底层实现，比如zk节点保存结构是使用的DataTree,临时节点使用的是Map&lt;String sessionId,Set<string path>&gt;进行保存的，使用ExpireQueue进行更行节点的过期时间（sessionId过期）。</string></p>
-<p>zk中实现了基于java nio和netty两种socket编程，本文根据zk Java nio实现socket服务端编程。测试时，客户端使用的是telnet进来连接。</p>
-<p>java nio中比较核心的几个类:</p>
-<pre><code>java.nio.channels.ServerSocketChannel
-java.nio.channels.SocketChannel
-java.nio.channels.SelectionKey
-java.nio.channels.Selector</code></pre><p>以下是核心代码，相关引用代码请clone zookeeper代码进行查看学习</p>
-<pre><code>package server;
+          <p>输入一棵二叉树的根节点，判断该树是不是平衡二叉树。如果某二叉树中任意节点的左右子树的深度相差不超过1，那么它就是一棵平衡二叉树。</p>
+<p>示例 1:</p>
+<p>给定二叉树 [3,9,20,null,null,15,7]</p>
+<pre><code>    3
+   / \
+  9  20
+    /  \
+   15   7
+
+返回 true 。</code></pre><p>示例 2:</p>
+<p>给定二叉树 [1,2,2,3,3,null,null,4,4]</p>
+<pre><code>      1
+     / \
+    2   2
+   / \
+  3   3
+ / \
+4   4
+返回 false </code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode left;</span></span><br><span class="line"><span class="comment"> *     TreeNode right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) &#123; val = x; &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isBalance</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> Math.abs(helper(root.left) - helper(root.right)) &lt;= <span class="number">1</span> &amp;&amp; isBalance(root.left) &amp;&amp; isBalance(root.right);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">helper</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> Math.max(helper(root.left), helper(root.right)) + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isBalance</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> height(root) &gt;= <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">height</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">int</span> leftH = height(root.left);</span><br><span class="line">            <span class="keyword">int</span> rightH = height(root.right);</span><br><span class="line">            <span class="keyword">if</span> (leftH == -<span class="number">1</span> || rightH == -<span class="number">1</span> || Math.abs(leftH - rightH) &gt; <span class="number">1</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> Math.max(height(root.left), height(root.right)) + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        TreeNode root = TreeUtils.constructBinaryTree(Arrays.asList(<span class="number">3</span>, <span class="number">9</span>, <span class="number">20</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="number">15</span>, <span class="number">7</span>));</span><br><span class="line">        System.out.println(<span class="keyword">new</span> Solution3().isBalance(root));</span><br><span class="line">        System.out.println(<span class="keyword">new</span> Solution().isBalance(root));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition of TreeNode:</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     public int val;</span></span><br><span class="line"><span class="comment"> *     public TreeNode left, right;</span></span><br><span class="line"><span class="comment"> *     public TreeNode(int val) &#123;</span></span><br><span class="line"><span class="comment"> *         this.val = val;</span></span><br><span class="line"><span class="comment"> *         this.left = this.right = null;</span></span><br><span class="line"><span class="comment"> *     &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isBalanced</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> levelOrder(root);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getHeight</span><span class="params">(TreeNode root)</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(root==<span class="keyword">null</span>)&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			<span class="keyword">return</span> Math.max(getHeight(root.left)+<span class="number">1</span>, getHeight(root.right)+<span class="number">1</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">  </span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">levelOrder</span><span class="params">(TreeNode root)</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(root==<span class="keyword">null</span>)&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		Queue&lt;TreeNode&gt; queue=<span class="keyword">new</span> LinkedList&lt;TreeNode&gt;();</span><br><span class="line">		queue.offer(root);</span><br><span class="line">		<span class="keyword">while</span>(!queue.isEmpty())&#123;</span><br><span class="line">			TreeNode node=queue.poll();</span><br><span class="line">			<span class="keyword">if</span>(Math.abs(getHeight(node.left)-getHeight(node.right))&gt;<span class="number">1</span>)&#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span>(node.left!=<span class="keyword">null</span>)&#123;</span><br><span class="line">				queue.offer(node.left);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span>(node.right!=<span class="keyword">null</span>)&#123;</span><br><span class="line">				queue.offer(node.right);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-import common.ExpiryQueue;
-import common.WorkerService;
-import common.ZooKeeperThread;
-import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.SocketException;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.LinkedBlockingQueue;
-
-/**
- * Created by hezhengkui on 2019/7/15.
- */
-@Slf4j
-public class NioServerFactory {
-        protected final Set&lt;NIOServerCnxn&gt; cnxns = Collections.newSetFromMap(new ConcurrentHashMap&lt;NIOServerCnxn, Boolean&gt;());
-        protected int maxClientCnxns = 60;
-        private volatile boolean stopped = true;
-        private AcceptThread acceptThread;
-        private ConnectionExpirerThread expirerThread;
-        private final ConcurrentHashMap&lt;InetAddress, Set&lt;NIOServerCnxn&gt;&gt; ipMap = new ConcurrentHashMap&lt;InetAddress, Set&lt;NIOServerCnxn&gt;&gt;();
-        private ExpiryQueue&lt;NIOServerCnxn&gt; cnxnExpiryQueue;
-        private final Set&lt;SelectorThread&gt; selectorThreads = new HashSet&lt;SelectorThread&gt;();
-        protected WorkerService workerPool;
-        final ConcurrentHashMap&lt;Long, NIOServerCnxn&gt; sessionMap = new ConcurrentHashMap&lt;Long, NIOServerCnxn&gt;();
-        private int numSelectorThreads;
-        private int numWorkerThreads;
-        private long workerShutdownTimeoutMS;
-        public static final String ZOOKEEPER_NIO_NUM_SELECTOR_THREADS = &quot;zookeeper.nio.numSelectorThreads&quot;;
-        public static final String ZOOKEEPER_NIO_NUM_WORKER_THREADS = &quot;zookeeper.nio.numWorkerThreads&quot;;
-        /**
-         * Default worker pool shutdown timeout in ms: 5000 (5s)
-         */
-        public static final String ZOOKEEPER_NIO_SHUTDOWN_TIMEOUT = &quot;zookeeper.nio.shutdownTimeout&quot;;
-
-    static {
-        try {
-            Selector.open().close();
-        } catch (IOException ie) {
-            log.error(&quot;Selector failed to open&quot;, ie);
-        }
-    }
-
-    private abstract class AbstractSelectThread extends ZooKeeperThread {
-        protected final Selector selector;
-
-        public AbstractSelectThread(String name) throws IOException {
-            super(name);
-            // Allows the JVM to shutdown even if this thread is still running.
-            setDaemon(true);
-            this.selector = Selector.open();
-        }
-
-        public void wakeupSelector() {
-            selector.wakeup();
-        }
-
-        /**
-         * Close the selector. This should be called when the thread is about to
-         * exit and no operation is going to be performed on the Selector or
-         * SelectionKey
-         */
-        protected void closeSelector() {
-            try {
-                selector.close();
-            } catch (IOException e) {
-                log.warn(&quot;ignored exception during selector close &quot;
-                        + e.getMessage());
-            }
-        }
-
-        protected void cleanupSelectionKey(SelectionKey key) {
-            if (key != null) {
-                try {
-                    key.cancel();
-                } catch (Exception ex) {
-                    if (log.isDebugEnabled()) {
-                        log.debug(&quot;ignoring exception during selectionkey cancel&quot;, ex);
-                    }
-                }
-            }
-        }
-
-        protected void fastCloseSock(SocketChannel sc) {
-            if (sc != null) {
-                try {
-                    // Hard close immediately, discarding buffers
-                    sc.socket().setSoLinger(true, 0);
-                } catch (SocketException e) {
-                    log.warn(&quot;Unable to set socket linger to 0, socket close&quot;
-                            + &quot; may stall in CLOSE_WAIT&quot;, e);
-                }
-                closeSock(sc);
-            }
-        }
-    }</code></pre><p>​<br>        public static void closeSock(SocketChannel sock) {<br>            if (sock.isOpen() == false) {<br>                return;<br>            }</p>
-<pre><code>    try {
-        /*
-         * The following sequence of code is stupid! You would think that
-         * only sock.close() is needed, but alas, it doesn&apos;t work that way.
-         * If you just do sock.close() there are cases where the socket
-         * doesn&apos;t actually close...
-         */
-        sock.socket().shutdownOutput();
-    } catch (IOException e) {
-        // This is a relatively common exception that we can&apos;t avoid
-        if (log.isDebugEnabled()) {
-            log.debug(&quot;ignoring exception during output shutdown&quot;, e);
-        }
-    }
-    try {
-        sock.socket().shutdownInput();
-    } catch (IOException e) {
-        // This is a relatively common exception that we can&apos;t avoid
-        if (log.isDebugEnabled()) {
-            log.debug(&quot;ignoring exception during input shutdown&quot;, e);
-        }
-    }
-    try {
-        sock.socket().close();
-    } catch (IOException e) {
-        if (log.isDebugEnabled()) {
-            log.debug(&quot;ignoring exception during socket close&quot;, e);
-        }
-    }
-    try {
-        sock.close();
-    } catch (IOException e) {
-        if (log.isDebugEnabled()) {
-            log.debug(&quot;ignoring exception during socketchannel close&quot;, e);
-        }
-    }
-}</code></pre><p>​<br>        private class AcceptThread extends AbstractSelectThread {<br>            private final ServerSocketChannel acceptSocket;<br>            private final SelectionKey acceptKey;<br>            private final Collection<selectorthread> selectorThreads;<br>            private Iterator<selectorthread> selectorIterator;<br>            private volatile boolean reconfiguring = false;</selectorthread></selectorthread></p>
-<pre><code>    public AcceptThread(ServerSocketChannel ss, InetSocketAddress addr,
-                        Set&lt;SelectorThread&gt; selectorThreads) throws IOException {
-        super(&quot;NIOServerCxnFactory.AcceptThread:&quot; + addr);
-        this.acceptSocket = ss;
-        this.acceptKey = acceptSocket.register(selector, SelectionKey.OP_ACCEPT);
-        this.selectorThreads = Collections.unmodifiableList(new ArrayList&lt;SelectorThread&gt;(selectorThreads));
-        selectorIterator = this.selectorThreads.iterator();
-    }
-
-    public void run() {
-        try {
-            while (!stopped &amp;&amp; !acceptSocket.socket().isClosed()) {
-                try {
-                    select();
-                } catch (RuntimeException e) {
-                    log.warn(&quot;Ignoring unexpected runtime exception&quot;, e);
-                } catch (Exception e) {
-                    log.warn(&quot;Ignoring unexpected exception&quot;, e);
-                }
-            }
-        } finally {
-            closeSelector();
-            // This will wake up the selector threads, and tell the
-            // worker thread pool to begin shutdown.
-            if (!reconfiguring) {
-                NioServerFactory.this.stop();
-            }
-            log.info(&quot;accept thread exitted run method&quot;);
-        }
-    }
-
-    public void setReconfiguring() {
-        reconfiguring = true;
-    }
-
-    private void select() {
-        try {
-            int select = selector.select();
-
-            Iterator&lt;SelectionKey&gt; selectedKeys = selector.selectedKeys().iterator();
-            while (!stopped &amp;&amp; selectedKeys.hasNext()) {
-                SelectionKey key = selectedKeys.next();
-                selectedKeys.remove();
-
-                if (!key.isValid()) {
-                    continue;
-                }
-                if (key.isAcceptable()) {
-                    if (!doAccept()) {
-                        // If unable to pull a new connection off the accept
-                        // queue, pause accepting to give us time to free
-                        // up file descriptors and so the accept thread
-                        // doesn&apos;t spin in a tight loop.
-                        pauseAccept(10);
-                    }
-                } else {
-                    log.warn(&quot;Unexpected ops in accept select &quot;
-                            + key.readyOps());
-                }
-            }
-        } catch (IOException e) {
-            log.warn(&quot;Ignoring IOException while selecting&quot;, e);
-        }
-    }
-
-    /**
-     * Mask off the listen socket interest ops and use select() to sleep
-     * so that other threads can wake us up by calling wakeup() on the
-     * selector.
-     */
-    private void pauseAccept(long millisecs) {
-        acceptKey.interestOps(0);
-        try {
-            selector.select(millisecs);
-        } catch (IOException e) {
-            // ignore
-        } finally {
-            acceptKey.interestOps(SelectionKey.OP_ACCEPT);
-        }
-    }
-
-    /**
-     * Accept new socket connections. Enforces maximum number of connections
-     * per client IP address. Round-robin assigns to selector thread for
-     * handling. Returns whether pulled a connection off the accept queue
-     * or not. If encounters an error attempts to fast close the socket.
-     *
-     * @return whether was able to accept a connection or not
-     */
-    private boolean doAccept() {
-        boolean accepted = false;
-        SocketChannel sc = null;
-        try {
-            sc = acceptSocket.accept();
-            accepted = true;
-            InetAddress ia = sc.socket().getInetAddress();
-            int cnxncount = getClientCnxnCount(ia);
-
-            if (maxClientCnxns &gt; 0 &amp;&amp; cnxncount &gt;= maxClientCnxns) {
-                throw new IOException(&quot;Too many connections from &quot; + ia
-                        + &quot; - max is &quot; + maxClientCnxns);
-            }
-
-            log.debug(&quot;Accepted socket connection from &quot;
-                    + sc.socket().getRemoteSocketAddress());
-            sc.configureBlocking(false);
-
-            // Round-robin assign this connection to a selector thread
-            if (!selectorIterator.hasNext()) {
-                selectorIterator = selectorThreads.iterator();
-            }
-            SelectorThread selectorThread = selectorIterator.next();
-            //交给selector 线程执行
-            if (!selectorThread.addAcceptedConnection(sc)) {
-                throw new IOException(
-                        &quot;Unable to add connection to selector queue&quot;
-                                + (stopped ? &quot; (shutdown in progress)&quot; : &quot;&quot;));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            // accept, maxClientCnxns, configureBlocking
-            fastCloseSock(sc);
-        }
-        return accepted;
-    }
-}
-
-ServerSocketChannel ss;
-
-public void stop() {
-    stopped = true;
-
-    // Stop queuing connection attempts
-    try {
-        ss.close();
-    } catch (IOException e) {
-        log.warn(&quot;Error closing listen socket&quot;, e);
-    }
-
-    if (acceptThread != null) {
-        if (acceptThread.isAlive()) {
-            acceptThread.wakeupSelector();
-        } else {
-            acceptThread.closeSelector();
-        }
-    }
-    if (expirerThread != null) {
-        expirerThread.interrupt();
-    }
-    for (SelectorThread thread : selectorThreads) {
-        if (thread.isAlive()) {
-            thread.wakeupSelector();
-        } else {
-            thread.closeSelector();
-        }
-    }
-    if (workerPool != null) {
-        workerPool.stop();
-    }
-}</code></pre><p>​<br>        class SelectorThread extends AbstractSelectThread {<br>            private final int id;<br>            private final Queue<socketchannel> acceptedQueue;<br>            private final Queue<selectionkey> updateQueue;</selectionkey></socketchannel></p>
-<pre><code>    public SelectorThread(int id) throws IOException {
-        super(&quot;NIOServerCxnFactory.SelectorThread-&quot; + id);
-        this.id = id;
-        acceptedQueue = new LinkedBlockingQueue&lt;SocketChannel&gt;();
-        updateQueue = new LinkedBlockingQueue&lt;SelectionKey&gt;();
-    }
-
-    /**
-     * Place new accepted connection onto a queue for adding. Do this
-     * so only the selector thread modifies what keys are registered
-     * with the selector.
-     */
-    public boolean addAcceptedConnection(SocketChannel accepted) {
-        if (stopped || !acceptedQueue.offer(accepted)) {
-            return false;
-        }
-        wakeupSelector();
-        return true;
-    }
-
-    /**
-     * Place interest op update requests onto a queue so that only the
-     * selector thread modifies interest ops, because interest ops
-     * reads/sets are potentially blocking operations if other select
-     * operations are happening.
-     */
-    public boolean addInterestOpsUpdateRequest(SelectionKey sk) {
-        if (stopped || !updateQueue.offer(sk)) {
-            return false;
-        }
-        wakeupSelector();
-        return true;
-    }
-
-    /**
-     * The main loop for the thread selects() on the connections and
-     * dispatches ready I/O work requests, then registers all pending
-     * newly accepted connections and updates any interest ops on the
-     * queue.
-     */
-    public void run() {
-        try {
-            while (!stopped) {
-                try {
-                    //accept事件第一次select()方法不会有任何事件触发，通过seletor.wakeUp（）唤起，
-                    select();
-                    //这个方法会触发registor(SelectorKey.OP_READ)事件
-                    processAcceptedConnections();
-                    processInterestOpsUpdateRequests();
-                } catch (RuntimeException e) {
-                    log.warn(&quot;Ignoring unexpected runtime exception&quot;, e);
-                } catch (Exception e) {
-                    log.warn(&quot;Ignoring unexpected exception&quot;, e);
-                }
-            }
-
-            // Close connections still pending on the selector. Any others
-            // with in-flight work, let drain out of the work queue.
-            for (SelectionKey key : selector.keys()) {
-                NIOServerCnxn cnxn = (NIOServerCnxn) key.attachment();
-                if (cnxn.isSelectable()) {
-                    cnxn.close(NIOServerCnxn.DisconnectReason.SERVER_SHUTDOWN);
-                }
-                cleanupSelectionKey(key);
-            }
-            SocketChannel accepted;
-            while ((accepted = acceptedQueue.poll()) != null) {
-                fastCloseSock(accepted);
-            }
-            updateQueue.clear();
-        } finally {
-            closeSelector();
-            // This will wake up the accept thread and the other selector
-            // threads, and tell the worker thread pool to begin shutdown.
-            NioServerFactory.this.stop();
-            log.info(&quot;selector thread exitted run method&quot;);
-        }
-    }
-
-    private void select() {
-        try {
-            //selector.wakeUp()方法会唤起select()方法执行
-            //registor()方法同样能唤起select()方法执行
-            int select = selector.select();
-
-            Set&lt;SelectionKey&gt; selected = selector.selectedKeys();
-            ArrayList&lt;SelectionKey&gt; selectedList = new ArrayList&lt;SelectionKey&gt;(selected);
-            Collections.shuffle(selectedList);
-            Iterator&lt;SelectionKey&gt; selectedKeys = selectedList.iterator();
-            while (!stopped &amp;&amp; selectedKeys.hasNext()) {
-                SelectionKey key = selectedKeys.next();
-                selected.remove(key);
-
-                if (!key.isValid()) {
-                    cleanupSelectionKey(key);
-                    continue;
-                }
-                if (key.isReadable() || key.isWritable()) {
-                    handleIO(key);
-                } else {
-                    log.warn(&quot;Unexpected ops in select &quot; + key.readyOps());
-                }
-            }
-        } catch (IOException e) {
-            log.warn(&quot;Ignoring IOException while selecting&quot;, e);
-        }
-    }
-
-    /**
-     * Schedule I/O for processing on the connection associated with
-     * the given SelectionKey. If a worker thread pool is not being used,
-     * I/O is run directly by this thread.
-     */
-    private void handleIO(SelectionKey key) {
-        IOWorkRequest workRequest = new IOWorkRequest(this, key);
-        NIOServerCnxn cnxn = (NIOServerCnxn) key.attachment();
-
-        // Stop selecting this key while processing on its
-        // connection
-        cnxn.disableSelectable();
-        key.interestOps(0);
-        touchCnxn(cnxn);
-        workerPool.schedule(workRequest);
-    }
-
-    /**
-     * Iterate over the queue of accepted connections that have been
-     * assigned to this thread but not yet placed on the selector.
-     */
-    private void processAcceptedConnections() {
-        SocketChannel accepted;
-        while (!stopped &amp;&amp; (accepted = acceptedQueue.poll()) != null) {
-            SelectionKey key = null;
-            try {
-                key = accepted.register(selector, SelectionKey.OP_READ);
-                NIOServerCnxn cnxn = createConnection(accepted, key, this);
-                key.attach(cnxn);
-                addCnxn(cnxn);
-            } catch (IOException e) {
-                e.printStackTrace();
-                // register, createConnection
-                cleanupSelectionKey(key);
-                fastCloseSock(accepted);
-            }
-        }
-    }
-
-    /**
-     * Iterate over the queue of connections ready to resume selection,
-     * and restore their interest ops selection mask.
-     */
-    private void processInterestOpsUpdateRequests() {
-        SelectionKey key;
-        while (!stopped &amp;&amp; (key = updateQueue.poll()) != null) {
-            if (!key.isValid()) {
-                cleanupSelectionKey(key);
-            }
-            NIOServerCnxn cnxn = (NIOServerCnxn) key.attachment();
-            if (cnxn.isSelectable()) {
-                key.interestOps(cnxn.getInterestOps());
-            }
-        }
-    }
-}</code></pre><p>​<br>        private void addCnxn(NIOServerCnxn cnxn) throws IOException {<br>            InetAddress addr = cnxn.getSocketAddress();<br>            if (addr == null) {<br>                throw new IOException(“Socket of “ + cnxn + “ has been closed”);<br>            }<br>            Set<nioservercnxn> set = ipMap.get(addr);<br>            if (set == null) {<br>                // in general we will see 1 connection from each<br>                // host, setting the initial cap to 2 allows us<br>                // to minimize mem usage in the common case<br>                // of 1 entry –  we need to set the initial cap<br>                // to 2 to avoid rehash when the first entry is added<br>                // Construct a ConcurrentHashSet using a ConcurrentHashMap<br>                set = Collections.newSetFromMap(<br>                        new ConcurrentHashMap&lt;NIOServerCnxn, Boolean&gt;(2));<br>                // Put the new set in the map, but only if another thread<br>                // hasn’t beaten us to it<br>                Set<nioservercnxn> existingSet = ipMap.putIfAbsent(addr, set);<br>                if (existingSet != null) {<br>                    set = existingSet;<br>                }<br>            }<br>            set.add(cnxn);</nioservercnxn></nioservercnxn></p>
-<pre><code>        cnxns.add(cnxn);
-        touchCnxn(cnxn);
-    }
-
-    public void touchCnxn(NIOServerCnxn cnxn) {
-        cnxnExpiryQueue.update(cnxn, cnxn.getSessionTimeout());
-    }
-
-    public boolean removeCnxn(NIOServerCnxn cnxn) {
-        // If the connection is not in the master list it&apos;s already been closed
-        if (!cnxns.remove(cnxn)) {
-            return false;
-        }
-        cnxnExpiryQueue.remove(cnxn);
-
-        removeCnxnFromSessionMap(cnxn);
-
-        InetAddress addr = cnxn.getSocketAddress();
-        if (addr != null) {
-            Set&lt;NIOServerCnxn&gt; set = ipMap.get(addr);
-            if (set != null) {
-                set.remove(cnxn);
-                // Note that we make no effort here to remove empty mappings
-                // from ipMap.
-            }
-        }
-
-        return true;
-    }
-
-    protected NIOServerCnxn createConnection(SocketChannel sock,
-                                             SelectionKey sk, SelectorThread selectorThread) throws IOException {
-        return new NIOServerCnxn(sock, sk, this, selectorThread);
-    }
-
-    public void removeCnxnFromSessionMap(NIOServerCnxn cnxn) {
-        long sessionId = cnxn.getSessionId();
-        if (sessionId != 0) {
-            sessionMap.remove(sessionId);
-        }
-    }
-
-    private class ConnectionExpirerThread extends ZooKeeperThread {
-        ConnectionExpirerThread() {
-            super(&quot;ConnnectionExpirer&quot;);
-        }
-
-        public void run() {
-            try {
-                while (!stopped) {
-                    long waitTime = cnxnExpiryQueue.getWaitTime();
-                    if (waitTime &gt; 0) {
-                        Thread.sleep(waitTime);
-                        continue;
-                    }
-                    for (NIOServerCnxn conn : cnxnExpiryQueue.poll()) {
-//                        ServerMetrics.getMetrics().SESSIONLESS_CONNECTIONS_EXPIRED.add(1);
-                        conn.close(NIOServerCnxn.DisconnectReason.CONNECTION_EXPIRED);
-                    }
-                }
-
-            } catch (InterruptedException e) {
-                log.info(&quot;ConnnectionExpirerThread interrupted&quot;);
-            }
-        }
-    }
-
-    private int getClientCnxnCount(InetAddress cl) {
-        Set&lt;NIOServerCnxn&gt; s = ipMap.get(cl);
-        if (s == null) return 0;
-        return s.size();
-    }</code></pre><p>​<br>        private class IOWorkRequest extends WorkerService.WorkRequest {<br>            private final SelectorThread selectorThread;<br>            private final SelectionKey key;<br>            private final NIOServerCnxn cnxn;</p>
-<pre><code>        IOWorkRequest(SelectorThread selectorThread, SelectionKey key) {
-            this.selectorThread = selectorThread;
-            this.key = key;
-            this.cnxn = (NIOServerCnxn) key.attachment();
-        }
-
-        public void doWork() throws InterruptedException {
-            if (!key.isValid()) {
-                selectorThread.cleanupSelectionKey(key);
-                return;
-            }
-
-            if (key.isReadable() || key.isWritable()) {
-                cnxn.doIO(key);
-
-                // Check if we shutdown or doIO() closed this connection
-                if (stopped) {
-                    cnxn.close(NIOServerCnxn.DisconnectReason.SERVER_SHUTDOWN);
-                    return;
-                }
-                if (!key.isValid()) {
-                    selectorThread.cleanupSelectionKey(key);
-                    return;
-                }
-                touchCnxn(cnxn);
-            }
-
-            // Mark this connection as once again ready for selection
-            cnxn.enableSelectable();
-            // Push an update request on the queue to resume selecting
-            // on the current set of interest ops, which may have changed
-            // as a result of the I/O operations we just performed.
-            if (!selectorThread.addInterestOpsUpdateRequest(key)) {
-                cnxn.close(NIOServerCnxn.DisconnectReason.CONNECTION_MODE_CHANGED);
-            }
-        }
-
-        @Override
-        public void cleanup() {
-            cnxn.close(NIOServerCnxn.DisconnectReason.CLEAN_UP);
-        }
-    }
-
-    public void configure(InetSocketAddress addr, int maxcc) throws IOException {
-
-        maxClientCnxns = maxcc;
-        cnxnExpiryQueue =
-                new ExpiryQueue&lt;NIOServerCnxn&gt;(10000);
-        expirerThread = new ConnectionExpirerThread();
-
-        int numCores = Runtime.getRuntime().availableProcessors();
-        // 32 cores sweet spot seems to be 4 selector threads
-        numSelectorThreads = Integer.getInteger(
-                ZOOKEEPER_NIO_NUM_SELECTOR_THREADS,
-                Math.max((int) Math.sqrt((float) numCores / 2), 1));
-        if (numSelectorThreads &lt; 1) {
-            throw new IOException(&quot;numSelectorThreads must be at least 1&quot;);
-        }
-
-        numWorkerThreads = Integer.getInteger(
-                ZOOKEEPER_NIO_NUM_WORKER_THREADS, 2 * numCores);
-        workerShutdownTimeoutMS = Long.getLong(
-                ZOOKEEPER_NIO_SHUTDOWN_TIMEOUT, 5000);
-
-        for (int i = 0; i &lt; numSelectorThreads; ++i) {
-            selectorThreads.add(new SelectorThread(i));
-        }
-
-        this.ss = ServerSocketChannel.open();
-        ss.socket().setReuseAddress(true);
-        log.info(&quot;binding to port &quot; + addr);
-        ss.socket().bind(addr);
-
-        ss.configureBlocking(false);
-        acceptThread = new AcceptThread(ss, addr, selectorThreads);
-    }
-
-    public void start() {
-        stopped = false;
-        if (workerPool == null) {
-            workerPool = new WorkerService(
-                    &quot;NIOWorker&quot;, numWorkerThreads, false);
-        }
-        for (SelectorThread thread : selectorThreads) {
-            if (thread.getState() == Thread.State.NEW) {
-                thread.start();
-            }
-        }
-        // ensure thread is started once and only once
-        if (acceptThread.getState() == Thread.State.NEW) {
-            acceptThread.start();
-        }
-        if (expirerThread.getState() == Thread.State.NEW) {
-            expirerThread.start();
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
-        NioServerFactory factory = new NioServerFactory();
-        InetSocketAddress address = new InetSocketAddress(9999);
-        factory.configure(address, 3);
-        factory.start();
-    }
-}</code></pre><hr>
-<pre><code>package server;
-
-import lombok.extern.slf4j.Slf4j;
-
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.channels.CancelledKeyException;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.SocketChannel;
-import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-/**
- * Created by hezhengkui on 2019/7/15.
- */
-@Slf4j
-public class NIOServerCnxn {
-    private final SelectionKey sk;
-    private final SocketChannel sock;
-    private final NioServerFactory.SelectorThread selectorThread;
-    private final NioServerFactory factory;
-    private final AtomicBoolean selectable = new AtomicBoolean(true);
-    private volatile boolean stale = false;
-    private long sessionId;
-    protected DisconnectReason disconnectReason = DisconnectReason.UNKNOWN;
-
-    private int sessionTimeout = 100000000;
-
-    private final AtomicBoolean throttled = new AtomicBoolean(false);
-
-    private final Queue&lt;ByteBuffer&gt; outgoingBuffers =
-            new LinkedBlockingQueue&lt;ByteBuffer&gt;();
-
-    public NIOServerCnxn(SocketChannel sock, SelectionKey sk, NioServerFactory factory,
-                         NioServerFactory.SelectorThread selectorThread) throws IOException {
-        this.sock = sock;
-        this.sk = sk;
-        this.factory = factory;
-        this.selectorThread = selectorThread;
-        sock.socket().setTcpNoDelay(true);
-        sock.socket().setSoLinger(false, -1);
-        InetAddress addr = ((InetSocketAddress) sock.socket().getRemoteSocketAddress()).getAddress();
-    }
-
-    public void enableSelectable() {
-        selectable.set(true);
-    }
-
-    public boolean isSelectable() {
-        return sk.isValid() &amp;&amp; selectable.get();
-    }
-
-    public void close(DisconnectReason reason) {
-        disconnectReason = reason;
-        close();
-    }
-
-    public InetAddress getSocketAddress() {
-        if (sock.isOpen() == false) {
-            return null;
-        }
-        return sock.socket().getInetAddress();
-    }
-
-    public int getInterestOps() {
-        if (!isSelectable()) {
-            return 0;
-        }
-        int interestOps = 0;
-        if (getReadInterest()) {
-            interestOps |= SelectionKey.OP_READ;
-        }
-        if (getWriteInterest()) {
-            interestOps |= SelectionKey.OP_WRITE;
-        }
-        return interestOps;
-    }
-
-    private boolean getWriteInterest() {
-        return !outgoingBuffers.isEmpty();
-    }
-
-    private boolean getReadInterest() {
-        return !throttled.get();
-    }
-
-    public void setStale() {
-        stale = true;
-    }
-
-    public long getSessionId() {
-        return sessionId;
-    }
-
-    private void close() {
-        setStale();
-        if (!factory.removeCnxn(this)) {
-            return;
-        }
-
-        if (sk != null) {
-            try {
-                // need to cancel this selection key from the selector
-                sk.cancel();
-            } catch (Exception e) {
-                if (log.isDebugEnabled()) {
-                    log.debug(&quot;ignoring exception during selectionkey cancel&quot;, e);
-                }
-            }
-        }
-
-        closeSock();
-    }
-
-    public void disableSelectable() {
-        selectable.set(false);
-    }
-
-    public int getSessionTimeout() {
-        return sessionTimeout;
-    }</code></pre><p>​<br>        private void closeSock() {<br>            if (sock.isOpen() == false) {<br>                return;<br>            }</p>
-<pre><code>    log.debug(&quot;Closed socket connection for client &quot;
-            + sock.socket().getRemoteSocketAddress()
-            + (sessionId != 0 ?
-            &quot; which had sessionid 0x&quot; + Long.toHexString(sessionId) :
-            &quot; (no session established for client)&quot;));
-    closeSock(sock);
-}</code></pre><p>​<br>        public static void closeSock(SocketChannel sock) {<br>            if (sock.isOpen() == false) {<br>                return;<br>            }</p>
-<pre><code>    try {
-        /*
-         * The following sequence of code is stupid! You would think that
-         * only sock.close() is needed, but alas, it doesn&apos;t work that way.
-         * If you just do sock.close() there are cases where the socket
-         * doesn&apos;t actually close...
-         */
-        sock.socket().shutdownOutput();
-    } catch (IOException e) {
-        // This is a relatively common exception that we can&apos;t avoid
-        if (log.isDebugEnabled()) {
-            log.debug(&quot;ignoring exception during output shutdown&quot;, e);
-        }
-    }
-    try {
-        sock.socket().shutdownInput();
-    } catch (IOException e) {
-        // This is a relatively common exception that we can&apos;t avoid
-        if (log.isDebugEnabled()) {
-            log.debug(&quot;ignoring exception during input shutdown&quot;, e);
-        }
-    }
-    try {
-        sock.socket().close();
-    } catch (IOException e) {
-        if (log.isDebugEnabled()) {
-            log.debug(&quot;ignoring exception during socket close&quot;, e);
-        }
-    }
-    try {
-        sock.close();
-    } catch (IOException e) {
-        if (log.isDebugEnabled()) {
-            log.debug(&quot;ignoring exception during socketchannel close&quot;, e);
-        }
-    }
-}
-
-protected boolean isSocketOpen() {
-    return sock.isOpen();
-}</code></pre><p>​<br>        /**<br>         * 具体的read、write事件在这里处理，进行数据包的拆分<br>         * @param k<br>         * @throws InterruptedException<br>         */<br>        void doIO(SelectionKey k) throws InterruptedException {<br>            try {<br>                if (isSocketOpen() == false) {<br>                    log.warn(“trying to do i/o on a null socket for session:0x”<br>                            + Long.toHexString(sessionId));</p>
-<pre><code>                return;
-            }
-            if (k.isReadable()) {//只有客户端发送数据，才会触发这里方法的执行
-                ByteBuffer byteBuffer = ByteBuffer.allocate(10);
-                int rc = sock.read(byteBuffer);
-                byteBuffer.flip();
-                log.debug(&quot;------r--{}, {}, {}&quot;, k.interestOps(), rc, new String(byteBuffer.array()));
-            }
-            if (k.isWritable()) {
-                log.debug(&quot;------w--&quot;, k.interestOps());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (CancelledKeyException e) {
-            e.printStackTrace();
-            log.warn(&quot;CancelledKeyException causing close of session 0x&quot; + Long.toHexString(sessionId));
-            if (log.isDebugEnabled()) {
-                log.debug(&quot;CancelledKeyException stack trace&quot;, e);
-            }
-            close(DisconnectReason.CANCELLED_KEY_EXCEPTION);
-        }
-    }
-
-    public enum DisconnectReason {
-        UNKNOWN(&quot;unknown&quot;),
-        SERVER_SHUTDOWN(&quot;server_shutdown&quot;),
-        CONNECTION_EXPIRED(&quot;connection_expired&quot;),
-        CANCELLED_KEY_EXCEPTION(&quot;cancelled_key_exception&quot;),
-        CLEAN_UP(&quot;clean_up&quot;),
-        CONNECTION_MODE_CHANGED(&quot;connection_mode_changed&quot;);
-        String disconnectReason;
-
-        DisconnectReason(String reason) {
-            this.disconnectReason = reason;
-        }
-
-        public String toDisconnectReasonString() {
-            return disconnectReason;
-        }
-    }
-
-}</code></pre>
       
     </div>
 
@@ -1187,7 +236,7 @@ protected boolean isSocketOpen() {
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2019/07/12/redis/redis-info信息/">
+    <link itemprop="mainEntityOfPage" href="/2021/03/02/leetcode/305. 岛屿数量2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1201,7 +250,7 @@ protected boolean isSocketOpen() {
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/07/12/redis/redis-info信息/" class="post-title-link" itemprop="url">redis info信息</a>
+            <a href="/2021/03/02/leetcode/305. 岛屿数量2/" class="post-title-link" itemprop="url">305. 岛屿数量2</a>
         </h2>
 
         <div class="post-meta">
@@ -1210,10 +259,16 @@ protected boolean isSocketOpen() {
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2019-07-12 13:20:20 / Modified: 14:05:50" itemprop="dateCreated datePublished" datetime="2019-07-12T13:20:20+08:00">2019-07-12</time>
+              <time title="Created: 2021-03-02 12:42:01" itemprop="dateCreated datePublished" datetime="2021-03-02T12:42:01+08:00">2021-03-02</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-17 10:15:18" itemprop="dateModified" datetime="2021-05-17T10:15:18+08:00">2021-05-17</time>
+              </span>
 
           
 
@@ -1226,222 +281,97 @@ protected boolean isSocketOpen() {
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>INFO [section]</p>
-<pre><code>以一种易于解释（parse）且易于阅读的格式，返回关于 Redis 服务器的各种信息和统计数值。
+          <h3 id="1-题目"><a href="#1-题目" class="headerlink" title="1. 题目"></a>1. 题目</h3><p>假设你设计一个游戏，用一个 m 行 n 列的 2D 网格来存储你的游戏地图。</p>
+<p>起始的时候，每个格子的地形都被默认标记为「水」。 我们可以通过使用 addLand 进行操作，将位置 (row, col) 的「水」变成「陆地」。</p>
+<p>你将会被给定一个列表，来记录所有需要被操作的位置，然后你需要返回计算出来 每次 addLand 操作后岛屿的数量。</p>
+<p>注意：一个岛的定义是被「水」包围的「陆地」，通过水平方向或者垂直方向上相邻的陆地连接而成。 你可以假设地图网格的四边均被无边无际的「水」所包围。</p>
+<p>请仔细阅读下方示例与解析，更加深入了解岛屿的判定。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">示例:</span><br><span class="line">输入: m = 3, n = 3, </span><br><span class="line">	positions = [[0,0], [0,1], [1,2], [2,1]]</span><br><span class="line">输出: [1,1,2,3]</span><br><span class="line">解析:</span><br><span class="line">起初，二维网格 grid 被全部注入「水」。（0 代表「水」，1 代表「陆地」）</span><br><span class="line">0 0 0</span><br><span class="line">0 0 0</span><br><span class="line">0 0 0</span><br><span class="line"></span><br><span class="line">操作 #1：addLand(0, 0) 将 grid[0][0] 的水变为陆地。</span><br><span class="line">1 0 0</span><br><span class="line">0 0 0   Number of islands = 1</span><br><span class="line">0 0 0</span><br><span class="line"></span><br><span class="line">操作 #2：addLand(0, 1) 将 grid[0][1] 的水变为陆地。</span><br><span class="line">1 1 0</span><br><span class="line">0 0 0   岛屿的数量为 1</span><br><span class="line">0 0 0</span><br><span class="line"></span><br><span class="line">操作 #3：addLand(1, 2) 将 grid[1][2] 的水变为陆地。</span><br><span class="line">1 1 0</span><br><span class="line">0 0 1   岛屿的数量为 2</span><br><span class="line">0 0 0</span><br><span class="line"></span><br><span class="line">操作 #4：addLand(2, 1) 将 grid[2][1] 的水变为陆地。</span><br><span class="line">1 1 0</span><br><span class="line">0 0 1   岛屿的数量为 3</span><br><span class="line">0 1 0</span><br><span class="line"></span><br><span class="line">拓展：</span><br><span class="line">你是否能在 O(k log mn) 的时间复杂度程度内完成每次的计算？</span><br><span class="line">（k 表示 positions 的长度）</span><br></pre></td></tr></table></figure>
 
-通过给定可选的参数 section ，可以让命令只返回某一部分的信息：</code></pre><p>server 部分记录了 Redis 服务器的信息，它包含以下域：</p>
-<pre><code>redis_version : Redis 服务器版本
-redis_git_sha1 : Git SHA1
-redis_git_dirty : Git dirty flag
-os : Redis 服务器的宿主操作系统
-arch_bits : 架构（32 或 64 位）
-multiplexing_api : Redis 所使用的事件处理机制
-gcc_version : 编译 Redis 时所使用的 GCC 版本
-process_id : 服务器进程的 PID
-run_id : Redis 服务器的随机标识符（用于 Sentinel 和集群）
-tcp_port : TCP/IP 监听端口
-uptime_in_seconds : 自 Redis 服务器启动以来，经过的秒数
-uptime_in_days : 自 Redis 服务器启动以来，经过的天数
-lru_clock : 以分钟为单位进行自增的时钟，用于 LRU 管理
-clients 部分记录了已连接客户端的信息，它包含以下域：
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">      </span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span>[] father, <span class="keyword">int</span> id)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">int</span> tf = father[id];</span><br><span class="line">          <span class="keyword">while</span> (tf != father[tf]) &#123;</span><br><span class="line">              tf = father[tf];</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">int</span> cur = id;</span><br><span class="line">          <span class="keyword">int</span> tmp;</span><br><span class="line">          <span class="keyword">while</span> (father[cur] != tf) &#123;</span><br><span class="line">              tmp = father[cur];</span><br><span class="line">              father[cur] = tf;</span><br><span class="line">              cur = tmp;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> tf;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(<span class="keyword">int</span>[] father, <span class="keyword">int</span>[] sz, <span class="keyword">int</span> id1, <span class="keyword">int</span> id2)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">int</span> tf1 = find(father, id1);</span><br><span class="line">          <span class="keyword">int</span> tf2 = find(father, id2);</span><br><span class="line">          <span class="keyword">if</span> (tf1 != tf2) &#123;</span><br><span class="line">              <span class="keyword">if</span> (sz[tf1] &gt; sz[tf2]) &#123;</span><br><span class="line">                  father[tf2] = tf1;</span><br><span class="line">                  sz[tf1] += sz[tf2];</span><br><span class="line">              &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                  father[tf1] = tf2;</span><br><span class="line">                  sz[tf2] += sz[tf1];</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">numIslands2</span><span class="params">(<span class="keyword">int</span> m, <span class="keyword">int</span> n, <span class="keyword">int</span>[][] positions)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (m == <span class="number">0</span> || n == <span class="number">0</span>) &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">          &#125;</span><br><span class="line">          ArrayList&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList();</span><br><span class="line">          <span class="keyword">int</span>[] father = <span class="keyword">new</span> <span class="keyword">int</span>[m * n];</span><br><span class="line">          <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; father.length; i++) &#123;</span><br><span class="line">              father[i] = -<span class="number">1</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">int</span>[] sz = <span class="keyword">new</span> <span class="keyword">int</span>[m * n];</span><br><span class="line">          <span class="keyword">int</span>[] dr = &#123;<span class="number">0</span>, <span class="number">0</span>, -<span class="number">1</span>, <span class="number">1</span>&#125;;</span><br><span class="line">          <span class="keyword">int</span>[] dc = &#123;-<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>&#125;;</span><br><span class="line">          <span class="keyword">int</span> r;</span><br><span class="line">          <span class="keyword">int</span> c;</span><br><span class="line">          <span class="keyword">int</span> nr;</span><br><span class="line">          <span class="keyword">int</span> nc;</span><br><span class="line">          <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; positions.length; i++) &#123;</span><br><span class="line">              r = positions[i][<span class="number">0</span>];</span><br><span class="line">              c = positions[i][<span class="number">1</span>];</span><br><span class="line">              count++;</span><br><span class="line">              father[r * n + c] = r * n + c;</span><br><span class="line">              sz[r * n + c] = <span class="number">1</span>;</span><br><span class="line">              <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">4</span>; j++) &#123;</span><br><span class="line">                  nr = r + dr[j];</span><br><span class="line">                  nc = c + dc[j];</span><br><span class="line">                  <span class="keyword">if</span> (nr &gt;= <span class="number">0</span> &amp;&amp; nr &lt; m &amp;&amp; nc &gt;= <span class="number">0</span> &amp;&amp; nc &lt; n &amp;&amp; father[nr * n + nc] != -<span class="number">1</span>) &#123;</span><br><span class="line">                      <span class="keyword">if</span> (find(father, r * n + c) != find(father, nr * n + nc)) &#123;</span><br><span class="line">                          count--;</span><br><span class="line">                          union(father, sz, r * n + c, nr * n + nc);</span><br><span class="line">                      &#125;</span><br><span class="line">                  &#125;</span><br><span class="line">              &#125;</span><br><span class="line">              res.add(count);</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> res;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 
-connected_clients : 已连接客户端的数量（不包括通过从属服务器连接的客户端）
-client_longest_output_list : 当前连接的客户端当中，最长的输出列表
-client_longest_input_buf : 当前连接的客户端当中，最大输入缓存
-blocked_clients : 正在等待阻塞命令（BLPOP、BRPOP、BRPOPLPUSH）的客户端的数量
-memory 部分记录了服务器的内存信息，它包含以下域：
 
-used_memory : 由 Redis 分配器分配的内存总量，以字节（byte）为单位
-used_memory_human : 以人类可读的格式返回 Redis 分配的内存总量
-used_memory_rss : 从操作系统的角度，返回 Redis 已分配的内存总量（俗称常驻集大小）。这个值和 top 、 ps 等命令的输出一致。
-used_memory_peak : Redis 的内存消耗峰值（以字节为单位）
-used_memory_peak_human : 以人类可读的格式返回 Redis 的内存消耗峰值
-used_memory_lua : Lua 引擎所使用的内存大小（以字节为单位）
-mem_fragmentation_ratio : used_memory_rss 和 used_memory 之间的比率
-mem_allocator : 在编译时指定的， Redis 所使用的内存分配器。可以是 libc 、 jemalloc 或者 tcmalloc 。
-在理想情况下， used_memory_rss 的值应该只比 used_memory 稍微高一点儿。
-当 rss &gt; used ，且两者的值相差较大时，表示存在（内部或外部的）内存碎片。
-内存碎片的比率可以通过 mem_fragmentation_ratio 的值看出。
-当 used &gt; rss 时，表示 Redis 的部分内存被操作系统换出到交换空间了，在这种情况下，操作可能会产生明显的延迟。
-Because Redis does not have control over how its allocations are mapped to memory pages, high used_memory_rss is often the result of a spike in memory usage.
+      
+    </div>
 
-当 Redis 释放内存时，分配器可能会，也可能不会，将内存返还给操作系统。
-如果 Redis 释放了内存，却没有将内存返还给操作系统，那么 used_memory 的值可能和操作系统显示的 Redis 内存占用并不一致。
-查看 used_memory_peak 的值可以验证这种情况是否发生。
-persistence 部分记录了跟 RDB 持久化和 AOF 持久化有关的信息，它包含以下域：
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
-loading : 一个标志值，记录了服务器是否正在载入持久化文件。
-rdb_changes_since_last_save : 距离最近一次成功创建持久化文件之后，经过了多少秒。
-rdb_bgsave_in_progress : 一个标志值，记录了服务器是否正在创建 RDB 文件。
-rdb_last_save_time : 最近一次成功创建 RDB 文件的 UNIX 时间戳。
-rdb_last_bgsave_status : 一个标志值，记录了最近一次创建 RDB 文件的结果是成功还是失败。
-rdb_last_bgsave_time_sec : 记录了最近一次创建 RDB 文件耗费的秒数。
-rdb_current_bgsave_time_sec : 如果服务器正在创建 RDB 文件，那么这个域记录的就是当前的创建操作已经耗费的秒数。
-aof_enabled : 一个标志值，记录了 AOF 是否处于打开状态。
-aof_rewrite_in_progress : 一个标志值，记录了服务器是否正在创建 AOF 文件。
-aof_rewrite_scheduled : 一个标志值，记录了在 RDB 文件创建完毕之后，是否需要执行预约的 AOF 重写操作。
-aof_last_rewrite_time_sec : 最近一次创建 AOF 文件耗费的时长。
-aof_current_rewrite_time_sec : 如果服务器正在创建 AOF 文件，那么这个域记录的就是当前的创建操作已经耗费的秒数。
-aof_last_bgrewrite_status : 一个标志值，记录了最近一次创建 AOF 文件的结果是成功还是失败。
-如果 AOF 持久化功能处于开启状态，那么这个部分还会加上以下域：
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/03/02/leetcode/200. 岛屿数量/">
 
-aof_current_size : AOF 文件目前的大小。
-aof_base_size : 服务器启动时或者 AOF 重写最近一次执行之后，AOF 文件的大小。
-aof_pending_rewrite : 一个标志值，记录了是否有 AOF 重写操作在等待 RDB 文件创建完毕之后执行。
-aof_buffer_length : AOF 缓冲区的大小。
-aof_rewrite_buffer_length : AOF 重写缓冲区的大小。
-aof_pending_bio_fsync : 后台 I/O 队列里面，等待执行的 fsync 调用数量。
-aof_delayed_fsync : 被延迟的 fsync 调用数量。
-stats 部分记录了一般统计信息，它包含以下域：
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
 
-total_connections_received : 服务器已接受的连接请求数量。
-total_commands_processed : 服务器已执行的命令数量。
-instantaneous_ops_per_sec : 服务器每秒钟执行的命令数量。
-rejected_connections : 因为最大客户端数量限制而被拒绝的连接请求数量。
-expired_keys : 因为过期而被自动删除的数据库键数量。
-evicted_keys : 因为最大内存容量限制而被驱逐（evict）的键数量。
-keyspace_hits : 查找数据库键成功的次数。
-keyspace_misses : 查找数据库键失败的次数。
-pubsub_channels : 目前被订阅的频道数量。
-pubsub_patterns : 目前被订阅的模式数量。
-latest_fork_usec : 最近一次 fork() 操作耗费的毫秒数。
-replication : 主/从复制信息
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/02/leetcode/200. 岛屿数量/" class="post-title-link" itemprop="url">200. 岛屿数量</a>
+        </h2>
 
-role : 如果当前服务器没有在复制任何其他服务器，那么这个域的值就是 master ；否则的话，这个域的值就是 slave 。注意，在创建复制链的时候，一个从服务器也可能是另一个服务器的主服务器。
-如果当前服务器是一个从服务器的话，那么这个部分还会加上以下域：
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
 
-master_host : 主服务器的 IP 地址。
-master_port : 主服务器的 TCP 监听端口号。
-master_link_status : 复制连接当前的状态， up 表示连接正常， down 表示连接断开。
-master_last_io_seconds_ago : 距离最近一次与主服务器进行通信已经过去了多少秒钟。
-master_sync_in_progress : 一个标志值，记录了主服务器是否正在与这个从服务器进行同步。
-如果同步操作正在进行，那么这个部分还会加上以下域：
+              <time title="Created: 2021-03-02 11:42:01" itemprop="dateCreated datePublished" datetime="2021-03-02T11:42:01+08:00">2021-03-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-17 10:15:24" itemprop="dateModified" datetime="2021-05-17T10:15:24+08:00">2021-05-17</time>
+              </span>
 
-master_sync_left_bytes : 距离同步完成还缺少多少字节数据。
-master_sync_last_io_seconds_ago : 距离最近一次因为 SYNC 操作而进行 I/O 已经过去了多少秒。
-如果主从服务器之间的连接处于断线状态，那么这个部分还会加上以下域：
+          
 
-master_link_down_since_seconds : 主从服务器连接断开了多少秒。
-以下是一些总会出现的域：
+        </div>
+      </header>
 
-connected_slaves : 已连接的从服务器数量。
-对于每个从服务器，都会添加以下一行信息：
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
-slaveXXX : ID、IP 地址、端口号、连接状态
-cpu 部分记录了 CPU 的计算量统计信息，它包含以下域：
+      
+          <p><a href="https://leetcode-cn.com/problems/number-of-islands/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/number-of-islands/</a></p>
+<p>给你一个由 ‘1’（陆地）和 ‘0’（水）组成的的二维网格，请你计算网格中岛屿的数量。</p>
+<p>岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。</p>
+<p>此外，你可以假设该网格的四条边均被水包围。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输入：grid = [</span><br><span class="line">  [&quot;1&quot;,&quot;1&quot;,&quot;1&quot;,&quot;1&quot;,&quot;0&quot;],</span><br><span class="line">  [&quot;1&quot;,&quot;1&quot;,&quot;0&quot;,&quot;1&quot;,&quot;0&quot;],</span><br><span class="line">  [&quot;1&quot;,&quot;1&quot;,&quot;0&quot;,&quot;0&quot;,&quot;0&quot;],</span><br><span class="line">  [&quot;0&quot;,&quot;0&quot;,&quot;0&quot;,&quot;0&quot;,&quot;0&quot;]</span><br><span class="line">]</span><br><span class="line">输出：1</span><br></pre></td></tr></table></figure>
 
-used_cpu_sys : Redis 服务器耗费的系统 CPU 。
-used_cpu_user : Redis 服务器耗费的用户 CPU 。
-used_cpu_sys_children : 后台进程耗费的系统 CPU 。
-used_cpu_user_children : 后台进程耗费的用户 CPU 。
-commandstats 部分记录了各种不同类型的命令的执行统计信息，比如命令执行的次数、命令耗费的 CPU 时间、执行每个命令耗费的平均 CPU 时间等等。对于每种类型的命令，这个部分都会添加一行以下格式的信息：
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输入：grid = [</span><br><span class="line">  [&quot;1&quot;,&quot;1&quot;,&quot;0&quot;,&quot;0&quot;,&quot;0&quot;],</span><br><span class="line">  [&quot;1&quot;,&quot;1&quot;,&quot;0&quot;,&quot;0&quot;,&quot;0&quot;],</span><br><span class="line">  [&quot;0&quot;,&quot;0&quot;,&quot;1&quot;,&quot;0&quot;,&quot;0&quot;],</span><br><span class="line">  [&quot;0&quot;,&quot;0&quot;,&quot;0&quot;,&quot;1&quot;,&quot;1&quot;]</span><br><span class="line">]</span><br><span class="line">输出：3</span><br></pre></td></tr></table></figure>
 
-cmdstat_XXX:calls=XXX,usec=XXX,usecpercall=XXX
-cluster 部分记录了和集群有关的信息，它包含以下域：
+<p>有两种解决方案：</p>
+<p>1、深度优先搜索</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">char</span>[][] grid, <span class="keyword">int</span> r, <span class="keyword">int</span> c)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> nr = grid.length;</span><br><span class="line">        <span class="keyword">int</span> nc = grid[<span class="number">0</span>].length;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (r &lt; <span class="number">0</span> || c &lt; <span class="number">0</span> || r &gt;= nr || c &gt;= nc || grid[r][c] == <span class="string">'0'</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        grid[r][c] = <span class="string">'0'</span>;</span><br><span class="line">        dfs(grid, r - <span class="number">1</span>, c);</span><br><span class="line">        dfs(grid, r + <span class="number">1</span>, c);</span><br><span class="line">        dfs(grid, r, c - <span class="number">1</span>);</span><br><span class="line">        dfs(grid, r, c + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numIslands</span><span class="params">(<span class="keyword">char</span>[][] grid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (grid == <span class="keyword">null</span> || grid.length == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> nr = grid.length;</span><br><span class="line">        <span class="keyword">int</span> nc = grid[<span class="number">0</span>].length;</span><br><span class="line">        <span class="keyword">int</span> num_islands = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> r = <span class="number">0</span>; r &lt; nr; ++r) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> c = <span class="number">0</span>; c &lt; nc; ++c) &#123;</span><br><span class="line">                <span class="keyword">if</span> (grid[r][c] == <span class="string">'1'</span>) &#123;</span><br><span class="line">                    ++num_islands;</span><br><span class="line">                    dfs(grid, r, c);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> num_islands;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-cluster_enabled : 一个标志值，记录集群功能是否已经开启。
-keyspace 部分记录了数据库相关的统计信息，比如数据库的键数量、数据库已经被删除的过期键数量等。对于每个数据库，这个部分都会添加一行以下格式的信息：
+<p>2、使用并查集</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">UnionFind</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> count;</span><br><span class="line">        <span class="keyword">int</span>[] parent;</span><br><span class="line">        <span class="keyword">int</span>[] rank;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">UnionFind</span><span class="params">(<span class="keyword">char</span>[][] grid)</span> </span>&#123;</span><br><span class="line">            count = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> m = grid.length;</span><br><span class="line">            <span class="keyword">int</span> n = grid[<span class="number">0</span>].length;</span><br><span class="line">            parent = <span class="keyword">new</span> <span class="keyword">int</span>[m * n];</span><br><span class="line">            rank = <span class="keyword">new</span> <span class="keyword">int</span>[m * n];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; ++i) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; ++j) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (grid[i][j] == <span class="string">'1'</span>) &#123;</span><br><span class="line">                        parent[i * n + j] = i * n + j;</span><br><span class="line">                        ++count;</span><br><span class="line">                    &#125;</span><br><span class="line">                    rank[i * n + j] = <span class="number">0</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (parent[i] != i) parent[i] = find(parent[i]);</span><br><span class="line">            <span class="keyword">return</span> parent[i];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">int</span> rootx = find(x);</span><br><span class="line">            <span class="keyword">int</span> rooty = find(y);</span><br><span class="line">            <span class="keyword">if</span> (rootx != rooty) &#123;</span><br><span class="line">                <span class="keyword">if</span> (rank[rootx] &gt; rank[rooty]) &#123;</span><br><span class="line">                    parent[rooty] = rootx;</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (rank[rootx] &lt; rank[rooty]) &#123;</span><br><span class="line">                    parent[rootx] = rooty;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    parent[rooty] = rootx;</span><br><span class="line">                    rank[rootx] += <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                --count;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> count;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numIslands</span><span class="params">(<span class="keyword">char</span>[][] grid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (grid == <span class="keyword">null</span> || grid.length == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> nr = grid.length;</span><br><span class="line">        <span class="keyword">int</span> nc = grid[<span class="number">0</span>].length;</span><br><span class="line">        <span class="keyword">int</span> num_islands = <span class="number">0</span>;</span><br><span class="line">        UnionFind uf = <span class="keyword">new</span> UnionFind(grid);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> r = <span class="number">0</span>; r &lt; nr; ++r) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> c = <span class="number">0</span>; c &lt; nc; ++c) &#123;</span><br><span class="line">                <span class="keyword">if</span> (grid[r][c] == <span class="string">'1'</span>) &#123;</span><br><span class="line">                    grid[r][c] = <span class="string">'0'</span>;</span><br><span class="line">                    <span class="keyword">if</span> (r - <span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; grid[r-<span class="number">1</span>][c] == <span class="string">'1'</span>) &#123;</span><br><span class="line">                        uf.union(r * nc + c, (r-<span class="number">1</span>) * nc + c);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (r + <span class="number">1</span> &lt; nr &amp;&amp; grid[r+<span class="number">1</span>][c] == <span class="string">'1'</span>) &#123;</span><br><span class="line">                        uf.union(r * nc + c, (r+<span class="number">1</span>) * nc + c);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (c - <span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; grid[r][c-<span class="number">1</span>] == <span class="string">'1'</span>) &#123;</span><br><span class="line">                        uf.union(r * nc + c, r * nc + c - <span class="number">1</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (c + <span class="number">1</span> &lt; nc &amp;&amp; grid[r][c+<span class="number">1</span>] == <span class="string">'1'</span>) &#123;</span><br><span class="line">                        uf.union(r * nc + c, r * nc + c + <span class="number">1</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> uf.getCount();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-dbXXX:keys=XXX,expires=XXX
-除上面给出的这些值以外， section 参数的值还可以是下面这两个：
 
-all : 返回所有信息
-default : 返回默认选择的信息
-当不带参数直接调用 INFO 命令时，使用 default 作为默认参数。
-
-不同版本的 Redis 可能对返回的一些域进行了增加或删减。
-
-因此，一个健壮的客户端程序在对 INFO 命令的输出进行分析时，应该能够跳过不认识的域，并且妥善地处理丢失不见的域。
-
-可用版本：&gt;= 1.0.0时间复杂度：O(1)返回值：具体请参见下面的测试代码。</code></pre><p>redis&gt; INFO</p>
-<pre><code># Server
-redis_version:2.9.11
-redis_git_sha1:937384d0
-redis_git_dirty:0
-redis_build_id:8e9509442863f22
-redis_mode:standalone
-os:Linux 3.13.0-35-generic x86_64
-arch_bits:64
-multiplexing_api:epoll
-gcc_version:4.8.2
-process_id:4716
-run_id:26186aac3f2380aaee9eef21cc50aecd542d97dc
-tcp_port:6379
-uptime_in_seconds:362
-uptime_in_days:0
-hz:10
-lru_clock:1725349
-config_file:
-
-# Clients
-connected_clients:1
-client_longest_output_list:0
-client_biggest_input_buf:0
-blocked_clients:0
-
-# Memory
-used_memory:508536
-used_memory_human:496.62K
-used_memory_rss:7974912
-used_memory_peak:508536
-used_memory_peak_human:496.62K
-used_memory_lua:33792
-mem_fragmentation_ratio:15.68
-mem_allocator:jemalloc-3.2.0
-
-# Persistence
-loading:0
-rdb_changes_since_last_save:6
-rdb_bgsave_in_progress:0
-rdb_last_save_time:1411011131
-rdb_last_bgsave_status:ok
-rdb_last_bgsave_time_sec:-1
-rdb_current_bgsave_time_sec:-1
-aof_enabled:0
-aof_rewrite_in_progress:0
-aof_rewrite_scheduled:0
-aof_last_rewrite_time_sec:-1
-aof_current_rewrite_time_sec:-1
-aof_last_bgrewrite_status:ok
-aof_last_write_status:ok
-
-# Stats
-total_connections_received:2
-total_commands_processed:4
-instantaneous_ops_per_sec:0
-rejected_connections:0
-sync_full:0
-sync_partial_ok:0
-sync_partial_err:0
-expired_keys:0
-evicted_keys:0
-keyspace_hits:0
-keyspace_misses:0
-pubsub_channels:0
-pubsub_patterns:0
-latest_fork_usec:0
-migrate_cached_sockets:0
-
-# Replication
-role:master
-connected_slaves:0
-master_repl_offset:0
-repl_backlog_active:0
-repl_backlog_size:1048576
-repl_backlog_first_byte_offset:0
-repl_backlog_histlen:0
-
-# CPU
-used_cpu_sys:0.21
-used_cpu_user:0.17
-used_cpu_sys_children:0.00
-used_cpu_user_children:0.00
-
-# Cluster
-cluster_enabled:0
-
-# Keyspace
-db0:keys=2,expires=0,avg_ttl=0</code></pre>
       
     </div>
 
@@ -1459,7 +389,7 @@ db0:keys=2,expires=0,avg_ttl=0</code></pre>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/27/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/27/">27</a><span class="page-number current">28</span><a class="page-number" href="/page/29/">29</a><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/29/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/27/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/27/">27</a><span class="page-number current">28</span><a class="page-number" href="/page/29/">29</a><span class="space">&hellip;</span><a class="page-number" href="/page/37/">37</a><a class="extend next" rel="next" href="/page/29/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1525,14 +455,14 @@ db0:keys=2,expires=0,avg_ttl=0</code></pre>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">88</span>
+          <span class="site-state-item-count">110</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

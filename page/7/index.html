@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/05/17/leetcode/93.有效ip地址/">
+    <link itemprop="mainEntityOfPage" href="/2021/05/31/leetcode/树/116. 填充每个节点的下一个右侧节点指针/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,78 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/05/17/leetcode/93.有效ip地址/" class="post-title-link" itemprop="url">93.还原有效ip地址</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-05-17 11:42:01" itemprop="dateCreated datePublished" datetime="2021-05-17T11:42:01+08:00">2021-05-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-18 10:15:27" itemprop="dateModified" datetime="2021-05-18T10:15:27+08:00">2021-05-18</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a href="https://leetcode-cn.com/problems/restore-ip-addresses/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/restore-ip-addresses/</a></p>
-<p>给定一个只包含数字的字符串，用以表示一个 IP 地址，返回所有可能从 s 获得的 有效 IP 地址 。你可以按任何顺序返回答案。</p>
-<p>有效 IP 地址 正好由四个整数（每个整数位于 0 到 255 之间组成，且不能含有前导 0），整数之间用 ‘.’ 分隔。</p>
-<p>例如：”0.1.2.201” 和 “192.168.1.1” 是 有效 IP 地址，但是 “0.011.255.245”、”192.168.1.312” 和 “<a href="mailto:192.168@1.1" target="_blank" rel="noopener">192.168@1.1</a>“ 是 无效 IP 地址。</p>
-<p>回溯+剪枝</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">_93</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"><span class="comment">//        Solution2 solution = new Solution2();</span></span><br><span class="line">        Solution1 solution = <span class="keyword">new</span> Solution1();</span><br><span class="line">        System.out.println(solution.restoreIpAddresses(<span class="string">"2525511135"</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">restoreIpAddresses</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">            List&lt;String&gt; allValidIpAddresses = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            <span class="keyword">if</span> (s == <span class="keyword">null</span> || s.length() &gt; <span class="number">12</span> || s.length() &lt; <span class="number">4</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> allValidIpAddresses;</span><br><span class="line">            &#125;</span><br><span class="line">            backtracking(s, <span class="keyword">new</span> ArrayList&lt;&gt;(), allValidIpAddresses, <span class="number">0</span>);</span><br><span class="line">            <span class="keyword">return</span> allValidIpAddresses;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">backtracking</span><span class="params">(String s, ArrayList&lt;String&gt; bytes, List&lt;String&gt; result, <span class="keyword">int</span> pos)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (bytes.size() == <span class="number">4</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (pos == s.length()) &#123;</span><br><span class="line">                    result.add(String.join(<span class="string">"."</span>, bytes));</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = pos; i &lt; pos + <span class="number">3</span> &amp;&amp; i &lt; s.length(); i++) &#123;</span><br><span class="line">                String oneByte = s.substring(pos, i + <span class="number">1</span>);</span><br><span class="line">                <span class="keyword">if</span> (!isValid(oneByte)) &#123;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                bytes.add(oneByte);</span><br><span class="line">                backtracking(s, bytes, result, i + <span class="number">1</span>);</span><br><span class="line">                bytes.remove(bytes.size() - <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isValid</span><span class="params">(String oneByte)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (oneByte.charAt(<span class="number">0</span>) == <span class="string">'0'</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> oneByte.equals(<span class="string">"0"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">int</span> num = Integer.valueOf(oneByte);</span><br><span class="line">            <span class="keyword">return</span> (num &gt;= <span class="number">0</span> &amp;&amp; num &lt; <span class="number">256</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">restoreIpAddresses</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">            List&lt;String&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            <span class="keyword">if</span> (str == <span class="keyword">null</span> || str.length() &lt; <span class="number">4</span> || str.length() &gt; <span class="number">12</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> result;</span><br><span class="line">            &#125;</span><br><span class="line">            dfs(str, <span class="number">0</span>, <span class="number">0</span>, <span class="keyword">new</span> LinkedList&lt;&gt;(), result);</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(String str, <span class="keyword">int</span> nums, <span class="keyword">int</span> start, LinkedList&lt;String&gt; strings, List&lt;String&gt; result)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (strings.size() == <span class="number">4</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (str.length() == start) &#123;</span><br><span class="line">                    result.add(String.join(<span class="string">"."</span>, strings));</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (str.length() - start &lt; (<span class="number">4</span> - nums) || str.length() - start &gt; (<span class="number">4</span> - nums) * <span class="number">3</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (start + i &gt;= str.length()) &#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (valid(str, start, start + i + <span class="number">1</span>)) &#123;</span><br><span class="line">                    strings.addLast(str.substring(start, start + i + <span class="number">1</span>));</span><br><span class="line">                    dfs(str, nums + <span class="number">1</span>, start + i + <span class="number">1</span>, strings, result);</span><br><span class="line">                    strings.removeLast();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">valid</span><span class="params">(String str, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</span><br><span class="line">            String tmp = str.substring(start, end);</span><br><span class="line">            <span class="keyword">if</span> (tmp.charAt(<span class="number">0</span>) == <span class="string">'0'</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">int</span> value = Integer.parseInt(tmp);</span><br><span class="line">            <span class="keyword">return</span> value &gt;= <span class="number">0</span> &amp;&amp; value &lt;= <span class="number">255</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/05/10/k8s/etcd-k8s查看数据/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/10/k8s/etcd-k8s查看数据/" class="post-title-link" itemprop="url">etcd k8s查看数据</a>
+            <a href="/2021/05/31/leetcode/树/116. 填充每个节点的下一个右侧节点指针/" class="post-title-link" itemprop="url">116. 填充每个节点的下一个右侧节点指针</a>
         </h2>
 
         <div class="post-meta">
@@ -246,7 +175,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-05-10 12:28:35 / Modified: 19:11:40" itemprop="dateCreated datePublished" datetime="2021-05-10T12:28:35+08:00">2021-05-10</time>
+              <time title="Created: 2021-05-31 14:45:02 / Modified: 17:56:16" itemprop="dateCreated datePublished" datetime="2021-05-31T14:45:02+08:00">2021-05-31</time>
             </span>
 
           
@@ -260,15 +189,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <ol>
-<li>ETCDCTL_API=3 etcdctl <br>–endpoints=<a href="https://127.0.0.1:2379" target="_blank" rel="noopener">https://127.0.0.1:2379</a> <br>–cacert=/etc/kubernetes/pki/etcd/ca.crt <br>–cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt <br>–key=/etc/kubernetes/pki/etcd/healthcheck-client.key <br>get / –prefix –keys-only</li>
-</ol>
-<ol start="2">
-<li>ETCDCTL_API=3 etcdctl <br>–endpoints=<a href="https://127.0.0.1:2379" target="_blank" rel="noopener">https://127.0.0.1:2379</a> <br>–cacert=/etc/kubernetes/pki/etcd/ca.crt <br>–cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt <br>–key=/etc/kubernetes/pki/etcd/healthcheck-client.key <br>get /registry/configmaps/kube-system/kube-flannel-cfg</li>
-</ol>
-<ol start="3">
-<li>ETCDCTL_API=3 etcdctl <br>–cacert=/etc/kubernetes/pki/etcd/ca.crt <br>–cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt <br>–key=/etc/kubernetes/pki/etcd/healthcheck-client.key <br>get /registry/minions/l-vkschedule-server2.pub.dev.ten.dm </li>
-</ol>
+          <p><a href="https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node" target="_blank" rel="noopener">https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node</a></p>
+<p>给定一个 完美二叉树 ，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下：</p>
+<p>struct Node {<br>  int val;<br>  Node *left;<br>  Node *right;<br>  Node *next;<br>}<br>填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。</p>
+<p>初始状态下，所有 next 指针都被设置为 NULL。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeLinkNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> val;</span><br><span class="line">    <span class="keyword">public</span> TreeLinkNode left;</span><br><span class="line">    <span class="keyword">public</span> TreeLinkNode right;</span><br><span class="line">    <span class="keyword">public</span> TreeLinkNode next;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TreeLinkNode</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        val = x;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connect</span><span class="params">(TreeLinkNode node)</span> </span>&#123;</span><br><span class="line">        Queue&lt;TreeLinkNode&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        queue.offer(node);</span><br><span class="line">        <span class="keyword">while</span> (!queue.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">int</span> size = queue.size();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">                TreeLinkNode curr = queue.poll();</span><br><span class="line">                <span class="keyword">if</span> (i &lt; size - <span class="number">1</span>) &#123;</span><br><span class="line">                    curr.next = queue.peek();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (curr.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    queue.offer(curr.left);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (curr.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    queue.offer(curr.right);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connect</span><span class="params">(TreeLinkNode node)</span> </span>&#123;</span><br><span class="line">        TreeLinkNode curr = node;</span><br><span class="line">        <span class="keyword">while</span> (curr.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">            TreeLinkNode head = curr;</span><br><span class="line">            <span class="keyword">while</span> (head != <span class="keyword">null</span>) &#123;</span><br><span class="line">                head.left.next = head.right;</span><br><span class="line">                <span class="keyword">if</span> (head.next != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    head.right.next = head.next.left;</span><br><span class="line">                &#125;</span><br><span class="line">                head = head.next;</span><br><span class="line">            &#125;</span><br><span class="line">            curr = curr.left;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -288,7 +216,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/05/10/k8s/创建k8s用户/">
+    <link itemprop="mainEntityOfPage" href="/2021/05/31/leetcode/1143. 最长公共子序列/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -302,7 +230,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/05/10/k8s/创建k8s用户/" class="post-title-link" itemprop="url">根据证书生成k8s账号信息</a>
+            <a href="/2021/05/31/leetcode/1143. 最长公共子序列/" class="post-title-link" itemprop="url">1143. 最长公共子序列</a>
         </h2>
 
         <div class="post-meta">
@@ -311,16 +239,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2021-05-10 12:28:35" itemprop="dateCreated datePublished" datetime="2021-05-10T12:28:35+08:00">2021-05-10</time>
+              <time title="Created: 2021-05-31 10:45:02 / Modified: 11:00:32" itemprop="dateCreated datePublished" datetime="2021-05-31T10:45:02+08:00">2021-05-31</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-11 19:20:21" itemprop="dateModified" datetime="2021-05-11T19:20:21+08:00">2021-05-11</time>
-              </span>
 
           
 
@@ -333,42 +255,96 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h4 id="新建用户"><a href="#新建用户" class="headerlink" title="新建用户"></a>新建用户</h4><p>新建一个k8s用户大概可以分为以下几步：</p>
-<ul>
-<li>生成用户的证书key</li>
-<li>通过用户的证书key，生成用户的证书请求</li>
-<li>通过k8s的api的ca证书去签发用户的证书请求，生成用户的证书</li>
-<li>配置kubectl config<ul>
-<li>kubectl config set-cluster              //集群配置</li>
-<li>kubectl config set-credentials NAME     //用户配置</li>
-<li>kubectl config set-context         //context配置</li>
-<li>kubectl config use-context         //切换context</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(umask 077; openssl genrsa -out test.key 2048)      //创建用户证书key</span><br><span class="line">openssl req -new -key test.key -out test.csr -subj &quot;/O=test/CN=test&quot;      //创建用户证书请求，-subj指定组和用户，其中O是组名，CN是用户名</span><br><span class="line">openssl x509 -req -in test.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out test.crt -days 3650      //使用k8s的ca签发用户证书</span><br><span class="line">kubectl config set-credentials test --client-certificate=test.crt --client-key=test.key --embed-certs=true      //用户配置</span><br><span class="line">kubectl config set-context test@kubernetes --cluster=kubernetes --user=test      //context设置</span><br><span class="line"></span><br><span class="line">//可以切换到新用户了，但此时用户啥权限都没有</span><br><span class="line">kubectl config use-context test@kubernetes</span><br></pre></td></tr></table></figure>
+          <p><a href="https://leetcode-cn.com/problems/longest-common-subsequence" target="_blank" rel="noopener">https://leetcode-cn.com/problems/longest-common-subsequence</a></p>
+<p>给定两个字符串 text1 和 text2，返回这两个字符串的最长 公共子序列 的长度。如果不存在 公共子序列 ，返回 0 。</p>
+<p>一个字符串的 子序列 是指这样一个新的字符串：它是由原字符串在不改变字符的相对顺序的情况下删除某些字符（也可以不删除任何字符）后组成的新字符串。</p>
+<p>例如，”ace” 是 “abcde” 的子序列，但 “aec” 不是 “abcde” 的子序列。<br>两个字符串的 公共子序列 是这两个字符串所共同拥有的子序列。</p>
+<p>示例 1：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：text1 = &quot;abcde&quot;, text2 = &quot;ace&quot; </span><br><span class="line">输出：3  </span><br><span class="line">解释：最长公共子序列是 &quot;ace&quot; ，它的长度为 3 。</span><br></pre></td></tr></table></figure>
 
-<p>简单说明：</p>
-<ul>
-<li>没有使用kubectl config set-cluster ，因为集群就使用本身的集群，也默认使用本集群的默认config文件</li>
-<li>kubectl config set-cluster –kubeconfig=/PATH/TO/SOMEFILE  —kubeconfig=/PATH/TO/SOMEFILE用于创建新的配置文件，如果不加此选项，则内容会添加到家目录下.kube/config文件中，可以使用use-context来切换不同的用户管理k8s集群</li>
-<li>context，就是用什么用户来管理哪个集群，即用户和集群的结合</li>
-</ul>
-<h4 id="用户授权"><a href="#用户授权" class="headerlink" title="用户授权"></a>用户授权</h4><p>k8s的用户授权有很多种，其中最普遍的是RBAC——基于角色的授权机制。</p>
-<ul>
-<li>某个用户属于某个角色</li>
-<li>某个角色拥有某些操作</li>
-<li>某些操作绑定到某些资源上</li>
-</ul>
-<p>即最终效果是：某个用户对某些资源拥有某些操作。下面以上面创建的baison用户为例，让此用户对default空间拥有查看pod与进入到pod里的权限。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl create role only-read-pods --verb=get,list,watch,create --resource=pod,pod/exec</span><br><span class="line">kubectl create rolebinding bind-only-read-pods --role=only-read-pods --user=test</span><br></pre></td></tr></table></figure>
+<p>示例 2：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：text1 = &quot;abc&quot;, text2 = &quot;abc&quot;</span><br><span class="line">输出：3</span><br><span class="line">解释：最长公共子序列是 &quot;abc&quot; ，它的长度为 3 。</span><br></pre></td></tr></table></figure>
 
-<p>简单说明：</p>
-<ul>
-<li>除了role、rolebinding外，还有cluserrole、clusterrolebinding，他们的区别就是作用域不同，很明显带cluser的作用与整个集群。</li>
-<li>rolebinding可以绑定role，也可以绑定clusterrole，绑定cluserrole的时候，clusterrole作用域降级为namespace级别。</li>
-<li>集群有很多内置role、rolebinding和cluserrole、clusterrolebinding，可以用yaml方式打开作为借鉴。</li>
-</ul>
+<p>示例 3：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：text1 = &quot;abc&quot;, text2 = &quot;def&quot;</span><br><span class="line">输出：0</span><br><span class="line">解释：两个字符串没有公共子序列，返回 0 。</span><br></pre></td></tr></table></figure>
+
+<p>动态规划</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public int longestCommonSubsequence(String text1, String text2) &#123;</span><br><span class="line">        int m = text1.length(), n = text2.length();</span><br><span class="line">        int[][] dp = new int[m + 1][n + 1];</span><br><span class="line">        for (int i = 1; i &lt;= m; i++) &#123;</span><br><span class="line">            char c1 = text1.charAt(i - 1);</span><br><span class="line">            for (int j = 1; j &lt;= n; j++) &#123;</span><br><span class="line">                char c2 = text2.charAt(j - 1);</span><br><span class="line">                if (c1 == c2) &#123;</span><br><span class="line">                    dp[i][j] = dp[i - 1][j - 1] + 1;</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return dp[m][n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://pic.leetcode-cn.com/1617411822-KhEKGw-image.png" alt></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/05/31/leetcode/字符串/567.字符串排列/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/31/leetcode/字符串/567.字符串排列/" class="post-title-link" itemprop="url">567.字符串排列</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-05-31 10:42:01 / Modified: 10:55:02" itemprop="dateCreated datePublished" datetime="2021-05-31T10:42:01+08:00">2021-05-31</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://leetcode-cn.com/problems/permutation-in-string" target="_blank" rel="noopener">https://leetcode-cn.com/problems/permutation-in-string</a></p>
+<p>给定两个字符串 s1 和 s2，写一个函数来判断 s2 是否包含 s1 的排列。</p>
+<p>换句话说，第一个字符串的排列之一是第二个字符串的 子串 。</p>
+<p> 示例 1：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: s1 = &quot;ab&quot; s2 = &quot;eidbaooo&quot;</span><br><span class="line">输出: True</span><br><span class="line">解释: s2 包含 s1 的排列之一 (&quot;ba&quot;).</span><br></pre></td></tr></table></figure>
+
+<p>示例 2：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: s1= &quot;ab&quot; s2 = &quot;eidboaoo&quot;</span><br><span class="line">输出: False</span><br></pre></td></tr></table></figure>
+
+<p>滑动窗口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">checkInclusion</span><span class="params">(String s1, String s2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = s1.length(), m = s2.length();</span><br><span class="line">        <span class="keyword">if</span> (n &gt; m) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span>[] cnt1 = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">26</span>];</span><br><span class="line">        <span class="keyword">int</span>[] cnt2 = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">26</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            ++cnt1[s1.charAt(i) - <span class="string">'a'</span>];</span><br><span class="line">            ++cnt2[s2.charAt(i) - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (Arrays.equals(cnt1, cnt2)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = n; i &lt; m; ++i) &#123;</span><br><span class="line">            ++cnt2[s2.charAt(i) - <span class="string">'a'</span>];</span><br><span class="line">            --cnt2[s2.charAt(i - n) - <span class="string">'a'</span>];</span><br><span class="line">            <span class="keyword">if</span> (Arrays.equals(cnt1, cnt2)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>双指针</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">checkInclusion</span><span class="params">(String s1, String s2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = s1.length(), m = s2.length();</span><br><span class="line">        <span class="keyword">if</span> (n &gt; m) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span>[] cnt = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">26</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            --cnt[s1.charAt(i) - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> right = <span class="number">0</span>; right &lt; m; ++right) &#123;</span><br><span class="line">            <span class="keyword">int</span> x = s2.charAt(right) - <span class="string">'a'</span>;</span><br><span class="line">            ++cnt[x];</span><br><span class="line">            <span class="keyword">while</span> (cnt[x] &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                --cnt[s2.charAt(left) - <span class="string">'a'</span>];</span><br><span class="line">                ++left;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (right - left + <span class="number">1</span> == n) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -387,7 +363,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/37/">37</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -453,14 +429,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">88</span>
+          <span class="site-state-item-count">110</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

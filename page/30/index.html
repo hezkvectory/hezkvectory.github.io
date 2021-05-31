@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2019/07/11/zookeeper/zookeeper_expiryQueue/">
+    <link itemprop="mainEntityOfPage" href="/2021/03/01/面试题/面试题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/07/11/zookeeper/zookeeper_expiryQueue/" class="post-title-link" itemprop="url">zookeeper之ExpiryQueue</a>
+            <a href="/2021/03/01/面试题/面试题/" class="post-title-link" itemprop="url">面试题</a>
         </h2>
 
         <div class="post-meta">
@@ -174,14 +174,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2019-07-11 12:28:35" itemprop="dateCreated datePublished" datetime="2019-07-11T12:28:35+08:00">2019-07-11</time>
+              <time title="Created: 2021-03-01 18:45:02" itemprop="dateCreated datePublished" datetime="2021-03-01T18:45:02+08:00">2021-03-01</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-09 18:31:34" itemprop="dateModified" datetime="2021-04-09T18:31:34+08:00">2021-04-09</time>
+                <time title="Modified: 2021-05-27 10:44:22" itemprop="dateModified" datetime="2021-05-27T10:44:22+08:00">2021-05-27</time>
               </span>
 
           
@@ -195,74 +195,208 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>zookeeper之ExpiryQueue</p>
-<pre><code>ExpiryQueue是在SessionTrackerImpl中使用的，主要是维护zk中session的队列
-了解ExpiryQueue的实现
+          <p>1、自我介绍，项目介绍，遇到的难点？产生原因？如何解决？<br>2、HashMap1.8与1.7区别？ConcurrentHashMap实现原理 ？<br>3、jvm类加载器，自定义类加载器，双亲委派机制，优缺点，tomcat类加载机制?<br>4、tomcat热部署，怎么做到的热加载？<br>5、cms收集器过程，g1收集器原理，怎么实现可预测停顿的，region的大小结构？<br>6、内存溢出，内存泄漏遇到过吗？什么场景产生的，怎么解决的？<br>7、volatile的原理？synchronized和重入锁实现原理以及区别？<br>8、redis字符串实现，sds和c区别？<br>9、redis集群，为什么是16384个slot？选举过程，会有脑裂问题么，raft算法，优缺点？<br>10、redis有序集合怎么实现的，跳表是什么？往跳表添加一个元素的过程获取分数的时间复杂度，为什么不用红黑树，红黑树有什么特点，左旋右旋操作？<br>11、锁升级过程，轻量锁可以变成偏向锁么？偏向锁可以变成无锁么？对象头结构，锁状态变化过程？<br>12、Innodb的结构了解么？磁盘页和缓存区是怎么配合的？缓冲区和磁盘数据不一致怎么办，服务器突然宕机了数据会丢失么？<br>13、InnoDB 索引为什使用B+树而不是用B树？<br>14、MySQL 分表是怎么实现的？跨库join如何解决？数据量突增怎么解决？<br>15、数据库的隔离级别，怎么实现的？当前读，快照读？MVCC？<br>16、mysql优化的实践经验<br>17、分布式事务出现过不一致吗？为什么？怎么解决？有什么方法避免？怎么监控？监控到怎么处理？什么时候需要人工接入？<br>18、io模型了解么？多路复用？selete，poll，epoll，epoll的结构？怎么注册事件？<br>19、你们用的什么消息中间件，kafka，为什么用kafka？kafka是怎么保证高吞吐量的？<br>20、kafka重平衡，重启服务怎么保证kafka不发生重平衡，有什么方案？<br>21、netty的原理和使用？tcp的连接过程？一台服务器能支持多少连接，为什么 ？tcp各个参数怎么设置？<br>22、Sping的AOP实现原理，以及对象生成方式的种类，单例的还是原型的？<br>23、讲讲调度接口是怎么实现的<br>24、分布式唯一ID是怎么实现的<br>25、设计模式，以及自己使用的场景<br>26、有没有用过分布式锁，怎么实现的，讲讲原理<br>27、如何解决线上问题？cpu狂飙怎么办？频繁minor gc怎么办？可能造成的原因是什么？如何避免？<br>28、怎么理解分布式和微服务，为什么要拆分服务，会产生什么问题，怎么解决这些问题 ？<br>29、怎么理解高可用，如何保证高可用，有什么弊端，熔断机制，怎么实现 ？<br>30、对于高并发怎么看，怎么算高并发，你们项目有么，如果有会产生什么问题，怎么解决<br>31、有没有做过压测的项目？首页接口优化是怎么做的？<br>32、如何优雅的写代码？什么代码算做优雅？什么代码是规范？你们代码规范是什么样的？如何进行code review？<br>33、算法：给定一个长度为N的整形数组arr，其中有N个互不相等的自然数1-N，请实现arr的排序，但是不要把下标0∼N−1位置上的数通过直接赋值的方式替换成1∼N<br>34、算法：判断一个树是否是平衡二叉树<br>35、算法：给定一个二叉树，请计算节点值之和最大的路径的节点值之和是多少，这个路径的开始节点和结束节点可以是二叉树中的任意节点<br>36、算法：LRU 缓存<br>37、算法：实现带有getMin功能的栈，要求push，pop，getMin的时间复杂度都是O(1)<br>38、算法：两数之和<br>39、算法：实现二叉树先序，中序和后序遍历</p>
+<p>1、介绍一下自己, 为什么出来看机会 ？你做的主要工作有什么？最复杂的一个业务讲一下流程？<br>2、平时用的工具链和技术栈是什么？<br>3、HashMap的并发不安全体现在哪？HashMap为什么数组要是二次幂？扩容rehash的流程？<br>4、HashMap拉链法中链表过长时变形为红黑树有什么优缺点？为什么是8为什么是6？<br>5、ConcurrentHashMap 是怎么做到并发安全的？<br>6、LSM 树了解吗? 是一种什么存储结构?<br>7、Java 有哪些锁机制？Java 中 CAS 是怎么实现的？Unsafe怎么实现？<br>8、简述一下Java 垃圾回收机制？ 如何判断一个对象是否存活？ Java 中垃圾收集的方法有哪些？<br>9、介绍一下Atomic 原子类？JUC 包中的原子类是哪4类？讲讲 AtomicInteger 的使用？AtomicInteger 类的原理？<br>10、线程池了解么？线程池的好处？线程池参数？execute执行流程？idl怎么配置的？最大线程满了之后如何处理？<br>11、tcp快速恢复，快速启动，慢启动？<br>12、MySQL 的存储引擎用的是什么?为什么选 InnoDB?  B+树和二叉树有什么区别和优劣？<br>13、考虑一个业务场景: 头条的文章的评论量非常大, 比如说一篇热门文章就有几百万的评论, 设计一个后端服务, 实现评论的时序展示与分页<br>14、假如用 id 翻页的方式, 数据库表如何设计? 索引如何设计?<br>15、假如量很大, 你觉得需要分库分表吗? 怎么分? 分库分表后怎么查询分页? 分库分表后怎么保证主键仍然是递增的?<br>16、现在需要支持深分页, 页码直接跳转, 怎么实现? 瞬时写入量很大可能会打挂存储, 怎么保护?<br>17、为什么要用 redis 而不用 map/guava 做缓存? redis 和 memcached 的区别？redis 内存淘汰机制？<br>18、用过 Redis 的哪几种数据结构？redis 设置过期时间？redis 事务？<br>19、缓存雪崩和缓存穿透问题解决方案？如何解决 Redis 的并发竞争 Key 问题？如何保证缓存与数据库双写时的数据一致性？<br>20、ZSET 是怎么实现的? zrange start, stop, 总长度为 n, 复杂度是多少?<br>21、什么是消息队列？为什么要用消息队列？JMS两种消息模型？<br>22、说一下kafka的topic，partition，broker概念？kafka的主从选举机制？<br>23、Kafka 的消费者如何做消息去重? 介绍一下 Kafka 的 ConsumerGroup？<br>24、时序型数据库的存储结构是怎么样的? 在生产中用过 Cassandra 和 RocksDB 吗? 数据量有多大? Cassandra 的墓碑机制是什么?<br>25、Spring Bean 的作用域？Spring 事务中的隔离级别？Spring 事务中的事务传播行为？<br>26、AOP是什么？IOC是什么？<br>27、什么是 Dubbo?为什么要用 Dubbo? Dubbo 工作原理？Dubbo 提供的负载均衡策略？<br>28、dubbo新节点上线怎么让其他节点感知？dubbo节点宕机怎么通知到zk？<br>29、 xxl-job工作原理？让你自己实现一个定时任务你会怎么做 ？<br>30、 聊项目警报怎么做的？<br>31、配置中心项目, 实时配置推送怎么做？如何做灰度发布？<br>32、我现在要做一个限流功能, 怎么做？ 这个限流要做成分布式的, 怎么做？假如这个限流希望做成可配置的, 需要有一个后台管理系统随意对某个 api 配置全局流量, 怎么做？<br>33、断路器内部怎么实现的? 断路器会造成写入失败, 假如我们不允许写入失败呢?<br>34、分布式锁加了超时之后有没有可能在没有释放的情况下, 被人抢走锁？怎么解决？<br>35、某一个业务中现在需要生成全局唯一的递增 ID, 并发量非常大, 怎么做？<br>36、自增主键和uuid做主键区别？ 雪花算法怎么实现的，是不是一定每次获取都递增<br>37、讲讲你理解的性能评价及测试指标？ 并发度提100倍有哪些优化的点？<br>38、算法题：M*N 横向纵向均递增的矩阵找指定数<br>39、算法题：用两个栈实现队列<br>40、算法题: N 场演唱会, 以 [{startTime, endTime}…] 的形式给出, 计算出最多能听几场演唱会？<br>41、算法题：树节点的最大距离<br>42、算法题：合并区间<br>43、平常怎么学习的？怎么看待学习和看书？<br>44、有什么想问我的</p>
+<ol>
+<li>通过redis解决千万级并发压力架构设计</li>
+<li>项目中遇到哪些问题？设计方案？秒杀？雪崩？穿透？击穿？预热？</li>
+<li>无锁化，串行化，扁平化克制高并发瓶颈！</li>
+<li>redis 宕机了咋办，如何做到可用性和一致性的trad off？</li>
+<li>12306抢票，微信红包，电商详情页等高频面试问题！</li>
+<li>redis持久化，主从复制，分片集群在BAT中的具体使用设计</li>
+<li>redis分布式锁造成的架构压力和错误的架构设计问题</li>
+<li>正确用布隆过滤器，跳表skiplist，HashMap解决并发场景问题</li>
+<li>如何和面试官互动获得offer</li>
+<li>学习方法和面试方法分享</li>
+<li>逃避认知偏差，技术诅咒，幸存者偏差</li>
+</ol>
+<ol>
+<li>图解spring IOC的实现机制</li>
+<li>spring的扩展实现一：BeanFactoryPostProcessor接口详解</li>
+<li>spring的扩展实现二：BeanPostProcessor接口详解</li>
+<li>必知必会的13个Bean生命周期处理机制</li>
+<li>BeanFactory和FactoryBean的接口对比与实现机制</li>
+<li>循环依赖问题中的三级缓存和提前暴露对象原理讲解</li>
+<li>jdk和cglib动态代理的原理及源码讲解</li>
+<li>Spring AOP的实现机制及扩展实现</li>
+<li>巧妙回答spring源码问题，让你成为源码专家</li>
+</ol>
+<ol>
+<li>从响应和吞吐的高维度理解什么是高并发调优</li>
+<li>为什么有了synchronized还需要JUC？</li>
+<li>为什么CAS和AQS是JUC的核心？</li>
+<li>可见、有序、原子-深入JVM源码理解多线程三大特性</li>
+<li>门闩（Latch）同步器适用于什么场景？</li>
+<li>篱笆（Barrier）同步器适用于什么场景？</li>
+<li>信号量（Semaphore）同步器适用于什么场景？</li>
+<li>阶段同步器（Phaser）适用于什么场景？</li>
+<li>原生锁支持（LockSupport）适用于什么场景？</li>
+<li>三大场景在实战中运用线程池提升系统性能</li>
+<li>生产环境中的线程池如何监控？</li>
+<li>线程池有哪些拒绝策略？</li>
+<li>有哪些拒绝策略应用在生产环境中？</li>
+<li>线程池有哪些在实际中的应用场景？</li>
+</ol>
+<ol>
+<li>高并发场景下秒杀超卖Bug复现</li>
+<li>秒杀场景下JVM锁现场压测实战</li>
+<li>高并发场景下，分布式锁思路分析</li>
+<li>高并发秒杀场景下MySQL分布式锁实战</li>
+<li>高并发秒杀场景下Redis分布式锁实战</li>
+<li>如何在双十一大促中提升分布式锁性能</li>
+<li>抗住双十一流量峰值的其他方案</li>
+<li>从源码级别看分布式锁如何实现</li>
+<li>CAP和BASE理论在分布式场景中的应用 </li>
+<li>分布式锁全部代码实战压测演示</li>
+</ol>
+<p>「力扣」第 150 题：逆波兰表达式求值（中等）<br>「力扣」第 32 题：最长有效括号（困难）<br>「力扣」第 739 题：每日温度（中等）<br>「力扣」第 496 题：下一个更大元素 I（简单）<br>「力扣」第 84 题：柱状图中最大的矩形（困难）<br>「力扣」第 42 题：接雨水（困难）<br>「力扣」第 901 题：股票价格跨度（中等）<br>「力扣」第 581 题：最短无序连续子数组（中等）<br>「力扣」第 402 题：移掉K位数字（中等）<br>「力扣」第 321 题：拼接最大数（困难）<br>「力扣」第 1673 题：找出最具竞争力的子序列（中等）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">【当你管理一个团队，请让员工记住5个黄金定律！】</span><br><span class="line"></span><br><span class="line">1、自我管理；工作不养闲人，团队不养懒人。每天思考今天的工作价值几分，如果满分是5分，那么你当日得分是否可以达到4分？这就是日OKR自我管理！</span><br><span class="line"></span><br><span class="line">2、学会投资自己的大脑；入一行，先别惦记着能赚钱，先学着让自己值钱。先值钱，再赚钱！学习是永远不会错的投资。钱是投资出来的，首先投资大脑！</span><br><span class="line"></span><br><span class="line">3、聚焦坚持，才能到达终点；走下坡路，往往很舒服。没有哪个行业的钱是好赚的。选对行业，聚焦，坚持，才能达到终点。</span><br><span class="line"></span><br><span class="line">4、磨炼才能造就成功；干工作，没有哪个是顺利的，受点气是正常的。合理的是训练，不合理的当做磨练。</span><br><span class="line"></span><br><span class="line">5、改变态度，才能决定高度只有先改变自己的态度，才能改变人生的高度。只有先改变自己的工作态度，才能有职业高度。</span><br></pre></td></tr></table></figure>
 
-//ExpiryQueue&lt;SessionImpl&gt; sessionExpiryQueue;
 
-//elemMap保存的是SessionImpl--&gt;过期时间
-private final ConcurrentHashMap&lt;E, Long&gt; elemMap = new ConcurrentHashMap&lt;E, Long&gt;();
+      
+    </div>
 
-//expiryMap保存的是 过期时间--&gt;SessionImpl集合
-private final ConcurrentHashMap&lt;Long, Set&lt;E&gt;&gt; expiryMap = new ConcurrentHashMap&lt;Long, Set&lt;E&gt;&gt;();
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
-****elemMap和expiryMap是利用空间换时间，方便根据SessionImpl 和 过期时间相互查找****</code></pre><p>ExpiryQueue的remove方法</p>
-<pre><code>ExpiryQueue的实现相当于一个缓存，想起之前面试的一个题目：实现一个缓存fifo,缓存的value可以有过期时间/无过
-期时间，缓存大小一定，当put时，如果缓存满了(达到缓存上线)，优先剔除最近要失效的key-value，如果key都不过
-期，优先剔除最先进来的key，直到能放下新的key-value。这个题可以用ConcurrentHashMap缓存，TreeSet(有序集
-合)过期时间排序，或者二分查找。
-**从这里感觉算法的重要性。时间复杂度、空间复杂度在实际工作中得以应用。**
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/03/01/leetcode/lru/">
 
-public Long remove(E elem) {
-     //快速根据SessionImpl获取过期的时间
-    Long expiryTime = elemMap.remove(elem);
-    if (expiryTime != null) {
-        Set&lt;E&gt; set = expiryMap.get(expiryTime);
-        if (set != null) {
-                //从expiryMap中删除
-            set.remove(elem);
-        }
-    }
-    return expiryTime;
-}</code></pre><p>ExpiryQueue的update方法</p>
-<pre><code>public Long update(E elem, int timeout) {
-    Long prevExpiryTime = elemMap.get(elem);
-    long now = Time.currentElapsedTime();
-    Long newExpiryTime = roundToNextInterval(now + timeout);
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
 
-    if (newExpiryTime.equals(prevExpiryTime)) {
-        // No change, so nothing to update
-        return null;
-    }
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/01/leetcode/lru/" class="post-title-link" itemprop="url">146、LRU 缓存机制</a>
+        </h2>
 
-    // First add the elem to the new expiry time bucket in expiryMap.
-    Set&lt;E&gt; set = expiryMap.get(newExpiryTime);
-    //**如果elemMap中不存在，放入到elemMap中
-    if (set == null) {
-        // Construct a ConcurrentHashSet using a ConcurrentHashMap
-        set = Collections.newSetFromMap(
-            new ConcurrentHashMap&lt;E, Boolean&gt;());
-        // Put the new set in the map, but only if another thread
-        // hasn&apos;t beaten us to it
-        Set&lt;E&gt; existingSet = expiryMap.putIfAbsent(newExpiryTime, set);
-        if (existingSet != null) {
-            set = existingSet;
-        }
-    }
-    set.add(elem);
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
 
-    // Map the elem to the new expiry time. If a different previous
-    // mapping was present, clean up the previous expiry bucket.
-    prevExpiryTime = elemMap.put(elem, newExpiryTime);
-    if (prevExpiryTime != null &amp;&amp; !newExpiryTime.equals(prevExpiryTime)) {
-        Set&lt;E&gt; prevSet = expiryMap.get(prevExpiryTime);
-        if (prevSet != null) {
-            prevSet.remove(elem);
-        }
-    }
-    return newExpiryTime;
-}</code></pre>
+              <time title="Created: 2021-03-01 18:45:02" itemprop="dateCreated datePublished" datetime="2021-03-01T18:45:02+08:00">2021-03-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-17 10:14:09" itemprop="dateModified" datetime="2021-05-17T10:14:09+08:00">2021-05-17</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>运用你所掌握的数据结构，设计和实现一个  LRU (最近最少使用) 缓存机制 。</p>
+<p>实现 LRUCache 类：</p>
+<p>​        LRUCache(int capacity) 以正整数作为容量 capacity 初始化 LRU 缓存<br>​        int get(int key) 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 。<br>​        void put(int key, int value) 如果关键字已经存在，则变更其数据值；如果关键字不存在，则插入该组「关键字-值」。</p>
+<p>当缓存容量达到上限时，它应该在写入新数据之前删除最久未使用的数据值，从而为新的数据值留出空间。</p>
+<p>进阶：你是否可以在 O(1) 时间复杂度内完成这两种操作？</p>
+<p>1、借助LinkedHashMap实现lru算法，只需要实现removeEldestEntry方法即可</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span> </span>&#123;</span><br><span class="line">         <span class="keyword">private</span> Map&lt;Integer, Integer&gt; cache;</span><br><span class="line">         <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> max;</span><br><span class="line"></span><br><span class="line">         <span class="function"><span class="keyword">public</span> <span class="title">LRUCache</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">             max = capacity;</span><br><span class="line">             cache = <span class="keyword">new</span> es&lt;Integer, Integer&gt;(capacity, <span class="number">1.0f</span>, <span class="keyword">true</span>) &#123;</span><br><span class="line">                 <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">removeEldestEntry</span><span class="params">(Map.Entry eldest)</span> </span>&#123;</span><br><span class="line">                     <span class="keyword">return</span> cache.size() &gt; max;</span><br><span class="line">                 &#125;</span><br><span class="line">             &#125;;</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">             <span class="keyword">return</span> cache.getOrDefault(key, -<span class="number">1</span>);</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">             cache.put(key, value);</span><br><span class="line">         &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>2、自己基于链表+map实现lru</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">            <span class="keyword">int</span> key;</span><br><span class="line">            <span class="keyword">int</span> value;</span><br><span class="line"></span><br><span class="line">            LRUCache.Node prev;</span><br><span class="line">            LRUCache.Node next;</span><br><span class="line"></span><br><span class="line">            Node(<span class="keyword">int</span> k, <span class="keyword">int</span> v) &#123;</span><br><span class="line">                <span class="keyword">this</span>.key = k;</span><br><span class="line">                <span class="keyword">this</span>.value = v;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            Node() &#123;</span><br><span class="line">                <span class="keyword">this</span>.key = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">this</span>.value = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> capacity;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> count;</span><br><span class="line">        <span class="keyword">private</span> LRUCache.Node head;</span><br><span class="line">        <span class="keyword">private</span> LRUCache.Node tail;</span><br><span class="line">        <span class="keyword">private</span> Map&lt;Integer, LRUCache.Node&gt; map;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">LRUCache</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.capacity = capacity;</span><br><span class="line">            <span class="keyword">this</span>.count = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">this</span>.map = <span class="keyword">new</span> HashMap();</span><br><span class="line">            head = <span class="keyword">new</span> LRUCache.Node();</span><br><span class="line">            tail = <span class="keyword">new</span> LRUCache.Node();</span><br><span class="line">            head.next = tail;</span><br><span class="line">            tail.prev = head;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">            LRUCache.Node node = map.get(key);</span><br><span class="line">            <span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                remove(node);</span><br><span class="line">                add(node);</span><br><span class="line">                <span class="keyword">return</span> node.value;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">            LRUCache.Node node = map.get(key);</span><br><span class="line">            <span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</span><br><span class="line">                node = <span class="keyword">new</span> LRUCache.Node(key, value);</span><br><span class="line">                map.put(key, node);</span><br><span class="line">                add(node);</span><br><span class="line">                count++;</span><br><span class="line">                <span class="keyword">if</span> (count &gt; capacity) &#123;</span><br><span class="line">                    LRUCache.Node toDelete = tail.prev;</span><br><span class="line">                    map.remove(toDelete.key);</span><br><span class="line">                    remove(toDelete);</span><br><span class="line">                    count--;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                remove(node);</span><br><span class="line">                node.value = value;</span><br><span class="line">                add(node);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(LRUCache.Node node)</span> </span>&#123;</span><br><span class="line">            LRUCache.Node next = node.next;</span><br><span class="line">            LRUCache.Node prev = node.prev;</span><br><span class="line">            prev.next = next;</span><br><span class="line">            next.prev = prev;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(LRUCache.Node node)</span> </span>&#123;</span><br><span class="line">            LRUCache.Node next = head.next;</span><br><span class="line">            head.next = node;</span><br><span class="line">            node.next = next;</span><br><span class="line">            node.prev = head;</span><br><span class="line">            next.prev = node;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/03/01/js/js高亮/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/01/js/js高亮/" class="post-title-link" itemprop="url">js高亮 、正则获取浏览器参数</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-03-01 18:45:02" itemprop="dateCreated datePublished" datetime="2021-03-01T18:45:02+08:00">2021-03-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-09 18:33:14" itemprop="dateModified" datetime="2021-04-09T18:33:14+08:00">2021-04-09</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> regReserved = [<span class="string">'['</span>, <span class="string">']'</span>, <span class="string">'('</span>, <span class="string">')'</span>, <span class="string">'&#123;'</span>, <span class="string">'&#125;'</span>, <span class="string">'\\'</span>, <span class="string">'+'</span>, <span class="string">'?'</span>, <span class="string">'*'</span>, <span class="string">'.'</span>, <span class="string">'|'</span>, <span class="string">'^'</span>, <span class="string">'$'</span>, <span class="string">'!'</span>, <span class="string">'='</span>]</span><br><span class="line">  <span class="keyword">const</span> query = <span class="string">'Java 工程'</span></span><br><span class="line">  <span class="keyword">const</span> value = <span class="string">'毕业于北京工程大学，在java工程领域，从事Java开发工程专业'</span></span><br><span class="line">  <span class="keyword">const</span> escapedQuery = _.escape(query)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'escapedQuery: '</span>, escapedQuery)</span><br><span class="line">  <span class="keyword">let</span> escapedValue = _.escape(value)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'escapedValue: '</span>, escapedValue)</span><br><span class="line">  <span class="comment">// 将正则表达式本身的保留字转义</span></span><br><span class="line">  <span class="keyword">const</span> protectedQuery = escapedQuery.replace(<span class="keyword">new</span> <span class="built_in">RegExp</span>(_.map(regReserved, reserved =&gt; <span class="string">`\\<span class="subst">$&#123;reserved&#125;</span>`</span>).join(<span class="string">'|'</span>), <span class="string">'gi'</span>), <span class="string">'\\$&amp;'</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'protectedQuery: '</span>, protectedQuery)</span><br><span class="line">  escapedValue = escapedValue.replace(<span class="keyword">new</span> <span class="built_in">RegExp</span>(protectedQuery.split(<span class="regexp">/\s+/</span>).join(<span class="string">'|'</span>), <span class="string">'gi'</span>), <span class="string">`&lt;span&gt;$&amp;&lt;/span&gt;`</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'escapedValue: '</span>, escapedValue)</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure>
+
+<p>用正则方法获取浏览器参数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> q = &#123;&#125;;</span><br><span class="line">location.search.replace(<span class="regexp">/([^?&amp;=]+)=([^&amp;]+)/g</span>,(_,k,v)=&gt;q[k]=v);</span><br><span class="line"><span class="built_in">console</span>.log(q);</span><br></pre></td></tr></table></figure>
+
+
       
     </div>
 
@@ -280,7 +414,7 @@ public Long remove(E elem) {
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/29/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><span class="page-number current">30</span>
+    <a class="extend prev" rel="prev" href="/page/29/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><span class="page-number current">30</span><a class="page-number" href="/page/31/">31</a><span class="space">&hellip;</span><a class="page-number" href="/page/37/">37</a><a class="extend next" rel="next" href="/page/31/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -346,14 +480,14 @@ public Long remove(E elem) {
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">88</span>
+          <span class="site-state-item-count">110</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
