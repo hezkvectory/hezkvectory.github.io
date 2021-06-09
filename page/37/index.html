@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2019/07/12/java/java多线程竞拍/">
+    <link itemprop="mainEntityOfPage" href="/2021/03/01/leetcode/买卖股票的最佳时机I、II、III、IV、含手续费、含冷冻期 -- 动态规划/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/07/12/java/java多线程竞拍/" class="post-title-link" itemprop="url">阿里云面试题-多线程竞拍</a>
+            <a href="/2021/03/01/leetcode/买卖股票的最佳时机I、II、III、IV、含手续费、含冷冻期 -- 动态规划/" class="post-title-link" itemprop="url">买卖股票的最佳时机I、II、III、IV、含手续费、含冷冻期 -- 动态规划</a>
         </h2>
 
         <div class="post-meta">
@@ -174,14 +174,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2019-07-12 12:28:35" itemprop="dateCreated datePublished" datetime="2019-07-12T12:28:35+08:00">2019-07-12</time>
+              <time title="Created: 2021-03-01 13:58:02" itemprop="dateCreated datePublished" datetime="2021-03-01T13:58:02+08:00">2021-03-01</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-01 18:56:07" itemprop="dateModified" datetime="2021-03-01T18:56:07+08:00">2021-03-01</time>
+                <time title="Modified: 2021-05-17 10:13:28" itemprop="dateModified" datetime="2021-05-17T10:13:28+08:00">2021-05-17</time>
               </span>
 
           
@@ -195,131 +195,47 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>多线程竞拍</p>
-<pre><code>创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）
+          <h4 id="121-买卖股票的最佳时机"><a href="#121-买卖股票的最佳时机" class="headerlink" title="121.买卖股票的最佳时机"></a>121.买卖股票的最佳时机</h4><p><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/</a></p>
+<p>给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。</p>
+<p>你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。</p>
+<p>返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="keyword">int</span>[] prices)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (prices == <span class="keyword">null</span> || prices.length == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">int</span> minBuy = prices[<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">int</span> maxProfit = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; prices.length; i++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (prices[i] &lt; minBuy) &#123;</span><br><span class="line">                    minBuy = prices[i];</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    maxProfit = Math.max(maxProfit, prices[i] - minBuy);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> maxProfit;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfix</span><span class="params">(<span class="keyword">int</span>[] prices)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (prices == <span class="keyword">null</span> || prices.length == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">int</span>[] buys = <span class="keyword">new</span> <span class="keyword">int</span>[prices.length];<span class="comment">//持有股票最大利润</span></span><br><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span><br><span class="line">            <span class="keyword">int</span>[] sells = <span class="keyword">new</span> <span class="keyword">int</span>[prices.length];<span class="comment">//不持有股票最大利润</span></span><br><span class="line">=======</span><br><span class="line">            <span class="keyword">int</span>[] sells = <span class="keyword">new</span> <span class="keyword">int</span>[prices.length];<span class="comment">//不持有股票</span></span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; ec7336d0753c9cf2c937ec18cdacce410e5ef25e</span><br><span class="line"></span><br><span class="line">            buys[<span class="number">0</span>] = -prices[<span class="number">0</span>];</span><br><span class="line">            sells[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; prices.length; i++) &#123;</span><br><span class="line">                buys[i] = Math.max(buys[i - <span class="number">1</span>], -prices[i]);</span><br><span class="line">                sells[i] = Math.max(sells[i - <span class="number">1</span>], prices[i] + buys[i - <span class="number">1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> sells[prices.length - <span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
-每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
+<h4 id="122-买卖股票的最佳时机-II"><a href="#122-买卖股票的最佳时机-II" class="headerlink" title="122. 买卖股票的最佳时机 II"></a>122. 买卖股票的最佳时机 II</h4><p><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/</a></p>
+<p>给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。</p>
+<p>设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。</p>
+<p>注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution3</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfix</span><span class="params">(<span class="keyword">int</span>[] prices)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (prices == <span class="keyword">null</span> || prices.length == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span>[] buys = <span class="keyword">new</span> <span class="keyword">int</span>[prices.length];<span class="comment">//持有股票的最优结果</span></span><br><span class="line">        <span class="keyword">int</span>[] sells = <span class="keyword">new</span> <span class="keyword">int</span>[prices.length];<span class="comment">//不持有股票的最优结果</span></span><br><span class="line"></span><br><span class="line">        buys[<span class="number">0</span>] = -prices[<span class="number">0</span>];</span><br><span class="line">        sells[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; prices.length; i++) &#123;</span><br><span class="line">            buys[i] = Math.max(buys[i - <span class="number">1</span>], sells[i - <span class="number">1</span>] - prices[i]);</span><br><span class="line">            sells[i] = Math.max(sells[i - <span class="number">1</span>], prices[i] + buys[i - <span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sells[prices.length - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-所有人的心理上线价位都为 M ，不会出价比M高
+<h4 id="123-买卖股票的最佳时机-III"><a href="#123-买卖股票的最佳时机-III" class="headerlink" title="123. 买卖股票的最佳时机 III"></a>123. 买卖股票的最佳时机 III</h4><p><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/</a></p>
+<p>给定一个数组，它的第 i 个元素是一支给定的股票在第 i 天的价格。</p>
+<p>设计一个算法来计算你所能获取的最大利润。你最多可以完成 两笔 交易。</p>
+<p>注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="keyword">int</span>[] prices)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">int</span> buy1 = Integer.MIN_VALUE;</span><br><span class="line">          <span class="keyword">int</span> buy2 = Integer.MIN_VALUE;</span><br><span class="line">          <span class="keyword">int</span> sell1 = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">int</span> sell2 = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; prices.length; i++) &#123;</span><br><span class="line">              buy1 = Math.max(buy1, -prices[i]);</span><br><span class="line">              sell1 = Math.max(sell1, buy1 + prices[i]);</span><br><span class="line">              buy2 = Math.max(buy2, sell1 - prices[i]);</span><br><span class="line">              sell2 = Math.max(sell2, buy2 + prices[i]);</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> sell2;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 
-每次出价必须比上一次出价高
+<h4 id="188-买卖股票的最佳时机-IV"><a href="#188-买卖股票的最佳时机-IV" class="headerlink" title="188. 买卖股票的最佳时机 IV"></a>188. 买卖股票的最佳时机 IV</h4><p><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iv/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iv/</a></p>
+<p>给定一个整数数组 prices ，它的第 i 个元素 prices[i] 是一支给定的股票在第 i 天的价格。</p>
+<p>设计一个算法来计算你所能获取的最大利润。你最多可以完成 k 笔交易。</p>
+<p>注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="keyword">int</span> k, <span class="keyword">int</span>[] prices)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (prices.length == <span class="number">0</span>) &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">int</span> n = prices.length;</span><br><span class="line">          k = Math.min(k, n / <span class="number">2</span>);</span><br><span class="line">          <span class="keyword">int</span>[][] buy = <span class="keyword">new</span> <span class="keyword">int</span>[n][k + <span class="number">1</span>];<span class="comment">//持有股票的最优结果</span></span><br><span class="line">          <span class="keyword">int</span>[][] sell = <span class="keyword">new</span> <span class="keyword">int</span>[n][k + <span class="number">1</span>];<span class="comment">//不持有股票的最优结果</span></span><br><span class="line"></span><br><span class="line">          buy[<span class="number">0</span>][<span class="number">0</span>] = -prices[<span class="number">0</span>];</span><br><span class="line">          sell[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= k; ++i) &#123;</span><br><span class="line">              buy[<span class="number">0</span>][i] = sell[<span class="number">0</span>][i] = Integer.MIN_VALUE / <span class="number">2</span>;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line">              buy[i][<span class="number">0</span>] = Math.max(buy[i - <span class="number">1</span>][<span class="number">0</span>], sell[i - <span class="number">1</span>][<span class="number">0</span>] - prices[i]);</span><br><span class="line">              <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= k; ++j) &#123;</span><br><span class="line">                  buy[i][j] = Math.max(buy[i - <span class="number">1</span>][j], sell[i - <span class="number">1</span>][j] - prices[i]);</span><br><span class="line">                  sell[i][j] = Math.max(sell[i - <span class="number">1</span>][j], buy[i - <span class="number">1</span>][j - <span class="number">1</span>] + prices[i]);</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">return</span> Arrays.stream(sell[n - <span class="number">1</span>]).max().getAsInt();</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 
-经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。</code></pre><p>个人觉得主要考察java基础（CountDownLatch、CyclicBarrier）的使用方法</p>
-<pre><code>import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.*;
-import java.util.concurrent.locks.ReentrantLock;
+<h4 id="309-最佳买卖股票时机含冷冻期"><a href="#309-最佳买卖股票时机含冷冻期" class="headerlink" title="309. 最佳买卖股票时机含冷冻期"></a>309. 最佳买卖股票时机含冷冻期</h4><p><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/</a></p>
+<p>给定一个整数数组，其中第 i 个元素代表了第 i 天的股票价格 。</p>
+<p>设计一个算法计算出最大利润。在满足以下约束条件下，你可以尽可能地完成更多的交易（多次买卖一支股票）:</p>
+<p>你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。</p>
+<p>卖出股票后，你无法在第二天买入股票 (即冷冻期为 1 天)。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution3</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfix</span><span class="params">(<span class="keyword">int</span>[] prices)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (prices == <span class="keyword">null</span> || prices.length == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span>[] buys = <span class="keyword">new</span> <span class="keyword">int</span>[prices.length];<span class="comment">//持有股票的最优结果</span></span><br><span class="line">        <span class="keyword">int</span>[] sells = <span class="keyword">new</span> <span class="keyword">int</span>[prices.length];<span class="comment">//不持有股票的最优结果</span></span><br><span class="line"></span><br><span class="line">        buys[<span class="number">0</span>] = -prices[<span class="number">0</span>];</span><br><span class="line">        sells[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; prices.length; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> temp = i - <span class="number">2</span> &gt;= <span class="number">0</span> ? <span class="number">0</span> : sells[i - <span class="number">2</span>];</span><br><span class="line">            buys[i] = Math.max(buys[i - <span class="number">1</span>], temp - prices[i]);</span><br><span class="line">            sells[i] = Math.max(sells[i - <span class="number">1</span>], prices[i] + buys[i - <span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sells[prices.length - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-public class AuctionTest {
+<h4 id="714-买卖股票的最佳时机含手续费"><a href="#714-买卖股票的最佳时机含手续费" class="headerlink" title="714. 买卖股票的最佳时机含手续费"></a>714. 买卖股票的最佳时机含手续费</h4><p><a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/</a></p>
+<p>给定一个整数数组 prices，其中第 i 个元素代表了第 i 天的股票价格 ；非负整数 fee 代表了交易股票的手续费用。</p>
+<p>你可以无限次地完成交易，但是你每笔交易都需要付手续费。如果你已经购买了一个股票，在卖出它之前你就不能再继续购买股票了。</p>
+<p>返回获得利润的最大值。</p>
+<p>注意：这里的一笔交易指买入持有并卖出股票的整个过程，每笔交易你只需要为支付一次手续费。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="keyword">int</span>[] prices, <span class="keyword">int</span> fee)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = prices.length;</span><br><span class="line">        <span class="keyword">if</span> (n &lt; <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span>[] hold = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">        <span class="keyword">int</span>[] sell = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">        hold[<span class="number">0</span>] = -prices[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; prices.length; i++) &#123;</span><br><span class="line">            hold[i] = Math.max(hold[i - <span class="number">1</span>], sell[i - <span class="number">1</span>] - prices[i]);</span><br><span class="line">            sell[i] = Math.max(sell[i - <span class="number">1</span>], hold[i - <span class="number">1</span>] - fee + prices[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sell[n - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-/**
- * 创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）
- * 每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
- * 所有人的心理上线价位都为 M ，不会出价比M高
- * 每次出价必须比上一次出价高
- * 经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。
- */
-static int N = 10; //竞拍人数
-static int M = 100;//所有人的心理上线价位都为 M ，不会出价比M高
-static int AUCTION_NUM = 5; //经过 k 次竞拍后
+<h4 id="动态规划解决买卖股票"><a href="#动态规划解决买卖股票" class="headerlink" title="动态规划解决买卖股票"></a>动态规划解决买卖股票</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Common</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">One</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="keyword">int</span>[] prices)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">int</span> profit = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">int</span> len = prices.length;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; len; i++) &#123;</span><br><span class="line">                    profit += Math.max(<span class="number">0</span>, prices[i] - prices[i - <span class="number">1</span>]);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> profit;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">N</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        * 深度优先遍历</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">            <span class="keyword">private</span> <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="keyword">int</span>[] prices)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">int</span> len = prices.length;</span><br><span class="line">                dfs(prices, <span class="number">0</span>, len, <span class="number">0</span>, <span class="keyword">this</span>.res);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">this</span>.res;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">/**</span></span><br><span class="line"><span class="comment">             * <span class="doctag">@param</span> prices 股票价格</span></span><br><span class="line"><span class="comment">             * <span class="doctag">@param</span> index  第几天</span></span><br><span class="line"><span class="comment">             * <span class="doctag">@param</span> len    总交易几天</span></span><br><span class="line"><span class="comment">             * <span class="doctag">@param</span> status 是否持有股票，0：不持有股票， 1：持有股票</span></span><br><span class="line"><span class="comment">             * <span class="doctag">@param</span> res</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span>[] prices, <span class="keyword">int</span> index, <span class="keyword">int</span> len, <span class="keyword">int</span> status, <span class="keyword">int</span> res)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (index == len) &#123;</span><br><span class="line">                    <span class="keyword">this</span>.res = Math.max(<span class="keyword">this</span>.res, res);</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                dfs(prices, index + <span class="number">1</span>, len, status, res);</span><br><span class="line">                <span class="keyword">if</span> (status == <span class="number">0</span>) &#123;</span><br><span class="line">                    dfs(prices, index + <span class="number">1</span>, len, <span class="number">1</span>, res - prices[index]);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    dfs(prices, index + <span class="number">1</span>, len, <span class="number">0</span>, res + prices[index]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="keyword">int</span>[] prices)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">int</span> len = prices.length;</span><br><span class="line">                <span class="keyword">int</span>[][] res = <span class="keyword">new</span> <span class="keyword">int</span>[len][<span class="number">2</span>];</span><br><span class="line">                res[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>; <span class="comment">//不持有股票</span></span><br><span class="line">                res[<span class="number">0</span>][<span class="number">1</span>] = -prices[<span class="number">0</span>];<span class="comment">//持有股票</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; len; i++) &#123;</span><br><span class="line">                    res[i][<span class="number">0</span>] = Math.max(res[i - <span class="number">1</span>][<span class="number">0</span>], res[i - <span class="number">1</span>][<span class="number">1</span>] + prices[i]);</span><br><span class="line">                    res[i][<span class="number">1</span>] = Math.max(res[i - <span class="number">1</span>][<span class="number">1</span>], res[i - <span class="number">1</span>][<span class="number">0</span>] - prices[i]);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> res[len - <span class="number">1</span>][<span class="number">0</span>];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="keyword">int</span>[] prices)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">int</span> len = prices.length;</span><br><span class="line">                <span class="keyword">if</span> (len &lt; <span class="number">2</span>) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; len; i++) &#123;</span><br><span class="line">                    <span class="keyword">int</span> diff = prices[i] - prices[i - <span class="number">1</span>];</span><br><span class="line">                    <span class="keyword">if</span> (diff &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                        res += diff;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> res;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Two</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="keyword">int</span>[] prices)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">int</span> len = prices.length;</span><br><span class="line">            <span class="keyword">int</span> buy1 = -prices[<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">int</span> buy2 = -prices[<span class="number">0</span>];</span><br><span class="line">            <span class="keyword">int</span> sell1 = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> sell2 = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; len; i++) &#123;</span><br><span class="line">                buy1 = Math.max(buy1, -prices[i]);</span><br><span class="line">                sell1 = Math.max(sell1, buy1 + prices[i]);</span><br><span class="line">                buy2 = Math.max(buy2, sell1 - prices[i]);</span><br><span class="line">                sell2 = Math.max(sell2, buy2 + prices[i]);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> sell2;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Freeze</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="keyword">int</span>[] prices)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">int</span> len = prices.length;</span><br><span class="line">                <span class="keyword">int</span>[][] res = <span class="keyword">new</span> <span class="keyword">int</span>[len][<span class="number">3</span>];</span><br><span class="line">                res[<span class="number">0</span>][<span class="number">0</span>] = -prices[<span class="number">0</span>];<span class="comment">//当前只有股票</span></span><br><span class="line">                res[<span class="number">0</span>][<span class="number">1</span>] = <span class="number">0</span>;<span class="comment">//当前不持有股票，并且在冷冻期</span></span><br><span class="line">                res[<span class="number">0</span>][<span class="number">2</span>] = <span class="number">0</span>;<span class="comment">//当前不只有股票，并且不再冷冻期</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">                    res[i][<span class="number">0</span>] = Math.max(res[i - <span class="number">1</span>][<span class="number">0</span>], res[i - <span class="number">1</span>][<span class="number">2</span>] - prices[i]);</span><br><span class="line">                    res[i][<span class="number">1</span>] = res[i - <span class="number">1</span>][<span class="number">0</span>] + prices[i];</span><br><span class="line">                    res[i][<span class="number">2</span>] = Math.max(res[i - <span class="number">1</span>][<span class="number">1</span>], res[i - <span class="number">1</span>][<span class="number">2</span>]);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> Math.max(res[len - <span class="number">1</span>][<span class="number">1</span>], res[len - <span class="number">1</span>][<span class="number">2</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ServiceChargeN</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxProfit</span><span class="params">(<span class="keyword">int</span>[] prices, <span class="keyword">int</span> serviceCharge)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">int</span> len = prices.length;</span><br><span class="line">                <span class="keyword">int</span>[][] res = <span class="keyword">new</span> <span class="keyword">int</span>[len][<span class="number">0</span>];</span><br><span class="line">                res[<span class="number">0</span>][<span class="number">0</span>] = -prices[<span class="number">0</span>];<span class="comment">//持有股票</span></span><br><span class="line">                res[<span class="number">0</span>][<span class="number">1</span>] = <span class="number">0</span>;<span class="comment">//不持有股票</span></span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; len; i++) &#123;</span><br><span class="line">                    res[i][<span class="number">0</span>] = Math.max(res[i - <span class="number">1</span>][<span class="number">0</span>], res[i - <span class="number">1</span>][<span class="number">1</span>] - prices[i]);</span><br><span class="line">                    res[i][<span class="number">1</span>] = Math.max(res[i - <span class="number">1</span>][<span class="number">1</span>], res[i - <span class="number">1</span>][<span class="number">0</span>] + prices[i] - serviceCharge);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> res[len - <span class="number">1</span>][<span class="number">0</span>];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] prices = &#123;<span class="number">7</span>, <span class="number">1</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">6</span>, <span class="number">4</span>&#125;;</span><br><span class="line">        System.out.println(<span class="keyword">new</span> N.Solution().maxProfit(prices));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-static ConcurrentHashMap&lt;String, List&lt;Integer&gt;&gt; ACTION_HIST = new ConcurrentHashMap&lt;&gt;();
 
-static ReentrantLock lock = new ReentrantLock();//这个锁是为了保证出价比上一个人出价高
-
-static volatile int CUR_MAX_PRICE = 0;
-
-public static void main(String[] args) throws Exception {
-    CyclicBarrier barrier = new CyclicBarrier(N);//每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
-    CountDownLatch countDownLatch = new CountDownLatch(N);//这里应该是N
-    ThreadPoolExecutor executor = new ThreadPoolExecutor(N, N, 1, TimeUnit.SECONDS, new ArrayBlockingQueue&lt;Runnable&gt;(1), new ThreadFactory() {
-        @Override
-        public Thread newThread(Runnable r) {
-            return new Thread(r, &quot;Auction&quot;);
-        }
-    });
-    int step = M / (AUCTION_NUM * N); //每次出价阶梯
-
-    for (int i = 1; i &lt;= N; i++) {
-        executor.execute(new Auction(barrier, countDownLatch, &quot;P&quot; + i, step));
-    }
-
-    countDownLatch.await();
-
-    String personName = null;
-    int maxPrice = 0;
-    int personId = 0;
-    for (int num = 1; num &lt;= AUCTION_NUM; num++) {
-        for (int i = 1; i &lt;= N; i++) {
-            personName = &quot;P&quot; + i;
-            Integer price = ACTION_HIST.get(personName).get(num - 1);
-            if (num == AUCTION_NUM) {
-                if (maxPrice &lt; price) {
-                    maxPrice = price;
-                    personId = i;
-                }
-            }
-            System.out.println(&quot;第&quot; + num + &quot;次出价人:P&quot; + i + &quot; 出价:&quot; + price);
-        }
-        System.out.println(&quot;-----------------&quot;);
-    }
-    System.out.println(&quot;最终竞价成功人:P&quot; + personId + &quot;,最终出价:&quot; + maxPrice);
-    executor.shutdown();
-}
-
-static class Auction implements Runnable {
-    private String name;
-    private CyclicBarrier barrier;
-    private int step;
-    private CountDownLatch countDownLatch;
-
-    public Auction(CyclicBarrier barrier, CountDownLatch countDownLatch, String name, int step) {
-        this.name = name;
-        this.barrier = barrier;
-        this.step = step;
-        this.countDownLatch = countDownLatch;
-    }
-
-    @Override
-    public void run() {
-        if (!ACTION_HIST.containsKey(name)) {
-            ACTION_HIST.put(name, new ArrayList&lt;&gt;());
-        }
-        lock.lock();
-        int currentPrice = 0;
-        try {
-            currentPrice = getRandPrice(step);
-            CUR_MAX_PRICE = CUR_MAX_PRICE &lt; currentPrice ? currentPrice : CUR_MAX_PRICE;
-        } finally {
-            lock.unlock();
-        }
-
-        ACTION_HIST.get(name).add(currentPrice);
-        int tmp = 1;
-        try {
-            while (tmp &lt; AUCTION_NUM) {
-                barrier.await();
-                currentPrice = getRandPrice(step);
-                currentPrice = currentPrice &gt; M ? M : currentPrice;
-                CUR_MAX_PRICE = CUR_MAX_PRICE &lt; currentPrice ? currentPrice : CUR_MAX_PRICE;
-                ACTION_HIST.get(name).add(currentPrice);
-                tmp++;
-            }
-            countDownLatch.countDown();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }   /**
-     * 当前心里价比上次多多少
-     *
-     * @param step
-     * @return
-     */
-    int getRandPrice(int step) {
-        return CUR_MAX_PRICE + new Random().nextInt(step) + 1;
-    }
-}</code></pre>
       
     </div>
 
@@ -338,7 +254,7 @@ static class Auction implements Runnable {
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2019/07/11/zookeeper/zookeeper_expiryQueue/">
+    <link itemprop="mainEntityOfPage" href="/2021/02/26/spring/springmvc long polling实战/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -352,7 +268,7 @@ static class Auction implements Runnable {
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2019/07/11/zookeeper/zookeeper_expiryQueue/" class="post-title-link" itemprop="url">zookeeper之ExpiryQueue</a>
+            <a href="/2021/02/26/spring/springmvc long polling实战/" class="post-title-link" itemprop="url">springmvc long polling实战</a>
         </h2>
 
         <div class="post-meta">
@@ -362,14 +278,14 @@ static class Auction implements Runnable {
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2019-07-11 12:28:35" itemprop="dateCreated datePublished" datetime="2019-07-11T12:28:35+08:00">2019-07-11</time>
+              <time title="Created: 2021-02-26 17:55:00" itemprop="dateCreated datePublished" datetime="2021-02-26T17:55:00+08:00">2021-02-26</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-09 18:31:34" itemprop="dateModified" datetime="2021-04-09T18:31:34+08:00">2021-04-09</time>
+                <time title="Modified: 2021-04-09 18:34:07" itemprop="dateModified" datetime="2021-04-09T18:34:07+08:00">2021-04-09</time>
               </span>
 
           
@@ -383,74 +299,100 @@ static class Auction implements Runnable {
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>zookeeper之ExpiryQueue</p>
-<pre><code>ExpiryQueue是在SessionTrackerImpl中使用的，主要是维护zk中session的队列
-了解ExpiryQueue的实现
+          <p>​        </p>
+<p>​        一个servlet请求ServletRequest可以通过调用request.startAsync()方法而进入异步模式。这样做的主要结果就是该servlet以及所有的过滤器都可以结束，但其响应（response）会留待异步处理结束后再返回调用request.startAsync()方法会返回一个AsyncContext对象，可用它对异步处理进行进一步的控制和操作。比如说它也提供了一个与转向（forward）很相似的dispatch方法，只不过它允许应用恢复Servlet容器的请求处理进程ServletRequest提供了获取当前DispatherType的方式，后者可以用来区别当前处理的是原始请求、异步分发请求、转向，或是其他类型的请求分发类型。</p>
+<p>有了上面的知识，下面可以来看一下Callable的异步请求被处理时所依次发生的事件：</p>
+<ol>
+<li>控制器先返回一个Callable对象</li>
+<li>Spring MVC开始进行异步处理，并把该Callable对象提交给另一个独立线程的执行器TaskExecutor处理</li>
+<li>DispatcherServlet和所有过滤器都退出Servlet容器线程，但此时方法的响应对象仍未返回</li>
+<li>Callable对象最终产生一个返回结果，此时Spring MVC会重新把请求分派回Servlet容器，恢复处理</li>
+<li>DispatcherServlet再次被调用，恢复对Callable异步处理所返回结果的处理</li>
+<li>对DeferredResult异步请求的处理顺序也非常类似，区别仅在于应用可以通过任何线程来计算返回一个结果：</li>
+<li>控制器先返回一个DeferredResult对象，并把它存取在内存（队列或列表等）中以便存取</li>
+<li>Spring MVC开始进行异步处理</li>
+<li>DispatcherServlet和所有过滤器都退出Servlet容器线程，但此时方法的响应对象仍未返回</li>
+<li>由处理该请求的线程对 DeferredResult进行设值，然后Spring MVC会重新把请求分派回Servlet容器，恢复处理</li>
+<li>DispatcherServlet再次被调用，恢复对该异步返回结果的处理</li>
+</ol>
+<p><strong>1.定义异步接口</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">@RequestMapping(&quot;/async&quot;)</span><br><span class="line">public class AsyncController &#123;</span><br><span class="line">    final Map deferredResultMap=new ConcurrentReferenceHashMap&lt;&gt;();</span><br><span class="line">    @GetMapping(&quot;/longPolling&quot;)</span><br><span class="line">    public DeferredResultlongPolling()&#123;</span><br><span class="line">        DeferredResultdeferredResult=new DeferredResult(0L);</span><br><span class="line">        deferredResultMap.put(deferredResult.hashCode(),deferredResult);</span><br><span class="line">        deferredResult.onCompletion(()-&gt;&#123;</span><br><span class="line">            deferredResultMap.remove(deferredResult.hashCode());</span><br><span class="line">            System.err.println(&quot;还剩&quot;+deferredResultMap.size()+&quot;个deferredResult未响应&quot;);</span><br><span class="line">        &#125;);</span><br><span class="line">        return deferredResult;</span><br><span class="line">    &#125;</span><br><span class="line">    @GetMapping(&quot;/returnLongPollingValue&quot;)</span><br><span class="line">    public void returnLongPollingValue()&#123;</span><br><span class="line">        for (Map.Entry entry:deferredResultMap.entrySet())&#123;</span><br><span class="line">            entry.getValue().setResult(&quot;kl&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-//ExpiryQueue&lt;SessionImpl&gt; sessionExpiryQueue;
+<p><strong>2.定义接口访问实例，使用fegin</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@FeignClient(url = &quot;localhost:8976&quot;,name = &quot;async&quot;)</span><br><span class="line">public interface AsyncFeginService &#123;</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/async/longPolling&quot;)</span><br><span class="line">    String longPolling();</span><br><span class="line"></span><br><span class="line">    @GetMapping(&quot;/async/returnLongPollingValue&quot;)</span><br><span class="line">     void returnLongPollingValue();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-//elemMap保存的是SessionImpl--&gt;过期时间
-private final ConcurrentHashMap&lt;E, Long&gt; elemMap = new ConcurrentHashMap&lt;E, Long&gt;();
+<p><strong>3.测试用例</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">@RunWith(SpringRunner.class)</span><br><span class="line">@SpringBootTest</span><br><span class="line">public class LongPollingdemoApplicationTests &#123;</span><br><span class="line">	@Autowired</span><br><span class="line">	AsyncFeginService asyncFeginService;</span><br><span class="line">	/**</span><br><span class="line">	 * 模拟多个浏览器客户端发起长轮询请求，等待testLongPolling测试用例请求通知服务端返回各浏览器的请求结果</span><br><span class="line">	 * @throws Exception</span><br><span class="line">	 */</span><br><span class="line">	@Test</span><br><span class="line">	public void contextLoads() throws Exception&#123;</span><br><span class="line">		ExecutorService executorService=Executors.newFixedThreadPool(4);</span><br><span class="line">		for (int i=0;i&lt;=3;i++)&#123;</span><br><span class="line">			executorService.execute(()-&gt;&#123;</span><br><span class="line">				String kl=asyncFeginService.longPolling();</span><br><span class="line">				System.err.println(&quot;收到响应：&quot;+kl);</span><br><span class="line">			&#125;);</span><br><span class="line">		&#125;</span><br><span class="line">		System.in.read();</span><br><span class="line">	&#125;</span><br><span class="line">	/**</span><br><span class="line">	 * 通知服务端返回上个测试的长轮询结果</span><br><span class="line">	 */</span><br><span class="line">	@Test</span><br><span class="line">	public void testLongPolling()&#123;</span><br><span class="line">		asyncFeginService.returnLongPollingValue();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-//expiryMap保存的是 过期时间--&gt;SessionImpl集合
-private final ConcurrentHashMap&lt;Long, Set&lt;E&gt;&gt; expiryMap = new ConcurrentHashMap&lt;Long, Set&lt;E&gt;&gt;();
+<h5 id="SseEmitter、ResponseBodyEmitter"><a href="#SseEmitter、ResponseBodyEmitter" class="headerlink" title="SseEmitter、ResponseBodyEmitter"></a>SseEmitter、ResponseBodyEmitter</h5><p>Callback和DeferredResult用于设置单个结果，如果有多个结果需要返回给客户端时，可以使用SseEmitter以及ResponseBodyEmitter等；</p>
+<p>http 分块传输，以及k8s list-watch机制，也是采用http分块传输机制实现的。</p>
 
-****elemMap和expiryMap是利用空间换时间，方便根据SessionImpl 和 过期时间相互查找****</code></pre><p>ExpiryQueue的remove方法</p>
-<pre><code>ExpiryQueue的实现相当于一个缓存，想起之前面试的一个题目：实现一个缓存fifo,缓存的value可以有过期时间/无过
-期时间，缓存大小一定，当put时，如果缓存满了(达到缓存上线)，优先剔除最近要失效的key-value，如果key都不过
-期，优先剔除最先进来的key，直到能放下新的key-value。这个题可以用ConcurrentHashMap缓存，TreeSet(有序集
-合)过期时间排序，或者二分查找。
-**从这里感觉算法的重要性。时间复杂度、空间复杂度在实际工作中得以应用。**
+      
+    </div>
 
-public Long remove(E elem) {
-     //快速根据SessionImpl获取过期的时间
-    Long expiryTime = elemMap.remove(elem);
-    if (expiryTime != null) {
-        Set&lt;E&gt; set = expiryMap.get(expiryTime);
-        if (set != null) {
-                //从expiryMap中删除
-            set.remove(elem);
-        }
-    }
-    return expiryTime;
-}</code></pre><p>ExpiryQueue的update方法</p>
-<pre><code>public Long update(E elem, int timeout) {
-    Long prevExpiryTime = elemMap.get(elem);
-    long now = Time.currentElapsedTime();
-    Long newExpiryTime = roundToNextInterval(now + timeout);
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
 
-    if (newExpiryTime.equals(prevExpiryTime)) {
-        // No change, so nothing to update
-        return null;
-    }
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/02/26/spring/spring常用类、方法/">
 
-    // First add the elem to the new expiry time bucket in expiryMap.
-    Set&lt;E&gt; set = expiryMap.get(newExpiryTime);
-    //**如果elemMap中不存在，放入到elemMap中
-    if (set == null) {
-        // Construct a ConcurrentHashSet using a ConcurrentHashMap
-        set = Collections.newSetFromMap(
-            new ConcurrentHashMap&lt;E, Boolean&gt;());
-        // Put the new set in the map, but only if another thread
-        // hasn&apos;t beaten us to it
-        Set&lt;E&gt; existingSet = expiryMap.putIfAbsent(newExpiryTime, set);
-        if (existingSet != null) {
-            set = existingSet;
-        }
-    }
-    set.add(elem);
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
 
-    // Map the elem to the new expiry time. If a different previous
-    // mapping was present, clean up the previous expiry bucket.
-    prevExpiryTime = elemMap.put(elem, newExpiryTime);
-    if (prevExpiryTime != null &amp;&amp; !newExpiryTime.equals(prevExpiryTime)) {
-        Set&lt;E&gt; prevSet = expiryMap.get(prevExpiryTime);
-        if (prevSet != null) {
-            prevSet.remove(elem);
-        }
-    }
-    return newExpiryTime;
-}</code></pre>
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/26/spring/spring常用类、方法/" class="post-title-link" itemprop="url">spring常用类、方法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-02-26 17:55:00" itemprop="dateCreated datePublished" datetime="2021-02-26T17:55:00+08:00">2021-02-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-09 18:34:01" itemprop="dateModified" datetime="2021-04-09T18:34:01+08:00">2021-04-09</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.AutowiredFieldElement#inject</span><br><span class="line"></span><br><span class="line">DefaultSingletonBeanRegistry</span><br><span class="line"></span><br><span class="line">org.springframework.beans.factory.support.DefaultListableBeanFactory#resolveDependency</span><br><span class="line"></span><br><span class="line">org.springframework.beans.factory.support.DefaultSingletonBeanRegistry#getSingleton(java.lang.String, org.springframework.beans.factory.ObjectFactory&lt;?&gt;)</span><br><span class="line"></span><br><span class="line">org.springframework.beans.factory.support.DefaultListableBeanFactory#addCandidateEntry</span><br><span class="line"></span><br><span class="line">org.springframework.aop.framework.CglibAopProxy#getProxy(java.lang.ClassLoader)</span><br><span class="line"></span><br><span class="line">org.springframework.beans.factory.support.SimpleInstantiationStrategy#instantiate(org.springframework.beans.factory.support.RootBeanDefinition, java.lang.String, org.springframework.beans.factory.BeanFactory)</span><br><span class="line"></span><br><span class="line">org.springframework.beans.factory.support.AbstractBeanFactory#getMergedLocalBeanDefinition</span><br><span class="line"></span><br><span class="line">org.springframework.beans.factory.support.DefaultListableBeanFactory#registerBeanDefinition</span><br><span class="line"></span><br><span class="line">org.springframework.context.support.PostProcessorRegistrationDelegate#invokeBeanFactoryPostProcessors(org.springframework.beans.factory.config.ConfigurableListableBeanFactory, java.util.List&lt;org.springframework.beans.factory.config.BeanFactoryPostProcessor&gt;)</span><br><span class="line"></span><br><span class="line">org.springframework.context.support.AbstractApplicationContext#invokeBeanFactoryPostProcessors</span><br><span class="line"></span><br><span class="line">org.springframework.context.support.PostProcessorRegistrationDelegate#invokeBeanDefinitionRegistryPostProcessors</span><br><span class="line"></span><br><span class="line">org.springframework.context.annotation.ConfigurationClassParser#processConfigurationClass</span><br><span class="line"></span><br><span class="line">org.springframework.context.annotation.ConfigurationClassParser#doProcessConfigurationClass</span><br><span class="line"></span><br><span class="line">class com.test.demo.web.TestProperties$$EnhancerBySpringCGLIB$$e2131cf5</span><br><span class="line"></span><br><span class="line">org.springframework.context.annotation.ConfigurationClassEnhancer#createClass</span><br><span class="line"></span><br><span class="line">org.springframework.context.annotation.ConfigurationClassPostProcessor#enhanceConfigurationClasses</span><br><span class="line"></span><br><span class="line">org.springframework.context.annotation.ConfigurationClassPostProcessor#postProcessBeanFactory   enhanceConfigurationClasses</span><br><span class="line"></span><br><span class="line">org.springframework.context.support.PostProcessorRegistrationDelegate#invokeBeanFactoryPostProcessors(org.springframework.beans.factory.config.ConfigurableListableBeanFactory, java.util.List&lt;org.springframework.beans.factory.config.BeanFactoryPostProcessor&gt;)</span><br><span class="line"></span><br><span class="line">invokeBeanFactoryPostProcessors</span><br></pre></td></tr></table></figure>
+
+
       
     </div>
 
@@ -468,7 +410,7 @@ public Long remove(E elem) {
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/36/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/36/">36</a><span class="page-number current">37</span>
+    <a class="extend prev" rel="prev" href="/page/36/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/36/">36</a><span class="page-number current">37</span><a class="page-number" href="/page/38/">38</a><span class="space">&hellip;</span><a class="page-number" href="/page/42/">42</a><a class="extend next" rel="next" href="/page/38/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -534,7 +476,7 @@ public Long remove(E elem) {
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-count">125</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

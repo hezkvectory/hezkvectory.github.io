@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/01/面试题/">
+    <link itemprop="mainEntityOfPage" href="/2019/07/12/redis/redis-info信息/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,128 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/03/01/面试题/" class="post-title-link" itemprop="url">面试题</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-03-01 18:45:02" itemprop="dateCreated datePublished" datetime="2021-03-01T18:45:02+08:00">2021-03-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-26 16:50:00" itemprop="dateModified" datetime="2021-03-26T16:50:00+08:00">2021-03-26</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>1、自我介绍，项目介绍，遇到的难点？产生原因？如何解决？<br>2、HashMap1.8与1.7区别？ConcurrentHashMap实现原理 ？<br>3、jvm类加载器，自定义类加载器，双亲委派机制，优缺点，tomcat类加载机制?<br>4、tomcat热部署，怎么做到的热加载？<br>5、cms收集器过程，g1收集器原理，怎么实现可预测停顿的，region的大小结构？<br>6、内存溢出，内存泄漏遇到过吗？什么场景产生的，怎么解决的？<br>7、volatile的原理？synchronized和重入锁实现原理以及区别？<br>8、redis字符串实现，sds和c区别？<br>9、redis集群，为什么是16384个slot？选举过程，会有脑裂问题么，raft算法，优缺点？<br>10、redis有序集合怎么实现的，跳表是什么？往跳表添加一个元素的过程获取分数的时间复杂度，为什么不用红黑树，红黑树有什么特点，左旋右旋操作？<br>11、锁升级过程，轻量锁可以变成偏向锁么？偏向锁可以变成无锁么？对象头结构，锁状态变化过程？<br>12、Innodb的结构了解么？磁盘页和缓存区是怎么配合的？缓冲区和磁盘数据不一致怎么办，服务器突然宕机了数据会丢失么？<br>13、InnoDB 索引为什使用B+树而不是用B树？<br>14、MySQL 分表是怎么实现的？跨库join如何解决？数据量突增怎么解决？<br>15、数据库的隔离级别，怎么实现的？当前读，快照读？MVCC？<br>16、mysql优化的实践经验<br>17、分布式事务出现过不一致吗？为什么？怎么解决？有什么方法避免？怎么监控？监控到怎么处理？什么时候需要人工接入？<br>18、io模型了解么？多路复用？selete，poll，epoll，epoll的结构？怎么注册事件？<br>19、你们用的什么消息中间件，kafka，为什么用kafka？kafka是怎么保证高吞吐量的？<br>20、kafka重平衡，重启服务怎么保证kafka不发生重平衡，有什么方案？<br>21、netty的原理和使用？tcp的连接过程？一台服务器能支持多少连接，为什么 ？tcp各个参数怎么设置？<br>22、Sping的AOP实现原理，以及对象生成方式的种类，单例的还是原型的？<br>23、讲讲调度接口是怎么实现的<br>24、分布式唯一ID是怎么实现的<br>25、设计模式，以及自己使用的场景<br>26、有没有用过分布式锁，怎么实现的，讲讲原理<br>27、如何解决线上问题？cpu狂飙怎么办？频繁minor gc怎么办？可能造成的原因是什么？如何避免？<br>28、怎么理解分布式和微服务，为什么要拆分服务，会产生什么问题，怎么解决这些问题 ？<br>29、怎么理解高可用，如何保证高可用，有什么弊端，熔断机制，怎么实现 ？<br>30、对于高并发怎么看，怎么算高并发，你们项目有么，如果有会产生什么问题，怎么解决<br>31、有没有做过压测的项目？首页接口优化是怎么做的？<br>32、如何优雅的写代码？什么代码算做优雅？什么代码是规范？你们代码规范是什么样的？如何进行code review？<br>33、算法：给定一个长度为N的整形数组arr，其中有N个互不相等的自然数1-N，请实现arr的排序，但是不要把下标0∼N−1位置上的数通过直接赋值的方式替换成1∼N<br>34、算法：判断一个树是否是平衡二叉树<br>35、算法：给定一个二叉树，请计算节点值之和最大的路径的节点值之和是多少，这个路径的开始节点和结束节点可以是二叉树中的任意节点<br>36、算法：LRU 缓存<br>37、算法：实现带有getMin功能的栈，要求push，pop，getMin的时间复杂度都是O(1)<br>38、算法：两数之和<br>39、算法：实现二叉树先序，中序和后序遍历</p>
-<p>1、介绍一下自己, 为什么出来看机会 ？你做的主要工作有什么？最复杂的一个业务讲一下流程？<br>2、平时用的工具链和技术栈是什么？<br>3、HashMap的并发不安全体现在哪？HashMap为什么数组要是二次幂？扩容rehash的流程？<br>4、HashMap拉链法中链表过长时变形为红黑树有什么优缺点？为什么是8为什么是6？<br>5、ConcurrentHashMap 是怎么做到并发安全的？<br>6、LSM 树了解吗? 是一种什么存储结构?<br>7、Java 有哪些锁机制？Java 中 CAS 是怎么实现的？Unsafe怎么实现？<br>8、简述一下Java 垃圾回收机制？ 如何判断一个对象是否存活？ Java 中垃圾收集的方法有哪些？<br>9、介绍一下Atomic 原子类？JUC 包中的原子类是哪4类？讲讲 AtomicInteger 的使用？AtomicInteger 类的原理？<br>10、线程池了解么？线程池的好处？线程池参数？execute执行流程？idl怎么配置的？最大线程满了之后如何处理？<br>11、tcp快速恢复，快速启动，慢启动？<br>12、MySQL 的存储引擎用的是什么?为什么选 InnoDB?  B+树和二叉树有什么区别和优劣？<br>13、考虑一个业务场景: 头条的文章的评论量非常大, 比如说一篇热门文章就有几百万的评论, 设计一个后端服务, 实现评论的时序展示与分页<br>14、假如用 id 翻页的方式, 数据库表如何设计? 索引如何设计?<br>15、假如量很大, 你觉得需要分库分表吗? 怎么分? 分库分表后怎么查询分页? 分库分表后怎么保证主键仍然是递增的?<br>16、现在需要支持深分页, 页码直接跳转, 怎么实现? 瞬时写入量很大可能会打挂存储, 怎么保护?<br>17、为什么要用 redis 而不用 map/guava 做缓存? redis 和 memcached 的区别？redis 内存淘汰机制？<br>18、用过 Redis 的哪几种数据结构？redis 设置过期时间？redis 事务？<br>19、缓存雪崩和缓存穿透问题解决方案？如何解决 Redis 的并发竞争 Key 问题？如何保证缓存与数据库双写时的数据一致性？<br>20、ZSET 是怎么实现的? zrange start, stop, 总长度为 n, 复杂度是多少?<br>21、什么是消息队列？为什么要用消息队列？JMS两种消息模型？<br>22、说一下kafka的topic，partition，broker概念？kafka的主从选举机制？<br>23、Kafka 的消费者如何做消息去重? 介绍一下 Kafka 的 ConsumerGroup？<br>24、时序型数据库的存储结构是怎么样的? 在生产中用过 Cassandra 和 RocksDB 吗? 数据量有多大? Cassandra 的墓碑机制是什么?<br>25、Spring Bean 的作用域？Spring 事务中的隔离级别？Spring 事务中的事务传播行为？<br>26、AOP是什么？IOC是什么？<br>27、什么是 Dubbo?为什么要用 Dubbo? Dubbo 工作原理？Dubbo 提供的负载均衡策略？<br>28、dubbo新节点上线怎么让其他节点感知？dubbo节点宕机怎么通知到zk？<br>29、 xxl-job工作原理？让你自己实现一个定时任务你会怎么做 ？<br>30、 聊项目警报怎么做的？<br>31、配置中心项目, 实时配置推送怎么做？如何做灰度发布？<br>32、我现在要做一个限流功能, 怎么做？ 这个限流要做成分布式的, 怎么做？假如这个限流希望做成可配置的, 需要有一个后台管理系统随意对某个 api 配置全局流量, 怎么做？<br>33、断路器内部怎么实现的? 断路器会造成写入失败, 假如我们不允许写入失败呢?<br>34、分布式锁加了超时之后有没有可能在没有释放的情况下, 被人抢走锁？怎么解决？<br>35、某一个业务中现在需要生成全局唯一的递增 ID, 并发量非常大, 怎么做？<br>36、自增主键和uuid做主键区别？ 雪花算法怎么实现的，是不是一定每次获取都递增<br>37、讲讲你理解的性能评价及测试指标？ 并发度提100倍有哪些优化的点？<br>38、算法题：M*N 横向纵向均递增的矩阵找指定数<br>39、算法题：用两个栈实现队列<br>40、算法题: N 场演唱会, 以 [{startTime, endTime}…] 的形式给出, 计算出最多能听几场演唱会？<br>41、算法题：树节点的最大距离<br>42、算法题：合并区间<br>43、平常怎么学习的？怎么看待学习和看书？<br>44、有什么想问我的</p>
-<ol>
-<li>通过redis解决千万级并发压力架构设计</li>
-<li>项目中遇到哪些问题？设计方案？秒杀？雪崩？穿透？击穿？预热？</li>
-<li>无锁化，串行化，扁平化克制高并发瓶颈！</li>
-<li>redis 宕机了咋办，如何做到可用性和一致性的trad off？</li>
-<li>12306抢票，微信红包，电商详情页等高频面试问题！</li>
-<li>redis持久化，主从复制，分片集群在BAT中的具体使用设计</li>
-<li>redis分布式锁造成的架构压力和错误的架构设计问题</li>
-<li>正确用布隆过滤器，跳表skiplist，HashMap解决并发场景问题</li>
-<li>如何和面试官互动获得offer</li>
-<li>学习方法和面试方法分享</li>
-<li>逃避认知偏差，技术诅咒，幸存者偏差</li>
-</ol>
-<ol>
-<li>图解spring IOC的实现机制</li>
-<li>spring的扩展实现一：BeanFactoryPostProcessor接口详解</li>
-<li>spring的扩展实现二：BeanPostProcessor接口详解</li>
-<li>必知必会的13个Bean生命周期处理机制</li>
-<li>BeanFactory和FactoryBean的接口对比与实现机制</li>
-<li>循环依赖问题中的三级缓存和提前暴露对象原理讲解</li>
-<li>jdk和cglib动态代理的原理及源码讲解</li>
-<li>Spring AOP的实现机制及扩展实现</li>
-<li>巧妙回答spring源码问题，让你成为源码专家</li>
-</ol>
-<ol>
-<li>从响应和吞吐的高维度理解什么是高并发调优</li>
-<li>为什么有了synchronized还需要JUC？</li>
-<li>为什么CAS和AQS是JUC的核心？</li>
-<li>可见、有序、原子-深入JVM源码理解多线程三大特性</li>
-<li>门闩（Latch）同步器适用于什么场景？</li>
-<li>篱笆（Barrier）同步器适用于什么场景？</li>
-<li>信号量（Semaphore）同步器适用于什么场景？</li>
-<li>阶段同步器（Phaser）适用于什么场景？</li>
-<li>原生锁支持（LockSupport）适用于什么场景？</li>
-<li>三大场景在实战中运用线程池提升系统性能</li>
-<li>生产环境中的线程池如何监控？</li>
-<li>线程池有哪些拒绝策略？</li>
-<li>有哪些拒绝策略应用在生产环境中？</li>
-<li>线程池有哪些在实际中的应用场景？</li>
-</ol>
-<ol>
-<li>高并发场景下秒杀超卖Bug复现</li>
-<li>秒杀场景下JVM锁现场压测实战</li>
-<li>高并发场景下，分布式锁思路分析</li>
-<li>高并发秒杀场景下MySQL分布式锁实战</li>
-<li>高并发秒杀场景下Redis分布式锁实战</li>
-<li>如何在双十一大促中提升分布式锁性能</li>
-<li>抗住双十一流量峰值的其他方案</li>
-<li>从源码级别看分布式锁如何实现</li>
-<li>CAP和BASE理论在分布式场景中的应用 </li>
-<li>分布式锁全部代码实战压测演示</li>
-</ol>
-<p>「力扣」第 150 题：逆波兰表达式求值（中等）<br>「力扣」第 32 题：最长有效括号（困难）<br>「力扣」第 739 题：每日温度（中等）<br>「力扣」第 496 题：下一个更大元素 I（简单）<br>「力扣」第 84 题：柱状图中最大的矩形（困难）<br>「力扣」第 42 题：接雨水（困难）<br>「力扣」第 901 题：股票价格跨度（中等）<br>「力扣」第 581 题：最短无序连续子数组（中等）<br>「力扣」第 402 题：移掉K位数字（中等）<br>「力扣」第 321 题：拼接最大数（困难）<br>「力扣」第 1673 题：找出最具竞争力的子序列（中等）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">【当你管理一个团队，请让员工记住5个黄金定律！】</span><br><span class="line"></span><br><span class="line">1、自我管理；工作不养闲人，团队不养懒人。每天思考今天的工作价值几分，如果满分是5分，那么你当日得分是否可以达到4分？这就是日OKR自我管理！</span><br><span class="line"></span><br><span class="line">2、学会投资自己的大脑；入一行，先别惦记着能赚钱，先学着让自己值钱。先值钱，再赚钱！学习是永远不会错的投资。钱是投资出来的，首先投资大脑！</span><br><span class="line"></span><br><span class="line">3、聚焦坚持，才能到达终点；走下坡路，往往很舒服。没有哪个行业的钱是好赚的。选对行业，聚焦，坚持，才能达到终点。</span><br><span class="line"></span><br><span class="line">4、磨炼才能造就成功；干工作，没有哪个是顺利的，受点气是正常的。合理的是训练，不合理的当做磨练。</span><br><span class="line"></span><br><span class="line">5、改变态度，才能决定高度只有先改变自己的态度，才能改变人生的高度。只有先改变自己的工作态度，才能有职业高度。</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/01/leetcode/lru/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/01/leetcode/lru/" class="post-title-link" itemprop="url">146、LRU 缓存机制</a>
+            <a href="/2019/07/12/redis/redis-info信息/" class="post-title-link" itemprop="url">redis info信息</a>
         </h2>
 
         <div class="post-meta">
@@ -296,7 +175,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-03-01 18:45:02 / Modified: 18:52:00" itemprop="dateCreated datePublished" datetime="2021-03-01T18:45:02+08:00">2021-03-01</time>
+              <time title="Created: 2019-07-12 13:20:20 / Modified: 14:05:50" itemprop="dateCreated datePublished" datetime="2019-07-12T13:20:20+08:00">2019-07-12</time>
             </span>
 
           
@@ -310,17 +189,286 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>运用你所掌握的数据结构，设计和实现一个  LRU (最近最少使用) 缓存机制 。</p>
-<p>实现 LRUCache 类：</p>
-<p>​        LRUCache(int capacity) 以正整数作为容量 capacity 初始化 LRU 缓存<br>​        int get(int key) 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 。<br>​        void put(int key, int value) 如果关键字已经存在，则变更其数据值；如果关键字不存在，则插入该组「关键字-值」。</p>
-<p>当缓存容量达到上限时，它应该在写入新数据之前删除最久未使用的数据值，从而为新的数据值留出空间。</p>
-<p>进阶：你是否可以在 O(1) 时间复杂度内完成这两种操作？</p>
-<p>1、借助LinkedHashMap实现lru算法，只需要实现removeEldestEntry方法即可</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span> </span>&#123;</span><br><span class="line">         <span class="keyword">private</span> Map&lt;Integer, Integer&gt; cache;</span><br><span class="line">         <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> max;</span><br><span class="line"></span><br><span class="line">         <span class="function"><span class="keyword">public</span> <span class="title">LRUCache</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">             max = capacity;</span><br><span class="line">             cache = <span class="keyword">new</span> es&lt;Integer, Integer&gt;(capacity, <span class="number">1.0f</span>, <span class="keyword">true</span>) &#123;</span><br><span class="line">                 <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">removeEldestEntry</span><span class="params">(Map.Entry eldest)</span> </span>&#123;</span><br><span class="line">                     <span class="keyword">return</span> cache.size() &gt; max;</span><br><span class="line">                 &#125;</span><br><span class="line">             &#125;;</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">             <span class="keyword">return</span> cache.getOrDefault(key, -<span class="number">1</span>);</span><br><span class="line">         &#125;</span><br><span class="line"></span><br><span class="line">         <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">             cache.put(key, value);</span><br><span class="line">         &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+          <p>INFO [section]</p>
+<pre><code>以一种易于解释（parse）且易于阅读的格式，返回关于 Redis 服务器的各种信息和统计数值。
 
-<p>2、自己基于链表+map实现lru</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">            <span class="keyword">int</span> key;</span><br><span class="line">            <span class="keyword">int</span> value;</span><br><span class="line"></span><br><span class="line">            LRUCache.Node prev;</span><br><span class="line">            LRUCache.Node next;</span><br><span class="line"></span><br><span class="line">            Node(<span class="keyword">int</span> k, <span class="keyword">int</span> v) &#123;</span><br><span class="line">                <span class="keyword">this</span>.key = k;</span><br><span class="line">                <span class="keyword">this</span>.value = v;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            Node() &#123;</span><br><span class="line">                <span class="keyword">this</span>.key = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">this</span>.value = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> capacity;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> count;</span><br><span class="line">        <span class="keyword">private</span> LRUCache.Node head;</span><br><span class="line">        <span class="keyword">private</span> LRUCache.Node tail;</span><br><span class="line">        <span class="keyword">private</span> Map&lt;Integer, LRUCache.Node&gt; map;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">LRUCache</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.capacity = capacity;</span><br><span class="line">            <span class="keyword">this</span>.count = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">this</span>.map = <span class="keyword">new</span> HashMap();</span><br><span class="line">            head = <span class="keyword">new</span> LRUCache.Node();</span><br><span class="line">            tail = <span class="keyword">new</span> LRUCache.Node();</span><br><span class="line">            head.next = tail;</span><br><span class="line">            tail.prev = head;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">get</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">            LRUCache.Node node = map.get(key);</span><br><span class="line">            <span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                remove(node);</span><br><span class="line">                add(node);</span><br><span class="line">                <span class="keyword">return</span> node.value;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">            LRUCache.Node node = map.get(key);</span><br><span class="line">            <span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</span><br><span class="line">                node = <span class="keyword">new</span> LRUCache.Node(key, value);</span><br><span class="line">                map.put(key, node);</span><br><span class="line">                add(node);</span><br><span class="line">                count++;</span><br><span class="line">                <span class="keyword">if</span> (count &gt; capacity) &#123;</span><br><span class="line">                    LRUCache.Node toDelete = tail.prev;</span><br><span class="line">                    map.remove(toDelete.key);</span><br><span class="line">                    remove(toDelete);</span><br><span class="line">                    count--;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                remove(node);</span><br><span class="line">                node.value = value;</span><br><span class="line">                add(node);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(LRUCache.Node node)</span> </span>&#123;</span><br><span class="line">            LRUCache.Node next = node.next;</span><br><span class="line">            LRUCache.Node prev = node.prev;</span><br><span class="line">            prev.next = next;</span><br><span class="line">            next.prev = prev;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(LRUCache.Node node)</span> </span>&#123;</span><br><span class="line">            LRUCache.Node next = head.next;</span><br><span class="line">            head.next = node;</span><br><span class="line">            node.next = next;</span><br><span class="line">            node.prev = head;</span><br><span class="line">            next.prev = node;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+通过给定可选的参数 section ，可以让命令只返回某一部分的信息：</code></pre><p>server 部分记录了 Redis 服务器的信息，它包含以下域：</p>
+<pre><code>redis_version : Redis 服务器版本
+redis_git_sha1 : Git SHA1
+redis_git_dirty : Git dirty flag
+os : Redis 服务器的宿主操作系统
+arch_bits : 架构（32 或 64 位）
+multiplexing_api : Redis 所使用的事件处理机制
+gcc_version : 编译 Redis 时所使用的 GCC 版本
+process_id : 服务器进程的 PID
+run_id : Redis 服务器的随机标识符（用于 Sentinel 和集群）
+tcp_port : TCP/IP 监听端口
+uptime_in_seconds : 自 Redis 服务器启动以来，经过的秒数
+uptime_in_days : 自 Redis 服务器启动以来，经过的天数
+lru_clock : 以分钟为单位进行自增的时钟，用于 LRU 管理
+clients 部分记录了已连接客户端的信息，它包含以下域：
 
+connected_clients : 已连接客户端的数量（不包括通过从属服务器连接的客户端）
+client_longest_output_list : 当前连接的客户端当中，最长的输出列表
+client_longest_input_buf : 当前连接的客户端当中，最大输入缓存
+blocked_clients : 正在等待阻塞命令（BLPOP、BRPOP、BRPOPLPUSH）的客户端的数量
+memory 部分记录了服务器的内存信息，它包含以下域：
+
+used_memory : 由 Redis 分配器分配的内存总量，以字节（byte）为单位
+used_memory_human : 以人类可读的格式返回 Redis 分配的内存总量
+used_memory_rss : 从操作系统的角度，返回 Redis 已分配的内存总量（俗称常驻集大小）。这个值和 top 、 ps 等命令的输出一致。
+used_memory_peak : Redis 的内存消耗峰值（以字节为单位）
+used_memory_peak_human : 以人类可读的格式返回 Redis 的内存消耗峰值
+used_memory_lua : Lua 引擎所使用的内存大小（以字节为单位）
+mem_fragmentation_ratio : used_memory_rss 和 used_memory 之间的比率
+mem_allocator : 在编译时指定的， Redis 所使用的内存分配器。可以是 libc 、 jemalloc 或者 tcmalloc 。
+在理想情况下， used_memory_rss 的值应该只比 used_memory 稍微高一点儿。
+当 rss &gt; used ，且两者的值相差较大时，表示存在（内部或外部的）内存碎片。
+内存碎片的比率可以通过 mem_fragmentation_ratio 的值看出。
+当 used &gt; rss 时，表示 Redis 的部分内存被操作系统换出到交换空间了，在这种情况下，操作可能会产生明显的延迟。
+Because Redis does not have control over how its allocations are mapped to memory pages, high used_memory_rss is often the result of a spike in memory usage.
+
+当 Redis 释放内存时，分配器可能会，也可能不会，将内存返还给操作系统。
+如果 Redis 释放了内存，却没有将内存返还给操作系统，那么 used_memory 的值可能和操作系统显示的 Redis 内存占用并不一致。
+查看 used_memory_peak 的值可以验证这种情况是否发生。
+persistence 部分记录了跟 RDB 持久化和 AOF 持久化有关的信息，它包含以下域：
+
+loading : 一个标志值，记录了服务器是否正在载入持久化文件。
+rdb_changes_since_last_save : 距离最近一次成功创建持久化文件之后，经过了多少秒。
+rdb_bgsave_in_progress : 一个标志值，记录了服务器是否正在创建 RDB 文件。
+rdb_last_save_time : 最近一次成功创建 RDB 文件的 UNIX 时间戳。
+rdb_last_bgsave_status : 一个标志值，记录了最近一次创建 RDB 文件的结果是成功还是失败。
+rdb_last_bgsave_time_sec : 记录了最近一次创建 RDB 文件耗费的秒数。
+rdb_current_bgsave_time_sec : 如果服务器正在创建 RDB 文件，那么这个域记录的就是当前的创建操作已经耗费的秒数。
+aof_enabled : 一个标志值，记录了 AOF 是否处于打开状态。
+aof_rewrite_in_progress : 一个标志值，记录了服务器是否正在创建 AOF 文件。
+aof_rewrite_scheduled : 一个标志值，记录了在 RDB 文件创建完毕之后，是否需要执行预约的 AOF 重写操作。
+aof_last_rewrite_time_sec : 最近一次创建 AOF 文件耗费的时长。
+aof_current_rewrite_time_sec : 如果服务器正在创建 AOF 文件，那么这个域记录的就是当前的创建操作已经耗费的秒数。
+aof_last_bgrewrite_status : 一个标志值，记录了最近一次创建 AOF 文件的结果是成功还是失败。
+如果 AOF 持久化功能处于开启状态，那么这个部分还会加上以下域：
+
+aof_current_size : AOF 文件目前的大小。
+aof_base_size : 服务器启动时或者 AOF 重写最近一次执行之后，AOF 文件的大小。
+aof_pending_rewrite : 一个标志值，记录了是否有 AOF 重写操作在等待 RDB 文件创建完毕之后执行。
+aof_buffer_length : AOF 缓冲区的大小。
+aof_rewrite_buffer_length : AOF 重写缓冲区的大小。
+aof_pending_bio_fsync : 后台 I/O 队列里面，等待执行的 fsync 调用数量。
+aof_delayed_fsync : 被延迟的 fsync 调用数量。
+stats 部分记录了一般统计信息，它包含以下域：
+
+total_connections_received : 服务器已接受的连接请求数量。
+total_commands_processed : 服务器已执行的命令数量。
+instantaneous_ops_per_sec : 服务器每秒钟执行的命令数量。
+rejected_connections : 因为最大客户端数量限制而被拒绝的连接请求数量。
+expired_keys : 因为过期而被自动删除的数据库键数量。
+evicted_keys : 因为最大内存容量限制而被驱逐（evict）的键数量。
+keyspace_hits : 查找数据库键成功的次数。
+keyspace_misses : 查找数据库键失败的次数。
+pubsub_channels : 目前被订阅的频道数量。
+pubsub_patterns : 目前被订阅的模式数量。
+latest_fork_usec : 最近一次 fork() 操作耗费的毫秒数。
+replication : 主/从复制信息
+
+role : 如果当前服务器没有在复制任何其他服务器，那么这个域的值就是 master ；否则的话，这个域的值就是 slave 。注意，在创建复制链的时候，一个从服务器也可能是另一个服务器的主服务器。
+如果当前服务器是一个从服务器的话，那么这个部分还会加上以下域：
+
+master_host : 主服务器的 IP 地址。
+master_port : 主服务器的 TCP 监听端口号。
+master_link_status : 复制连接当前的状态， up 表示连接正常， down 表示连接断开。
+master_last_io_seconds_ago : 距离最近一次与主服务器进行通信已经过去了多少秒钟。
+master_sync_in_progress : 一个标志值，记录了主服务器是否正在与这个从服务器进行同步。
+如果同步操作正在进行，那么这个部分还会加上以下域：
+
+master_sync_left_bytes : 距离同步完成还缺少多少字节数据。
+master_sync_last_io_seconds_ago : 距离最近一次因为 SYNC 操作而进行 I/O 已经过去了多少秒。
+如果主从服务器之间的连接处于断线状态，那么这个部分还会加上以下域：
+
+master_link_down_since_seconds : 主从服务器连接断开了多少秒。
+以下是一些总会出现的域：
+
+connected_slaves : 已连接的从服务器数量。
+对于每个从服务器，都会添加以下一行信息：
+
+slaveXXX : ID、IP 地址、端口号、连接状态
+cpu 部分记录了 CPU 的计算量统计信息，它包含以下域：
+
+used_cpu_sys : Redis 服务器耗费的系统 CPU 。
+used_cpu_user : Redis 服务器耗费的用户 CPU 。
+used_cpu_sys_children : 后台进程耗费的系统 CPU 。
+used_cpu_user_children : 后台进程耗费的用户 CPU 。
+commandstats 部分记录了各种不同类型的命令的执行统计信息，比如命令执行的次数、命令耗费的 CPU 时间、执行每个命令耗费的平均 CPU 时间等等。对于每种类型的命令，这个部分都会添加一行以下格式的信息：
+
+cmdstat_XXX:calls=XXX,usec=XXX,usecpercall=XXX
+cluster 部分记录了和集群有关的信息，它包含以下域：
+
+cluster_enabled : 一个标志值，记录集群功能是否已经开启。
+keyspace 部分记录了数据库相关的统计信息，比如数据库的键数量、数据库已经被删除的过期键数量等。对于每个数据库，这个部分都会添加一行以下格式的信息：
+
+dbXXX:keys=XXX,expires=XXX
+除上面给出的这些值以外， section 参数的值还可以是下面这两个：
+
+all : 返回所有信息
+default : 返回默认选择的信息
+当不带参数直接调用 INFO 命令时，使用 default 作为默认参数。
+
+不同版本的 Redis 可能对返回的一些域进行了增加或删减。
+
+因此，一个健壮的客户端程序在对 INFO 命令的输出进行分析时，应该能够跳过不认识的域，并且妥善地处理丢失不见的域。
+
+可用版本：&gt;= 1.0.0时间复杂度：O(1)返回值：具体请参见下面的测试代码。</code></pre><p>redis&gt; INFO</p>
+<pre><code># Server
+redis_version:2.9.11
+redis_git_sha1:937384d0
+redis_git_dirty:0
+redis_build_id:8e9509442863f22
+redis_mode:standalone
+os:Linux 3.13.0-35-generic x86_64
+arch_bits:64
+multiplexing_api:epoll
+gcc_version:4.8.2
+process_id:4716
+run_id:26186aac3f2380aaee9eef21cc50aecd542d97dc
+tcp_port:6379
+uptime_in_seconds:362
+uptime_in_days:0
+hz:10
+lru_clock:1725349
+config_file:
+
+# Clients
+connected_clients:1
+client_longest_output_list:0
+client_biggest_input_buf:0
+blocked_clients:0
+
+# Memory
+used_memory:508536
+used_memory_human:496.62K
+used_memory_rss:7974912
+used_memory_peak:508536
+used_memory_peak_human:496.62K
+used_memory_lua:33792
+mem_fragmentation_ratio:15.68
+mem_allocator:jemalloc-3.2.0
+
+# Persistence
+loading:0
+rdb_changes_since_last_save:6
+rdb_bgsave_in_progress:0
+rdb_last_save_time:1411011131
+rdb_last_bgsave_status:ok
+rdb_last_bgsave_time_sec:-1
+rdb_current_bgsave_time_sec:-1
+aof_enabled:0
+aof_rewrite_in_progress:0
+aof_rewrite_scheduled:0
+aof_last_rewrite_time_sec:-1
+aof_current_rewrite_time_sec:-1
+aof_last_bgrewrite_status:ok
+aof_last_write_status:ok
+
+# Stats
+total_connections_received:2
+total_commands_processed:4
+instantaneous_ops_per_sec:0
+rejected_connections:0
+sync_full:0
+sync_partial_ok:0
+sync_partial_err:0
+expired_keys:0
+evicted_keys:0
+keyspace_hits:0
+keyspace_misses:0
+pubsub_channels:0
+pubsub_patterns:0
+latest_fork_usec:0
+migrate_cached_sockets:0
+
+# Replication
+role:master
+connected_slaves:0
+master_repl_offset:0
+repl_backlog_active:0
+repl_backlog_size:1048576
+repl_backlog_first_byte_offset:0
+repl_backlog_histlen:0
+
+# CPU
+used_cpu_sys:0.21
+used_cpu_user:0.17
+used_cpu_sys_children:0.00
+used_cpu_user_children:0.00
+
+# Cluster
+cluster_enabled:0
+
+# Keyspace
+db0:keys=2,expires=0,avg_ttl=0</code></pre>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2019/07/12/http/tcp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/07/12/http/tcp/" class="post-title-link" itemprop="url">tcp三次握手、四次挥手</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-07-12 12:28:35" itemprop="dateCreated datePublished" datetime="2019-07-12T12:28:35+08:00">2019-07-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-02-18 19:03:12" itemprop="dateModified" datetime="2021-02-18T19:03:12+08:00">2021-02-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="/2019/07/12/http/tcp/tcp.jpeg" alt="dddd"></p>
 
       
     </div>
@@ -340,7 +488,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/01/leetcode/heap&heapSort/">
+    <link itemprop="mainEntityOfPage" href="/2019/07/12/java/java多线程竞拍/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -354,7 +502,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/03/01/leetcode/heap&heapSort/" class="post-title-link" itemprop="url">heap & heapSort</a>
+            <a href="/2019/07/12/java/java多线程竞拍/" class="post-title-link" itemprop="url">阿里云面试题-多线程竞拍</a>
         </h2>
 
         <div class="post-meta">
@@ -364,14 +512,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-03-01 18:45:02" itemprop="dateCreated datePublished" datetime="2021-03-01T18:45:02+08:00">2021-03-01</time>
+              <time title="Created: 2019-07-12 12:28:35" itemprop="dateCreated datePublished" datetime="2019-07-12T12:28:35+08:00">2019-07-12</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-02 16:46:04" itemprop="dateModified" datetime="2021-03-02T16:46:04+08:00">2021-03-02</time>
+                <time title="Modified: 2021-03-01 18:56:07" itemprop="dateModified" datetime="2021-03-01T18:56:07+08:00">2021-03-01</time>
               </span>
 
           
@@ -385,28 +533,131 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h4 id="堆属性"><a href="#堆属性" class="headerlink" title="堆属性"></a>堆属性</h4><p>堆分为两种：<em>最大堆</em>和<em>最小堆</em>，两者的差别在于节点的排序方式。</p>
-<p>在最大堆中，父节点的值比每一个子节点的值都要大。</p>
-<p>在最小堆中，父节点的值比每一个子节点的值都要小。</p>
-<p>这就是所谓的“堆属性”，并且这个属性对堆中的每一个节点都成立。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">   10</span><br><span class="line">  / \</span><br><span class="line"> 7   2</span><br><span class="line">/  \</span><br><span class="line">5   1</span><br></pre></td></tr></table></figure>
+          <p>多线程竞拍</p>
+<pre><code>创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）
 
-<p>这是一个最大堆，，因为每一个父节点的值都比其子节点要大。<code>10</code> 比 <code>7</code> 和 <code>2</code> 都大。<code>7</code> 比 <code>5</code> 和 <code>1</code>都大。</p>
-<p>根据这一属性，那么最大堆总是将其中的最大值存放在树的根节点。而对于最小堆，根节点中的元素总是树中的最小值。</p>
-<p>堆属性非常有用，因为堆常常被当做优先队列使用，因为可以快速地访问到“最重要”的元素。</p>
-<p><strong>注意：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">堆的根节点中存放的是最大或者最小元素，但是其他节点的排序顺序是未知的。</span><br><span class="line"></span><br><span class="line">例如，在一个最大堆中，最大的那一个元素总是位于 index 0 的位置，但是最小的元素则未必是最后一个元素。</span><br><span class="line">唯一能够保证的是最小的元素是一个叶节点，但是不确定是哪一个。</span><br></pre></td></tr></table></figure>
+每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
 
-<h4 id="堆和普通树的区别"><a href="#堆和普通树的区别" class="headerlink" title="堆和普通树的区别"></a>堆和普通树的区别</h4><p>堆并不能取代二叉搜索树，它们之间有相似之处也有一些不同。我们来看一下两者的主要差别：</p>
-<p><strong>节点的顺序。</strong>在二叉搜索树中，左子节点必须比父节点小，右子节点必须必比父节点大。但是在堆中并非如此。在最大堆中两个子节点都必须比父节点小，而在最小堆中，它们都必须比父节点大。</p>
-<p><strong>内存占用。</strong>普通树占用的内存空间比它们存储的数据要多。你必须为节点对象以及左/右子节点指针分配内存。堆仅仅使用一个数据来存储数组，且不使用指针。</p>
-<p><strong>平衡。</strong>二叉搜索树必须是“平衡”的情况下，其大部分操作的复杂度才能达到<strong>O(log n)</strong>。你可以按任意顺序位置插入/删除数据，或者使用 AVL 树或者红黑树，但是在堆中实际上不需要整棵树都是有序的。我们只需要满足堆属性即可，所以在堆中平衡不是问题。因为堆中数据的组织方式可以保证<strong>O(log n)</strong> 的性能。</p>
-<p><strong>搜索。</strong>在二叉树中搜索会很快，但是在堆中搜索会很慢。在堆中搜索不是第一优先级，因为使用堆的目的是将最大（或者最小）的节点放在最前面，从而快速的进行相关插入、删除操作。</p>
-<h4 id="堆代码"><a href="#堆代码" class="headerlink" title="堆代码"></a>堆代码</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Heap</span>&lt;<span class="title">T</span> <span class="keyword">extends</span> <span class="title">Comparable</span>&lt;<span class="title">T</span>&gt;&gt; </span>&#123;</span><br><span class="line">    <span class="comment">//存储堆中的元素</span></span><br><span class="line">    <span class="keyword">private</span> T[] items;</span><br><span class="line">    <span class="comment">//记录堆中元素的个数</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> N;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Heap</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.items= (T[]) <span class="keyword">new</span> Comparable[capacity+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">this</span>.N=<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//判断堆中索引i处的元素是否小于索引j处的元素</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">less</span><span class="params">(<span class="keyword">int</span> i,<span class="keyword">int</span> j)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> items[i].compareTo(items[j])&lt;<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//交换堆中i索引和j索引处的值</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">exch</span><span class="params">(<span class="keyword">int</span> i,<span class="keyword">int</span> j)</span></span>&#123;</span><br><span class="line">        T temp = items[i];</span><br><span class="line">        items[i] = items[j];</span><br><span class="line">        items[j] = temp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//往堆中插入一个元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span><span class="params">(T t)</span></span>&#123;</span><br><span class="line">        items[++N]=t;</span><br><span class="line">        swim(N);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//使用上浮算法，使索引k处的元素能在堆中处于一个正确的位置</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">swim</span><span class="params">(<span class="keyword">int</span> k)</span></span>&#123;</span><br><span class="line">        <span class="comment">//通过循环，不断的比较当前结点的值和其父结点的值，如果发现父结点的值比当前结点的值小，则交换位置</span></span><br><span class="line">        <span class="keyword">while</span>(k&gt;<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="comment">//比较当前结点和其父结点</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (less(k/<span class="number">2</span>,k))&#123;</span><br><span class="line">                exch(k/<span class="number">2</span>,k);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            k = k/<span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//删除堆中最大的元素,并返回这个最大元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">delMax</span><span class="params">()</span></span>&#123;</span><br><span class="line">        T max = items[<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">        <span class="comment">//交换索引1处的元素和最大索引处的元素，让完全二叉树中最右侧的元素变为临时根结点</span></span><br><span class="line">        exch(<span class="number">1</span>,N);</span><br><span class="line">        <span class="comment">//最大索引处的元素删除掉</span></span><br><span class="line">        items[N]=<span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">//元素个数-1</span></span><br><span class="line">        N--;</span><br><span class="line">        <span class="comment">//通过下沉调整堆，让堆重新有序</span></span><br><span class="line">        sink(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> max;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//使用下沉算法，使索引k处的元素能在堆中处于一个正确的位置</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">sink</span><span class="params">(<span class="keyword">int</span> k)</span></span>&#123;</span><br><span class="line">        <span class="comment">//通过循环不断的对比当前k结点和其左子结点2*k以及右子结点2k+1处中的较大值的元素大小，如果当前结点小，则需要交换位置</span></span><br><span class="line">        <span class="keyword">while</span>(<span class="number">2</span>*k&lt;=N)&#123;</span><br><span class="line">            <span class="comment">//获取当前结点的子结点中的较大结点</span></span><br><span class="line">            <span class="keyword">int</span> max;<span class="comment">//记录较大结点所在的索引</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="number">2</span>*k+<span class="number">1</span>&lt;=N)&#123;</span><br><span class="line">                <span class="keyword">if</span> (less(<span class="number">2</span>*k,<span class="number">2</span>*k+<span class="number">1</span>))&#123;</span><br><span class="line">                    max=<span class="number">2</span>*k+<span class="number">1</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    max=<span class="number">2</span>*k;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                max = <span class="number">2</span>*k;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">//比较当前结点和较大结点的值</span></span><br><span class="line">            <span class="keyword">if</span> (!less(k,max))&#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//交换k索引处的值和max索引处的值</span></span><br><span class="line">            exch(k,max);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//变换k的值</span></span><br><span class="line">            k = max;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Heap&lt;String&gt; heap = <span class="keyword">new</span> Heap&lt;String&gt;(<span class="number">20</span>);</span><br><span class="line">        heap.insert(<span class="string">"A"</span>);</span><br><span class="line">        heap.insert(<span class="string">"B"</span>);</span><br><span class="line">        heap.insert(<span class="string">"C"</span>);</span><br><span class="line">        heap.insert(<span class="string">"D"</span>);</span><br><span class="line">        heap.insert(<span class="string">"E"</span>);</span><br><span class="line">        heap.insert(<span class="string">"F"</span>);</span><br><span class="line">        heap.insert(<span class="string">"G"</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        String del;</span><br><span class="line">        <span class="keyword">while</span>((del=heap.delMax())!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            System.out.print(del+<span class="string">","</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+所有人的心理上线价位都为 M ，不会出价比M高
 
-<h4 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HeapSort</span> </span>&#123;</span><br><span class="line">    <span class="comment">//判断heap堆中索引i处的元素是否小于索引j处的元素</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span>  <span class="keyword">boolean</span> <span class="title">less</span><span class="params">(Comparable[] heap, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> heap[i].compareTo(heap[j])&lt;<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//交换heap堆中i索引和j索引处的值</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span>  <span class="keyword">void</span> <span class="title">exch</span><span class="params">(Comparable[] heap, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">        Comparable tmp = heap[i];</span><br><span class="line">        heap[i] = heap[j];</span><br><span class="line">        heap[j] = tmp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//根据原数组source，构造出堆heap</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">createHeap</span><span class="params">(Comparable[] source, Comparable[] heap)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//把source中的元素拷贝到heap中，heap中的元素就形成一个无序的堆</span></span><br><span class="line">        System.arraycopy(source,<span class="number">0</span>,heap,<span class="number">1</span>,source.length);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//对堆中的元素做下沉调整(从长度的一半处开始，往索引1处扫描)</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = (heap.length)/<span class="number">2</span>;i&gt;<span class="number">0</span>;i--)&#123;</span><br><span class="line">            sink(heap,i,heap.length-<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//对source数组中的数据从小到大排序</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span>  <span class="keyword">void</span> <span class="title">sort</span><span class="params">(Comparable[] source)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//构建堆</span></span><br><span class="line">        Comparable[] heap = <span class="keyword">new</span> Comparable[source.length+<span class="number">1</span>];</span><br><span class="line">        createHeap(source,heap);</span><br><span class="line">        <span class="comment">//定义一个变量，记录未排序的元素中最大的索引</span></span><br><span class="line">        <span class="keyword">int</span> N = heap.length-<span class="number">1</span>;</span><br><span class="line">        <span class="comment">//通过循环，交换1索引处的元素和排序的元素中最大的索引处的元素</span></span><br><span class="line">        <span class="keyword">while</span>(N!=<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="comment">//交换元素</span></span><br><span class="line">            exch(heap,<span class="number">1</span>,N);</span><br><span class="line">            <span class="comment">//排序交换后最大元素所在的索引，让它不要参与堆的下沉调整</span></span><br><span class="line">            N--;</span><br><span class="line">            <span class="comment">//需要对索引1处的元素进行对的下沉调整</span></span><br><span class="line">            sink(heap,<span class="number">1</span>, N);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//把heap中的数据复制到原数组source中</span></span><br><span class="line">        System.arraycopy(heap,<span class="number">1</span>,source,<span class="number">0</span>,source.length);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//在heap堆中，对target处的元素做下沉，范围是0~range</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sink</span><span class="params">(Comparable[] heap, <span class="keyword">int</span> target, <span class="keyword">int</span> range)</span></span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="number">2</span>*target&lt;=range)&#123;</span><br><span class="line">            <span class="comment">//1.找出当前结点的较大的子结点</span></span><br><span class="line">            <span class="keyword">int</span> max;</span><br><span class="line">            <span class="keyword">if</span> (<span class="number">2</span>*target+<span class="number">1</span>&lt;=range)&#123;</span><br><span class="line">                <span class="keyword">if</span> (less(heap,<span class="number">2</span>*target,<span class="number">2</span>*target+<span class="number">1</span>))&#123;</span><br><span class="line">                    max = <span class="number">2</span>*target+<span class="number">1</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    max = <span class="number">2</span>*target;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                max = <span class="number">2</span>*target;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//2.比较当前结点的值和较大子结点的值</span></span><br><span class="line">            <span class="keyword">if</span> (!less(heap,target,max))&#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            exch(heap,target,max);</span><br><span class="line"></span><br><span class="line">            target = max;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+每次出价必须比上一次出价高
 
+经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。</code></pre><p>个人觉得主要考察java基础（CountDownLatch、CyclicBarrier）的使用方法</p>
+<pre><code>import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.*;
+import java.util.concurrent.locks.ReentrantLock;
 
+public class AuctionTest {
+
+/**
+ * 创建N条线程，代表N个人，每个人的名称分别为：（“P1”，“P2”，“P3”…“Pn”）
+ * 每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
+ * 所有人的心理上线价位都为 M ，不会出价比M高
+ * 每次出价必须比上一次出价高
+ * 经过 k 次竞拍后，打印出所有k次竞拍的人及其出价。
+ */
+static int N = 10; //竞拍人数
+static int M = 100;//所有人的心理上线价位都为 M ，不会出价比M高
+static int AUCTION_NUM = 5; //经过 k 次竞拍后
+
+static ConcurrentHashMap&lt;String, List&lt;Integer&gt;&gt; ACTION_HIST = new ConcurrentHashMap&lt;&gt;();
+
+static ReentrantLock lock = new ReentrantLock();//这个锁是为了保证出价比上一个人出价高
+
+static volatile int CUR_MAX_PRICE = 0;
+
+public static void main(String[] args) throws Exception {
+    CyclicBarrier barrier = new CyclicBarrier(N);//每个人在出价之后必须等其他人出价后才能再次出价；第一次出价不受此限制。
+    CountDownLatch countDownLatch = new CountDownLatch(N);//这里应该是N
+    ThreadPoolExecutor executor = new ThreadPoolExecutor(N, N, 1, TimeUnit.SECONDS, new ArrayBlockingQueue&lt;Runnable&gt;(1), new ThreadFactory() {
+        @Override
+        public Thread newThread(Runnable r) {
+            return new Thread(r, &quot;Auction&quot;);
+        }
+    });
+    int step = M / (AUCTION_NUM * N); //每次出价阶梯
+
+    for (int i = 1; i &lt;= N; i++) {
+        executor.execute(new Auction(barrier, countDownLatch, &quot;P&quot; + i, step));
+    }
+
+    countDownLatch.await();
+
+    String personName = null;
+    int maxPrice = 0;
+    int personId = 0;
+    for (int num = 1; num &lt;= AUCTION_NUM; num++) {
+        for (int i = 1; i &lt;= N; i++) {
+            personName = &quot;P&quot; + i;
+            Integer price = ACTION_HIST.get(personName).get(num - 1);
+            if (num == AUCTION_NUM) {
+                if (maxPrice &lt; price) {
+                    maxPrice = price;
+                    personId = i;
+                }
+            }
+            System.out.println(&quot;第&quot; + num + &quot;次出价人:P&quot; + i + &quot; 出价:&quot; + price);
+        }
+        System.out.println(&quot;-----------------&quot;);
+    }
+    System.out.println(&quot;最终竞价成功人:P&quot; + personId + &quot;,最终出价:&quot; + maxPrice);
+    executor.shutdown();
+}
+
+static class Auction implements Runnable {
+    private String name;
+    private CyclicBarrier barrier;
+    private int step;
+    private CountDownLatch countDownLatch;
+
+    public Auction(CyclicBarrier barrier, CountDownLatch countDownLatch, String name, int step) {
+        this.name = name;
+        this.barrier = barrier;
+        this.step = step;
+        this.countDownLatch = countDownLatch;
+    }
+
+    @Override
+    public void run() {
+        if (!ACTION_HIST.containsKey(name)) {
+            ACTION_HIST.put(name, new ArrayList&lt;&gt;());
+        }
+        lock.lock();
+        int currentPrice = 0;
+        try {
+            currentPrice = getRandPrice(step);
+            CUR_MAX_PRICE = CUR_MAX_PRICE &lt; currentPrice ? currentPrice : CUR_MAX_PRICE;
+        } finally {
+            lock.unlock();
+        }
+
+        ACTION_HIST.get(name).add(currentPrice);
+        int tmp = 1;
+        try {
+            while (tmp &lt; AUCTION_NUM) {
+                barrier.await();
+                currentPrice = getRandPrice(step);
+                currentPrice = currentPrice &gt; M ? M : currentPrice;
+                CUR_MAX_PRICE = CUR_MAX_PRICE &lt; currentPrice ? currentPrice : CUR_MAX_PRICE;
+                ACTION_HIST.get(name).add(currentPrice);
+                tmp++;
+            }
+            countDownLatch.countDown();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }   /**
+     * 当前心里价比上次多多少
+     *
+     * @param step
+     * @return
+     */
+    int getRandPrice(int step) {
+        return CUR_MAX_PRICE + new Random().nextInt(step) + 1;
+    }
+}</code></pre>
       
     </div>
 
@@ -424,7 +675,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/40/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/40/">40</a><span class="page-number current">41</span><a class="page-number" href="/page/42/">42</a><span class="space">&hellip;</span><a class="page-number" href="/page/47/">47</a><a class="extend next" rel="next" href="/page/42/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/40/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/40/">40</a><span class="page-number current">41</span><a class="page-number" href="/page/42/">42</a><a class="extend next" rel="next" href="/page/42/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -490,14 +741,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-count">125</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

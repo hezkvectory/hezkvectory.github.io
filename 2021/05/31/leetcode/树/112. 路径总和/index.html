@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="我的博客">
 <meta property="og:description" content="https://leetcode-cn.com/problems/path-sum 给你二叉树的根节点 root 和一个表示目标和的整数 targetSum ，判断该树中是否存在 根节点到叶子节点 的路径，这条路径上所有节点值相加等于目标和 targetSum 。 叶子节点 是指没有子节点的节点。 1234567891011public static class Solution1 &amp;#123;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-05-31T10:09:16.718Z">
+<meta property="og:updated_time" content="2021-06-09T09:09:38.835Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="112. 路径总和">
 <meta name="twitter:description" content="https://leetcode-cn.com/problems/path-sum 给你二叉树的根节点 root 和一个表示目标和的整数 targetSum ，判断该树中是否存在 根节点到叶子节点 的路径，这条路径上所有节点值相加等于目标和 targetSum 。 叶子节点 是指没有子节点的节点。 1234567891011public static class Solution1 &amp;#123;">
@@ -178,10 +178,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-05-31 14:45:02 / Modified: 18:09:16" itemprop="dateCreated datePublished" datetime="2021-05-31T14:45:02+08:00">2021-05-31</time>
+              <time title="Created: 2021-05-31 14:45:02" itemprop="dateCreated datePublished" datetime="2021-05-31T14:45:02+08:00">2021-05-31</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-06-09 17:09:38" itemprop="dateModified" datetime="2021-06-09T17:09:38+08:00">2021-06-09</time>
+              </span>
 
           
 
@@ -199,6 +205,9 @@
 <p>叶子节点 是指没有子节点的节点。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasPathSum</span><span class="params">(TreeNode root, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (root.val == sum &amp;&amp; root.left == <span class="keyword">null</span> &amp;&amp; root.right == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> hasPathSum(root.left, sum - root.val) || hasPathSum(root.right, sum - root.val);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<p> [112. 路径总和.md](112. 路径总和.md) </p>
+<p> [113. 路径总和 II.md](113. 路径总和 II.md) </p>
+<p> [437. 路径总和 III.md](437. 路径总和 III.md) </p>
 
     </div>
 
@@ -217,12 +226,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/05/31/leetcode/树/base1/" rel="prev" title="113. 路径总和 II">
-      <i class="fa fa-chevron-left"></i> 113. 路径总和 II
+    <a href="/2021/05/31/leetcode/树/94. 二叉树的中序遍历/" rel="prev" title="94. 二叉树的中序遍历">
+      <i class="fa fa-chevron-left"></i> 94. 二叉树的中序遍历
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/05/31/leetcode/树/98. 验证二叉搜索树/" rel="next" title="144. 二叉树的前序遍历">
-      144. 二叉树的前序遍历 <i class="fa fa-chevron-right"></i>
+    <a href="/2021/05/31/leetcode/树/103. 二叉树的锯齿形层序遍历/" rel="next" title="103. 二叉树的锯齿形层序遍历">
+      103. 二叉树的锯齿形层序遍历 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -295,7 +304,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-count">125</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

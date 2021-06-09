@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/05/10/k8s/创建k8s用户/">
+    <link itemprop="mainEntityOfPage" href="/2021/05/27/leetcode/字符串/316.移除重复字母/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/05/10/k8s/创建k8s用户/" class="post-title-link" itemprop="url">根据证书生成k8s账号信息</a>
+            <a href="/2021/05/27/leetcode/字符串/316.移除重复字母/" class="post-title-link" itemprop="url">316.删除重复字母</a>
         </h2>
 
         <div class="post-meta">
@@ -174,14 +174,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-05-10 12:28:35" itemprop="dateCreated datePublished" datetime="2021-05-10T12:28:35+08:00">2021-05-10</time>
+              <time title="Created: 2021-05-27 10:48:21" itemprop="dateCreated datePublished" datetime="2021-05-27T10:48:21+08:00">2021-05-27</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-11 19:20:21" itemprop="dateModified" datetime="2021-05-11T19:20:21+08:00">2021-05-11</time>
+                <time title="Modified: 2021-05-31 16:24:58" itemprop="dateModified" datetime="2021-05-31T16:24:58+08:00">2021-05-31</time>
               </span>
 
           
@@ -195,41 +195,25 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h4 id="新建用户"><a href="#新建用户" class="headerlink" title="新建用户"></a>新建用户</h4><p>新建一个k8s用户大概可以分为以下几步：</p>
-<ul>
-<li>生成用户的证书key</li>
-<li>通过用户的证书key，生成用户的证书请求</li>
-<li>通过k8s的api的ca证书去签发用户的证书请求，生成用户的证书</li>
-<li>配置kubectl config<ul>
-<li>kubectl config set-cluster              //集群配置</li>
-<li>kubectl config set-credentials NAME     //用户配置</li>
-<li>kubectl config set-context         //context配置</li>
-<li>kubectl config use-context         //切换context</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(umask 077; openssl genrsa -out test.key 2048)      //创建用户证书key</span><br><span class="line">openssl req -new -key test.key -out test.csr -subj &quot;/O=test/CN=test&quot;      //创建用户证书请求，-subj指定组和用户，其中O是组名，CN是用户名</span><br><span class="line">openssl x509 -req -in test.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out test.crt -days 3650      //使用k8s的ca签发用户证书</span><br><span class="line">kubectl config set-credentials test --client-certificate=test.crt --client-key=test.key --embed-certs=true      //用户配置</span><br><span class="line">kubectl config set-context test@kubernetes --cluster=kubernetes --user=test      //context设置</span><br><span class="line"></span><br><span class="line">//可以切换到新用户了，但此时用户啥权限都没有</span><br><span class="line">kubectl config use-context test@kubernetes</span><br></pre></td></tr></table></figure>
+          <p><a href="https://leetcode-cn.com/problems/remove-duplicate-letters/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/remove-duplicate-letters/</a></p>
+<p>给你一个字符串 <code>s</code> ，请你去除字符串中重复的字母，使得每个字母只出现一次。需保证 <strong>返回结果的字典序最小</strong>（要求不能打乱其他字符的相对位置）。</p>
+<p> 和1081题目类似</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：s = &quot;bcabc&quot;</span><br><span class="line">输出：&quot;abc&quot;</span><br></pre></td></tr></table></figure>
 
-<p>简单说明：</p>
-<ul>
-<li>没有使用kubectl config set-cluster ，因为集群就使用本身的集群，也默认使用本集群的默认config文件</li>
-<li>kubectl config set-cluster –kubeconfig=/PATH/TO/SOMEFILE  —kubeconfig=/PATH/TO/SOMEFILE用于创建新的配置文件，如果不加此选项，则内容会添加到家目录下.kube/config文件中，可以使用use-context来切换不同的用户管理k8s集群</li>
-<li>context，就是用什么用户来管理哪个集群，即用户和集群的结合</li>
-</ul>
-<h4 id="用户授权"><a href="#用户授权" class="headerlink" title="用户授权"></a>用户授权</h4><p>k8s的用户授权有很多种，其中最普遍的是RBAC——基于角色的授权机制。</p>
-<ul>
-<li>某个用户属于某个角色</li>
-<li>某个角色拥有某些操作</li>
-<li>某些操作绑定到某些资源上</li>
-</ul>
-<p>即最终效果是：某个用户对某些资源拥有某些操作。下面以上面创建的baison用户为例，让此用户对default空间拥有查看pod与进入到pod里的权限。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl create role only-read-pods --verb=get,list,watch,create --resource=pod,pod/exec</span><br><span class="line">kubectl create rolebinding bind-only-read-pods --role=only-read-pods --user=test</span><br></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：s = &quot;cbacdcbc&quot;</span><br><span class="line">输出：&quot;acdb&quot;</span><br></pre></td></tr></table></figure>
 
-<p>简单说明：</p>
+
+
+<p>使用栈+数组</p>
+<p><a href="https://leetcode-cn.com/problems/remove-duplicate-letters/solution/you-qian-ru-shen-dan-diao-zhan-si-lu-qu-chu-zhong-/?um_chnnl=huawei?um_from_appkey=5fcda41c42348b56d6f8e8d5" target="_blank" rel="noopener">https://leetcode-cn.com/problems/remove-duplicate-letters/solution/you-qian-ru-shen-dan-diao-zhan-si-lu-qu-chu-zhong-/?um_chnnl=huawei?um_from_appkey=5fcda41c42348b56d6f8e8d5</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="comment">//1、去除重复字母</span></span><br><span class="line">    <span class="comment">//2、保持原有字符顺序</span></span><br><span class="line">    <span class="comment">//3、保证字典顺序最小</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">removeDuplicateLetters</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (str == <span class="keyword">null</span> || str.length() &lt;= <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> str;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> len = str.length();</span><br><span class="line">        Stack&lt;Character&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">        <span class="keyword">int</span>[] count = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">256</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">            count[str.charAt(i)]++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">boolean</span>[] inStack = <span class="keyword">new</span> <span class="keyword">boolean</span>[<span class="number">256</span>];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">            <span class="keyword">char</span> c = str.charAt(i);</span><br><span class="line">            count[c]--;</span><br><span class="line">            <span class="keyword">if</span> (inStack[c]) &#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">while</span> (!stack.isEmpty() &amp;&amp; stack.peek() &gt; c) &#123;</span><br><span class="line">                <span class="keyword">if</span> (count[stack.peek()] == <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                inStack[stack.pop()] = <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            stack.push(c);</span><br><span class="line">            inStack[c] = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        StringBuffer buffer = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">            buffer.append(stack.pop());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> buffer.reverse().toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li>除了role、rolebinding外，还有cluserrole、clusterrolebinding，他们的区别就是作用域不同，很明显带cluser的作用与整个集群。</li>
-<li>rolebinding可以绑定role，也可以绑定clusterrole，绑定cluserrole的时候，clusterrole作用域降级为namespace级别。</li>
-<li>集群有很多内置role、rolebinding和cluserrole、clusterrolebinding，可以用yaml方式打开作为借鉴。</li>
+<li><a href="316.移除重复字母.md">316.移除重复字母.md</a> </li>
+<li>[321. 拼接最大数.md](321. 拼接最大数.md) </li>
+<li><a href="402.移除K位数字.md">402.移除K位数字.md</a> </li>
 </ul>
 
       
@@ -250,7 +234,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/30/netty/netty 回调/">
+    <link itemprop="mainEntityOfPage" href="/2021/05/26/leetcode/字符串/632.最小区间/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -264,7 +248,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/04/30/netty/netty 回调/" class="post-title-link" itemprop="url">netty ChannelFuture回调</a>
+            <a href="/2021/05/26/leetcode/字符串/632.最小区间/" class="post-title-link" itemprop="url">632. 最小覆盖子串</a>
         </h2>
 
         <div class="post-meta">
@@ -274,14 +258,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-04-30 13:20:20" itemprop="dateCreated datePublished" datetime="2021-04-30T13:20:20+08:00">2021-04-30</time>
+              <time title="Created: 2021-05-26 12:42:01" itemprop="dateCreated datePublished" datetime="2021-05-26T12:42:01+08:00">2021-05-26</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-06 10:47:11" itemprop="dateModified" datetime="2021-05-06T10:47:11+08:00">2021-05-06</time>
+                <time title="Modified: 2021-05-31 16:25:10" itemprop="dateModified" datetime="2021-05-31T16:25:10+08:00">2021-05-31</time>
               </span>
 
           
@@ -295,15 +279,30 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h4 id="ChannelInboundHandler-read方法写数据到socket"><a href="#ChannelInboundHandler-read方法写数据到socket" class="headerlink" title="ChannelInboundHandler#read方法写数据到socket"></a>ChannelInboundHandler#read方法写数据到socket</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&quot;nioEventLoopGroup-3-1@1242&quot; prio=10 tid=0xf nid=NA runnable</span><br><span class="line">  java.lang.Thread.State: RUNNABLE</span><br><span class="line">	  at com.hezk.netty.echo.server.EchoServerHandler$1.operationComplete(EchoServerHandler.java:19)</span><br><span class="line">	  at com.hezk.netty.echo.server.EchoServerHandler$1.operationComplete(EchoServerHandler.java:16)</span><br><span class="line">	  at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:578)</span><br><span class="line">	  at io.netty.util.concurrent.DefaultPromise.notifyListenersNow(DefaultPromise.java:552)</span><br><span class="line">	  at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:491)</span><br><span class="line">	  at io.netty.util.concurrent.DefaultPromise.setValue0(DefaultPromise.java:616)</span><br><span class="line">	  at io.netty.util.concurrent.DefaultPromise.setSuccess0(DefaultPromise.java:605)</span><br><span class="line">	  at io.netty.util.concurrent.DefaultPromise.trySuccess(DefaultPromise.java:104)</span><br><span class="line">	  at io.netty.util.internal.PromiseNotificationUtil.trySuccess(PromiseNotificationUtil.java:48)</span><br><span class="line">	  at io.netty.channel.ChannelOutboundBuffer.safeSuccess(ChannelOutboundBuffer.java:717)</span><br><span class="line">	  at io.netty.channel.ChannelOutboundBuffer.remove(ChannelOutboundBuffer.java:272)</span><br><span class="line">	  at io.netty.channel.ChannelOutboundBuffer.removeBytes(ChannelOutboundBuffer.java:352)</span><br><span class="line">	  at io.netty.channel.socket.nio.NioSocketChannel.doWrite(NioSocketChannel.java:414)</span><br><span class="line">	  at io.netty.channel.AbstractChannel$AbstractUnsafe.flush0(AbstractChannel.java:941)</span><br><span class="line">	  at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.flush0(AbstractNioChannel.java:354)</span><br><span class="line">	  at io.netty.channel.AbstractChannel$AbstractUnsafe.flush(AbstractChannel.java:905)</span><br><span class="line">	  at io.netty.channel.DefaultChannelPipeline$HeadContext.flush(DefaultChannelPipeline.java:1372)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.invokeFlush0(AbstractChannelHandlerContext.java:750)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.invokeFlush(AbstractChannelHandlerContext.java:742)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.flush(AbstractChannelHandlerContext.java:728)</span><br><span class="line">	  at com.hezk.netty.echo.server.EchoServerHandler.channelRead(EchoServerHandler.java:22)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)</span><br><span class="line">	  at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)</span><br><span class="line">	  at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)</span><br><span class="line">	  at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)</span><br><span class="line">	  at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:719)</span><br><span class="line">	  at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:655)</span><br><span class="line">	  at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:581)</span><br><span class="line">	  at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:493)</span><br><span class="line">	  at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:989)</span><br><span class="line">	  at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)</span><br><span class="line">	  at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)</span><br><span class="line">	  at java.lang.Thread.run(Thread.java:748)</span><br></pre></td></tr></table></figure>
+          <p><a href="https://leetcode-cn.com/problems/smallest-range-covering-elements-from-k-lists" target="_blank" rel="noopener">https://leetcode-cn.com/problems/smallest-range-covering-elements-from-k-lists</a></p>
+<p>你有 k 个 非递减排列 的整数列表。找到一个 最小 区间，使得 k 个列表中的每个列表至少有一个数包含在其中。</p>
+<p>我们定义如果 b-a &lt; d-c 或者在 b-a == d-c 时 a &lt; c，则区间 [a,b] 比 [c,d] 小。</p>
+<p>示例 1：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [[4,10,15,24,26], [0,9,12,20], [5,18,22,30]]</span><br><span class="line">输出：[20,24]</span><br><span class="line">解释： </span><br><span class="line">列表 1：[4, 10, 15, 24, 26]，24 在区间 [20,24] 中。</span><br><span class="line">列表 2：[0, 9, 12, 20]，20 在区间 [20,24] 中。</span><br><span class="line">列表 3：[5, 18, 22, 30]，22 在区间 [20,24] 中。</span><br></pre></td></tr></table></figure>
 
-<h4 id="netty核心类"><a href="#netty核心类" class="headerlink" title="netty核心类"></a>netty核心类</h4><p>AbstractNioByteChannel<br>NioByteUnsafe<br>PooledByteBufAllocator<br>Bootstrap<br>ServerBootstrap<br>EventLoopGroup<br>NioEventLoopGroup<br>NioEventLoop<br>ChannelOption</p>
-<p>ChannelPipeline<br>ServerBootstrapAcceptor<br>ChannelInboundHandler<br>ChannelOutboundHandler<br>ChannelHandlerContext<br>ChannelInitializer<br>ByteToMessageDecoder<br>DefaultChannelPipeline<br>MessageToMessageDecoder</p>
-<p>DefaultPromise<br>DefaultChannelPromise</p>
-<p>NioSocketChannel</p>
-<p>NioServerSocketChannel<br>ReferenceCountUtil<br>ResourceLeakTracker<br>HashedWheelTimer<br>FastThreadLocal</p>
-<h4 id="核心功能"><a href="#核心功能" class="headerlink" title="核心功能"></a>核心功能</h4><p>心跳检测</p>
-<p>断线重连</p>
+<p>示例 2：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [[1,2,3],[1,2,3],[1,2,3]]</span><br><span class="line">输出：[1,1]</span><br></pre></td></tr></table></figure>
+
+<p>示例 3：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [[10,10],[11,11]]</span><br><span class="line">输出：[10,11]</span><br></pre></td></tr></table></figure>
+
+<p>示例 4：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [[10],[11]]</span><br><span class="line">输出：[10,11]</span><br></pre></td></tr></table></figure>
+
+<p>示例 5：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [[1],[2],[3],[4],[5],[6],[7]]</span><br><span class="line">输出：[1,7]</span><br></pre></td></tr></table></figure>
+
+<p>优先队列解法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">		<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span>[] smallestRange(List&lt;List&lt;Integer&gt;&gt; nums) &#123;</span><br><span class="line">            <span class="keyword">int</span> n = nums.size();</span><br><span class="line">            <span class="keyword">int</span> inf = <span class="number">0x3f3f3f</span>;</span><br><span class="line">            <span class="keyword">int</span> max = -inf; <span class="comment">// 当前最大值</span></span><br><span class="line">            <span class="keyword">int</span> st = -inf;  <span class="comment">// 起点</span></span><br><span class="line">            <span class="keyword">int</span> ed = inf;   <span class="comment">// 终点</span></span><br><span class="line"></span><br><span class="line">            PriorityQueue&lt;Node&gt; pq = <span class="keyword">new</span> PriorityQueue&lt;&gt;(((o1, o2) -&gt; o1.val - o2.val));</span><br><span class="line">            PriorityQueue&lt;Node&gt; pq1 = <span class="keyword">new</span> PriorityQueue&lt;&gt;((o1, o2) -&gt; Integer.compare(o1.val, o2.val));</span><br><span class="line">            PriorityQueue&lt;Node&gt; pq2 = <span class="keyword">new</span> PriorityQueue&lt;&gt;(Comparator.comparingInt(o -&gt; o.val));</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 相当于合并k个有序链表，把 head 放进去</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">                <span class="keyword">int</span> val = nums.get(i).get(<span class="number">0</span>);</span><br><span class="line">                pq.offer(<span class="keyword">new</span> Node(i, <span class="number">0</span>, val));</span><br><span class="line">                max = Math.max(max, val);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 必须包含 k 个元素</span></span><br><span class="line">            <span class="keyword">while</span> (pq.size() == n) &#123;</span><br><span class="line">                Node node = pq.poll();</span><br><span class="line">                <span class="keyword">int</span> i = node.i;</span><br><span class="line">                <span class="keyword">int</span> j = node.j;</span><br><span class="line">                <span class="keyword">int</span> val = node.val;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 更新区间长度</span></span><br><span class="line">                <span class="keyword">if</span> (max - val &lt; ed - st) &#123;</span><br><span class="line">                    st = val;</span><br><span class="line">                    ed = max;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 为堆中填充元素</span></span><br><span class="line">                <span class="keyword">if</span> (j + <span class="number">1</span> &lt; nums.get(i).size()) &#123;</span><br><span class="line">                    <span class="keyword">int</span> nVal = nums.get(i).get(j + <span class="number">1</span>);</span><br><span class="line">                    pq.offer(<span class="keyword">new</span> Node(i, j + <span class="number">1</span>, nVal));</span><br><span class="line">                    max = Math.max(max, nVal);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;st, ed&#125;;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">            <span class="keyword">int</span> i, j, val;</span><br><span class="line"></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">this</span>.i = i;</span><br><span class="line">                <span class="keyword">this</span>.j = j;</span><br><span class="line">                <span class="keyword">this</span>.val = val;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;List&lt;Integer&gt;&gt; nums = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"><span class="comment">//        nums.add(Arrays.asList(4, 10, 15, 24, 26));</span></span><br><span class="line"><span class="comment">//        nums.add(Arrays.asList(0, 9, 12, 20));</span></span><br><span class="line"><span class="comment">//        nums.add(Arrays.asList(5, 18, 22, 30));</span></span><br><span class="line">        nums.add(Arrays.asList(<span class="number">4</span>, <span class="number">10</span>, <span class="number">15</span>, <span class="number">24</span>, <span class="number">26</span>));</span><br><span class="line">        nums.add(Arrays.asList(<span class="number">0</span>));</span><br><span class="line">        nums.add(Arrays.asList(<span class="number">5</span>, <span class="number">18</span>, <span class="number">22</span>, <span class="number">30</span>));</span><br><span class="line">        Solution solution = <span class="keyword">new</span> Solution();</span><br><span class="line">        <span class="keyword">int</span>[] result = solution.smallestRange(nums);</span><br><span class="line">        System.out.print(result[<span class="number">0</span>] + <span class="string">"\t"</span>);</span><br><span class="line">        System.out.println(result[<span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>哈希表+滑动窗口（类似倒排索引）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution3</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] smallestRange(List&lt;List&lt;Integer&gt;&gt; nums) &#123;</span><br><span class="line">        <span class="keyword">int</span> size = nums.size();</span><br><span class="line">        Map&lt;Integer, List&lt;Integer&gt;&gt; indices = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">int</span> xMin = Integer.MAX_VALUE, xMax = Integer.MIN_VALUE;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> x : nums.get(i)) &#123;</span><br><span class="line">                List&lt;Integer&gt; list = indices.getOrDefault(x, <span class="keyword">new</span> ArrayList&lt;&gt;());</span><br><span class="line">                list.add(i);</span><br><span class="line">                indices.put(x, list);</span><br><span class="line">                xMin = Math.min(xMin, x);</span><br><span class="line">                xMax = Math.max(xMax, x);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span>[] freq = <span class="keyword">new</span> <span class="keyword">int</span>[size];</span><br><span class="line">        <span class="keyword">int</span> inside = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> left = xMin, right = xMin - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> bestLeft = xMin, bestRight = xMax;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (right &lt; xMax) &#123;</span><br><span class="line">            right++;</span><br><span class="line">            <span class="keyword">if</span> (indices.containsKey(right)) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> x : indices.get(right)) &#123;</span><br><span class="line">                    freq[x]++;</span><br><span class="line">                    <span class="keyword">if</span> (freq[x] == <span class="number">1</span>) &#123;</span><br><span class="line">                        inside++;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">while</span> (inside == size) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (right - left &lt; bestRight - bestLeft) &#123;</span><br><span class="line">                        bestLeft = left;</span><br><span class="line">                        bestRight = right;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (indices.containsKey(left)) &#123;</span><br><span class="line">                        <span class="keyword">for</span> (<span class="keyword">int</span> x: indices.get(left)) &#123;</span><br><span class="line">                            freq[x]--;</span><br><span class="line">                            <span class="keyword">if</span> (freq[x] == <span class="number">0</span>) &#123;</span><br><span class="line">                                inside--;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    left++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;bestLeft, bestRight&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -323,7 +322,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/29/技术文档格式/">
+    <link itemprop="mainEntityOfPage" href="/2021/05/26/leetcode/23.合并K个有序链表/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -337,7 +336,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/04/29/技术文档格式/" class="post-title-link" itemprop="url">技术文档</a>
+            <a href="/2021/05/26/leetcode/23.合并K个有序链表/" class="post-title-link" itemprop="url">23.合并K个有序链表</a>
         </h2>
 
         <div class="post-meta">
@@ -348,7 +347,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-04-29 18:45:02 / Modified: 16:35:55" itemprop="dateCreated datePublished" datetime="2021-04-29T18:45:02+08:00">2021-04-29</time>
+              <time title="Created: 2021-05-26 10:42:01 / Modified: 12:00:50" itemprop="dateCreated datePublished" datetime="2021-05-26T10:42:01+08:00">2021-05-26</time>
             </span>
 
           
@@ -362,7 +361,28 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h4 id="一、背景介绍"><a href="#一、背景介绍" class="headerlink" title="一、背景介绍"></a>一、背景介绍</h4><h4 id="二、技术选型"><a href="#二、技术选型" class="headerlink" title="二、技术选型"></a>二、技术选型</h4><h4 id="三、技术介绍"><a href="#三、技术介绍" class="headerlink" title="三、技术介绍"></a>三、技术介绍</h4><h4 id="四、功能介绍"><a href="#四、功能介绍" class="headerlink" title="四、功能介绍"></a>四、功能介绍</h4><h4 id="五、系统架构"><a href="#五、系统架构" class="headerlink" title="五、系统架构"></a>五、系统架构</h4><h5 id="交互图"><a href="#交互图" class="headerlink" title="交互图"></a>交互图</h5><h5 id="模块划分"><a href="#模块划分" class="headerlink" title="模块划分"></a>模块划分</h5><h5 id="交互、通信机制"><a href="#交互、通信机制" class="headerlink" title="交互、通信机制"></a>交互、通信机制</h5><h5 id="核心功能设计"><a href="#核心功能设计" class="headerlink" title="核心功能设计"></a>核心功能设计</h5><h4 id="六、系统改造、升级"><a href="#六、系统改造、升级" class="headerlink" title="六、系统改造、升级"></a>六、系统改造、升级</h4><h5 id="技术核心功能优化"><a href="#技术核心功能优化" class="headerlink" title="技术核心功能优化"></a>技术核心功能优化</h5><h4 id="七、快速升级、迁移"><a href="#七、快速升级、迁移" class="headerlink" title="七、快速升级、迁移"></a>七、快速升级、迁移</h4>
+          <p><a href="https://leetcode-cn.com/problems/merge-k-sorted-lists" target="_blank" rel="noopener">https://leetcode-cn.com/problems/merge-k-sorted-lists</a></p>
+<p>给你一个链表数组，每个链表都已经按升序排列。</p>
+<p>请你将所有链表合并到一个升序链表中，返回合并后的链表。</p>
+<p>示例 1：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">输入：lists = [[1,4,5],[1,3,4],[2,6]]</span><br><span class="line">输出：[1,1,2,3,4,4,5,6]</span><br><span class="line">解释：链表数组如下：</span><br><span class="line">[</span><br><span class="line">  1-&gt;4-&gt;5,</span><br><span class="line">  1-&gt;3-&gt;4,</span><br><span class="line">  2-&gt;6</span><br><span class="line">]</span><br><span class="line">将它们合并到一个有序链表中得到。</span><br><span class="line">1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6</span><br></pre></td></tr></table></figure>
+
+<p>示例 2：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：lists = []</span><br><span class="line">输出：[]</span><br></pre></td></tr></table></figure>
+
+<p>示例 3：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：lists = [[]]</span><br><span class="line">输出：[]</span><br></pre></td></tr></table></figure>
+
+<p>解决方法</p>
+<ol>
+<li>顺序合并</li>
+<li>分治合并</li>
+<li>使用优先队列</li>
+</ol>
+<p>优先队列</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ListNode <span class="title">mergeKLists</span><span class="params">(ListNode[] lists)</span> </span>&#123;</span><br><span class="line">        PriorityQueue&lt;ListNode&gt; heap = <span class="keyword">new</span> PriorityQueue((Comparator&lt;ListNode&gt;) (o1, o2) -&gt; o1.val - o2.val);</span><br><span class="line">        <span class="keyword">for</span> (ListNode node : lists) &#123;</span><br><span class="line">            <span class="keyword">if</span> (node != <span class="keyword">null</span>) &#123;</span><br><span class="line">                heap.add(node);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ListNode dummy = <span class="keyword">new</span> ListNode(-<span class="number">1</span>);</span><br><span class="line">        ListNode temp = dummy;</span><br><span class="line">        <span class="keyword">while</span> (!heap.isEmpty()) &#123;</span><br><span class="line">            temp.next = heap.poll();</span><br><span class="line">            temp = temp.next;</span><br><span class="line">            <span class="keyword">if</span> (temp.next != <span class="keyword">null</span>) &#123;</span><br><span class="line">                heap.add(temp.next);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dummy.next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
       
     </div>
 
@@ -380,7 +400,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/14/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/page/16/">16</a><span class="space">&hellip;</span><a class="page-number" href="/page/37/">37</a><a class="extend next" rel="next" href="/page/16/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/14/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/page/16/">16</a><span class="space">&hellip;</span><a class="page-number" href="/page/42/">42</a><a class="extend next" rel="next" href="/page/16/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -446,7 +466,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-count">125</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

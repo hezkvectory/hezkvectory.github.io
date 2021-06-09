@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="我的博客">
 <meta property="og:description" content="https://leetcode-cn.com/problems/maximum-depth-of-binary-tree 给定一个二叉树，找出其最大深度。 二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。 说明: 叶子节点是指没有子节点的节点。 示例： 给定二叉树 [3,9,20,null,null,15,7]，     3    / \   9  20     /  \    15">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-05-31T08:07:23.295Z">
+<meta property="og:updated_time" content="2021-06-09T08:26:25.661Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="104. 二叉树的最大深度">
 <meta name="twitter:description" content="https://leetcode-cn.com/problems/maximum-depth-of-binary-tree 给定一个二叉树，找出其最大深度。 二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。 说明: 叶子节点是指没有子节点的节点。 示例： 给定二叉树 [3,9,20,null,null,15,7]，     3    / \   9  20     /  \    15">
@@ -178,10 +178,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-05-31 14:45:02 / Modified: 16:07:23" itemprop="dateCreated datePublished" datetime="2021-05-31T14:45:02+08:00">2021-05-31</time>
+              <time title="Created: 2021-05-31 14:45:02" itemprop="dateCreated datePublished" datetime="2021-05-31T14:45:02+08:00">2021-05-31</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-06-09 16:26:25" itemprop="dateModified" datetime="2021-06-09T16:26:25+08:00">2021-06-09</time>
+              </span>
 
           
 
@@ -208,6 +214,7 @@
 
 返回它的最大深度 3 。</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxDepth</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> Math.max(maxDepth(root.left), maxDepth(root.right)) + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Iterative solution:</span></span><br><span class="line"><span class="comment">     * Time: O(n)</span></span><br><span class="line"><span class="comment">     * Space: O(n)</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxDepth</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        LinkedList&lt;TreeNode&gt; stack = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        LinkedList&lt;Integer&gt; depths = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        stack.add(root);</span><br><span class="line">        depths.add(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> depth = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">            TreeNode currentNode = stack.pollLast();</span><br><span class="line">            <span class="keyword">int</span> currentDepth = depths.pollLast();</span><br><span class="line">            <span class="keyword">if</span> (currentNode != <span class="keyword">null</span>) &#123;</span><br><span class="line">                depth = Math.max(depth, currentDepth);</span><br><span class="line">                stack.add(currentNode.right);</span><br><span class="line">                depths.add(currentDepth + <span class="number">1</span>);</span><br><span class="line">                stack.add(currentNode.left);</span><br><span class="line">                depths.add(currentDepth + <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> depth;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<p> [543. 二叉树的直径.md](543. 二叉树的直径.md) </p>
 
     </div>
 
@@ -226,12 +233,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/05/31/leetcode/树/113. 路径总和 II/" rel="prev" title="116. 填充每个节点的下一个右侧节点指针">
-      <i class="fa fa-chevron-left"></i> 116. 填充每个节点的下一个右侧节点指针
+    <a href="/2021/05/31/leetcode/树/105. 从前序与中序遍历序列构造二叉树/" rel="prev" title="105. 从前序与中序遍历序列构造二叉树">
+      <i class="fa fa-chevron-left"></i> 105. 从前序与中序遍历序列构造二叉树
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/05/31/leetcode/树/base1/" rel="next" title="113. 路径总和 II">
-      113. 路径总和 II <i class="fa fa-chevron-right"></i>
+    <a href="/2021/05/31/leetcode/树/107. 二叉树的层序遍历 II/" rel="next" title="107. 二叉树的层序遍历 II">
+      107. 二叉树的层序遍历 II <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -304,7 +311,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-count">125</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

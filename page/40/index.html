@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/02/leetcode/128.最长连续序列/">
+    <link itemprop="mainEntityOfPage" href="/2021/02/26/mysql/MySQL实战45讲/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/03/02/leetcode/128.最长连续序列/" class="post-title-link" itemprop="url">128.最长连续序列</a>
+            <a href="/2021/02/26/mysql/MySQL实战45讲/" class="post-title-link" itemprop="url">Untitled</a>
         </h2>
 
         <div class="post-meta">
@@ -175,7 +175,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-03-02 11:42:01 / Modified: 14:30:56" itemprop="dateCreated datePublished" datetime="2021-03-02T11:42:01+08:00">2021-03-02</time>
+              <time title="Created: 2021-02-26 11:57:28 / Modified: 12:46:11" itemprop="dateCreated datePublished" datetime="2021-02-26T11:57:28+08:00">2021-02-26</time>
             </span>
 
           
@@ -189,28 +189,205 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a href="https://leetcode-cn.com/problems/longest-consecutive-sequence/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/longest-consecutive-sequence/</a></p>
-<p>给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。</p>
-<p>进阶：你可以设计并实现时间复杂度为 O(n) 的解决方案吗？</p>
-<p>示例 1：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [100,4,200,1,3,2]</span><br><span class="line">输出：4</span><br><span class="line">解释：最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。</span><br></pre></td></tr></table></figure>
-
-<p>示例 2：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [0,3,7,2,5,8,4,6,0,1]</span><br><span class="line">输出：9</span><br></pre></td></tr></table></figure>
-
+          <h3 id="01-基础架构：一条SQL查询语句是如何执行的？"><a href="#01-基础架构：一条SQL查询语句是如何执行的？" class="headerlink" title="01 | 基础架构：一条SQL查询语句是如何执行的？"></a>01 | 基础架构：一条SQL查询语句是如何执行的？</h3><p><a href="https://blog.csdn.net/zxcc1314/article/details/84842650" target="_blank" rel="noopener">https://blog.csdn.net/zxcc1314/article/details/84842650</a></p>
+<p>大体来说，MySQL分为<strong>Server层</strong>和<strong>存储引擎层</strong>两部分。</p>
+<p><img src="https://img-blog.csdnimg.cn/20181205200741375.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <ul>
-<li><p>方法一：排序</p>
+<li>连接器：负责跟客户端建立连接、获取权限、维持和管理连接。</li>
+<li>查询缓存：查询请求先访问缓存(key 是查询的语句，value 是查询的结果)。命中直接返回。不推荐使用缓存，更新会把缓存清除(关闭缓存：参数 query_cache_type 设置成 DEMAND)。</li>
+<li>分析器：对 SQL 语句做解析，判断sql是否正确。</li>
+<li>优化器：决定使用哪个索引，多表关联（join）的时候，决定各个表的连接顺序。</li>
+<li>执行器：执行语句，先判断用户有无查询权限，使用表定义的存储引擎。</li>
+</ul>
+<h3 id="02-日志系统：一条SQL更新语句是如何执行的？"><a href="#02-日志系统：一条SQL更新语句是如何执行的？" class="headerlink" title="02 | 日志系统：一条SQL更新语句是如何执行的？"></a><strong>02 | 日志系统：一条SQL更新语句是如何执行的？</strong></h3><h4 id="redo-log"><a href="#redo-log" class="headerlink" title="redo log"></a>redo log</h4><p>MySQL WAL 技术，先写日志，再写磁盘。保证掉电重启，数据不丢失（crash-safe）。<br>redo log 是 InnoDB 引擎特有的日志。<br>当记录更新时，Innodb 先记录 redo log 再更新内存，这时更新就算完成。引擎往往会在系统空闲时刷盘。</p>
+<p><img src="https://img-blog.csdnimg.cn/20181214201529442.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>redo log 是实现了类似环形缓冲区，一个指针 write pos 是当前记录的位置，另一个指针 checkpoint 是当前要擦除的位置，write pos 和checkpoint 之间是空闲部分。如果 write pos 快追上 checkpoint 时，代表缓冲区快满了，需要暂停刷盘。（CP’见12讲）</p>
+<p>innodb_flush_log_at_trx_commit参数：<br>0：log buffer将每秒一次地写入log file中，并且log file的flush(刷到磁盘)操作同时进行。该模式下在事务提交的时候，不会主动触发写入磁盘的操作。<br>1：每次事务提交时MySQL都会把log buffer的数据写入log file，并且flush(刷到磁盘)中去，该模式为系统默认。<br>2：每次事务提交时MySQL都会把log buffer的数据写入log file，但是flush(刷到磁盘)操作并不会同时进行。该模式下，MySQL会每秒执行一次 flush(刷到磁盘)操作。</p>
+<h4 id="binlog（归档日志）"><a href="#binlog（归档日志）" class="headerlink" title="binlog（归档日志）"></a>binlog（归档日志）</h4><p>Server层日志。binlog 日志只能用于归档，没有crash-safe能力。<br>三个用途:</p>
+<ul>
+<li><p>恢复：利用binlog日志恢复数据库数据</p>
 </li>
-<li><p>方法二：集合</p>
+<li><p>复制：主从同步</p>
 </li>
-<li><p>方法三：哈希表</p>
-</li>
-<li><p>方法四：并查集</p>
-<p>并查集数据结构参考：<a href="https://hezkvectory.github.io/2021/03/01/leetcode/%E5%B9%B6%E6%9F%A5%E9%9B%86/" target="_blank" rel="noopener">https://hezkvectory.github.io/2021/03/01/leetcode/%E5%B9%B6%E6%9F%A5%E9%9B%86/</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public int longestConsecutive(int[] nums) &#123;</span><br><span class="line">    if (nums.length == 0) return 0;</span><br><span class="line">    </span><br><span class="line">    // 首次遍历，与邻居结盟</span><br><span class="line">    UnionFind uf = new UnionFind(nums);</span><br><span class="line">    for (int v : nums)</span><br><span class="line">        uf.union(v, v + 1); // uf.union() 结盟</span><br><span class="line"></span><br><span class="line">    // 二次遍历，记录领队距离</span><br><span class="line">    int max = 1;</span><br><span class="line">    for (int v : nums)</span><br><span class="line">        max = Math.max(max, uf.find(v) - v + 1); // uf.find() 查找领队</span><br><span class="line">    return max;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<li><p>审计：通过二进制日志中的信息来进行审计，判断是否有对数据库进行注入攻击</p>
 </li>
 </ul>
+<p>  常见格式：</p>
+<table>
+<thead>
+<tr>
+<th>format</th>
+<th>定义</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>statement</td>
+<td>记录的是修改SQL语句</td>
+<td>日志文件小，节约IO，提高性能</td>
+<td>准确性差，对一些系统函数不能准确复制或不能复制，如now()、uuid()等</td>
+</tr>
+<tr>
+<td>row(推荐）</td>
+<td>记录的是每行实际数据的变更，记两条，更新前和更新后</td>
+<td>准确性强，能准确复制数据的变更</td>
+<td>日志文件大，较大的网络IO和磁盘IO</td>
+</tr>
+<tr>
+<td>mixed</td>
+<td>statement和row模式的混合</td>
+<td>准确性强，文件大小适中</td>
+<td>有可能发生主从不一致问题</td>
+</tr>
+</tbody></table>
+<p>sync_binlog参数：</p>
+<p>​        0：当事务提交后，Mysql仅仅是将binlog_cache中的数据写入Binlog文件，但不执行fsync之类的磁盘 同步指令通知文件系统将缓存刷新到磁盘，而让Filesystem自行决定什么时候来做同步，这个是性能最好的。<br>​        n：在进行n次事务提交以后，Mysql将执行一次fsync之类的磁盘同步指令，同志文件系统将Binlog文件缓存刷新到磁盘。</p>
+<h5 id="不同点"><a href="#不同点" class="headerlink" title="不同点:"></a>不同点:</h5><p>redo log 是物理日志，记录的是“在某个数据页上做了什么修改”；</p>
+<p>binlog 是逻辑日志，记录的是这个语句的原始逻辑，比如“给 ID=2 这一行的 c 字段加 1 ”。<br>redo log 是循环写的，空间固定会用完；binlog 是可以追加写入的。binlog 文件到一定大小，会切换到下一个文件。</p>
+<p>update执行过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update T set c=c+1 where ID=2;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20181205200935425.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>两阶段提交</p>
+<ul>
+<li><p>1 prepare阶段 </p>
+</li>
+<li><p>2 写binlog </p>
+</li>
+<li><p>3 commit</p>
+<p>当在2之前崩溃时<br>重启恢复：后发现没有commit，回滚。备份恢复：没有binlog 。<br>当在3之前崩溃<br>重启恢复：虽没有commit，但满足prepare和binlog完整，所以重启后会自动commit。备份：有binlog 。</p>
+</li>
+</ul>
+<h3 id="03-事务隔离：为什么你改了我还看不见？"><a href="#03-事务隔离：为什么你改了我还看不见？" class="headerlink" title="03 | 事务隔离：为什么你改了我还看不见？"></a>03 | 事务隔离：为什么你改了我还看不见？</h3><p>事务ACID、隔离级别</p>
+<table>
+<thead>
+<tr>
+<th align="left">事务隔离级别</th>
+<th>脏读</th>
+<th>不可重复读</th>
+<th>幻读</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">读未提交（read-uncommitted）</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td align="left">不可重复读（read-committed）</td>
+<td>否</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td align="left">可重复读（repeatable-read）</td>
+<td>否</td>
+<td>否</td>
+<td>是</td>
+</tr>
+<tr>
+<td align="left">串行化（serializable）</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+</tr>
+</tbody></table>
+<p>总结：<br>    RR下，事务在第一个Read操作时，会建立read-view<br>    RC下，事务在每次Read操作时，都会建立read-view<br>    不同业务选择不同的隔离级别。</p>
+<h4 id="回滚段"><a href="#回滚段" class="headerlink" title="回滚段"></a>回滚段</h4><p>​        rollback segment称为回滚段，每个回滚段中有1024个undo log segment。每个undo操作在记录的时候占用一个undo log segment。<br>​        undo log有两个作用：提供回滚和多个行版本控制(MVCC)。<br>在数据修改的时候，不仅记录了redo，还记录了相对应的undo，如果因为某些原因导致事务失败或回滚了，可以借助该undo进行回滚。<br>​        undo log和redo log记录物理日志不一样，它是逻辑日志。可以认为当delete一条记录时，undo log中会记录一条对应的insert记录，反之亦然，当update一条记录时，它记录一条对应相反的update记录。</p>
+<h3 id="事务隔离的实现"><a href="#事务隔离的实现" class="headerlink" title="事务隔离的实现"></a>事务隔离的实现</h3><p>以可重复读（RR）为例，每条记录在更新的时候都会同时记录一条回滚操作。</p>
+<p><img src="https://img-blog.csdnimg.cn/20181205201633554.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>不同时刻启动的事务会有不同的 read-view。同一条记录在系统中可以存在多个版本，就是数据库的多版本并发控制（MVCC）。<br>当系统里没有比这个回滚日志更早的 read-view 的时候，回滚日志会被删除。所以要避免长事务。</p>
+<h3 id="04-深入浅出索引（上）"><a href="#04-深入浅出索引（上）" class="headerlink" title="04 | 深入浅出索引（上）"></a>04 | 深入浅出索引（上）</h3><h4 id="索引的常见模型"><a href="#索引的常见模型" class="headerlink" title="索引的常见模型"></a>索引的常见模型</h4><ul>
+<li>哈希表，不适合做区间搜索。</li>
+<li>有序数组，只适合静态数据，插入麻烦。</li>
+<li>二叉搜索树，N叉树。</li>
+</ul>
+<h4 id="InnoDB-的索引模型"><a href="#InnoDB-的索引模型" class="headerlink" title="InnoDB 的索引模型"></a>InnoDB 的索引模型</h4><p>​        在 MySQL 中，索引是在存储引擎层实现的。<br>​        以主键顺序存在B+树中。</p>
+<ul>
+<li>主键索引（聚簇索引） 的叶子节点存的是整行数据。主键查询主需要扫描主键索引。</li>
+<li>非主键索引（二级索引）的叶子节点内容是主键的值。通过二级索引需要扫描二级索引树，找到主键后再扫描主键索引。该过程称为回表。</li>
+</ul>
+<h4 id="索引维护"><a href="#索引维护" class="headerlink" title="索引维护"></a>索引维护</h4><p>当插入到索引树最后，只需直接插入。<br>但当插入到索引树中间，需要逻辑上挪动后面的数据，空出位置，并且当数据页满时，需要申请一个新的数据页，然后挪动部分数据过去（页分裂）。<br>当相邻两个页由于删除了数据，利用率很低之后，会将数据页做合并。</p>
+<p>自增索引（追加操作，都不涉及到挪动其他记录，也不会触发叶子节点的分裂）<br>业务逻辑的字段做主键，则往往不容易保证有序插入，这样写数据成本相对较高。<br>二级索引的叶子节点为主键，业务字段做主键时会占大量存储空间。<br>什么时候可以使用业务字段做主键？ 只有一个索引；该索引必须是唯一索引。</p>
+<h4 id="索引重建"><a href="#索引重建" class="headerlink" title="索引重建"></a>索引重建</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter table T engine=InnoDB</span><br></pre></td></tr></table></figure>
+
+<p>不推荐drop，再add。并且不论是删除主键还是创建主键，都会将整个表重建。</p>
+<h4 id="05-深入浅出索引（下）"><a href="#05-深入浅出索引（下）" class="headerlink" title="05 | 深入浅出索引（下）"></a>05 | 深入浅出索引（下）</h4><h4 id="覆盖索引"><a href="#覆盖索引" class="headerlink" title="覆盖索引"></a>覆盖索引</h4><p>当查询值已经在二级索引上时，不需要回表。</p>
+<h4 id="最左前缀原则"><a href="#最左前缀原则" class="headerlink" title="最左前缀原则"></a>最左前缀原则</h4><p>联合索引合理安排顺序，可以少维护索引，或者减少存储空间。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `geek` (</span><br><span class="line">  `a` int(11) NOT NULL,</span><br><span class="line">  `b` int(11) NOT NULL,</span><br><span class="line">  `c` int(11) NOT NULL,</span><br><span class="line">  `d` int(11) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`a`,`b`),</span><br><span class="line">  KEY `c` (`c`),</span><br><span class="line">  KEY `ca` (`c`,`a`),</span><br><span class="line">  KEY `cb` (`c`,`b`)</span><br><span class="line">) ENGINE=InnoDB;</span><br></pre></td></tr></table></figure>
+
+<p>索引ca可以去掉，因为c和主键ab，和ca和主键ab相同。</p>
+<h4 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h4><p>MySQL 5.6 引入的索引下推优化，可以在索引遍历过程中，对索引中包含的字段先做判断，直接过滤掉不满足条件的记录，减少回表次数。</p>
+<h3 id="06-全局锁和表锁-：给表加个字段怎么有这么多阻碍？"><a href="#06-全局锁和表锁-：给表加个字段怎么有这么多阻碍？" class="headerlink" title="06 | 全局锁和表锁 ：给表加个字段怎么有这么多阻碍？"></a>06 | 全局锁和表锁 ：给表加个字段怎么有这么多阻碍？</h3><p>mysql锁大致可以分成全局锁、表级锁和行锁三类</p>
+<h4 id="全局锁"><a href="#全局锁" class="headerlink" title="全局锁"></a>全局锁</h4><p>全局锁的典型使用场景是，做全库逻辑备份。<br>FTWRL命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Flush tables with read lock;</span><br></pre></td></tr></table></figure>
+
+<p>官方自带的逻辑备份工具是 mysqldump，当 mysqldump 使用参数–single-transaction 的时候，导数据之前就会启动一个事务，来确保拿到一致性视图。<br>但当引擎不支持事务时，只能使用FTWRL 命令了。不推荐不使用 set global readonly=true，readonly会被其他逻辑使用（比如判断主从），readonly发生异常会保持该状态。</p>
+<h4 id="表级锁"><a href="#表级锁" class="headerlink" title="表级锁"></a>表级锁</h4><p>MySQL 里面表级别的锁有两种：一种是表锁，一种是元数据锁（meta data lock，MDL)。<br>表锁的语法是 lock tables … read/write。<br>MDL不需要显式使用，在访问一个表的时候会被自动加上。<br>当对一个表做增删改查操作的时候，加 MDL 读锁；当要对表做结构变更操作的时候，加 MDL 写锁。</p>
+<p><img src="https://img-blog.csdnimg.cn/20181207205124386.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>当一个长事务还没提交，进行表结构变更操作，会导致后面的事务block。当客户端有重试机制时，新起session请求，会导致库的线程很快就会爆满。</p>
+<p>如何安全地给小表加字段？</p>
+<ol>
+<li><p>避免长事务。</p>
+</li>
+<li><p>在 alter table 语句里面设定等待时间。<br>MariaDB 已经合并了 AliSQL 的这个功能，所以这两个开源分支目前都支持 DDL NOWAIT/WAIT n 这个语法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ALTER TABLE tbl_name NOWAIT add column ...</span><br><span class="line">ALTER TABLE tbl_name WAIT N add column ...</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<h3 id="07-行锁功过：怎么减少行锁对性能的影响？"><a href="#07-行锁功过：怎么减少行锁对性能的影响？" class="headerlink" title="07 | 行锁功过：怎么减少行锁对性能的影响？"></a>07 | 行锁功过：怎么减少行锁对性能的影响？</h3><h4 id="行锁"><a href="#行锁" class="headerlink" title="行锁"></a>行锁</h4><p>Mysql行锁由引擎层实现</p>
+<h4 id="两阶段锁"><a href="#两阶段锁" class="headerlink" title="两阶段锁"></a>两阶段锁</h4><p>行锁需要事务结束时才释放，这就是两阶段锁。<br>所以需要合理安排事务中sql执行顺序，尽量把容易冲突的更新语句放在后面。</p>
+<h4 id="死锁和死锁检测"><a href="#死锁和死锁检测" class="headerlink" title="死锁和死锁检测"></a>死锁和死锁检测</h4><p>设置超时时间，innodb_lock_wait_timeout。<br>死锁检测，发现死锁主动回滚某个事务，innodb_deadlock_detect 默认on。<br>假设1000个同时更新一行，则死锁检测操作就是 100 万这个量级的。即使没有死锁，检测也会消耗大量的 CPU 资源。</p>
+<h5 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a>解决方案：</h5><ol>
+<li><p>业务不会出现死锁，可以临时关闭。</p>
+</li>
+<li><p>在客户端控制并发。</p>
+</li>
+<li><p>修改MySQL 源码，并发进入引擎之前排队。</p>
+</li>
+<li><p>将一行数据改为多行，如将一个余额账户分为多个，但在数据减少操作时需考虑小于0的情况。</p>
+</li>
+</ol>
+<h3 id="08-事务到底是隔离的还是不隔离的？"><a href="#08-事务到底是隔离的还是不隔离的？" class="headerlink" title="08 | 事务到底是隔离的还是不隔离的？"></a>08 | 事务到底是隔离的还是不隔离的？</h3><h4 id="快照”在-MVCC-里是怎么工作的？"><a href="#快照”在-MVCC-里是怎么工作的？" class="headerlink" title="快照”在 MVCC 里是怎么工作的？"></a>快照”在 MVCC 里是怎么工作的？</h4><p>InnoDB 里面每个事务有一个唯一的事务 ID，叫作 transaction id。它是在事务开始的时候向InnoDB 的事务系统申请的，是按申请顺序严格递增的。<br>而每行数据也都是有多个版本的。每次事务更新数据的时候，都会生成一个新的数据版本，并且把 transaction id赋值给这个数据版本的事务 ID，记为 row trx_id。<br>也就是说，数据表中的一行记录，其实可能有多个版本 (row)，每个版本有自己的 row trx_id。</p>
+<p><img src="https://img-blog.csdnimg.cn/20181211194643271.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>上图中的三个虚线箭头就是undo log。<br>某个事务建立快照，只需根据transaction id。只认事务启动时小于数据版本的数据，除自己更新的数据。</p>
+<h4 id="快照实现"><a href="#快照实现" class="headerlink" title="快照实现"></a>快照实现</h4><p>InnoDB在每个事务启动瞬间，构造了数组保存了当前启动但未提交的事务ID。<br>数组ID最小值为低水位，当前系统最大事务ID+1为高水位。<br>数组和高水位，组成了当前事务的一致性事务（read-view）。</p>
+<p><img src="https://img-blog.csdnimg.cn/20181211195928928.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p4Y2MxMzE0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>黄色部分需分为以下两种情况，因为有可能大于低水位的某个事务已经提交：</p>
+<ol>
+<li>若 row trx_id 在数组中，表示这个版本是由还没提交的事务生成的，不可见；</li>
+<li>若 row trx_id 不在数组中，表示这个版本是已经提交了的事务生成的，可见。</li>
+</ol>
+<p>更新数据都是先读后写的，而这个读，只能读当前的值，称为“当前读”（current read）。<br>如果当前的记录的行锁被其他事务占用的话，就需要进入锁等待。</p>
+<p>不同隔离级别：</p>
+<ul>
+<li><p>对于可重复读，查询只承认在事务启动前就已经提交完成的数据</p>
+</li>
+<li><p>对于读提交，查询只承认在语句启动前就已经提交完成的数据</p>
+</li>
+<li><p>而当前读，总是读取已经提交完成的最新版本。</p>
+</li>
+</ul>
+<h3 id="14-count-这么慢，我该怎么办？"><a href="#14-count-这么慢，我该怎么办？" class="headerlink" title="14 | count(*)这么慢，我该怎么办？"></a>14 | count(*)这么慢，我该怎么办？</h3><h4 id="count-的实现方式"><a href="#count-的实现方式" class="headerlink" title="count(*) 的实现方式"></a>count(*) 的实现方式</h4><ol>
+<li>MyISAM 引擎保存总行数，所以count很快。但如果加了where不能很快返回。</li>
+<li>Innodb需要一行一行读出来累积计数。<br>innodb由于多版本并发控制（MVCC）的原因，多个事务count的行数不同，所以不能保存总行数。<br>但count(*)做了优化，引擎会选择最小的普通索引树，来计数。而不是直接统计聚集索引树。</li>
+</ol>
+<h4 id="不同的-count-用法"><a href="#不同的-count-用法" class="headerlink" title="不同的 count 用法"></a>不同的 count 用法</h4><p>下面的讨论还是基于 InnoDB 引擎的</p>
+<ol>
+<li><p>count(主键 id) ，InnoDB 引擎会遍历整张表，把每一行的 id 值都取出来，返回给 server 层。server 层拿到 id 后，判断是不可能为空的，就按行累加。</p>
+</li>
+<li><p>count(1)，InnoDB 引擎遍历整张表，但不取值。server 层对于返回的每一行，放一个数字“1”进去，判断是不可能为空的，按行累加。</p>
+</li>
+<li><p>count(字段)<br>a. 如果这个“字段”是定义为 not null 的话，一行行地从记录里面读出这个字段，判断不能为 null，按行累加；<br>b. 如果这个“字段”定义允许为 null，那么执行的时候，判断到有可能是 null，还要把值取出来再判断一下，不是 null 才累加。</p>
+</li>
+<li><p>count(<em>*)，并不会把全部字段取出来，而是专门做了优化，不取值。count(</em>) 肯定不是 null，按行累加。</p>
+</li>
+</ol>
+<p>   按照效率排序的话，count(字段)&lt;count(主键 id)&lt;count(1)≈count(<em>)，所以建议尽量使用 count(</em>)。</p>
 
       
     </div>
@@ -230,7 +407,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/02/leetcode/200. 岛屿数量/">
+    <link itemprop="mainEntityOfPage" href="/2021/02/18/java/Java类加载/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -244,7 +421,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/03/02/leetcode/200. 岛屿数量/" class="post-title-link" itemprop="url">200. 岛屿数量</a>
+            <a href="/2021/02/18/java/Java类加载/" class="post-title-link" itemprop="url">Java类加载</a>
         </h2>
 
         <div class="post-meta">
@@ -255,7 +432,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-03-02 11:42:01 / Modified: 11:45:15" itemprop="dateCreated datePublished" datetime="2021-03-02T11:42:01+08:00">2021-03-02</time>
+              <time title="Created: 2021-02-18 18:44:02 / Modified: 18:59:33" itemprop="dateCreated datePublished" datetime="2021-02-18T18:44:02+08:00">2021-02-18</time>
             </span>
 
           
@@ -269,23 +446,58 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a href="https://leetcode-cn.com/problems/number-of-islands/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/number-of-islands/</a></p>
-<p>给你一个由 ‘1’（陆地）和 ‘0’（水）组成的的二维网格，请你计算网格中岛屿的数量。</p>
-<p>岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。</p>
-<p>此外，你可以假设该网格的四条边均被水包围。</p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输入：grid = [</span><br><span class="line">  [&quot;1&quot;,&quot;1&quot;,&quot;1&quot;,&quot;1&quot;,&quot;0&quot;],</span><br><span class="line">  [&quot;1&quot;,&quot;1&quot;,&quot;0&quot;,&quot;1&quot;,&quot;0&quot;],</span><br><span class="line">  [&quot;1&quot;,&quot;1&quot;,&quot;0&quot;,&quot;0&quot;,&quot;0&quot;],</span><br><span class="line">  [&quot;0&quot;,&quot;0&quot;,&quot;0&quot;,&quot;0&quot;,&quot;0&quot;]</span><br><span class="line">]</span><br><span class="line">输出：1</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输入：grid = [</span><br><span class="line">  [&quot;1&quot;,&quot;1&quot;,&quot;0&quot;,&quot;0&quot;,&quot;0&quot;],</span><br><span class="line">  [&quot;1&quot;,&quot;1&quot;,&quot;0&quot;,&quot;0&quot;,&quot;0&quot;],</span><br><span class="line">  [&quot;0&quot;,&quot;0&quot;,&quot;1&quot;,&quot;0&quot;,&quot;0&quot;],</span><br><span class="line">  [&quot;0&quot;,&quot;0&quot;,&quot;0&quot;,&quot;1&quot;,&quot;1&quot;]</span><br><span class="line">]</span><br><span class="line">输出：3</span><br></pre></td></tr></table></figure>
-
-<p>有两种解决方案：</p>
-<p>1、深度优先搜索</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">char</span>[][] grid, <span class="keyword">int</span> r, <span class="keyword">int</span> c)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> nr = grid.length;</span><br><span class="line">        <span class="keyword">int</span> nc = grid[<span class="number">0</span>].length;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (r &lt; <span class="number">0</span> || c &lt; <span class="number">0</span> || r &gt;= nr || c &gt;= nc || grid[r][c] == <span class="string">'0'</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        grid[r][c] = <span class="string">'0'</span>;</span><br><span class="line">        dfs(grid, r - <span class="number">1</span>, c);</span><br><span class="line">        dfs(grid, r + <span class="number">1</span>, c);</span><br><span class="line">        dfs(grid, r, c - <span class="number">1</span>);</span><br><span class="line">        dfs(grid, r, c + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numIslands</span><span class="params">(<span class="keyword">char</span>[][] grid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (grid == <span class="keyword">null</span> || grid.length == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> nr = grid.length;</span><br><span class="line">        <span class="keyword">int</span> nc = grid[<span class="number">0</span>].length;</span><br><span class="line">        <span class="keyword">int</span> num_islands = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> r = <span class="number">0</span>; r &lt; nr; ++r) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> c = <span class="number">0</span>; c &lt; nc; ++c) &#123;</span><br><span class="line">                <span class="keyword">if</span> (grid[r][c] == <span class="string">'1'</span>) &#123;</span><br><span class="line">                    ++num_islands;</span><br><span class="line">                    dfs(grid, r, c);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> num_islands;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>2、使用并查集</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">UnionFind</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> count;</span><br><span class="line">        <span class="keyword">int</span>[] parent;</span><br><span class="line">        <span class="keyword">int</span>[] rank;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">UnionFind</span><span class="params">(<span class="keyword">char</span>[][] grid)</span> </span>&#123;</span><br><span class="line">            count = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> m = grid.length;</span><br><span class="line">            <span class="keyword">int</span> n = grid[<span class="number">0</span>].length;</span><br><span class="line">            parent = <span class="keyword">new</span> <span class="keyword">int</span>[m * n];</span><br><span class="line">            rank = <span class="keyword">new</span> <span class="keyword">int</span>[m * n];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; ++i) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; ++j) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (grid[i][j] == <span class="string">'1'</span>) &#123;</span><br><span class="line">                        parent[i * n + j] = i * n + j;</span><br><span class="line">                        ++count;</span><br><span class="line">                    &#125;</span><br><span class="line">                    rank[i * n + j] = <span class="number">0</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (parent[i] != i) parent[i] = find(parent[i]);</span><br><span class="line">            <span class="keyword">return</span> parent[i];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">int</span> rootx = find(x);</span><br><span class="line">            <span class="keyword">int</span> rooty = find(y);</span><br><span class="line">            <span class="keyword">if</span> (rootx != rooty) &#123;</span><br><span class="line">                <span class="keyword">if</span> (rank[rootx] &gt; rank[rooty]) &#123;</span><br><span class="line">                    parent[rooty] = rootx;</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (rank[rootx] &lt; rank[rooty]) &#123;</span><br><span class="line">                    parent[rootx] = rooty;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    parent[rooty] = rootx;</span><br><span class="line">                    rank[rootx] += <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                --count;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> count;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">numIslands</span><span class="params">(<span class="keyword">char</span>[][] grid)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (grid == <span class="keyword">null</span> || grid.length == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> nr = grid.length;</span><br><span class="line">        <span class="keyword">int</span> nc = grid[<span class="number">0</span>].length;</span><br><span class="line">        <span class="keyword">int</span> num_islands = <span class="number">0</span>;</span><br><span class="line">        UnionFind uf = <span class="keyword">new</span> UnionFind(grid);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> r = <span class="number">0</span>; r &lt; nr; ++r) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> c = <span class="number">0</span>; c &lt; nc; ++c) &#123;</span><br><span class="line">                <span class="keyword">if</span> (grid[r][c] == <span class="string">'1'</span>) &#123;</span><br><span class="line">                    grid[r][c] = <span class="string">'0'</span>;</span><br><span class="line">                    <span class="keyword">if</span> (r - <span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; grid[r-<span class="number">1</span>][c] == <span class="string">'1'</span>) &#123;</span><br><span class="line">                        uf.union(r * nc + c, (r-<span class="number">1</span>) * nc + c);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (r + <span class="number">1</span> &lt; nr &amp;&amp; grid[r+<span class="number">1</span>][c] == <span class="string">'1'</span>) &#123;</span><br><span class="line">                        uf.union(r * nc + c, (r+<span class="number">1</span>) * nc + c);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (c - <span class="number">1</span> &gt;= <span class="number">0</span> &amp;&amp; grid[r][c-<span class="number">1</span>] == <span class="string">'1'</span>) &#123;</span><br><span class="line">                        uf.union(r * nc + c, r * nc + c - <span class="number">1</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (c + <span class="number">1</span> &lt; nc &amp;&amp; grid[r][c+<span class="number">1</span>] == <span class="string">'1'</span>) &#123;</span><br><span class="line">                        uf.union(r * nc + c, r * nc + c + <span class="number">1</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> uf.getCount();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+          <h4 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a><strong>类加载</strong></h4><p>​        在java代码中，类的加载、连接和初始化过程都是在程序运行期间完成的。（类从磁盘加载到内存中经历的三个阶段）</p>
+<p>提供了更大的灵活性，增加了更多的可能性。</p>
+<h4 id="类加载器深入剖析："><a href="#类加载器深入剖析：" class="headerlink" title="类加载器深入剖析："></a><strong>类加载器深入剖析：</strong></h4><p>Java虚拟机与程序的生命周期</p>
+<p>在如下几种情况下，java虚拟机将结束生命周期</p>
+<p>（1）执行了System.exit()方法</p>
+<p>（2）程序正常执行结束</p>
+<p>（3）程序在执行过程中遇到了异常或错误而异常终止</p>
+<p>（4）由于操作系统出现错误而导致虚拟机进程终止</p>
+<h5 id="类的加载、连接与初始化："><a href="#类的加载、连接与初始化：" class="headerlink" title="类的加载、连接与初始化："></a><strong>类的加载、连接与初始化：</strong></h5><ol>
+<li><p>加载：查找并加载类的二进制数据到java虚拟机中</p>
+</li>
+<li><p>连接：</p>
+<ul>
+<li><p>​    验证 : 确保被加载的类的正确性</p>
+</li>
+<li><p>​    准备：为类的<strong>静态变量</strong>分配内存，并将其初始化为<strong>默认值</strong>，但是到达初始化之前类变量都没有初始化为真正的初始值</p>
+</li>
+<li><p>​    解析：<strong>把类中的符号引用转换为直接引用</strong>，就是在类型的常量池中寻找类、接口、字段和方法的符号引用，把这些符号引用替换成直接引用的过程</p>
+</li>
+</ul>
+</li>
+<li><p>初始化：为类的静态变量赋予正确的初始值</p>
+</li>
+</ol>
+<p><strong>类从磁盘上加载到内存中要经历五个阶段：加载、连接、初始化、使用、卸载</strong></p>
+<p>Java程序对类的使用方式可分为两种</p>
+<ol>
+<li><em>主动使用</em></li>
+<li><em>被动使用</em></li>
+</ol>
+<p>所有的Java虚拟机实现必须在每个类或接口被Java程序“首次主动使用”时才能初始化他们</p>
+<p><strong>主动使用</strong></p>
+<p>（1）创建类的实例</p>
+<p>（2）访问某个类或接口的静态变量 getstatic（助记符），或者对该静态变量赋值 putstatic</p>
+<p>（3）调用类的静态方法 invokestatic</p>
+<p>（4）反射（Class.forName(“com.test.Test”)）</p>
+<p>（5）初始化一个类的子类</p>
+<p>（6）Java虚拟机启动时被标明启动类的类</p>
+<p>（7）JDK1.7开始提供的动态语言支持（了解）</p>
+<p><strong>被动使用</strong></p>
+<p>​    除了上面七种情况外，其他使用java类的方式都被看做是对类的被动使用，都不会导致类的初始化</p>
+<h5 id="类的加载详解："><a href="#类的加载详解：" class="headerlink" title="类的加载详解："></a><strong>类的加载详解：</strong></h5><p>​        类的加载指的是将类的.class文件中的二进制数据读入到内存中，将其放在运行时数据区的方法区内，然后在内存中创建一个java.lang.Class对象（规范并未说明Class对象位于哪里，HotSpot虚拟机将其放在<strong>方法区</strong>中）用来封装内在方法区内的数据结构。</p>
+<p>加载.calss文件的方式</p>
+<p>（1）从本地系统中直接加载</p>
+<p>（2）通过网络下载.class文件</p>
+<p>（3）从zip，jar等归档文件中加载.class文件</p>
+<p>（4）从专用数据库中提取.class文件</p>
+<p>（5）将java源文件动态编译为.class文件</p>
+<h4 id="类加载器双亲委托模型的好处："><a href="#类加载器双亲委托模型的好处：" class="headerlink" title="类加载器双亲委托模型的好处："></a>类加载器双亲委托模型的好处：</h4><p>（1）可以确保Java和核心库的安全：所有的Java应用都会引用java.lang中的类，也就是说在运行期java.lang中的类会被加载到虚拟机中，如果这个加载过程如果是由自己的类加载器所加载，那么很可能就会在JVM中存在多个版本的java.lang中的类，而且这些类是相互不可见的（命名空间的作用）。借助于双亲委托机制，Java核心类库中的类的加载工作都是由启动根加载器去加载，从而确保了Java应用所使用的的都是同一个版本的Java核心类库，他们之间是相互兼容的；</p>
+<p>（2）确保Java核心类库中的类不会被自定义的类所替代；</p>
+<p>（3）不同的类加载器可以为相同名称的类（binary name）创建额外的命名空间。相同名称的类可以并存在Java虚拟机中，只需要用不同的类加载器去加载即可。相当于在Java虚拟机内部建立了一个又一个相互隔离的Java类空间。</p>
+<p>父亲委托机制的优点是能够提高软件系统的安全性。因此在此机制下，用户自定义的类加载器不可能加载应该由父类加载器加载的可靠类，从而防止不可靠甚至恶意的代码代替由父类加载器加载的可靠代码。例如，java.lang.Object类是由跟类加载器加载，其他任何用哪个户自定义的类加载器都不可能加载含有恶意代码的java.lang.Object类。</p>
 
       
     </div>
@@ -305,7 +517,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/03/02/leetcode/301.删除无效括号/">
+    <link itemprop="mainEntityOfPage" href="/2019/07/15/java/java-nio/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -319,7 +531,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/03/02/leetcode/301.删除无效括号/" class="post-title-link" itemprop="url">301.删除无效括号</a>
+            <a href="/2019/07/15/java/java-nio/" class="post-title-link" itemprop="url">java-nio-server</a>
         </h2>
 
         <div class="post-meta">
@@ -328,10 +540,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-03-02 10:48:21 / Modified: 10:54:20" itemprop="dateCreated datePublished" datetime="2021-03-02T10:48:21+08:00">2021-03-02</time>
+              <time title="Created: 2019-07-15 14:49:35" itemprop="dateCreated datePublished" datetime="2019-07-15T14:49:35+08:00">2019-07-15</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-04-09 18:33:33" itemprop="dateModified" datetime="2021-04-09T18:33:33+08:00">2021-04-09</time>
+              </span>
 
           
 
@@ -344,19 +562,870 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a href="https://leetcode-cn.com/problems/remove-invalid-parentheses" target="_blank" rel="noopener">https://leetcode-cn.com/problems/remove-invalid-parentheses</a></p>
-<p>删除最小数量的无效括号，使得输入的字符串有效，返回所有可能的结果。</p>
-<p>说明: 输入可能包含了除 ( 和 ) 以外的字符。</p>
-<p>示例 1:</p>
-<p>​        输入: “()())()”<br>​        输出: [“()()()”, “(())()”]</p>
-<p>示例 2:</p>
-<p>​        输入: “(a)())()”<br>​        输出: [“(a)()()”, “(a())()”]</p>
-<p>示例 3:</p>
-<p>​        输入: “)(“<br>​        输出: [“”]</p>
-<p>使用回溯+剪枝方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> len;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">char</span>[] charArray;</span><br><span class="line">        <span class="keyword">private</span> Set&lt;String&gt; validExpressions = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">removeInvalidParentheses</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.len = s.length();</span><br><span class="line">            <span class="keyword">this</span>.charArray = s.toCharArray();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 第 1 步：遍历一次，计算多余的左右括号</span></span><br><span class="line">            <span class="keyword">int</span> leftRemove = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> rightRemove = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (charArray[i] == <span class="string">'('</span>) &#123;</span><br><span class="line">                    leftRemove++;</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (charArray[i] == <span class="string">')'</span>) &#123;</span><br><span class="line">                    <span class="comment">// 遇到右括号的时候，须要根据已经存在的左括号数量决定</span></span><br><span class="line">                    <span class="keyword">if</span> (leftRemove == <span class="number">0</span>) &#123;</span><br><span class="line">                        rightRemove++;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (leftRemove &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                        <span class="comment">// 关键：一个右括号出现可以抵销之前遇到的左括号</span></span><br><span class="line">                        leftRemove--;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 第 2 步：回溯算法，尝试每一种可能的删除操作</span></span><br><span class="line">            StringBuilder path = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">            dfs(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, leftRemove, rightRemove, path);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;(<span class="keyword">this</span>.validExpressions);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> index       当前遍历到的下标</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> leftCount   已经遍历到的左括号的个数</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> rightCount  已经遍历到的右括号的个数</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> leftRemove  最少应该删除的左括号的个数</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> rightRemove 最少应该删除的右括号的个数</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> path        一个可能的结果</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> index, <span class="keyword">int</span> leftCount, <span class="keyword">int</span> rightCount, <span class="keyword">int</span> leftRemove, <span class="keyword">int</span> rightRemove, StringBuilder path)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (index == len) &#123;</span><br><span class="line">                <span class="keyword">if</span> (leftRemove == <span class="number">0</span> &amp;&amp; rightRemove == <span class="number">0</span>) &#123;</span><br><span class="line">                    validExpressions.add(path.toString());</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">char</span> character = charArray[index];</span><br><span class="line">            <span class="comment">// 可能的操作 1：删除当前遍历到的字符</span></span><br><span class="line">            <span class="keyword">if</span> (character == <span class="string">'('</span> &amp;&amp; leftRemove &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="comment">// 由于 leftRemove &gt; 0，并且当前遇到的是左括号，因此可以尝试删除当前遇到的左括号</span></span><br><span class="line">                dfs(index + <span class="number">1</span>, leftCount, rightCount, leftRemove - <span class="number">1</span>, rightRemove, path);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (character == <span class="string">')'</span> &amp;&amp; rightRemove &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="comment">// 由于 rightRemove &gt; 0，并且当前遇到的是右括号，因此可以尝试删除当前遇到的右括号</span></span><br><span class="line">                dfs(index + <span class="number">1</span>, leftCount, rightCount, leftRemove, rightRemove - <span class="number">1</span>, path);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 可能的操作 2：保留当前遍历到的字符</span></span><br><span class="line">            path.append(character);</span><br><span class="line">            <span class="keyword">if</span> (character != <span class="string">'('</span> &amp;&amp; character != <span class="string">')'</span>) &#123;</span><br><span class="line">                <span class="comment">// 如果不是括号，继续深度优先遍历</span></span><br><span class="line">                dfs(index + <span class="number">1</span>, leftCount, rightCount, leftRemove, rightRemove, path);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (character == <span class="string">'('</span>) &#123;</span><br><span class="line">                <span class="comment">// 考虑左括号</span></span><br><span class="line">                dfs(index + <span class="number">1</span>, leftCount + <span class="number">1</span>, rightCount, leftRemove, rightRemove, path);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (leftCount &gt; rightCount) &#123;<span class="comment">//这里不能是 character == ')'， 还有可能是字母</span></span><br><span class="line">                <span class="comment">// 考虑右括号</span></span><br><span class="line">                dfs(index + <span class="number">1</span>, leftCount, rightCount + <span class="number">1</span>, leftRemove, rightRemove, path);</span><br><span class="line">            &#125;</span><br><span class="line">            path.deleteCharAt(path.length() - <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+          <p>之前对Java nio的了解局限于简答的socket数据传输，对tcp沾包、拆包有一些简单的了解，但是没有深入的研究。后来<br>简单的了解了一些tcp知识，例如：tcp滑动窗口。</p>
+<p>最近粗略的看了一下zookeeper的源码，了解了zookeeper的底层实现，比如zk节点保存结构是使用的DataTree,临时节点使用的是Map&lt;String sessionId,Set<string path>&gt;进行保存的，使用ExpireQueue进行更行节点的过期时间（sessionId过期）。</string></p>
+<p>zk中实现了基于java nio和netty两种socket编程，本文根据zk Java nio实现socket服务端编程。测试时，客户端使用的是telnet进来连接。</p>
+<p>java nio中比较核心的几个类:</p>
+<pre><code>java.nio.channels.ServerSocketChannel
+java.nio.channels.SocketChannel
+java.nio.channels.SelectionKey
+java.nio.channels.Selector</code></pre><p>以下是核心代码，相关引用代码请clone zookeeper代码进行查看学习</p>
+<pre><code>package server;
 
+import common.ExpiryQueue;
+import common.WorkerService;
+import common.ZooKeeperThread;
+import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketException;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingQueue;
+
+/**
+ * Created by hezhengkui on 2019/7/15.
+ */
+@Slf4j
+public class NioServerFactory {
+        protected final Set&lt;NIOServerCnxn&gt; cnxns = Collections.newSetFromMap(new ConcurrentHashMap&lt;NIOServerCnxn, Boolean&gt;());
+        protected int maxClientCnxns = 60;
+        private volatile boolean stopped = true;
+        private AcceptThread acceptThread;
+        private ConnectionExpirerThread expirerThread;
+        private final ConcurrentHashMap&lt;InetAddress, Set&lt;NIOServerCnxn&gt;&gt; ipMap = new ConcurrentHashMap&lt;InetAddress, Set&lt;NIOServerCnxn&gt;&gt;();
+        private ExpiryQueue&lt;NIOServerCnxn&gt; cnxnExpiryQueue;
+        private final Set&lt;SelectorThread&gt; selectorThreads = new HashSet&lt;SelectorThread&gt;();
+        protected WorkerService workerPool;
+        final ConcurrentHashMap&lt;Long, NIOServerCnxn&gt; sessionMap = new ConcurrentHashMap&lt;Long, NIOServerCnxn&gt;();
+        private int numSelectorThreads;
+        private int numWorkerThreads;
+        private long workerShutdownTimeoutMS;
+        public static final String ZOOKEEPER_NIO_NUM_SELECTOR_THREADS = &quot;zookeeper.nio.numSelectorThreads&quot;;
+        public static final String ZOOKEEPER_NIO_NUM_WORKER_THREADS = &quot;zookeeper.nio.numWorkerThreads&quot;;
+        /**
+         * Default worker pool shutdown timeout in ms: 5000 (5s)
+         */
+        public static final String ZOOKEEPER_NIO_SHUTDOWN_TIMEOUT = &quot;zookeeper.nio.shutdownTimeout&quot;;
+
+    static {
+        try {
+            Selector.open().close();
+        } catch (IOException ie) {
+            log.error(&quot;Selector failed to open&quot;, ie);
+        }
+    }
+
+    private abstract class AbstractSelectThread extends ZooKeeperThread {
+        protected final Selector selector;
+
+        public AbstractSelectThread(String name) throws IOException {
+            super(name);
+            // Allows the JVM to shutdown even if this thread is still running.
+            setDaemon(true);
+            this.selector = Selector.open();
+        }
+
+        public void wakeupSelector() {
+            selector.wakeup();
+        }
+
+        /**
+         * Close the selector. This should be called when the thread is about to
+         * exit and no operation is going to be performed on the Selector or
+         * SelectionKey
+         */
+        protected void closeSelector() {
+            try {
+                selector.close();
+            } catch (IOException e) {
+                log.warn(&quot;ignored exception during selector close &quot;
+                        + e.getMessage());
+            }
+        }
+
+        protected void cleanupSelectionKey(SelectionKey key) {
+            if (key != null) {
+                try {
+                    key.cancel();
+                } catch (Exception ex) {
+                    if (log.isDebugEnabled()) {
+                        log.debug(&quot;ignoring exception during selectionkey cancel&quot;, ex);
+                    }
+                }
+            }
+        }
+
+        protected void fastCloseSock(SocketChannel sc) {
+            if (sc != null) {
+                try {
+                    // Hard close immediately, discarding buffers
+                    sc.socket().setSoLinger(true, 0);
+                } catch (SocketException e) {
+                    log.warn(&quot;Unable to set socket linger to 0, socket close&quot;
+                            + &quot; may stall in CLOSE_WAIT&quot;, e);
+                }
+                closeSock(sc);
+            }
+        }
+    }</code></pre><p>​<br>        public static void closeSock(SocketChannel sock) {<br>            if (sock.isOpen() == false) {<br>                return;<br>            }</p>
+<pre><code>    try {
+        /*
+         * The following sequence of code is stupid! You would think that
+         * only sock.close() is needed, but alas, it doesn&apos;t work that way.
+         * If you just do sock.close() there are cases where the socket
+         * doesn&apos;t actually close...
+         */
+        sock.socket().shutdownOutput();
+    } catch (IOException e) {
+        // This is a relatively common exception that we can&apos;t avoid
+        if (log.isDebugEnabled()) {
+            log.debug(&quot;ignoring exception during output shutdown&quot;, e);
+        }
+    }
+    try {
+        sock.socket().shutdownInput();
+    } catch (IOException e) {
+        // This is a relatively common exception that we can&apos;t avoid
+        if (log.isDebugEnabled()) {
+            log.debug(&quot;ignoring exception during input shutdown&quot;, e);
+        }
+    }
+    try {
+        sock.socket().close();
+    } catch (IOException e) {
+        if (log.isDebugEnabled()) {
+            log.debug(&quot;ignoring exception during socket close&quot;, e);
+        }
+    }
+    try {
+        sock.close();
+    } catch (IOException e) {
+        if (log.isDebugEnabled()) {
+            log.debug(&quot;ignoring exception during socketchannel close&quot;, e);
+        }
+    }
+}</code></pre><p>​<br>        private class AcceptThread extends AbstractSelectThread {<br>            private final ServerSocketChannel acceptSocket;<br>            private final SelectionKey acceptKey;<br>            private final Collection<selectorthread> selectorThreads;<br>            private Iterator<selectorthread> selectorIterator;<br>            private volatile boolean reconfiguring = false;</selectorthread></selectorthread></p>
+<pre><code>    public AcceptThread(ServerSocketChannel ss, InetSocketAddress addr,
+                        Set&lt;SelectorThread&gt; selectorThreads) throws IOException {
+        super(&quot;NIOServerCxnFactory.AcceptThread:&quot; + addr);
+        this.acceptSocket = ss;
+        this.acceptKey = acceptSocket.register(selector, SelectionKey.OP_ACCEPT);
+        this.selectorThreads = Collections.unmodifiableList(new ArrayList&lt;SelectorThread&gt;(selectorThreads));
+        selectorIterator = this.selectorThreads.iterator();
+    }
+
+    public void run() {
+        try {
+            while (!stopped &amp;&amp; !acceptSocket.socket().isClosed()) {
+                try {
+                    select();
+                } catch (RuntimeException e) {
+                    log.warn(&quot;Ignoring unexpected runtime exception&quot;, e);
+                } catch (Exception e) {
+                    log.warn(&quot;Ignoring unexpected exception&quot;, e);
+                }
+            }
+        } finally {
+            closeSelector();
+            // This will wake up the selector threads, and tell the
+            // worker thread pool to begin shutdown.
+            if (!reconfiguring) {
+                NioServerFactory.this.stop();
+            }
+            log.info(&quot;accept thread exitted run method&quot;);
+        }
+    }
+
+    public void setReconfiguring() {
+        reconfiguring = true;
+    }
+
+    private void select() {
+        try {
+            int select = selector.select();
+
+            Iterator&lt;SelectionKey&gt; selectedKeys = selector.selectedKeys().iterator();
+            while (!stopped &amp;&amp; selectedKeys.hasNext()) {
+                SelectionKey key = selectedKeys.next();
+                selectedKeys.remove();
+
+                if (!key.isValid()) {
+                    continue;
+                }
+                if (key.isAcceptable()) {
+                    if (!doAccept()) {
+                        // If unable to pull a new connection off the accept
+                        // queue, pause accepting to give us time to free
+                        // up file descriptors and so the accept thread
+                        // doesn&apos;t spin in a tight loop.
+                        pauseAccept(10);
+                    }
+                } else {
+                    log.warn(&quot;Unexpected ops in accept select &quot;
+                            + key.readyOps());
+                }
+            }
+        } catch (IOException e) {
+            log.warn(&quot;Ignoring IOException while selecting&quot;, e);
+        }
+    }
+
+    /**
+     * Mask off the listen socket interest ops and use select() to sleep
+     * so that other threads can wake us up by calling wakeup() on the
+     * selector.
+     */
+    private void pauseAccept(long millisecs) {
+        acceptKey.interestOps(0);
+        try {
+            selector.select(millisecs);
+        } catch (IOException e) {
+            // ignore
+        } finally {
+            acceptKey.interestOps(SelectionKey.OP_ACCEPT);
+        }
+    }
+
+    /**
+     * Accept new socket connections. Enforces maximum number of connections
+     * per client IP address. Round-robin assigns to selector thread for
+     * handling. Returns whether pulled a connection off the accept queue
+     * or not. If encounters an error attempts to fast close the socket.
+     *
+     * @return whether was able to accept a connection or not
+     */
+    private boolean doAccept() {
+        boolean accepted = false;
+        SocketChannel sc = null;
+        try {
+            sc = acceptSocket.accept();
+            accepted = true;
+            InetAddress ia = sc.socket().getInetAddress();
+            int cnxncount = getClientCnxnCount(ia);
+
+            if (maxClientCnxns &gt; 0 &amp;&amp; cnxncount &gt;= maxClientCnxns) {
+                throw new IOException(&quot;Too many connections from &quot; + ia
+                        + &quot; - max is &quot; + maxClientCnxns);
+            }
+
+            log.debug(&quot;Accepted socket connection from &quot;
+                    + sc.socket().getRemoteSocketAddress());
+            sc.configureBlocking(false);
+
+            // Round-robin assign this connection to a selector thread
+            if (!selectorIterator.hasNext()) {
+                selectorIterator = selectorThreads.iterator();
+            }
+            SelectorThread selectorThread = selectorIterator.next();
+            //交给selector 线程执行
+            if (!selectorThread.addAcceptedConnection(sc)) {
+                throw new IOException(
+                        &quot;Unable to add connection to selector queue&quot;
+                                + (stopped ? &quot; (shutdown in progress)&quot; : &quot;&quot;));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            // accept, maxClientCnxns, configureBlocking
+            fastCloseSock(sc);
+        }
+        return accepted;
+    }
+}
+
+ServerSocketChannel ss;
+
+public void stop() {
+    stopped = true;
+
+    // Stop queuing connection attempts
+    try {
+        ss.close();
+    } catch (IOException e) {
+        log.warn(&quot;Error closing listen socket&quot;, e);
+    }
+
+    if (acceptThread != null) {
+        if (acceptThread.isAlive()) {
+            acceptThread.wakeupSelector();
+        } else {
+            acceptThread.closeSelector();
+        }
+    }
+    if (expirerThread != null) {
+        expirerThread.interrupt();
+    }
+    for (SelectorThread thread : selectorThreads) {
+        if (thread.isAlive()) {
+            thread.wakeupSelector();
+        } else {
+            thread.closeSelector();
+        }
+    }
+    if (workerPool != null) {
+        workerPool.stop();
+    }
+}</code></pre><p>​<br>        class SelectorThread extends AbstractSelectThread {<br>            private final int id;<br>            private final Queue<socketchannel> acceptedQueue;<br>            private final Queue<selectionkey> updateQueue;</selectionkey></socketchannel></p>
+<pre><code>    public SelectorThread(int id) throws IOException {
+        super(&quot;NIOServerCxnFactory.SelectorThread-&quot; + id);
+        this.id = id;
+        acceptedQueue = new LinkedBlockingQueue&lt;SocketChannel&gt;();
+        updateQueue = new LinkedBlockingQueue&lt;SelectionKey&gt;();
+    }
+
+    /**
+     * Place new accepted connection onto a queue for adding. Do this
+     * so only the selector thread modifies what keys are registered
+     * with the selector.
+     */
+    public boolean addAcceptedConnection(SocketChannel accepted) {
+        if (stopped || !acceptedQueue.offer(accepted)) {
+            return false;
+        }
+        wakeupSelector();
+        return true;
+    }
+
+    /**
+     * Place interest op update requests onto a queue so that only the
+     * selector thread modifies interest ops, because interest ops
+     * reads/sets are potentially blocking operations if other select
+     * operations are happening.
+     */
+    public boolean addInterestOpsUpdateRequest(SelectionKey sk) {
+        if (stopped || !updateQueue.offer(sk)) {
+            return false;
+        }
+        wakeupSelector();
+        return true;
+    }
+
+    /**
+     * The main loop for the thread selects() on the connections and
+     * dispatches ready I/O work requests, then registers all pending
+     * newly accepted connections and updates any interest ops on the
+     * queue.
+     */
+    public void run() {
+        try {
+            while (!stopped) {
+                try {
+                    //accept事件第一次select()方法不会有任何事件触发，通过seletor.wakeUp（）唤起，
+                    select();
+                    //这个方法会触发registor(SelectorKey.OP_READ)事件
+                    processAcceptedConnections();
+                    processInterestOpsUpdateRequests();
+                } catch (RuntimeException e) {
+                    log.warn(&quot;Ignoring unexpected runtime exception&quot;, e);
+                } catch (Exception e) {
+                    log.warn(&quot;Ignoring unexpected exception&quot;, e);
+                }
+            }
+
+            // Close connections still pending on the selector. Any others
+            // with in-flight work, let drain out of the work queue.
+            for (SelectionKey key : selector.keys()) {
+                NIOServerCnxn cnxn = (NIOServerCnxn) key.attachment();
+                if (cnxn.isSelectable()) {
+                    cnxn.close(NIOServerCnxn.DisconnectReason.SERVER_SHUTDOWN);
+                }
+                cleanupSelectionKey(key);
+            }
+            SocketChannel accepted;
+            while ((accepted = acceptedQueue.poll()) != null) {
+                fastCloseSock(accepted);
+            }
+            updateQueue.clear();
+        } finally {
+            closeSelector();
+            // This will wake up the accept thread and the other selector
+            // threads, and tell the worker thread pool to begin shutdown.
+            NioServerFactory.this.stop();
+            log.info(&quot;selector thread exitted run method&quot;);
+        }
+    }
+
+    private void select() {
+        try {
+            //selector.wakeUp()方法会唤起select()方法执行
+            //registor()方法同样能唤起select()方法执行
+            int select = selector.select();
+
+            Set&lt;SelectionKey&gt; selected = selector.selectedKeys();
+            ArrayList&lt;SelectionKey&gt; selectedList = new ArrayList&lt;SelectionKey&gt;(selected);
+            Collections.shuffle(selectedList);
+            Iterator&lt;SelectionKey&gt; selectedKeys = selectedList.iterator();
+            while (!stopped &amp;&amp; selectedKeys.hasNext()) {
+                SelectionKey key = selectedKeys.next();
+                selected.remove(key);
+
+                if (!key.isValid()) {
+                    cleanupSelectionKey(key);
+                    continue;
+                }
+                if (key.isReadable() || key.isWritable()) {
+                    handleIO(key);
+                } else {
+                    log.warn(&quot;Unexpected ops in select &quot; + key.readyOps());
+                }
+            }
+        } catch (IOException e) {
+            log.warn(&quot;Ignoring IOException while selecting&quot;, e);
+        }
+    }
+
+    /**
+     * Schedule I/O for processing on the connection associated with
+     * the given SelectionKey. If a worker thread pool is not being used,
+     * I/O is run directly by this thread.
+     */
+    private void handleIO(SelectionKey key) {
+        IOWorkRequest workRequest = new IOWorkRequest(this, key);
+        NIOServerCnxn cnxn = (NIOServerCnxn) key.attachment();
+
+        // Stop selecting this key while processing on its
+        // connection
+        cnxn.disableSelectable();
+        key.interestOps(0);
+        touchCnxn(cnxn);
+        workerPool.schedule(workRequest);
+    }
+
+    /**
+     * Iterate over the queue of accepted connections that have been
+     * assigned to this thread but not yet placed on the selector.
+     */
+    private void processAcceptedConnections() {
+        SocketChannel accepted;
+        while (!stopped &amp;&amp; (accepted = acceptedQueue.poll()) != null) {
+            SelectionKey key = null;
+            try {
+                key = accepted.register(selector, SelectionKey.OP_READ);
+                NIOServerCnxn cnxn = createConnection(accepted, key, this);
+                key.attach(cnxn);
+                addCnxn(cnxn);
+            } catch (IOException e) {
+                e.printStackTrace();
+                // register, createConnection
+                cleanupSelectionKey(key);
+                fastCloseSock(accepted);
+            }
+        }
+    }
+
+    /**
+     * Iterate over the queue of connections ready to resume selection,
+     * and restore their interest ops selection mask.
+     */
+    private void processInterestOpsUpdateRequests() {
+        SelectionKey key;
+        while (!stopped &amp;&amp; (key = updateQueue.poll()) != null) {
+            if (!key.isValid()) {
+                cleanupSelectionKey(key);
+            }
+            NIOServerCnxn cnxn = (NIOServerCnxn) key.attachment();
+            if (cnxn.isSelectable()) {
+                key.interestOps(cnxn.getInterestOps());
+            }
+        }
+    }
+}</code></pre><p>​<br>        private void addCnxn(NIOServerCnxn cnxn) throws IOException {<br>            InetAddress addr = cnxn.getSocketAddress();<br>            if (addr == null) {<br>                throw new IOException(“Socket of “ + cnxn + “ has been closed”);<br>            }<br>            Set<nioservercnxn> set = ipMap.get(addr);<br>            if (set == null) {<br>                // in general we will see 1 connection from each<br>                // host, setting the initial cap to 2 allows us<br>                // to minimize mem usage in the common case<br>                // of 1 entry –  we need to set the initial cap<br>                // to 2 to avoid rehash when the first entry is added<br>                // Construct a ConcurrentHashSet using a ConcurrentHashMap<br>                set = Collections.newSetFromMap(<br>                        new ConcurrentHashMap&lt;NIOServerCnxn, Boolean&gt;(2));<br>                // Put the new set in the map, but only if another thread<br>                // hasn’t beaten us to it<br>                Set<nioservercnxn> existingSet = ipMap.putIfAbsent(addr, set);<br>                if (existingSet != null) {<br>                    set = existingSet;<br>                }<br>            }<br>            set.add(cnxn);</nioservercnxn></nioservercnxn></p>
+<pre><code>        cnxns.add(cnxn);
+        touchCnxn(cnxn);
+    }
+
+    public void touchCnxn(NIOServerCnxn cnxn) {
+        cnxnExpiryQueue.update(cnxn, cnxn.getSessionTimeout());
+    }
+
+    public boolean removeCnxn(NIOServerCnxn cnxn) {
+        // If the connection is not in the master list it&apos;s already been closed
+        if (!cnxns.remove(cnxn)) {
+            return false;
+        }
+        cnxnExpiryQueue.remove(cnxn);
+
+        removeCnxnFromSessionMap(cnxn);
+
+        InetAddress addr = cnxn.getSocketAddress();
+        if (addr != null) {
+            Set&lt;NIOServerCnxn&gt; set = ipMap.get(addr);
+            if (set != null) {
+                set.remove(cnxn);
+                // Note that we make no effort here to remove empty mappings
+                // from ipMap.
+            }
+        }
+
+        return true;
+    }
+
+    protected NIOServerCnxn createConnection(SocketChannel sock,
+                                             SelectionKey sk, SelectorThread selectorThread) throws IOException {
+        return new NIOServerCnxn(sock, sk, this, selectorThread);
+    }
+
+    public void removeCnxnFromSessionMap(NIOServerCnxn cnxn) {
+        long sessionId = cnxn.getSessionId();
+        if (sessionId != 0) {
+            sessionMap.remove(sessionId);
+        }
+    }
+
+    private class ConnectionExpirerThread extends ZooKeeperThread {
+        ConnectionExpirerThread() {
+            super(&quot;ConnnectionExpirer&quot;);
+        }
+
+        public void run() {
+            try {
+                while (!stopped) {
+                    long waitTime = cnxnExpiryQueue.getWaitTime();
+                    if (waitTime &gt; 0) {
+                        Thread.sleep(waitTime);
+                        continue;
+                    }
+                    for (NIOServerCnxn conn : cnxnExpiryQueue.poll()) {
+//                        ServerMetrics.getMetrics().SESSIONLESS_CONNECTIONS_EXPIRED.add(1);
+                        conn.close(NIOServerCnxn.DisconnectReason.CONNECTION_EXPIRED);
+                    }
+                }
+
+            } catch (InterruptedException e) {
+                log.info(&quot;ConnnectionExpirerThread interrupted&quot;);
+            }
+        }
+    }
+
+    private int getClientCnxnCount(InetAddress cl) {
+        Set&lt;NIOServerCnxn&gt; s = ipMap.get(cl);
+        if (s == null) return 0;
+        return s.size();
+    }</code></pre><p>​<br>        private class IOWorkRequest extends WorkerService.WorkRequest {<br>            private final SelectorThread selectorThread;<br>            private final SelectionKey key;<br>            private final NIOServerCnxn cnxn;</p>
+<pre><code>        IOWorkRequest(SelectorThread selectorThread, SelectionKey key) {
+            this.selectorThread = selectorThread;
+            this.key = key;
+            this.cnxn = (NIOServerCnxn) key.attachment();
+        }
+
+        public void doWork() throws InterruptedException {
+            if (!key.isValid()) {
+                selectorThread.cleanupSelectionKey(key);
+                return;
+            }
+
+            if (key.isReadable() || key.isWritable()) {
+                cnxn.doIO(key);
+
+                // Check if we shutdown or doIO() closed this connection
+                if (stopped) {
+                    cnxn.close(NIOServerCnxn.DisconnectReason.SERVER_SHUTDOWN);
+                    return;
+                }
+                if (!key.isValid()) {
+                    selectorThread.cleanupSelectionKey(key);
+                    return;
+                }
+                touchCnxn(cnxn);
+            }
+
+            // Mark this connection as once again ready for selection
+            cnxn.enableSelectable();
+            // Push an update request on the queue to resume selecting
+            // on the current set of interest ops, which may have changed
+            // as a result of the I/O operations we just performed.
+            if (!selectorThread.addInterestOpsUpdateRequest(key)) {
+                cnxn.close(NIOServerCnxn.DisconnectReason.CONNECTION_MODE_CHANGED);
+            }
+        }
+
+        @Override
+        public void cleanup() {
+            cnxn.close(NIOServerCnxn.DisconnectReason.CLEAN_UP);
+        }
+    }
+
+    public void configure(InetSocketAddress addr, int maxcc) throws IOException {
+
+        maxClientCnxns = maxcc;
+        cnxnExpiryQueue =
+                new ExpiryQueue&lt;NIOServerCnxn&gt;(10000);
+        expirerThread = new ConnectionExpirerThread();
+
+        int numCores = Runtime.getRuntime().availableProcessors();
+        // 32 cores sweet spot seems to be 4 selector threads
+        numSelectorThreads = Integer.getInteger(
+                ZOOKEEPER_NIO_NUM_SELECTOR_THREADS,
+                Math.max((int) Math.sqrt((float) numCores / 2), 1));
+        if (numSelectorThreads &lt; 1) {
+            throw new IOException(&quot;numSelectorThreads must be at least 1&quot;);
+        }
+
+        numWorkerThreads = Integer.getInteger(
+                ZOOKEEPER_NIO_NUM_WORKER_THREADS, 2 * numCores);
+        workerShutdownTimeoutMS = Long.getLong(
+                ZOOKEEPER_NIO_SHUTDOWN_TIMEOUT, 5000);
+
+        for (int i = 0; i &lt; numSelectorThreads; ++i) {
+            selectorThreads.add(new SelectorThread(i));
+        }
+
+        this.ss = ServerSocketChannel.open();
+        ss.socket().setReuseAddress(true);
+        log.info(&quot;binding to port &quot; + addr);
+        ss.socket().bind(addr);
+
+        ss.configureBlocking(false);
+        acceptThread = new AcceptThread(ss, addr, selectorThreads);
+    }
+
+    public void start() {
+        stopped = false;
+        if (workerPool == null) {
+            workerPool = new WorkerService(
+                    &quot;NIOWorker&quot;, numWorkerThreads, false);
+        }
+        for (SelectorThread thread : selectorThreads) {
+            if (thread.getState() == Thread.State.NEW) {
+                thread.start();
+            }
+        }
+        // ensure thread is started once and only once
+        if (acceptThread.getState() == Thread.State.NEW) {
+            acceptThread.start();
+        }
+        if (expirerThread.getState() == Thread.State.NEW) {
+            expirerThread.start();
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        NioServerFactory factory = new NioServerFactory();
+        InetSocketAddress address = new InetSocketAddress(9999);
+        factory.configure(address, 3);
+        factory.start();
+    }
+}</code></pre><hr>
+<pre><code>package server;
+
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.CancelledKeyException;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.SocketChannel;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+/**
+ * Created by hezhengkui on 2019/7/15.
+ */
+@Slf4j
+public class NIOServerCnxn {
+    private final SelectionKey sk;
+    private final SocketChannel sock;
+    private final NioServerFactory.SelectorThread selectorThread;
+    private final NioServerFactory factory;
+    private final AtomicBoolean selectable = new AtomicBoolean(true);
+    private volatile boolean stale = false;
+    private long sessionId;
+    protected DisconnectReason disconnectReason = DisconnectReason.UNKNOWN;
+
+    private int sessionTimeout = 100000000;
+
+    private final AtomicBoolean throttled = new AtomicBoolean(false);
+
+    private final Queue&lt;ByteBuffer&gt; outgoingBuffers =
+            new LinkedBlockingQueue&lt;ByteBuffer&gt;();
+
+    public NIOServerCnxn(SocketChannel sock, SelectionKey sk, NioServerFactory factory,
+                         NioServerFactory.SelectorThread selectorThread) throws IOException {
+        this.sock = sock;
+        this.sk = sk;
+        this.factory = factory;
+        this.selectorThread = selectorThread;
+        sock.socket().setTcpNoDelay(true);
+        sock.socket().setSoLinger(false, -1);
+        InetAddress addr = ((InetSocketAddress) sock.socket().getRemoteSocketAddress()).getAddress();
+    }
+
+    public void enableSelectable() {
+        selectable.set(true);
+    }
+
+    public boolean isSelectable() {
+        return sk.isValid() &amp;&amp; selectable.get();
+    }
+
+    public void close(DisconnectReason reason) {
+        disconnectReason = reason;
+        close();
+    }
+
+    public InetAddress getSocketAddress() {
+        if (sock.isOpen() == false) {
+            return null;
+        }
+        return sock.socket().getInetAddress();
+    }
+
+    public int getInterestOps() {
+        if (!isSelectable()) {
+            return 0;
+        }
+        int interestOps = 0;
+        if (getReadInterest()) {
+            interestOps |= SelectionKey.OP_READ;
+        }
+        if (getWriteInterest()) {
+            interestOps |= SelectionKey.OP_WRITE;
+        }
+        return interestOps;
+    }
+
+    private boolean getWriteInterest() {
+        return !outgoingBuffers.isEmpty();
+    }
+
+    private boolean getReadInterest() {
+        return !throttled.get();
+    }
+
+    public void setStale() {
+        stale = true;
+    }
+
+    public long getSessionId() {
+        return sessionId;
+    }
+
+    private void close() {
+        setStale();
+        if (!factory.removeCnxn(this)) {
+            return;
+        }
+
+        if (sk != null) {
+            try {
+                // need to cancel this selection key from the selector
+                sk.cancel();
+            } catch (Exception e) {
+                if (log.isDebugEnabled()) {
+                    log.debug(&quot;ignoring exception during selectionkey cancel&quot;, e);
+                }
+            }
+        }
+
+        closeSock();
+    }
+
+    public void disableSelectable() {
+        selectable.set(false);
+    }
+
+    public int getSessionTimeout() {
+        return sessionTimeout;
+    }</code></pre><p>​<br>        private void closeSock() {<br>            if (sock.isOpen() == false) {<br>                return;<br>            }</p>
+<pre><code>    log.debug(&quot;Closed socket connection for client &quot;
+            + sock.socket().getRemoteSocketAddress()
+            + (sessionId != 0 ?
+            &quot; which had sessionid 0x&quot; + Long.toHexString(sessionId) :
+            &quot; (no session established for client)&quot;));
+    closeSock(sock);
+}</code></pre><p>​<br>        public static void closeSock(SocketChannel sock) {<br>            if (sock.isOpen() == false) {<br>                return;<br>            }</p>
+<pre><code>    try {
+        /*
+         * The following sequence of code is stupid! You would think that
+         * only sock.close() is needed, but alas, it doesn&apos;t work that way.
+         * If you just do sock.close() there are cases where the socket
+         * doesn&apos;t actually close...
+         */
+        sock.socket().shutdownOutput();
+    } catch (IOException e) {
+        // This is a relatively common exception that we can&apos;t avoid
+        if (log.isDebugEnabled()) {
+            log.debug(&quot;ignoring exception during output shutdown&quot;, e);
+        }
+    }
+    try {
+        sock.socket().shutdownInput();
+    } catch (IOException e) {
+        // This is a relatively common exception that we can&apos;t avoid
+        if (log.isDebugEnabled()) {
+            log.debug(&quot;ignoring exception during input shutdown&quot;, e);
+        }
+    }
+    try {
+        sock.socket().close();
+    } catch (IOException e) {
+        if (log.isDebugEnabled()) {
+            log.debug(&quot;ignoring exception during socket close&quot;, e);
+        }
+    }
+    try {
+        sock.close();
+    } catch (IOException e) {
+        if (log.isDebugEnabled()) {
+            log.debug(&quot;ignoring exception during socketchannel close&quot;, e);
+        }
+    }
+}
+
+protected boolean isSocketOpen() {
+    return sock.isOpen();
+}</code></pre><p>​<br>        /**<br>         * 具体的read、write事件在这里处理，进行数据包的拆分<br>         * @param k<br>         * @throws InterruptedException<br>         */<br>        void doIO(SelectionKey k) throws InterruptedException {<br>            try {<br>                if (isSocketOpen() == false) {<br>                    log.warn(“trying to do i/o on a null socket for session:0x”<br>                            + Long.toHexString(sessionId));</p>
+<pre><code>                return;
+            }
+            if (k.isReadable()) {//只有客户端发送数据，才会触发这里方法的执行
+                ByteBuffer byteBuffer = ByteBuffer.allocate(10);
+                int rc = sock.read(byteBuffer);
+                byteBuffer.flip();
+                log.debug(&quot;------r--{}, {}, {}&quot;, k.interestOps(), rc, new String(byteBuffer.array()));
+            }
+            if (k.isWritable()) {
+                log.debug(&quot;------w--&quot;, k.interestOps());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (CancelledKeyException e) {
+            e.printStackTrace();
+            log.warn(&quot;CancelledKeyException causing close of session 0x&quot; + Long.toHexString(sessionId));
+            if (log.isDebugEnabled()) {
+                log.debug(&quot;CancelledKeyException stack trace&quot;, e);
+            }
+            close(DisconnectReason.CANCELLED_KEY_EXCEPTION);
+        }
+    }
+
+    public enum DisconnectReason {
+        UNKNOWN(&quot;unknown&quot;),
+        SERVER_SHUTDOWN(&quot;server_shutdown&quot;),
+        CONNECTION_EXPIRED(&quot;connection_expired&quot;),
+        CANCELLED_KEY_EXCEPTION(&quot;cancelled_key_exception&quot;),
+        CLEAN_UP(&quot;clean_up&quot;),
+        CONNECTION_MODE_CHANGED(&quot;connection_mode_changed&quot;);
+        String disconnectReason;
+
+        DisconnectReason(String reason) {
+            this.disconnectReason = reason;
+        }
+
+        public String toDisconnectReasonString() {
+            return disconnectReason;
+        }
+    }
+
+}</code></pre>
       
     </div>
 
@@ -374,7 +1443,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/39/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/39/">39</a><span class="page-number current">40</span><a class="page-number" href="/page/41/">41</a><span class="space">&hellip;</span><a class="page-number" href="/page/47/">47</a><a class="extend next" rel="next" href="/page/41/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/39/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/39/">39</a><span class="page-number current">40</span><a class="page-number" href="/page/41/">41</a><a class="page-number" href="/page/42/">42</a><a class="extend next" rel="next" href="/page/41/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -440,14 +1509,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-count">125</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
