@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/06/09/leetcode/树/988. 从叶结点开始的最小字符串/">
+    <link itemprop="mainEntityOfPage" href="/2021/06/09/leetcode/树/1367. 二叉树中的列表/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/06/09/leetcode/树/988. 从叶结点开始的最小字符串/" class="post-title-link" itemprop="url">988. 从叶结点开始的最小字符串</a>
+            <a href="/2021/06/09/leetcode/树/1367. 二叉树中的列表/" class="post-title-link" itemprop="url">1367. 二叉树中的列表</a>
         </h2>
 
         <div class="post-meta">
@@ -175,7 +175,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-06-09 14:45:02 / Modified: 17:32:41" itemprop="dateCreated datePublished" datetime="2021-06-09T14:45:02+08:00">2021-06-09</time>
+              <time title="Created: 2021-06-09 14:45:02 / Modified: 16:37:18" itemprop="dateCreated datePublished" datetime="2021-06-09T14:45:02+08:00">2021-06-09</time>
             </span>
 
           
@@ -189,11 +189,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a href="https://leetcode-cn.com/problems/smallest-string-starting-from-leaf" target="_blank" rel="noopener">https://leetcode-cn.com/problems/smallest-string-starting-from-leaf</a></p>
-<p>给定一颗根结点为 root 的二叉树，树中的每一个结点都有一个从 0 到 25 的值，分别代表字母 ‘a’ 到 ‘z’：值 0 代表 ‘a’，值 1 代表 ‘b’，依此类推。</p>
-<p>找出按字典序最小的字符串，该字符串从这棵树的一个叶结点开始，到根结点结束。</p>
-<p>（小贴士：字符串中任何较短的前缀在字典序上都是较小的：例如，在字典序上 “ab” 比 “aba” 要小。叶结点是指没有子结点的结点。）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="comment">//选择一个大于'z'的字符作为初始值</span></span><br><span class="line">    String ans = <span class="string">"~"</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">smallestFromLeaf</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        dfs(root, <span class="keyword">new</span> StringBuffer());</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//深度优先搜索每一条根到叶的路径</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(TreeNode root, StringBuffer sb)</span></span>&#123;</span><br><span class="line">        <span class="comment">//遍历到树的末端，返回</span></span><br><span class="line">        <span class="keyword">if</span>(root == <span class="keyword">null</span>) <span class="keyword">return</span>;</span><br><span class="line">        <span class="comment">//将当前节点的字符拼接到路径字符串中</span></span><br><span class="line">        sb.append((<span class="keyword">char</span>)(<span class="string">'a'</span> + root.val));</span><br><span class="line">        <span class="comment">//叶子节点：当前路径字符串s的字典序若小于ans，则更新到ans中</span></span><br><span class="line">        <span class="keyword">if</span>(root.left == <span class="keyword">null</span> &amp;&amp; root.right == <span class="keyword">null</span>)&#123;</span><br><span class="line">            sb.reverse();</span><br><span class="line">            String s = sb.toString();</span><br><span class="line">            sb.reverse(); <span class="comment">// sb进行状态重置</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(s.compareTo(ans) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">                ans = s;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//深度优先遍历</span></span><br><span class="line">        dfs(root.left, sb);</span><br><span class="line">        dfs(root.right, sb);</span><br><span class="line">        <span class="comment">//状态重置到上一次</span></span><br><span class="line">        sb.deleteCharAt(sb.length() - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <p><a href="https://leetcode-cn.com/problems/linked-list-in-binary-tree" target="_blank" rel="noopener">https://leetcode-cn.com/problems/linked-list-in-binary-tree</a><br>给你一棵以 root 为根的二叉树和一个 head 为第一个节点的链表。</p>
+<p>如果在二叉树中，存在一条一直向下的路径，且每个点的数值恰好一一对应以 head 为首的链表中每个节点的值，那么请你返回 True ，否则返回 False 。</p>
+<p>一直向下的路径的意思是：从树中某个节点开始，一直连续向下的路径。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSubPath</span><span class="params">(ListNode head, TreeNode root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="comment">// 检查当前子树和左右子树中是否有符合要求的序列</span></span><br><span class="line">        <span class="keyword">return</span> dfs(head, root) || isSubPath(head, root.left) || isSubPath(head, root.right);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">dfs</span><span class="params">(ListNode head, TreeNode root)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 检查到了链表的末尾，说明找到了一个完整匹配的序列，返回 true</span></span><br><span class="line">        <span class="keyword">if</span> (head == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        <span class="comment">// 链表还没结束呢，树自己先到头了，所以不能完全匹配，返回 false</span></span><br><span class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="comment">// 如果树中节点已经不匹配了，那么就直接返回 false</span></span><br><span class="line">        <span class="keyword">if</span> (root.val != head.val) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        <span class="comment">// 当前节点匹配，就检查左右子树和链表的下一个节点是否符合匹配</span></span><br><span class="line">        <span class="keyword">return</span> dfs(head.next, root.left) || dfs(head.next, root.right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
       
@@ -214,7 +213,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/06/09/leetcode/树/687. 最长同值路径/">
+    <link itemprop="mainEntityOfPage" href="/2021/06/09/leetcode/树/124. 二叉树中的最大路径和/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -228,7 +227,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/06/09/leetcode/树/687. 最长同值路径/" class="post-title-link" itemprop="url">687. 最长同值路径</a>
+            <a href="/2021/06/09/leetcode/树/124. 二叉树中的最大路径和/" class="post-title-link" itemprop="url">124. 二叉树中的最大路径和</a>
         </h2>
 
         <div class="post-meta">
@@ -239,7 +238,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-06-09 14:45:02 / Modified: 17:23:55" itemprop="dateCreated datePublished" datetime="2021-06-09T14:45:02+08:00">2021-06-09</time>
+              <time title="Created: 2021-06-09 14:45:02 / Modified: 16:38:12" itemprop="dateCreated datePublished" datetime="2021-06-09T14:45:02+08:00">2021-06-09</time>
             </span>
 
           
@@ -253,13 +252,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a href="https://leetcode-cn.com/problems/longest-univalue-path" target="_blank" rel="noopener">https://leetcode-cn.com/problems/longest-univalue-path</a></p>
-<p>给定一个二叉树，找到最长的路径，这个路径中的每个节点具有相同值。 这条路径可以经过也可以不经过根节点。</p>
-<p>注意：两个节点之间的路径长度由它们之间的边数表示。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> ans;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">longestUnivaluePath</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        ans = <span class="number">0</span>;</span><br><span class="line">        dfs(root);</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">dfs</span><span class="params">(TreeNode node)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (node == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> left = dfs(node.left);</span><br><span class="line">        <span class="keyword">int</span> right = dfs(node.right);</span><br><span class="line">        <span class="keyword">int</span> arrowLeft = <span class="number">0</span>, arrowRight = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (node.left != <span class="keyword">null</span> &amp;&amp; node.left.val == node.val) &#123;</span><br><span class="line">            arrowLeft += left + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (node.right != <span class="keyword">null</span> &amp;&amp; node.right.val == node.val) &#123;</span><br><span class="line">            arrowRight += right + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        ans = Math.max(ans, arrowLeft + arrowRight);</span><br><span class="line">        <span class="keyword">return</span> Math.max(arrowLeft, arrowRight);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <p><a href="https://leetcode-cn.com/problems/binary-tree-maximum-path-sum" target="_blank" rel="noopener">https://leetcode-cn.com/problems/binary-tree-maximum-path-sum</a></p>
+<p>路径 被定义为一条从树中任意节点出发，沿父节点-子节点连接，达到任意节点的序列。同一个节点在一条路径序列中 至多出现一次 。该路径 至少包含一个 节点，且不一定经过根节点。</p>
+<p>路径和 是路径中各节点值的总和。</p>
+<p>给你一个二叉树的根节点 root ，返回其 最大路径和 。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> maxSum = Integer.MIN_VALUE;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxPathSum</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        maxGain(root);</span><br><span class="line">        <span class="keyword">return</span> maxSum;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxGain</span><span class="params">(TreeNode node)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (node == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 递归计算左右子节点的最大贡献值</span></span><br><span class="line">        <span class="comment">// 只有在最大贡献值大于 0 时，才会选取对应子节点</span></span><br><span class="line">        <span class="keyword">int</span> leftGain = Math.max(maxGain(node.left), <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">int</span> rightGain = Math.max(maxGain(node.right), <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 节点的最大路径和取决于该节点的值与该节点的左右子节点的最大贡献值</span></span><br><span class="line">        <span class="keyword">int</span> priceNewpath = node.val + leftGain + rightGain;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 更新答案</span></span><br><span class="line">        maxSum = Math.max(maxSum, priceNewpath);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 返回节点的最大贡献值</span></span><br><span class="line">        <span class="keyword">return</span> node.val + Math.max(leftGain, rightGain);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Use a one element array to pass in and out is a common technique for handling tree questions.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">longestUnivaluePath</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] result = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">if</span> (root != <span class="keyword">null</span>) &#123;</span><br><span class="line">            dfs(root, result);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// calculate longest univalue path from root to leaves</span></span><br><span class="line">    <span class="comment">// In addition, the maximum univalue path cross the root node is calculated and then global maximum is udpated.</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">dfs</span><span class="params">(TreeNode root, <span class="keyword">int</span>[] result)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> leftPath = root.left == <span class="keyword">null</span> ? <span class="number">0</span> : dfs(root.left, result);</span><br><span class="line">        <span class="keyword">int</span> rightPath = root.right == <span class="keyword">null</span> ? <span class="number">0</span> : dfs(root.right, result);</span><br><span class="line">        <span class="keyword">int</span> leftResult = (root.left != <span class="keyword">null</span> &amp;&amp; root.left.val == root.val) ? leftPath + <span class="number">1</span> : <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> rightResult = (root.right != <span class="keyword">null</span> &amp;&amp; root.right.val == root.val) ? rightPath + <span class="number">1</span> : <span class="number">0</span>;</span><br><span class="line">        result[<span class="number">0</span>] = Math.max(result[<span class="number">0</span>], leftResult + rightResult);</span><br><span class="line">        <span class="keyword">return</span> Math.max(leftResult, rightResult);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<p> [687. 最长同值路径.md](687. 最长同值路径.md) </p>
+<p> [124. 二叉树中的最大路径和.md](124. 二叉树中的最大路径和.md) </p>
+<p> [543. 二叉树的直径.md](543. 二叉树的直径.md) </p>
+<p> [1367. 二叉树中的列表.md](1367. 二叉树中的列表.md) </p>
 
       
     </div>
@@ -279,7 +281,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/06/09/leetcode/树/base2/">
+    <link itemprop="mainEntityOfPage" href="/2021/06/09/leetcode/二分查找/base/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -293,7 +295,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/06/09/leetcode/树/base2/" class="post-title-link" itemprop="url">543. 二叉树的直径</a>
+            <a href="/2021/06/09/leetcode/二分查找/base/" class="post-title-link" itemprop="url">543. 二叉树的直径</a>
         </h2>
 
         <div class="post-meta">
@@ -304,7 +306,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-06-09 14:45:02 / Modified: 17:32:27" itemprop="dateCreated datePublished" datetime="2021-06-09T14:45:02+08:00">2021-06-09</time>
+              <time title="Created: 2021-06-09 14:45:02 / Modified: 20:31:45" itemprop="dateCreated datePublished" datetime="2021-06-09T14:45:02+08:00">2021-06-09</time>
             </span>
 
           
@@ -336,7 +338,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/42/">42</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/43/">43</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -402,14 +404,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">125</span>
+          <span class="site-state-item-count">128</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

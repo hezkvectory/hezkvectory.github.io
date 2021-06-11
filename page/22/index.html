@@ -150,6 +150,198 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/04/27/spring/feign-ribbon-loadbalancer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/27/spring/feign-ribbon-loadbalancer/" class="post-title-link" itemprop="url">spring openfeign ribbon loadbalancer</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-04-27 17:55:00" itemprop="dateCreated datePublished" datetime="2021-04-27T17:55:00+08:00">2021-04-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-17 12:09:12" itemprop="dateModified" datetime="2021-05-17T12:09:12+08:00">2021-05-17</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="Ribbon的负载均衡策略"><a href="#Ribbon的负载均衡策略" class="headerlink" title="Ribbon的负载均衡策略"></a>Ribbon的负载均衡策略</h4><table>
+<thead>
+<tr>
+<th>类</th>
+<th>命名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RoundRobinRule</td>
+<td>轮询策略</td>
+<td>Ribbon的默认负载均衡策略</td>
+</tr>
+<tr>
+<td>RandomRule</td>
+<td>随机策略</td>
+<td>从所有可用的提供者中随机选择一个</td>
+</tr>
+<tr>
+<td>RetryRule</td>
+<td>重试策略</td>
+<td>从所有可用的提供者中随机选择一个,若获取失败的话，则可以在指定的时间内重试，默认为500毫秒</td>
+</tr>
+<tr>
+<td>BestAvailableRule</td>
+<td>最低并发策略</td>
+<td>选择并发量最小的 提供者</td>
+</tr>
+<tr>
+<td>AvailabilityFilteringRule</td>
+<td>可用过滤策略</td>
+<td>过滤掉处于被标记为circuit tripped状态的提供者，或已经超过连接极限的 提供者,对剩余 provider 采用轮询策略</td>
+</tr>
+<tr>
+<td>ZoneAvoidanceRule</td>
+<td>复合判断策略</td>
+<td>判断提供所在区域的性能及 provider 的可用性选择服务器。</td>
+</tr>
+<tr>
+<td>WeightedResponseTimeRule</td>
+<td>权重响应时间策略</td>
+<td>根据每个 提供的平均响应时间计算其权重，响应时间越快权重越大，被选中的机率就越高。在刚启动时采用轮询策略。后面就会根据权重进行选择了。</td>
+</tr>
+</tbody></table>
+<h4 id="spring-openfeign"><a href="#spring-openfeign" class="headerlink" title="spring-openfeign"></a>spring-openfeign</h4><p>openfeign发送请求主要是通过<strong>FeignLoadBalancer</strong>进行请求封装和调用，类图如下，负载均衡请求逻辑主要方法在</p>
+<p>com.netflix.client.AbstractLoadBalancerAwareClient#executeWithLoadBalancer(S, com.netflix.client.config.IClientConfig)</p>
+<p>通过LoadBalancerCommand.submit方法，从注册中心根据IRule策略，选择合适的Server并发送请求到对应的机器。</p>
+<p>在submit方法中，有ServerStatus类进行对应的qps、rts、错误率等指标统计，IRule根据此指标，选择合适的Server。</p>
+<h5 id="feign调用流程"><a href="#feign调用流程" class="headerlink" title="feign调用流程"></a>feign调用流程</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">FeignClientFactoryBean </span><br><span class="line">-&gt; getTarget</span><br><span class="line">-&gt; Targeter.target(FeignContext|Client)</span><br><span class="line">-&gt; ReflectiveFeign</span><br><span class="line">-&gt; InvocationHandler(FeignInvocationHandler) </span><br><span class="line">-&gt; SynchronousMethodHandler.invoke </span><br><span class="line">-&gt; executeAndDecode </span><br><span class="line">-&gt; feign.Client#execute</span><br><span class="line">-&gt; org.springframework.cloud.openfeign.ribbon.LoadBalancerFeignClient#execute</span><br><span class="line">-&gt; com.netflix.client.AbstractLoadBalancerAwareClient#executeWithLoadBalancer(S, com.netflix.client.config.IClientConfig)</span><br><span class="line">-&gt; com.netflix.client.IClient#execute</span><br></pre></td></tr></table></figure>
+
+<p>LoadBalancerFeignClient</p>
+<p><img src="/2021/04/27/spring/feign-ribbon-loadbalancer/openfeign-ribbon.jpg" alt></p>
+<h4 id="如何从eureka-client加载并缓存Server信息"><a href="#如何从eureka-client加载并缓存Server信息" class="headerlink" title="如何从eureka-client加载并缓存Server信息"></a>如何从eureka-client加载并缓存Server信息</h4><p>DynamicServerListLoadBalancer</p>
+<p>此类中有一个定时任务，updateListOfServers方法，从eureka-client客户端缓存中加载对应的Server信息。</p>
+<p>PollingServerListUpdater</p>
+<p>CommonClientConfigKey</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/04/27/spring/spring-aop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/27/spring/spring-aop/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-04-27 17:55:00" itemprop="dateCreated datePublished" datetime="2021-04-27T17:55:00+08:00">2021-04-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-17 11:03:16" itemprop="dateModified" datetime="2021-05-17T11:03:16+08:00">2021-05-17</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><strong><a href="https://cloud.tencent.com/developer/article/1497770" target="_blank" rel="noopener">核心类讲解</a></strong></p>
+<p>spring代理采用cglib或者jdk proxy</p>
+<p>cglib核心类ProxyFactory、MethodInterceptor、DynamicAdvisedInterceptor、CglibMethodInvocation</p>
+<h4 id="Pointcut"><a href="#Pointcut" class="headerlink" title="Pointcut"></a>Pointcut</h4><p>​    ClassFilter MethodFilter</p>
+<h4 id="Advice"><a href="#Advice" class="headerlink" title="Advice"></a>Advice</h4><p>​    MethodBeforeAdvice AfterReturningAdvice AspectJAroundAdvice</p>
+<h4 id="Advisor"><a href="#Advisor" class="headerlink" title="Advisor"></a>Advisor</h4><p>​    Advisor 其实它就是 Pointcut 与 Advice 的组合, Advice 是执行的方法, 而要知道方法何时执行, 则 Advice 必需与 Pointcut 组合在一起, 这就诞生了 Advisor 这个类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">AopProxyUtils.completeProxiedInterfaces(this.advised)</span><br><span class="line">		0 = &#123;Class@521&#125; &quot;interface com.hezk.aop.service.Browser&quot;</span><br><span class="line">		1 = &#123;Class@1152&#125; &quot;interface org.springframework.aop.SpringProxy&quot;</span><br><span class="line">		2 = &#123;Class@511&#125; &quot;interface org.springframework.aop.framework.Advised&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Callback		</span><br><span class="line">	0 = &#123;CglibAopProxy$DynamicAdvisedInterceptor@1184&#125; </span><br><span class="line">	1 = &#123;CglibAopProxy$StaticUnadvisedInterceptor@1198&#125; </span><br><span class="line">	2 = &#123;CglibAopProxy$SerializableNoOp@1218&#125; </span><br><span class="line">	3 = &#123;CglibAopProxy$StaticDispatcher@1206&#125; </span><br><span class="line">	4 = &#123;CglibAopProxy$AdvisedDispatcher@984&#125; </span><br><span class="line">	5 = &#123;CglibAopProxy$EqualsInterceptor@1219&#125; </span><br><span class="line">	6 = &#123;CglibAopProxy$HashCodeInterceptor@1220&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ProxyCallbackFilter</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">interceptorList = &#123;ArrayList@1723&#125;  size = 3</span><br><span class="line"> 0 = &#123;MethodBeforeAdviceInterceptor@1930&#125; </span><br><span class="line"> 1 = &#123;AfterReturningAdviceInterceptor@1931&#125; </span><br><span class="line"> 2 = &#123;BrowserAroundAdvice@975&#125; </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> CglibMethodInvocation</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> org.springframework.cglib.core.AbstractClassGenerator.generate 生成代理方法</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="/2021/04/19/dubbo/dubbo消费者调用流程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -214,172 +406,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/19/dubbo/dubbo编解码和协议/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/19/dubbo/dubbo编解码和协议/" class="post-title-link" itemprop="url">dubbo编解码和协议</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-04-19 10:28:35 / Modified: 10:41:06" itemprop="dateCreated datePublished" datetime="2021-04-19T10:28:35+08:00">2021-04-19</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="Dubbo编解码"><a href="#Dubbo编解码" class="headerlink" title="Dubbo编解码"></a>Dubbo编解码</h4><h5 id="消费者入口"><a href="#消费者入口" class="headerlink" title="消费者入口"></a>消费者入口</h5><p>消费者口在NettyClient#doOpen方法发起连接，初始化BootStrap时，会在Netty的pipeline里添加不同类型的ChannelHandler，其中就有编解码器。</p>
-<p>同理，提供者在NettyServer#doOpen方法提供服务，初始化ServerBootstrap时，会添加编解码器。（adapter.getDecoder（）- 解码器，adapater.getEncoder（） - 编码器）。</p>
-<p><strong>NettyClient</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Init bootstrap</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> Throwable</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doOpen</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    bootstrap = <span class="keyword">new</span> Bootstrap();</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    bootstrap.handler(<span class="keyword">new</span> ChannelInitializer&lt;SocketChannel&gt;() &#123;</span><br><span class="line"> </span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(SocketChannel ch)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">            ch.pipeline()</span><br><span class="line">                    .addLast(<span class="string">"decoder"</span>, adapter.getDecoder())</span><br><span class="line">                    .addLast(<span class="string">"encoder"</span>, adapter.getEncoder())</span><br><span class="line">                    .addLast(<span class="string">"client-idle-handler"</span>, <span class="keyword">new</span> IdleStateHandler(heartbeatInterval, <span class="number">0</span>, <span class="number">0</span>, MILLISECONDS))</span><br><span class="line">                    .addLast(<span class="string">"handler"</span>, nettyClientHandler);</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="NettyServer"><a href="#NettyServer" class="headerlink" title="NettyServer"></a>NettyServer</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Init and start netty server</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> Throwable</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doOpen</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    bootstrap = <span class="keyword">new</span> ServerBootstrap();</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"> </span><br><span class="line">    bootstrap.group(bossGroup, workerGroup)</span><br><span class="line">            .channel(NettyEventLoopFactory.serverSocketChannelClass())</span><br><span class="line">            .option(ChannelOption.SO_REUSEADDR, Boolean.TRUE)</span><br><span class="line">            .childOption(ChannelOption.TCP_NODELAY, Boolean.TRUE)</span><br><span class="line">            .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)</span><br><span class="line">            .childHandler(<span class="keyword">new</span> ChannelInitializer&lt;SocketChannel&gt;() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(SocketChannel ch)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                    <span class="comment">// ...</span></span><br><span class="line">                    ch.pipeline()</span><br><span class="line">                            .addLast(<span class="string">"decoder"</span>, adapter.getDecoder())</span><br><span class="line">                            .addLast(<span class="string">"encoder"</span>, adapter.getEncoder())</span><br><span class="line">                            .addLast(<span class="string">"server-idle-handler"</span>, <span class="keyword">new</span> IdleStateHandler(<span class="number">0</span>, <span class="number">0</span>, idleTimeout, MILLISECONDS))</span><br><span class="line">                            .addLast(<span class="string">"handler"</span>, nettyServerHandler);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="消费端链路"><a href="#消费端链路" class="headerlink" title="消费端链路"></a>消费端链路</h5><p>消费者在发送消息时编码，接收响应时解码。</p>
-<p><strong>发送消息</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ChannelInboundHandler</span><br><span class="line">...</span><br><span class="line">NettyCodecAdapter#getEncoder()</span><br><span class="line">    -&gt;NettyCodecAdapter$InternalEncoder#encode</span><br><span class="line">         -&gt;DubboCountCodec#encode</span><br><span class="line">             -&gt;DubboCodec#encode</span><br><span class="line">                -&gt;ExchangeCodec#encode</span><br><span class="line">                -&gt;ExchangeCodec#encodeRequest</span><br><span class="line"> </span><br><span class="line">DubboCountCodec类实际引用的是DubboCodec，因DubboCodec继承于ExchangeCodec，并未重写encode方法，所以实际代码跳转会直接进入ExchangeCodec#encode方法</span><br></pre></td></tr></table></figure>
-
-<p><strong>接收响应</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">NettyCodecAdapter#getDecoder()</span><br><span class="line">    -&gt;NettyCodecAdapter$InternalDecoder#decode</span><br><span class="line">         -&gt;DubboCountCodec#decode</span><br><span class="line">             -&gt;DubboCodec#decode</span><br><span class="line">                 -&gt;ExchangeCodec#decode</span><br><span class="line">             -&gt;DubboCodec#decodeBody</span><br><span class="line">...</span><br><span class="line">MultiMessageHandler#received</span><br><span class="line">    -&gt;HeartbeatHadnler#received</span><br><span class="line">        -&gt;AllChannelHandler#received</span><br><span class="line">...</span><br><span class="line">ChannelEventRunnable#run</span><br><span class="line">    -&gt;DecodeHandler#received</span><br><span class="line">    -&gt;DecodeHandler#decode</span><br><span class="line">        -&gt;DecodeableRpcResult#decode</span><br><span class="line"> </span><br><span class="line">解码链路相对复杂，过程中做了两次解码，在一次DubboCodec#decodeBody内，并未实际解码channel的数据，而是构建成DecodeableRpcResult对象，然后在业务处理的Handler里通过异步线程进行实际解码。</span><br></pre></td></tr></table></figure>
-
-<h5 id="提供端链路"><a href="#提供端链路" class="headerlink" title="提供端链路"></a>提供端链路</h5><p>提供者在接收消息时解码，回复响应时编码。</p>
-<p><strong>接收消息</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">NettyCodecAdapter#getDecoder()</span><br><span class="line">    -&gt;NettyCodecAdapter$InternalDecoder#decode</span><br><span class="line">         -&gt;DubboCountCodec#decode</span><br><span class="line">             -&gt;DubboCodec#decode</span><br><span class="line">                 -&gt;ExchangeCodec#decode</span><br><span class="line">             -&gt;DubboCodec#decodeBody</span><br><span class="line">...</span><br><span class="line">MultiMessageHandler#received</span><br><span class="line">    -&gt;HeartbeatHadnler#received</span><br><span class="line">        -&gt;AllChannelHandler#received</span><br><span class="line">...</span><br><span class="line">ChannelEventRunnable#run</span><br><span class="line">    -&gt;DecodeHandler#received</span><br><span class="line">    -&gt;DecodeHandler#decode</span><br><span class="line">        -&gt;DecodeableRpcInvocation#decode</span><br><span class="line"> </span><br><span class="line">提供端解码链路与消费端的类似，区别在于实际解码对象不一样，DecodeableRpcResult 替换成 DecodeableRpcInvocation。</span><br><span class="line"> </span><br><span class="line">体现了Dubbo代码里的良好设计，抽象处理链路，屏蔽处理细节，流程清晰可复用。</span><br></pre></td></tr></table></figure>
-
-<p><strong>回复响应</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">NettyCodecAdapter#getEncoder()</span><br><span class="line">    -&gt;NettyCodecAdapter$InternalEncoder#encode</span><br><span class="line">         -&gt;DubboCountCodec#encode</span><br><span class="line">             -&gt;DubboCodec#encode</span><br><span class="line">                -&gt;ExchangeCodec#encode</span><br><span class="line">                -&gt;ExchangeCodec#encodeResponse</span><br><span class="line"> </span><br><span class="line">与消费方发送消息链路一致，区别在于最后一步区分Request和Response，进行不同内容编码</span><br></pre></td></tr></table></figure>
-
-<p><a href="https://dubbo.apache.org/zh/docs/v2.7/dev/implementation/" target="_blank" rel="noopener">dubbo协议</a></p>
-<p><a href="https://mp.weixin.qq.com/s/tl4iSZUYV5GWTqyWhaDkfw" target="_blank" rel="noopener">原文链接</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/15/架构/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/15/架构/" class="post-title-link" itemprop="url">架构</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-04-15 18:45:02" itemprop="dateCreated datePublished" datetime="2021-04-15T18:45:02+08:00">2021-04-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-04-25 19:45:53" itemprop="dateModified" datetime="2021-04-25T19:45:53+08:00">2021-04-25</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>1、单点故障</p>
-<p>2、系统间依赖复杂</p>
-<p>3、服务补偿</p>
-<p>4、幂等设计</p>
-<p>5、超时设置</p>
-<p>6、流量控制</p>
-<p>7、监控预警</p>
-<p>8、重试策略</p>
-<p>9、系统隔离</p>
-<p>10、代码同步调用</p>
-<p>11、热数据缓存</p>
-<p>12、系统分级</p>
-<p>13、服务降级</p>
-<p>14、灰度和回滚方案</p>
-<p>15、熔断机制</p>
-<p>16、线上压测</p>
-<p>17、代码扫描</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/21/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><span class="page-number current">22</span><a class="page-number" href="/page/23/">23</a><span class="space">&hellip;</span><a class="page-number" href="/page/42/">42</a><a class="extend next" rel="next" href="/page/23/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/21/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><span class="page-number current">22</span><a class="page-number" href="/page/23/">23</a><span class="space">&hellip;</span><a class="page-number" href="/page/43/">43</a><a class="extend next" rel="next" href="/page/23/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -445,14 +475,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">125</span>
+          <span class="site-state-item-count">128</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

@@ -150,6 +150,77 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/05/17/leetcode/93.有效ip地址/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/17/leetcode/93.有效ip地址/" class="post-title-link" itemprop="url">93.还原有效ip地址</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-05-17 11:42:01" itemprop="dateCreated datePublished" datetime="2021-05-17T11:42:01+08:00">2021-05-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-18 10:15:27" itemprop="dateModified" datetime="2021-05-18T10:15:27+08:00">2021-05-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://leetcode-cn.com/problems/restore-ip-addresses/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/restore-ip-addresses/</a></p>
+<p>给定一个只包含数字的字符串，用以表示一个 IP 地址，返回所有可能从 s 获得的 有效 IP 地址 。你可以按任何顺序返回答案。</p>
+<p>有效 IP 地址 正好由四个整数（每个整数位于 0 到 255 之间组成，且不能含有前导 0），整数之间用 ‘.’ 分隔。</p>
+<p>例如：”0.1.2.201” 和 “192.168.1.1” 是 有效 IP 地址，但是 “0.011.255.245”、”192.168.1.312” 和 “<a href="mailto:192.168@1.1" target="_blank" rel="noopener">192.168@1.1</a>“ 是 无效 IP 地址。</p>
+<p>回溯+剪枝</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">_93</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"><span class="comment">//        Solution2 solution = new Solution2();</span></span><br><span class="line">        Solution1 solution = <span class="keyword">new</span> Solution1();</span><br><span class="line">        System.out.println(solution.restoreIpAddresses(<span class="string">"2525511135"</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">restoreIpAddresses</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">            List&lt;String&gt; allValidIpAddresses = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            <span class="keyword">if</span> (s == <span class="keyword">null</span> || s.length() &gt; <span class="number">12</span> || s.length() &lt; <span class="number">4</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> allValidIpAddresses;</span><br><span class="line">            &#125;</span><br><span class="line">            backtracking(s, <span class="keyword">new</span> ArrayList&lt;&gt;(), allValidIpAddresses, <span class="number">0</span>);</span><br><span class="line">            <span class="keyword">return</span> allValidIpAddresses;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">backtracking</span><span class="params">(String s, ArrayList&lt;String&gt; bytes, List&lt;String&gt; result, <span class="keyword">int</span> pos)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (bytes.size() == <span class="number">4</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (pos == s.length()) &#123;</span><br><span class="line">                    result.add(String.join(<span class="string">"."</span>, bytes));</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = pos; i &lt; pos + <span class="number">3</span> &amp;&amp; i &lt; s.length(); i++) &#123;</span><br><span class="line">                String oneByte = s.substring(pos, i + <span class="number">1</span>);</span><br><span class="line">                <span class="keyword">if</span> (!isValid(oneByte)) &#123;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                bytes.add(oneByte);</span><br><span class="line">                backtracking(s, bytes, result, i + <span class="number">1</span>);</span><br><span class="line">                bytes.remove(bytes.size() - <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isValid</span><span class="params">(String oneByte)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (oneByte.charAt(<span class="number">0</span>) == <span class="string">'0'</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> oneByte.equals(<span class="string">"0"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">int</span> num = Integer.valueOf(oneByte);</span><br><span class="line">            <span class="keyword">return</span> (num &gt;= <span class="number">0</span> &amp;&amp; num &lt; <span class="number">256</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">restoreIpAddresses</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">            List&lt;String&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            <span class="keyword">if</span> (str == <span class="keyword">null</span> || str.length() &lt; <span class="number">4</span> || str.length() &gt; <span class="number">12</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> result;</span><br><span class="line">            &#125;</span><br><span class="line">            dfs(str, <span class="number">0</span>, <span class="number">0</span>, <span class="keyword">new</span> LinkedList&lt;&gt;(), result);</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(String str, <span class="keyword">int</span> nums, <span class="keyword">int</span> start, LinkedList&lt;String&gt; strings, List&lt;String&gt; result)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (strings.size() == <span class="number">4</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (str.length() == start) &#123;</span><br><span class="line">                    result.add(String.join(<span class="string">"."</span>, strings));</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (str.length() - start &lt; (<span class="number">4</span> - nums) || str.length() - start &gt; (<span class="number">4</span> - nums) * <span class="number">3</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (start + i &gt;= str.length()) &#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (valid(str, start, start + i + <span class="number">1</span>)) &#123;</span><br><span class="line">                    strings.addLast(str.substring(start, start + i + <span class="number">1</span>));</span><br><span class="line">                    dfs(str, nums + <span class="number">1</span>, start + i + <span class="number">1</span>, strings, result);</span><br><span class="line">                    strings.removeLast();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">valid</span><span class="params">(String str, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</span><br><span class="line">            String tmp = str.substring(start, end);</span><br><span class="line">            <span class="keyword">if</span> (tmp.charAt(<span class="number">0</span>) == <span class="string">'0'</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">int</span> value = Integer.parseInt(tmp);</span><br><span class="line">            <span class="keyword">return</span> value &gt;= <span class="number">0</span> &amp;&amp; value &lt;= <span class="number">255</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="/2021/05/10/k8s/创建k8s用户/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -250,7 +321,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/30/netty/netty 回调/">
+    <link itemprop="mainEntityOfPage" href="/2021/05/10/k8s/kubeadm安装集群/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -264,80 +335,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/04/30/netty/netty 回调/" class="post-title-link" itemprop="url">netty ChannelFuture回调</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-04-30 13:20:20" itemprop="dateCreated datePublished" datetime="2021-04-30T13:20:20+08:00">2021-04-30</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-06 10:47:11" itemprop="dateModified" datetime="2021-05-06T10:47:11+08:00">2021-05-06</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="ChannelInboundHandler-read方法写数据到socket"><a href="#ChannelInboundHandler-read方法写数据到socket" class="headerlink" title="ChannelInboundHandler#read方法写数据到socket"></a>ChannelInboundHandler#read方法写数据到socket</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&quot;nioEventLoopGroup-3-1@1242&quot; prio=10 tid=0xf nid=NA runnable</span><br><span class="line">  java.lang.Thread.State: RUNNABLE</span><br><span class="line">	  at com.hezk.netty.echo.server.EchoServerHandler$1.operationComplete(EchoServerHandler.java:19)</span><br><span class="line">	  at com.hezk.netty.echo.server.EchoServerHandler$1.operationComplete(EchoServerHandler.java:16)</span><br><span class="line">	  at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:578)</span><br><span class="line">	  at io.netty.util.concurrent.DefaultPromise.notifyListenersNow(DefaultPromise.java:552)</span><br><span class="line">	  at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:491)</span><br><span class="line">	  at io.netty.util.concurrent.DefaultPromise.setValue0(DefaultPromise.java:616)</span><br><span class="line">	  at io.netty.util.concurrent.DefaultPromise.setSuccess0(DefaultPromise.java:605)</span><br><span class="line">	  at io.netty.util.concurrent.DefaultPromise.trySuccess(DefaultPromise.java:104)</span><br><span class="line">	  at io.netty.util.internal.PromiseNotificationUtil.trySuccess(PromiseNotificationUtil.java:48)</span><br><span class="line">	  at io.netty.channel.ChannelOutboundBuffer.safeSuccess(ChannelOutboundBuffer.java:717)</span><br><span class="line">	  at io.netty.channel.ChannelOutboundBuffer.remove(ChannelOutboundBuffer.java:272)</span><br><span class="line">	  at io.netty.channel.ChannelOutboundBuffer.removeBytes(ChannelOutboundBuffer.java:352)</span><br><span class="line">	  at io.netty.channel.socket.nio.NioSocketChannel.doWrite(NioSocketChannel.java:414)</span><br><span class="line">	  at io.netty.channel.AbstractChannel$AbstractUnsafe.flush0(AbstractChannel.java:941)</span><br><span class="line">	  at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.flush0(AbstractNioChannel.java:354)</span><br><span class="line">	  at io.netty.channel.AbstractChannel$AbstractUnsafe.flush(AbstractChannel.java:905)</span><br><span class="line">	  at io.netty.channel.DefaultChannelPipeline$HeadContext.flush(DefaultChannelPipeline.java:1372)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.invokeFlush0(AbstractChannelHandlerContext.java:750)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.invokeFlush(AbstractChannelHandlerContext.java:742)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.flush(AbstractChannelHandlerContext.java:728)</span><br><span class="line">	  at com.hezk.netty.echo.server.EchoServerHandler.channelRead(EchoServerHandler.java:22)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:357)</span><br><span class="line">	  at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1410)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:379)</span><br><span class="line">	  at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:365)</span><br><span class="line">	  at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:919)</span><br><span class="line">	  at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)</span><br><span class="line">	  at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:719)</span><br><span class="line">	  at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:655)</span><br><span class="line">	  at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:581)</span><br><span class="line">	  at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:493)</span><br><span class="line">	  at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:989)</span><br><span class="line">	  at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)</span><br><span class="line">	  at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)</span><br><span class="line">	  at java.lang.Thread.run(Thread.java:748)</span><br></pre></td></tr></table></figure>
-
-<h4 id="netty核心类"><a href="#netty核心类" class="headerlink" title="netty核心类"></a>netty核心类</h4><p>AbstractNioByteChannel<br>NioByteUnsafe<br>PooledByteBufAllocator<br>Bootstrap<br>ServerBootstrap<br>EventLoopGroup<br>NioEventLoopGroup<br>NioEventLoop<br>ChannelOption</p>
-<p>ChannelPipeline<br>ServerBootstrapAcceptor<br>ChannelInboundHandler<br>ChannelOutboundHandler<br>ChannelHandlerContext<br>ChannelInitializer<br>ByteToMessageDecoder<br>DefaultChannelPipeline<br>MessageToMessageDecoder</p>
-<p>DefaultPromise<br>DefaultChannelPromise</p>
-<p>NioSocketChannel</p>
-<p>NioServerSocketChannel<br>ReferenceCountUtil<br>ResourceLeakTracker<br>HashedWheelTimer<br>FastThreadLocal</p>
-<h4 id="核心功能"><a href="#核心功能" class="headerlink" title="核心功能"></a>核心功能</h4><p>心跳检测</p>
-<p>断线重连</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/29/技术文档格式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/04/29/技术文档格式/" class="post-title-link" itemprop="url">技术文档</a>
+            <a href="/2021/05/10/k8s/kubeadm安装集群/" class="post-title-link" itemprop="url">kubeadm安装集群</a>
         </h2>
 
         <div class="post-meta">
@@ -348,7 +346,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-04-29 18:45:02 / Modified: 16:35:55" itemprop="dateCreated datePublished" datetime="2021-04-29T18:45:02+08:00">2021-04-29</time>
+              <time title="Created: 2021-05-10 12:28:35 / Modified: 19:13:02" itemprop="dateCreated datePublished" datetime="2021-05-10T12:28:35+08:00">2021-05-10</time>
             </span>
 
           
@@ -362,7 +360,29 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h4 id="一、背景介绍"><a href="#一、背景介绍" class="headerlink" title="一、背景介绍"></a>一、背景介绍</h4><h4 id="二、技术选型"><a href="#二、技术选型" class="headerlink" title="二、技术选型"></a>二、技术选型</h4><h4 id="三、技术介绍"><a href="#三、技术介绍" class="headerlink" title="三、技术介绍"></a>三、技术介绍</h4><h4 id="四、功能介绍"><a href="#四、功能介绍" class="headerlink" title="四、功能介绍"></a>四、功能介绍</h4><h4 id="五、系统架构"><a href="#五、系统架构" class="headerlink" title="五、系统架构"></a>五、系统架构</h4><h5 id="交互图"><a href="#交互图" class="headerlink" title="交互图"></a>交互图</h5><h5 id="模块划分"><a href="#模块划分" class="headerlink" title="模块划分"></a>模块划分</h5><h5 id="交互、通信机制"><a href="#交互、通信机制" class="headerlink" title="交互、通信机制"></a>交互、通信机制</h5><h5 id="核心功能设计"><a href="#核心功能设计" class="headerlink" title="核心功能设计"></a>核心功能设计</h5><h4 id="六、系统改造、升级"><a href="#六、系统改造、升级" class="headerlink" title="六、系统改造、升级"></a>六、系统改造、升级</h4><h5 id="技术核心功能优化"><a href="#技术核心功能优化" class="headerlink" title="技术核心功能优化"></a>技术核心功能优化</h5><h4 id="七、快速升级、迁移"><a href="#七、快速升级、迁移" class="headerlink" title="七、快速升级、迁移"></a>七、快速升级、迁移</h4>
+          <p>1、添加k8s项目的yum, kubernetes.repo</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cat &lt;&lt;EOF &gt; kubernetes.repo</span><br><span class="line">[kubernetes]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">repo_gpgcheck=1</span><br><span class="line">gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 安装最新的kubelet和kubectl以及kubeadm</span><br><span class="line">yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes</span><br><span class="line"># 设置启动策略</span><br><span class="line">systemctl daemon-reload &amp;&amp; systemctl enable kubelet &amp;&amp; systemctl start kubelet</span><br><span class="line">systemctl daemon-reload &amp;&amp; systemctl restart kubelet &amp;&amp; systemctl status kubelet</span><br></pre></td></tr></table></figure>
+
+<p>此时可能出现kubelet启动失败的问题， 通过下面命令查看error日志</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">journalctl -xefu kubelet</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubelet cgroup driver: \&quot;cgroupfs\&quot; is different from docker cgroup driver: \&quot;systemd\&quot;&quot;</span><br></pre></td></tr></table></figure>
+
+<p>文件<strong>/etc/docker/daemon.json</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;exec-opts&quot;: [&quot;native.cgroupdriver=systemd&quot;]</span><br></pre></td></tr></table></figure>
+
+<p> 文件<strong>/usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExecStart=/usr/bin/kubelet --cgroup-driver=systemd $KUBELET_KUBECONFIG_ARGS $KUBELET_CONFIG_ARGS $KUBELET_KUBEADM_ARGS $KUBELET_EXTRA_ARGS</span><br></pre></td></tr></table></figure>
+
+<p><strong>彻底清理kubeadm配置文件</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">sudo kubeadm reset -f</span><br><span class="line">sudo rm -rvf $HOME/.kube</span><br><span class="line">sudo rm -rvf ~/.kube/</span><br><span class="line">sudo rm -rvf /etc/kubernetes/</span><br><span class="line">sudo rm -rvf /etc/systemd/system/kubelet.service.d</span><br><span class="line">sudo rm -rvf /etc/systemd/system/kubelet.service</span><br><span class="line">sudo rm -rvf /usr/bin/kube*</span><br><span class="line">sudo rm -rvf /etc/cni</span><br><span class="line">sudo rm -rvf /opt/cni</span><br><span class="line">sudo rm -rvf /var/lib/etcd</span><br><span class="line">sudo rm -rvf /var/etcd</span><br><span class="line">sudo apt-get remove kube*</span><br></pre></td></tr></table></figure>
+
+<p><strong>查看kubeadm join命令</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubeadm token create --print-join-command</span><br></pre></td></tr></table></figure>
+
+
       
     </div>
 
@@ -380,7 +400,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/19/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><span class="page-number current">20</span><a class="page-number" href="/page/21/">21</a><span class="space">&hellip;</span><a class="page-number" href="/page/42/">42</a><a class="extend next" rel="next" href="/page/21/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/19/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><span class="page-number current">20</span><a class="page-number" href="/page/21/">21</a><span class="space">&hellip;</span><a class="page-number" href="/page/43/">43</a><a class="extend next" rel="next" href="/page/21/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -446,14 +466,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">125</span>
+          <span class="site-state-item-count">128</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
