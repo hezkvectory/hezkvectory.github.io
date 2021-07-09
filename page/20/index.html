@@ -221,106 +221,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/05/10/k8s/创建k8s用户/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/10/k8s/创建k8s用户/" class="post-title-link" itemprop="url">根据证书生成k8s账号信息</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2021-05-10 12:28:35" itemprop="dateCreated datePublished" datetime="2021-05-10T12:28:35+08:00">2021-05-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-11 19:20:21" itemprop="dateModified" datetime="2021-05-11T19:20:21+08:00">2021-05-11</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="新建用户"><a href="#新建用户" class="headerlink" title="新建用户"></a>新建用户</h4><p>新建一个k8s用户大概可以分为以下几步：</p>
-<ul>
-<li>生成用户的证书key</li>
-<li>通过用户的证书key，生成用户的证书请求</li>
-<li>通过k8s的api的ca证书去签发用户的证书请求，生成用户的证书</li>
-<li>配置kubectl config<ul>
-<li>kubectl config set-cluster              //集群配置</li>
-<li>kubectl config set-credentials NAME     //用户配置</li>
-<li>kubectl config set-context         //context配置</li>
-<li>kubectl config use-context         //切换context</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(umask 077; openssl genrsa -out test.key 2048)      //创建用户证书key</span><br><span class="line">openssl req -new -key test.key -out test.csr -subj &quot;/O=test/CN=test&quot;      //创建用户证书请求，-subj指定组和用户，其中O是组名，CN是用户名</span><br><span class="line">openssl x509 -req -in test.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out test.crt -days 3650      //使用k8s的ca签发用户证书</span><br><span class="line">kubectl config set-credentials test --client-certificate=test.crt --client-key=test.key --embed-certs=true      //用户配置</span><br><span class="line">kubectl config set-context test@kubernetes --cluster=kubernetes --user=test      //context设置</span><br><span class="line"></span><br><span class="line">//可以切换到新用户了，但此时用户啥权限都没有</span><br><span class="line">kubectl config use-context test@kubernetes</span><br></pre></td></tr></table></figure>
-
-<p>简单说明：</p>
-<ul>
-<li>没有使用kubectl config set-cluster ，因为集群就使用本身的集群，也默认使用本集群的默认config文件</li>
-<li>kubectl config set-cluster –kubeconfig=/PATH/TO/SOMEFILE  —kubeconfig=/PATH/TO/SOMEFILE用于创建新的配置文件，如果不加此选项，则内容会添加到家目录下.kube/config文件中，可以使用use-context来切换不同的用户管理k8s集群</li>
-<li>context，就是用什么用户来管理哪个集群，即用户和集群的结合</li>
-</ul>
-<h4 id="用户授权"><a href="#用户授权" class="headerlink" title="用户授权"></a>用户授权</h4><p>k8s的用户授权有很多种，其中最普遍的是RBAC——基于角色的授权机制。</p>
-<ul>
-<li>某个用户属于某个角色</li>
-<li>某个角色拥有某些操作</li>
-<li>某些操作绑定到某些资源上</li>
-</ul>
-<p>即最终效果是：某个用户对某些资源拥有某些操作。下面以上面创建的baison用户为例，让此用户对default空间拥有查看pod与进入到pod里的权限。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl create role only-read-pods --verb=get,list,watch,create --resource=pod,pod/exec</span><br><span class="line">kubectl create rolebinding bind-only-read-pods --role=only-read-pods --user=test</span><br></pre></td></tr></table></figure>
-
-<p>简单说明：</p>
-<ul>
-<li>除了role、rolebinding外，还有cluserrole、clusterrolebinding，他们的区别就是作用域不同，很明显带cluser的作用与整个集群。</li>
-<li>rolebinding可以绑定role，也可以绑定clusterrole，绑定cluserrole的时候，clusterrole作用域降级为namespace级别。</li>
-<li>集群有很多内置role、rolebinding和cluserrole、clusterrolebinding，可以用yaml方式打开作为借鉴。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="/2021/05/10/k8s/kubeadm安装集群/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -382,6 +282,73 @@
 <p><strong>查看kubeadm join命令</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubeadm token create --print-join-command</span><br></pre></td></tr></table></figure>
 
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/05/10/k8s/etcd-k8s查看数据/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/10/k8s/etcd-k8s查看数据/" class="post-title-link" itemprop="url">etcd k8s查看数据</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-05-10 12:28:35 / Modified: 19:11:40" itemprop="dateCreated datePublished" datetime="2021-05-10T12:28:35+08:00">2021-05-10</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ol>
+<li>ETCDCTL_API=3 etcdctl <br>–endpoints=<a href="https://127.0.0.1:2379" target="_blank" rel="noopener">https://127.0.0.1:2379</a> <br>–cacert=/etc/kubernetes/pki/etcd/ca.crt <br>–cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt <br>–key=/etc/kubernetes/pki/etcd/healthcheck-client.key <br>get / –prefix –keys-only</li>
+</ol>
+<ol start="2">
+<li>ETCDCTL_API=3 etcdctl <br>–endpoints=<a href="https://127.0.0.1:2379" target="_blank" rel="noopener">https://127.0.0.1:2379</a> <br>–cacert=/etc/kubernetes/pki/etcd/ca.crt <br>–cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt <br>–key=/etc/kubernetes/pki/etcd/healthcheck-client.key <br>get /registry/configmaps/kube-system/kube-flannel-cfg</li>
+</ol>
+<ol start="3">
+<li>ETCDCTL_API=3 etcdctl <br>–cacert=/etc/kubernetes/pki/etcd/ca.crt <br>–cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt <br>–key=/etc/kubernetes/pki/etcd/healthcheck-client.key <br>get /registry/minions/l-vkschedule-server2.pub.dev.ten.dm </li>
+</ol>
 
       
     </div>
@@ -466,7 +433,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">128</span>
+          <span class="site-state-item-count">129</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

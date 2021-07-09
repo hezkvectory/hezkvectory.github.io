@@ -279,7 +279,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/05/31/leetcode/树/114. 二叉树展开为链表/">
+    <link itemprop="mainEntityOfPage" href="/2021/05/31/leetcode/树/117. 填充每个节点的下一个右侧节点指针 II/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -293,7 +293,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/05/31/leetcode/树/114. 二叉树展开为链表/" class="post-title-link" itemprop="url">114. 二叉树展开为链表</a>
+            <a href="/2021/05/31/leetcode/树/117. 填充每个节点的下一个右侧节点指针 II/" class="post-title-link" itemprop="url">117. 填充每个节点的下一个右侧节点指针 II</a>
         </h2>
 
         <div class="post-meta">
@@ -304,7 +304,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-05-31 14:45:02 / Modified: 18:07:03" itemprop="dateCreated datePublished" datetime="2021-05-31T14:45:02+08:00">2021-05-31</time>
+              <time title="Created: 2021-05-31 14:45:02 / Modified: 18:06:25" itemprop="dateCreated datePublished" datetime="2021-05-31T14:45:02+08:00">2021-05-31</time>
             </span>
 
           
@@ -318,10 +318,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a href="https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list" target="_blank" rel="noopener">https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list</a></p>
-<p>给你二叉树的根结点 root ，请你将它展开为一个单链表：</p>
-<p>展开后的单链表应该同样使用 TreeNode ，其中 right 子指针指向链表中下一个结点，而左子指针始终为 null 。<br>展开后的单链表应该与二叉树 先序遍历 顺序相同。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">flatten</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        TreeNode curr = root;</span><br><span class="line">        <span class="keyword">while</span> (curr != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (curr.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">                TreeNode prev = curr.left;</span><br><span class="line">                <span class="keyword">while</span> (prev.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    prev = prev.right;</span><br><span class="line">                &#125;</span><br><span class="line">                prev.right = curr.right;</span><br><span class="line">                curr.right = curr.left;</span><br><span class="line">                curr.left = <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            curr = curr.right;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <p><a href="https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node-ii" target="_blank" rel="noopener">https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node-ii</a></p>
+<p>给定一个二叉树</p>
+<p>struct Node {<br>  int val;<br>  Node *left;<br>  Node *right;<br>  Node *next;<br>}<br>填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。</p>
+<p>初始状态下，所有 next 指针都被设置为 NULL。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</span><br><span class="line">    TreeLinkNode last = <span class="keyword">null</span>, nextStart = <span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connect</span><span class="params">(TreeLinkNode root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        TreeLinkNode start = root;</span><br><span class="line">        <span class="keyword">while</span>(start != <span class="keyword">null</span>) &#123;</span><br><span class="line">            last = <span class="keyword">null</span>;</span><br><span class="line">            nextStart = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">for</span>(TreeLinkNode p = start; p != <span class="keyword">null</span>; p = p.next) &#123;</span><br><span class="line">                <span class="keyword">if</span> (p.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    handler(p.left);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (p.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    handler(p.right);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            start = nextStart;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">handler</span><span class="params">(TreeLinkNode node)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (last != <span class="keyword">null</span>) &#123;</span><br><span class="line">            last.next = node;</span><br><span class="line">        &#125;</span><br><span class="line">        last = node;</span><br><span class="line">        <span class="keyword">if</span> (nextStart == <span class="keyword">null</span>) &#123;</span><br><span class="line">            nextStart = node;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
       
@@ -407,7 +408,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">128</span>
+          <span class="site-state-item-count">129</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

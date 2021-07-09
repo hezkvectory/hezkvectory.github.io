@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/05/31/leetcode/树/112. 路径总和/">
+    <link itemprop="mainEntityOfPage" href="/2021/05/31/leetcode/树/226. 翻转二叉树/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,79 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/05/31/leetcode/树/112. 路径总和/" class="post-title-link" itemprop="url">112. 路径总和</a>
+            <a href="/2021/05/31/leetcode/树/226. 翻转二叉树/" class="post-title-link" itemprop="url">226. 翻转二叉树</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-05-31 14:45:02 / Modified: 18:17:23" itemprop="dateCreated datePublished" datetime="2021-05-31T14:45:02+08:00">2021-05-31</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>翻转一棵二叉树。</p>
+<p>示例：</p>
+<p>输入：</p>
+<pre><code>             4
+    /   \
+  2     7
+ / \   / \
+1   3 6   9</code></pre><p>输出：</p>
+<pre><code>             4
+    /   \
+  7     2
+ / \   / \
+9   6 3   1</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> TreeNode <span class="title">invertTree</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> root;</span><br><span class="line">		&#125;</span><br><span class="line">		Queue&lt;TreeNode&gt; q = <span class="keyword">new</span> LinkedList();</span><br><span class="line">		q.offer(root);</span><br><span class="line">		<span class="keyword">while</span> (!q.isEmpty()) &#123;</span><br><span class="line">			TreeNode curr = q.poll();</span><br><span class="line">			TreeNode temp = curr.left;</span><br><span class="line">			curr.left = curr.right;</span><br><span class="line">			curr.right = temp;</span><br><span class="line">			<span class="keyword">if</span> (curr.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">				q.offer(curr.left);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (curr.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">				q.offer(curr.right);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> root;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> TreeNode <span class="title">invertTree</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> root;</span><br><span class="line">		&#125;</span><br><span class="line">		TreeNode temp = root.left;</span><br><span class="line">		root.left = root.right;</span><br><span class="line">		root.right = temp;</span><br><span class="line">		invertTree(root.left);</span><br><span class="line">		invertTree(root.right);</span><br><span class="line">		<span class="keyword">return</span> root;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution3</span> </span>&#123;</span><br><span class="line">	<span class="comment">//more concise version</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> TreeNode <span class="title">invertTree</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> root;</span><br><span class="line">		&#125;</span><br><span class="line">		TreeNode temp = root.left;</span><br><span class="line">		root.left = invertTree(root.right);</span><br><span class="line">		root.right = invertTree(temp);</span><br><span class="line">		<span class="keyword">return</span> root;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/05/31/leetcode/树/104. 二叉树的最大深度/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/31/leetcode/树/104. 二叉树的最大深度/" class="post-title-link" itemprop="url">104. 二叉树的最大深度</a>
         </h2>
 
         <div class="post-meta">
@@ -181,7 +253,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-06-09 17:09:38" itemprop="dateModified" datetime="2021-06-09T17:09:38+08:00">2021-06-09</time>
+                <time title="Modified: 2021-06-09 16:26:25" itemprop="dateModified" datetime="2021-06-09T16:26:25+08:00">2021-06-09</time>
               </span>
 
           
@@ -195,14 +267,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a href="https://leetcode-cn.com/problems/path-sum" target="_blank" rel="noopener">https://leetcode-cn.com/problems/path-sum</a></p>
-<p>给你二叉树的根节点 root 和一个表示目标和的整数 targetSum ，判断该树中是否存在 根节点到叶子节点 的路径，这条路径上所有节点值相加等于目标和 targetSum 。</p>
-<p>叶子节点 是指没有子节点的节点。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasPathSum</span><span class="params">(TreeNode root, <span class="keyword">int</span> sum)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (root.val == sum &amp;&amp; root.left == <span class="keyword">null</span> &amp;&amp; root.right == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> hasPathSum(root.left, sum - root.val) || hasPathSum(root.right, sum - root.val);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <p><a href="https://leetcode-cn.com/problems/maximum-depth-of-binary-tree" target="_blank" rel="noopener">https://leetcode-cn.com/problems/maximum-depth-of-binary-tree</a></p>
+<p>给定一个二叉树，找出其最大深度。</p>
+<p>二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。</p>
+<p>说明: 叶子节点是指没有子节点的节点。</p>
+<p>示例：</p>
+<pre><code>给定二叉树 [3,9,20,null,null,15,7]，
+    3
+   / \
+  9  20
+    /  \
+   15   7
 
-<p> [112. 路径总和.md](112. 路径总和.md) </p>
-<p> [113. 路径总和 II.md](113. 路径总和 II.md) </p>
-<p> [437. 路径总和 III.md](437. 路径总和 III.md) </p>
+返回它的最大深度 3 。</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxDepth</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> Math.max(maxDepth(root.left), maxDepth(root.right)) + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Iterative solution:</span></span><br><span class="line"><span class="comment">     * Time: O(n)</span></span><br><span class="line"><span class="comment">     * Space: O(n)</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxDepth</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        LinkedList&lt;TreeNode&gt; stack = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        LinkedList&lt;Integer&gt; depths = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        stack.add(root);</span><br><span class="line">        depths.add(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> depth = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">            TreeNode currentNode = stack.pollLast();</span><br><span class="line">            <span class="keyword">int</span> currentDepth = depths.pollLast();</span><br><span class="line">            <span class="keyword">if</span> (currentNode != <span class="keyword">null</span>) &#123;</span><br><span class="line">                depth = Math.max(depth, currentDepth);</span><br><span class="line">                stack.add(currentNode.right);</span><br><span class="line">                depths.add(currentDepth + <span class="number">1</span>);</span><br><span class="line">                stack.add(currentNode.left);</span><br><span class="line">                depths.add(currentDepth + <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> depth;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> [543. 二叉树的直径.md](543. 二叉树的直径.md) </p>
 
       
     </div>
@@ -222,7 +301,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/05/31/leetcode/树/94. 二叉树的中序遍历/">
+    <link itemprop="mainEntityOfPage" href="/2021/05/31/leetcode/树/116. 填充每个节点的下一个右侧节点指针/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -236,7 +315,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/05/31/leetcode/树/94. 二叉树的中序遍历/" class="post-title-link" itemprop="url">94. 二叉树的中序遍历</a>
+            <a href="/2021/05/31/leetcode/树/116. 填充每个节点的下一个右侧节点指针/" class="post-title-link" itemprop="url">116. 填充每个节点的下一个右侧节点指针</a>
         </h2>
 
         <div class="post-meta">
@@ -247,7 +326,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-05-31 14:45:02 / Modified: 17:10:04" itemprop="dateCreated datePublished" datetime="2021-05-31T14:45:02+08:00">2021-05-31</time>
+              <time title="Created: 2021-05-31 14:45:02 / Modified: 17:56:16" itemprop="dateCreated datePublished" datetime="2021-05-31T14:45:02+08:00">2021-05-31</time>
             </span>
 
           
@@ -261,72 +340,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>(搜索二叉树，中序遍历，遍历结果是升序排序) </p>
-<p>递归+栈</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">inorderTraversal</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> inorder(root, <span class="keyword">new</span> ArrayList());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> List&lt;Integer&gt; <span class="title">inorder</span><span class="params">(TreeNode root, List&lt;Integer&gt; result)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">        inorder(root.left, result);</span><br><span class="line">        result.add(root.val);</span><br><span class="line">        <span class="keyword">return</span> inorder(root.right, result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution3</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">inorderTraversal</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        Stack&lt;TreeNode&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() || root != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">while</span> (root != <span class="keyword">null</span>) &#123;</span><br><span class="line">                stack.push(root);</span><br><span class="line">                root = root.left;</span><br><span class="line">            &#125;</span><br><span class="line">            root = stack.pop();</span><br><span class="line">            result.add(root.val);</span><br><span class="line">            root = root.right;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <p><a href="https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node" target="_blank" rel="noopener">https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node</a></p>
+<p>给定一个 完美二叉树 ，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下：</p>
+<p>struct Node {<br>  int val;<br>  Node *left;<br>  Node *right;<br>  Node *next;<br>}<br>填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。</p>
+<p>初始状态下，所有 next 指针都被设置为 NULL。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TreeLinkNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> val;</span><br><span class="line">    <span class="keyword">public</span> TreeLinkNode left;</span><br><span class="line">    <span class="keyword">public</span> TreeLinkNode right;</span><br><span class="line">    <span class="keyword">public</span> TreeLinkNode next;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TreeLinkNode</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        val = x;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/05/31/leetcode/树/145. 二叉树的后序遍历/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/31/leetcode/树/145. 二叉树的后序遍历/" class="post-title-link" itemprop="url">145. 二叉树的后序遍历</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-05-31 14:45:02 / Modified: 17:47:44" itemprop="dateCreated datePublished" datetime="2021-05-31T14:45:02+08:00">2021-05-31</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>栈 + 递归</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">postorderTraversal</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; list = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> list;</span><br><span class="line">        &#125;</span><br><span class="line">        Stack&lt;TreeNode&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">        stack.push(root);</span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">            TreeNode curr = stack.pop();</span><br><span class="line">            list.add(<span class="number">0</span>, curr.val);</span><br><span class="line">            <span class="keyword">if</span> (curr.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">                stack.push(curr.left);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (curr.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">                stack.push(curr.right);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution3</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">postorderTraversal</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; result = <span class="keyword">new</span> ArrayList();</span><br><span class="line">        <span class="keyword">return</span> post(root, result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">List&lt;Integer&gt; <span class="title">post</span><span class="params">(TreeNode root, List&lt;Integer&gt; result)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">        post(root.left, result);</span><br><span class="line">        post(root.right, result);</span><br><span class="line">        result.add(root.val);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">postorder</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">		List&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> res;</span><br><span class="line">		&#125;</span><br><span class="line">		Stack&lt;TreeNode&gt; queue = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">		TreeNode prev = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">while</span>(root != <span class="keyword">null</span> || !queue.isEmpty()) &#123;</span><br><span class="line">			<span class="keyword">while</span>(root != <span class="keyword">null</span>) &#123;</span><br><span class="line">				queue.push(root);</span><br><span class="line">				root = root.left;</span><br><span class="line">			&#125;</span><br><span class="line">			root = root.pop();</span><br><span class="line">			<span class="keyword">if</span> (root.right == <span class="keyword">null</span> || root.right == prev) &#123;</span><br><span class="line">				res.add(root.val);</span><br><span class="line">				prev = root;</span><br><span class="line">				root = <span class="keyword">null</span>;</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				queue.push(root);</span><br><span class="line">				root = root.right;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connect</span><span class="params">(TreeLinkNode node)</span> </span>&#123;</span><br><span class="line">        Queue&lt;TreeLinkNode&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        queue.offer(node);</span><br><span class="line">        <span class="keyword">while</span> (!queue.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">int</span> size = queue.size();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">                TreeLinkNode curr = queue.poll();</span><br><span class="line">                <span class="keyword">if</span> (i &lt; size - <span class="number">1</span>) &#123;</span><br><span class="line">                    curr.next = queue.peek();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (curr.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    queue.offer(curr.left);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (curr.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    queue.offer(curr.right);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connect</span><span class="params">(TreeLinkNode node)</span> </span>&#123;</span><br><span class="line">        TreeLinkNode curr = node;</span><br><span class="line">        <span class="keyword">while</span> (curr.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">            TreeLinkNode head = curr;</span><br><span class="line">            <span class="keyword">while</span> (head != <span class="keyword">null</span>) &#123;</span><br><span class="line">                head.left.next = head.right;</span><br><span class="line">                <span class="keyword">if</span> (head.next != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    head.right.next = head.next.left;</span><br><span class="line">                &#125;</span><br><span class="line">                head = head.next;</span><br><span class="line">            &#125;</span><br><span class="line">            curr = curr.left;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
       
@@ -412,7 +432,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">128</span>
+          <span class="site-state-item-count">129</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

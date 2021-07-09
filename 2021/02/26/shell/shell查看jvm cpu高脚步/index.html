@@ -199,7 +199,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line">TID=`ps H -eo user,pid,ppid,tid,time,%cpu,cmd --sort=%cpu | tail -n 10 | head -n 1 | awk '&#123;print $4&#125;'`</span><br><span class="line">echo $TID</span><br><span class="line">SIX=`printf '%x\n' $TID`</span><br><span class="line">echo $SIX</span><br><span class="line">jstack  2918 | grep $SIX -A 20</span><br></pre></td></tr></table></figure>
+        <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">TID=`ps H -eo user,pid,ppid,tid,time,%cpu,cmd --sort=%cpu | tail -n 10 | head -n 1 | awk '&#123;print $4&#125;'`</span><br><span class="line">echo $TID</span><br><span class="line">SIX=`printf '%x\n' $TID`</span><br><span class="line">echo $SIX</span><br><span class="line">jstack  2918 | grep $SIX -A 20</span><br></pre></td></tr></table></figure>
 
 
     </div>
@@ -216,11 +216,11 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/02/26/skywalking/skywalking-oap服务启动/" rel="prev" title="">
+    <a href="/2021/02/26/sentinel/sentinel原理/" rel="prev" title="">
       <i class="fa fa-chevron-left"></i> 
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/02/26/sentinel/sentinel原理/" rel="next" title="">
+    <a href="/2021/02/26/skywalking/skywalking-oap服务启动/" rel="next" title="">
        <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
@@ -294,7 +294,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">128</span>
+          <span class="site-state-item-count">129</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
