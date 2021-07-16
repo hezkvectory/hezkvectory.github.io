@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/05/19/java/方法重载和方法重写/">
+    <link itemprop="mainEntityOfPage" href="/2021/05/19/leetcode/字符串/76. 最小覆盖子串/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,200 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/05/19/java/方法重载和方法重写/" class="post-title-link" itemprop="url">方法重载和方法重写</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-05-19 10:44:02 / Modified: 11:22:00" itemprop="dateCreated datePublished" datetime="2021-05-19T10:44:02+08:00">2021-05-19</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><a href="https://blog.csdn.net/zwx900102/article/details/108027295" target="_blank" rel="noopener">https://blog.csdn.net/zwx900102/article/details/108027295</a></p>
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>JVM执行字节码指令是基于栈的架构，就是说所有的操作数都必须先入栈，然后再根据需要出栈进行操作计算，再把结果进行入栈，这个流程和基于寄存器的架构是有本质区别的，而基于寄存器架构来实现，在不同的机器上可能会无法做到完全兼容，这也是Java会选择基于栈的设计的原因之一。</p>
-<h1 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h1><p>我们思考下，当我们调用一个方法时，参数是怎么传递的，返回值又是怎么保存的，一个方法调用之后又是如何继续下一个方法调用的呢？调用过程中肯定会存储一些方法的参数和返回值等信息，这些信息存储在哪里呢？</p>
-<p>我们知道，每次调用一个方法就会产生一个栈帧，所以我们肯定可以想到栈帧就存储了所有调用过程中需要使用到的数据。现在就让我们深入的去了解一下Java虚拟机栈中的栈帧吧。</p>
-<h1 id="栈帧"><a href="#栈帧" class="headerlink" title="栈帧"></a>栈帧</h1><p>当我们调用一个方法的时候，就会产生一个栈帧，当一个方法调用完成时，它所对应的栈帧将被销毁，无论这种完成是正常的还是突然的(抛出一个未捕获的异常)。</p>
-<p>每个栈帧中包括局部变量表(Local Variables)、操作数栈(Operand Stack)、动态链接(Dynamic Linking)、方法返回地址(Return Address)和额外的附加信息。</p>
-<p>在给定的线程当中，永远只有一个栈帧是活动的，所以活动的栈帧又称之为当前栈帧，而其对应的方法则称之为当前方法，定义了当前方法的类则称之为当前类。当一个方法调用结束时，其对应的栈帧也会被丢弃。</p>
-<h2 id="局部变量表-Local-Variables"><a href="#局部变量表-Local-Variables" class="headerlink" title="局部变量表(Local Variables)"></a>局部变量表(Local Variables)</h2><p>局部变量表是以数组的形式存储的，而且当前栈帧的方法所需要分配的最大长度是在编译时就确定了。局部变量表通过index来寻址，变量从index[0]开始传递。</p>
-<p>局部变量表的数组中，每一个位置可以保存一个32位的数据类型：boolean、byte、char、short、int、float、reference或returnAddress类型的值。而对于64位的数据类型long和double则需要两个位置来存储，但是因为局部变量表是属于线程私有的，所以虽然被分割为2个变量存储，依然不用担心会出现安全性问题。</p>
-<p>对于64位的数据类型，假如其占用了数组中的index[n]和index[n+1]两个位置，那么不允许单独访问其中的某一个位置，Java虚拟机规范中规定，如果出现一个64位的数据被单独访问某一部分时，则在类加载机制中的校验阶段就应该抛出异常。</p>
-<p>Java虚拟机在方法调用时使用局部变量进行传递参数。在类方法(static方法)调用中，所有参数都以从局部变量中的index[0]开始进行参数传递。而在实例方法调用上，index[0]固定用来传递方法所属于的对象实例，其余所有参数则在从局部变量表内index[1]的位置开始进行传递。</p>
-<p>注意：局部变量表中的变量不可以直接使用，如需要使用的话，必须通过相关指令将其加载至操作数栈中作为操作数才能使用</p>
-<h2 id="操作数栈-Operand-Stacks"><a href="#操作数栈-Operand-Stacks" class="headerlink" title="操作数栈(Operand Stacks)"></a>操作数栈(Operand Stacks)</h2><p>操作数栈，在上下文语义清晰时，也可以称之为操作栈（Operand Stack），是一个后进先出(Last In First Out,LIFO)栈，同局部变量表一样，操作数栈的最大深度也是在编译时就确定的。</p>
-<p>操作数栈在刚被创建时(也就是方法刚被执行的时候)是空的，然后在执行方法的过程中，通过虚拟机指令将常量/值从局部变量表或字段加载到操作数栈中，然后对其进行操作，并将操作结果压入栈内。</p>
-<p>操作数堆栈上的每个条目都可以保存任何Java虚拟机类型的值，包括long或double类型的值。</p>
-<p>注意：我们必须以适合其类型的方式对操作数堆栈中的值进行操作。例如，不可能将两个int类型的值压入栈后将其视为long类型，也不可能将两个float类型值压入栈内后使用iadd指令将其添加。</p>
-<h2 id="动态连接-Dynamic-Linking"><a href="#动态连接-Dynamic-Linking" class="headerlink" title="动态连接(Dynamic Linking)"></a>动态连接(Dynamic Linking)</h2><p>每个栈帧都包含一个指向运行时常量池中该栈帧所属方法的引用，持有这个引用是为了支持方法调用过程中的动态连接。</p>
-<p>在Class文件中的常量池中存有大量的符号引用，字节码中的方法调用指令就以常量池中指向方法的符号引用作为参数，这些符号引用一部分会在类加载阶段或者第一次使用的时候就转化为直接引用，这种就称为静态解析。而另外一部分则会在每一次运行期间才会转化为直接引用，这部分就称为动态连接。</p>
-<h2 id="方法返回地址"><a href="#方法返回地址" class="headerlink" title="方法返回地址"></a>方法返回地址</h2><p>当一个方法开始执行后，只有两种方式可以退出：一种是遇到方法返回的字节码指令；一种是遇见异常，并且这个异常没有在方法体内得到处理。</p>
-<h3 id="正常退出-Normal-Method-Invocation-Completion"><a href="#正常退出-Normal-Method-Invocation-Completion" class="headerlink" title="正常退出(Normal Method Invocation Completion)"></a>正常退出(Normal Method Invocation Completion)</h3><p>如果对当前方法的调用正常完成，则可能会向调用方法返回一个值。当被调用的方法执行其中一个返回指令时，返回指令的选择必须与被返回值的类型相匹配(如果有的话)。</p>
-<p>方法正常退出时，当前栈帧通过将调用者的pc程序计数器适当的并跳过当前的调用指令来恢复调用程序的状态，包括它的局部变量表和操作数堆栈。然后继续在调用方法的栈帧来执行后续流程，如果有返回值的话则需要将返回值压入操作数栈。</p>
-<h3 id="异常终止-Abrupt-Method-Invocation-Completion"><a href="#异常终止-Abrupt-Method-Invocation-Completion" class="headerlink" title="异常终止(Abrupt Method Invocation Completion)"></a>异常终止(Abrupt Method Invocation Completion)</h3><p>如果在方法中执行Java虚拟机指令导致Java虚拟机抛出异常，并且该异常没有在方法中处理，那么方法调用会突然结束，因为异常导致的方法突然结束永远不会有返回值返回给它的调用者。</p>
-<h2 id="其他附加信息"><a href="#其他附加信息" class="headerlink" title="其他附加信息"></a>其他附加信息</h2><p>这一部分具体要看虚拟机产商是如何实现的，虚拟机规范并没有对这部分进行描述。</p>
-<h1 id="方法调用流程演示"><a href="#方法调用流程演示" class="headerlink" title="方法调用流程演示"></a>方法调用流程演示</h1><p>上面的概念听起来有点抽象，下面我们就通过一个简单的例子来演示一下方法的执行流程。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">package com.zwx.jvm;</span><br><span class="line"></span><br><span class="line">public class JVMDemo &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        int sum = add(1, 2);</span><br><span class="line">        print(sum);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static int add(int a, int b) &#123;</span><br><span class="line">        a = 3;</span><br><span class="line">        int result = a + b;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void print(int num) &#123;</span><br><span class="line">        System.out.println(num);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>要想了解Java虚拟机的执行流程，那么我们必须要对类进行编译，得到字节码文件，执行如下命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javap -c xxx\xxx\JVMDemo.class &gt;1.txt</span><br></pre></td></tr></table></figure>
-
-<p>将JVMDemo.class生成的字节码指令输出到1.txt文件中，然后打开，看到如下字节码指令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">Compiled from &quot;JVMDemo.java&quot;</span><br><span class="line">public class com.zwx.jvm.JVMDemo &#123;</span><br><span class="line">  public com.zwx.jvm.JVMDemo();</span><br><span class="line">    Code:</span><br><span class="line">       0: aload_0</span><br><span class="line">       1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">       4: return</span><br><span class="line"></span><br><span class="line">  public static void main(java.lang.String[]);</span><br><span class="line">    Code:</span><br><span class="line">       0: iconst_1</span><br><span class="line">       1: iconst_2</span><br><span class="line">       2: invokestatic  #2                  // Method add:(II)I</span><br><span class="line">       5: istore_1</span><br><span class="line">       6: iload_1</span><br><span class="line">       7: invokestatic  #3                  // Method print:(I)V</span><br><span class="line">      10: return</span><br><span class="line"></span><br><span class="line">  public static int add(int, int);</span><br><span class="line">    Code:</span><br><span class="line">       0: iconst_3</span><br><span class="line">       1: istore_0</span><br><span class="line">       2: iload_0</span><br><span class="line">       3: iload_1</span><br><span class="line">       4: iadd</span><br><span class="line">       5: istore_2</span><br><span class="line">       6: iload_2</span><br><span class="line">       7: ireturn</span><br><span class="line"></span><br><span class="line">  public static void print(int);</span><br><span class="line">    Code:</span><br><span class="line">       0: getstatic     #4                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">       3: iload_0</span><br><span class="line">       4: invokevirtual #5                  // Method java/io/PrintStream.println:(I)V</span><br><span class="line">       7: return</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>如果是第一次接触可能指令看不太懂，但是大致的类结构还是很清晰的，我们先来对用到的字节码指令大致说明一下：</p>
-<ul>
-<li>iconst_i<br>表示将整型数字i压入操作数栈，注意，这里i的返回只有-1~5，如果不在这个范围会采用其他指令，如当int取值范围是[-128,127]时，会采用bipush指令。</li>
-<li>invokestatic<br>表示调用一个静态方法</li>
-<li>istore_n<br>这里表示将一个整型数字存入局部变量表的索引n位置，因为局部变量表是通过一个数组形式来存储变量的</li>
-<li>iload_n<br>表示将局部变量位置n的变量压入操作数栈</li>
-<li>ireturn<br>将当前方法的结果返回到上一个栈帧</li>
-<li>invokevirtual<br>调用虚方法</li>
-</ul>
-<p>了解了字节码指令的大概意思，接下来就让我们来演示一下主要的几个执行流程：</p>
-<ul>
-<li>1、代码编译之后大致得到如下的一个Java虚拟机栈,注意这时候操作数栈都是空的(pc寄存器的值在这里暂不考虑 ，实际上调用指令的过程，pc寄存器是会一直发生变化的)<br><img src="https://img-blog.csdnimg.cn/20200812062258133.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70" alt="图片"></li>
-<li>2、执行iconst_1和iconst_2两个指令，也就是从本地变量中把整型1和2两个数字压入操作数栈内：<br><img src="https://img-blog.csdnimg.cn/20200812062436923.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70" alt="图片"></li>
-<li>3、执行invokestatic指令，调用add方法，会再次创建一个新的栈帧入栈，并且会将参数a和b存入add栈帧中的本地变量表<br><img src="https://img-blog.csdnimg.cn/20200812125828956.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70#pic_center" alt="图片"></li>
-<li>4、add栈帧中调用iconst_3指令，从本地变量中将整型3压入操作数栈<br><img src="https://img-blog.csdnimg.cn/20200812130046313.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70#pic_center" alt="图片"></li>
-<li>5、add栈帧中调用istore_0，表示将当前的栈顶元素存入局部变量表index[0]的位置，也就是赋值给a。<br><img src="https://img-blog.csdnimg.cn/20200812130202941.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70#pic_center" alt="图片"></li>
-<li>6、调用iload_0和iload_1，将局部变量表中index[0]和index[1]两个位置的变量压入操作数栈<br><img src="https://img-blog.csdnimg.cn/20200812130400501.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70#pic_center" alt="图片"></li>
-<li>7、最后执行iadd指令：将3和2弹出栈后将两个数相加，得到5，并将得到的结果5重新压入栈内<br><img src="https://img-blog.csdnimg.cn/20200812130447517.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70#pic_center" alt="图片"><br>8、执行istore_2指令，将当前栈顶元素弹出存入局部变量表index[2]的位置，并再次调用iload_2从局部变量表内将index[2]位置的数据压入操作数栈内<br><img src="https://img-blog.csdnimg.cn/20200812130819549.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70#pic_center" alt="图片"></li>
-<li>9、最后执行ireturn命令将结果5返回main栈帧，此时栈帧add被销毁，回到main栈帧继续后续执行<br><img src="https://img-blog.csdnimg.cn/20200812064056710.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p3eDkwMDEwMg==,size_16,color_FFFFFF,t_70" alt="图片"><br>方法的调用大致就是不断的入栈和出栈的过程，上述的过程省略了很多细节，只关注了大致流程即可，实际调用比图中要复杂的多。</li>
-</ul>
-<h1 id="方法调用分析"><a href="#方法调用分析" class="headerlink" title="方法调用分析"></a>方法调用分析</h1><p>我们知道，Java是一种面向对象语言，支持多态，而多态的体现形式就是方法重载和方法重写，那么Java虚拟机又是如何确认我们应该调用哪一个方法的呢？</p>
-<h2 id="方法调用指令"><a href="#方法调用指令" class="headerlink" title="方法调用指令"></a>方法调用指令</h2><p>首先，我们来看一下方法的字节码调用指令，在Java中，提供了4种字节码指令来调用方法(jdk1.7之前)：</p>
-<ul>
-<li>1、invokestatic：调用静态方法</li>
-<li>2、invokespecial：调用实例构造器方法，私有方法，父类方法</li>
-<li>3、invokevirtual：调用所有的虚方法</li>
-<li>4、invokeinterface：调用接口方法（运行时会确定一个实现了接口的对象）</li>
-</ul>
-<p>注意：在JDK1.7开始，Java新增了一个指令invokedynamic，这个是为了实现“动态类型语言”而引入的，在这里我们暂不讨论</p>
-<h2 id="方法解析"><a href="#方法解析" class="headerlink" title="方法解析"></a>方法解析</h2><p>在类加载机制中的解析阶段，主要做的事情就是将符号引用转为直接引用，但是，对方法的调用而言，有一个前提，那就是在方法真正运行之前就可以唯一确定具体要调用哪一个方法，而且这个方法在运行期间是不可变的。只有满足这个前提的方法才会在解析阶段直接被替换为直接引用，否则只能等到运行时才能最终确定。</p>
-<h2 id="非虚方法"><a href="#非虚方法" class="headerlink" title="非虚方法"></a>非虚方法</h2><p>在Java语言中，满足“编译器可知，运行期不可变”这个前提的方法，被称之为非虚方法。非虚方法在类加载机制中的解析阶段就可以直接将符号引用转化为直接引用。非虚方法有4种：</p>
-<ul>
-<li>1、静态方法</li>
-<li>2、私有方法</li>
-<li>3、实例构造器方法</li>
-<li>4、父类方法(通过super.xxx调用，因为Java是单继承，只有一个父类，所以可以确定方法的唯一)</li>
-</ul>
-<p>除了非虚方法之外的非final方法就被称之为虚方法，虚方法需要运行时才能确定真正调用哪一个方法。Java语言规范中明确指出，final方法是一种非虚方法，但是final又属于比较特殊的存在，因为final方法和其他非虚方法调用的字节码指令不一样。</p>
-<p>知道了虚方法的类型，再结合上面的方法的调用指令，我们可以知道，虚方法就是通过字节码指令invokestatic和invokespecial调用的，而final方法又是一个例外，final方法是通过字节码指令invokevirtual调用的，但是因为final方法的特性就是不可被重写，无法覆盖，所以必然是唯一的，虽然调用指令不同，但是依然属于非虚方法的范畴。</p>
-<h2 id="方法重载"><a href="#方法重载" class="headerlink" title="方法重载"></a>方法重载</h2><p>先来看一个方法重载的例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">package com.zwx.jvm.overload;</span><br><span class="line"></span><br><span class="line">public class OverloadDemo &#123;</span><br><span class="line">    static class Human &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    static class Man extends Human &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    static class WoMan extends Human &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void hello(Human human) &#123;</span><br><span class="line">        System.out.println(&quot;Hi,Human&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void hello(Man man) &#123;</span><br><span class="line">        System.out.println(&quot;Hi,Man&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void hello(WoMan woMan) &#123;</span><br><span class="line">        System.out.println(&quot;Hi,Women&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        OverloadDemo overloadDemo = new OverloadDemo();</span><br><span class="line">        Human man = new Man();</span><br><span class="line">        Human woman = new WoMan();</span><br><span class="line"></span><br><span class="line">        overloadDemo.hello(man);</span><br><span class="line">        overloadDemo.hello(woman);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>输出结果为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Hi,Human</span><br><span class="line">Hi,Human</span><br></pre></td></tr></table></figure>
-
-<p>这里，Java虚拟机为什么会选择参数为Human的方法来进行调用呢？</p>
-<p>在解释这个问题之前，我们先来介绍一个概念：宗量</p>
-<h2 id="宗量"><a href="#宗量" class="headerlink" title="宗量"></a>宗量</h2><p><strong>方法的接收者(调用者)和方法参数统称为宗量</strong>。而最终决定方法的分派就是基于宗量来选择的，故而根据基于多少种宗量来选择方法又可以分为：</p>
-<ul>
-<li>单分派：根据1个宗量对方法进行选择</li>
-<li>多分派：根据1个以上的宗量对方法进行选择</li>
-</ul>
-<p>知道了方法的分派是基于宗量来进行的，那我们再回到上面的例子中就很好理解了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">overloadDemo.hello(man);</span><br></pre></td></tr></table></figure>
-
-<p>这句代码中overloadDemo表示接收者，man表示参数，而接收者是确定唯一的，就是overloadDemo实例，所以决定调用哪个方法的只有参数(包括参数类型和个数和顺序)这一个宗量。我们再看看参数类型：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Human man = new Man();</span><br></pre></td></tr></table></figure>
-
-<p>这句话中，Human称之为变量的静态类型，而Man则称之为变量的实际类型，而Java虚拟机在确认重载方法时是基于参数的静态类型来作为判断依据的，故而最终实际上不管你右边new的对象是哪个，调用的都是参数类型为Human的方法。</p>
-<h2 id="静态分派"><a href="#静态分派" class="headerlink" title="静态分派"></a>静态分派</h2><p>所有依赖变量的静态类型来定位方法执行的分派动作就称之为静态分派。<strong>静态分派最典型的应用就是方法重载。</strong></p>
-<p>方法重载在编译期就能确定方法的唯一，不过虽然如此，但是在有些情况下，这个重载版本不是唯一的，甚至是有点模糊的。产生这个原因就是因为字面量并不需要定义，所以字面量就没有今天类型，比如我们直接调用一个方法：xxx.xxx(‘1’)，这个字面量1就是模糊的，并没有对应静态类型。我们再来看一个例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">package com.zwx.jvm.overload;</span><br><span class="line"></span><br><span class="line">import java.io.Serializable;</span><br><span class="line"></span><br><span class="line">public class OverloadDemo2 &#123;</span><br><span class="line"></span><br><span class="line">    public static void hello(Object a)&#123;</span><br><span class="line">        System.out.println(&quot;Hello,Object&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void hello(double a)&#123;</span><br><span class="line">        System.out.println(&quot;Hello,double&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void hello(Double a)&#123;</span><br><span class="line">        System.out.println(&quot;Hello,Double&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void hello(float a)&#123;</span><br><span class="line">        System.out.println(&quot;Hello,float&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void hello(long a)&#123;</span><br><span class="line">        System.out.println(&quot;Hello,long&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void hello(int a)&#123;</span><br><span class="line">        System.out.println(&quot;Hello,int&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void hello(Character a)&#123;</span><br><span class="line">        System.out.println(&quot;Hello,Character&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void hello(char a)&#123;</span><br><span class="line">        System.out.println(&quot;Hello,char&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void hello(char ...a)&#123;</span><br><span class="line">        System.out.println(&quot;Hello,chars&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public static void hello(Serializable a)&#123;</span><br><span class="line">        System.out.println(&quot;Hello,Serializable&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        OverloadDemo2.hello(&apos;1&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里的输出结果是</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello,char</span><br></pre></td></tr></table></figure>
-
-<p>然后如果把该方法注释掉，就会输出：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello,int</span><br></pre></td></tr></table></figure>
-
-<p>再把int方法注释掉，那么会依次按照如下顺序进行方法调用输出：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">char-&gt;int-&gt;long-&gt;float-&gt;double-&gt;Character-&gt;Serializable-&gt;Object-&gt;chars</span><br></pre></td></tr></table></figure>
-
-<p>可以看到，多参数的优先级最低，之所以会输出Serializable是因为包装类Character实现了Serializable接口，注意示例中double的包装类Double，并不会被执行。</p>
-<h2 id="方法重写"><a href="#方法重写" class="headerlink" title="方法重写"></a>方法重写</h2><p>我们把上面第1个例子修改一下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">package com.zwx.jvm.override;</span><br><span class="line"></span><br><span class="line">public class OverrideDemo &#123;</span><br><span class="line">    static class Human &#123;</span><br><span class="line">        public void hello(Human human) &#123;</span><br><span class="line">            System.out.println(&quot;Hi,Human&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static class Man extends Human &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void hello(Human human) &#123;</span><br><span class="line">            System.out.println(&quot;Hi,Man&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static class WoMan extends Human &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void hello(Human human) &#123;</span><br><span class="line">            System.out.println(&quot;Hi,Women&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Human man = new Man();</span><br><span class="line">        Human woman = new WoMan();</span><br><span class="line"></span><br><span class="line">        man.hello(man);</span><br><span class="line">        man.hello(woman);</span><br><span class="line">        woman.hello(woman);</span><br><span class="line">        woman.hello(man);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>输出结果为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Hi,Man</span><br><span class="line">Hi,Man</span><br><span class="line">Hi,Women</span><br><span class="line">Hi,Women</span><br></pre></td></tr></table></figure>
-
-<p>这里静态类型都是Human，但是却输出了两种结果，所以肯定不是按照静态类型来分派方法了，而从结果来看应该是按照了调用者的实际类型来进行的判断。</p>
-<p>执行javap命令把类转换成字节码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">Compiled from &quot;OverrideDemo.java&quot;</span><br><span class="line">public class com.zwx.jvm.override.OverrideDemo &#123;</span><br><span class="line">  public com.zwx.jvm.override.OverrideDemo();</span><br><span class="line">    Code:</span><br><span class="line">       0: aload_0</span><br><span class="line">       1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">       4: return</span><br><span class="line"></span><br><span class="line">  public static void main(java.lang.String[]);</span><br><span class="line">    Code:</span><br><span class="line">       0: new           #2                  // class com/zwx/jvm/override/OverrideDemo$Man</span><br><span class="line">       3: dup</span><br><span class="line">       4: invokespecial #3                  // Method com/zwx/jvm/override/OverrideDemo$Man.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">       7: astore_1</span><br><span class="line">       8: new           #4                  // class com/zwx/jvm/override/OverrideDemo$WoMan</span><br><span class="line">      11: dup</span><br><span class="line">      12: invokespecial #5                  // Method com/zwx/jvm/override/OverrideDemo$WoMan.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">      15: astore_2</span><br><span class="line">      16: aload_1</span><br><span class="line">      17: aload_1</span><br><span class="line">      18: invokevirtual #6                  // Method com/zwx/jvm/override/OverrideDemo$Human.hello:(Lcom/zwx/jvm/override/OverrideDemo$Human;)V</span><br><span class="line">      21: aload_1</span><br><span class="line">      22: aload_2</span><br><span class="line">      23: invokevirtual #6                  // Method com/zwx/jvm/override/OverrideDemo$Human.hello:(Lcom/zwx/jvm/override/OverrideDemo$Human;)V</span><br><span class="line">      26: aload_2</span><br><span class="line">      27: aload_2</span><br><span class="line">      28: invokevirtual #6                  // Method com/zwx/jvm/override/OverrideDemo$Human.hello:(Lcom/zwx/jvm/override/OverrideDemo$Human;)V</span><br><span class="line">      31: aload_2</span><br><span class="line">      32: aload_1</span><br><span class="line">      33: invokevirtual #6                  // Method com/zwx/jvm/override/OverrideDemo$Human.hello:(Lcom/zwx/jvm/override/OverrideDemo$Human;)V</span><br><span class="line">      36: return</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>我们可以发现这里的方法调用使用了指令invokevirtual来调用，因为根据上面的分类可以判断，hello方法均是虚方法。</p>
-<blockquote>
-<p>main方法大概解释一下，main方法中，第7行(Code列序号)和第15行是分别把Man对象实例和Women对象实例存入局部变量变的index[1]和index[2]两个位置，然后16,17两行，21,22两行，26,27两行，31,32两行分别是把需要用到的方法调用者和参数压入操作数栈，然后调用invokevirtual指令调用方法。</p>
-</blockquote>
-<p>所以上面最关键的就是invokevirtual指令到底是如何工作的呢？invokevirtual主要是按照如下步骤进行方法选择的：</p>
-<ul>
-<li>1、找到当前操作数栈中的方法接收者(调用者)，记下来，比如叫Caller</li>
-<li>2、然后在类型Caller中去找方法，如果找到方法签名一致的方法，则停止搜索，开始对方法校验，校验通过直接调用，校验不通过，直接抛IllegalAccessError异常</li>
-<li>3、如果在Caller中没有找到方法签名一致的方法，则往上找父类，以此类推，直到找到为止，如果到顶了还没找到匹配的方法，则抛出AbstractMethodError异常</li>
-</ul>
-<h2 id="动态分派"><a href="#动态分派" class="headerlink" title="动态分派"></a>动态分派</h2><p>上面的方法重写例子中，在运行期间才能根据实际类型来确定方法的执行版本的分派过程就称之为动态分派。</p>
-<h2 id="单分派与多分派"><a href="#单分派与多分派" class="headerlink" title="单分派与多分派"></a>单分派与多分派</h2><p>上面方法重载的第1个示例中，是一个静态分派过程，静态分配过程中Java虚拟机选择目标方法有两点：</p>
-<ul>
-<li>1、静态类型</li>
-<li>2、方法参数</li>
-</ul>
-<p>也就是用到了2个宗量来进行分派，所以是一个静态多分派的过程。</p>
-<p>而上面方法重写的例子中，因为方法签名是固定的，也就是参数是固定的，那么就只有一个宗量-静态类型，能最终确定方法的调用，所以属于动态单分派。</p>
-<p>所以可以得出对Java而言：Java是一门静态多分派，动态单分派语言</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本文主要介绍了一下Java虚拟机中，方法的执行流程以及方法执行过程中时，Java虚拟机栈中的内存布局，并从字节码的角度诠释了Java虚拟机是如何针对方法重载和方法重写来做出最终调用方法的选择的。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/05/18/leetcode/字符串/3. 无重复字符的最长子串/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/18/leetcode/字符串/3. 无重复字符的最长子串/" class="post-title-link" itemprop="url">3. 无重复字符的最长子串</a>
+            <a href="/2021/05/19/leetcode/字符串/76. 最小覆盖子串/" class="post-title-link" itemprop="url">76. 最小覆盖子串</a>
         </h2>
 
         <div class="post-meta">
@@ -367,14 +174,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2021-05-18 16:42:01" itemprop="dateCreated datePublished" datetime="2021-05-18T16:42:01+08:00">2021-05-18</time>
+              <time title="Created: 2021-05-19 12:42:01" itemprop="dateCreated datePublished" datetime="2021-05-19T12:42:01+08:00">2021-05-19</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-31 16:24:42" itemprop="dateModified" datetime="2021-05-31T16:24:42+08:00">2021-05-31</time>
+                <time title="Modified: 2021-05-31 16:24:50" itemprop="dateModified" datetime="2021-05-31T16:24:50+08:00">2021-05-31</time>
               </span>
 
           
@@ -388,33 +195,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a href="https://leetcode-cn.com/problems/longest-substring-without-repeating-characters" target="_blank" rel="noopener">https://leetcode-cn.com/problems/longest-substring-without-repeating-characters</a></p>
-<p>给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。</p>
-<p>示例 1:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: s = &quot;abcabcbb&quot;</span><br><span class="line">输出: 3 </span><br><span class="line">解释: 因为无重复字符的最长子串是 &quot;abc&quot;，所以其长度为 3。</span><br></pre></td></tr></table></figure>
+          <p><a href="https://leetcode-cn.com/problems/minimum-window-substring" target="_blank" rel="noopener">https://leetcode-cn.com/problems/minimum-window-substring</a></p>
+<p>给你一个字符串 s 、一个字符串 t 。返回 s 中涵盖 t 所有字符的最小子串。如果 s 中不存在涵盖 t 所有字符的子串，则返回空字符串 “” 。</p>
+<p>注意：如果 s 中存在这样的子串，我们保证它是唯一的答案。</p>
+<p>示例 1：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：s = &quot;ADOBECODEBANC&quot;, t = &quot;ABC&quot;</span><br><span class="line">输出：&quot;BANC&quot;</span><br></pre></td></tr></table></figure>
 
-<p>示例 2:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: s = &quot;bbbbb&quot;</span><br><span class="line">输出: 1</span><br><span class="line">解释: 因为无重复字符的最长子串是 &quot;b&quot;，所以其长度为 1。</span><br></pre></td></tr></table></figure>
+<p>示例 2：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：s = &quot;a&quot;, t = &quot;a&quot;</span><br><span class="line">输出：&quot;a&quot;</span><br></pre></td></tr></table></figure>
 
-<p>示例 3:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入: s = &quot;pwwkew&quot;</span><br><span class="line">输出: 3</span><br><span class="line">解释: 因为无重复字符的最长子串是 &quot;wke&quot;，所以其长度为 3。</span><br><span class="line">     请注意，你的答案必须是 子串 的长度，&quot;pwke&quot; 是一个子序列，不是子串。</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">       <span class="function"><span class="keyword">public</span> String <span class="title">minWindow</span><span class="params">(String s, String t)</span> </span>&#123;</span><br><span class="line">           <span class="keyword">int</span>[] counts = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">256</span>];</span><br><span class="line">           <span class="keyword">for</span> (<span class="keyword">char</span> c : t.toCharArray()) &#123;</span><br><span class="line">               counts[c]++;</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">           <span class="keyword">int</span> start = <span class="number">0</span>;</span><br><span class="line">           <span class="keyword">int</span> end = <span class="number">0</span>;</span><br><span class="line">           <span class="keyword">int</span> minStart = <span class="number">0</span>;</span><br><span class="line">           <span class="keyword">int</span> minLen = Integer.MAX_VALUE;</span><br><span class="line">           <span class="keyword">int</span> counter = t.length();</span><br><span class="line">           <span class="keyword">while</span> (end &lt; s.length()) &#123;</span><br><span class="line">               <span class="keyword">if</span> (counts[s.charAt(end)] &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                   counter--;</span><br><span class="line">               &#125;</span><br><span class="line"></span><br><span class="line">               counts[s.charAt(end)]--;</span><br><span class="line">               end++;</span><br><span class="line"></span><br><span class="line">               <span class="keyword">while</span> (counter == <span class="number">0</span>) &#123;</span><br><span class="line">                   <span class="keyword">if</span> (end - start &lt; minLen) &#123;</span><br><span class="line">                       minStart = start;</span><br><span class="line">                       minLen = end - start;</span><br><span class="line">                   &#125;</span><br><span class="line">                   counts[s.charAt(start)]++;</span><br><span class="line">                   <span class="keyword">if</span> (counts[s.charAt(start)] &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                       counter++;</span><br><span class="line">                   &#125;</span><br><span class="line">                   start++;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">           <span class="keyword">if</span> (minLen == Integer.MAX_VALUE) &#123;</span><br><span class="line">               <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">return</span> s.substring(minStart, minStart + minLen);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 
-<p>示例 4:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: s = &quot;&quot;</span><br><span class="line">输出: 0</span><br></pre></td></tr></table></figure>
-
-<p>滑动窗口（双指针）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution5</span> </span>&#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (s.length() == <span class="number">0</span>) &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">boolean</span>[] used = <span class="keyword">new</span> <span class="keyword">boolean</span>[<span class="number">256</span>];</span><br><span class="line">          <span class="keyword">int</span> max = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">int</span> left = <span class="number">0</span>, right = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">int</span> len = s.length();</span><br><span class="line">          <span class="keyword">while</span> (right &lt; len) &#123;</span><br><span class="line">              <span class="keyword">if</span> (used[s.charAt(right)]) &#123;</span><br><span class="line">                  max = Math.max(max, right - left);</span><br><span class="line">                  <span class="keyword">while</span> (left &lt; right &amp;&amp; s.charAt(left) != s.charAt(right)) &#123;</span><br><span class="line">                      used[s.charAt(left)] = <span class="keyword">false</span>;</span><br><span class="line">                      left++;</span><br><span class="line">                  &#125;</span><br><span class="line">                  left++;</span><br><span class="line">                  right++;</span><br><span class="line">              &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                  used[s.charAt(right++)] = <span class="keyword">true</span>;</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line">          max = Math.max(max, right - left);</span><br><span class="line">          <span class="keyword">return</span> max;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">int</span> n = s.length();</span><br><span class="line">          Set&lt;Character&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">          <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">while</span> (i &lt; n &amp;&amp; j &lt; n) &#123;</span><br><span class="line">              <span class="comment">/**Try to extend the range i, j*/</span></span><br><span class="line">              <span class="keyword">if</span> (!set.contains(s.charAt(j))) &#123;</span><br><span class="line">                  set.add(s.charAt(j++));</span><br><span class="line">                  result = Math.max(result, j - i);</span><br><span class="line">              &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                  set.remove(s.charAt(i++));</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> result;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="滑动窗口题目"><a href="#滑动窗口题目" class="headerlink" title="滑动窗口题目:"></a>滑动窗口题目:</h4><ul>
-<li>[3. 无重复字符的最长子串.md](3. 无重复字符的最长子串.md) </li>
-<li>[30. 串联所有单词的子串.md](30. 串联所有单词的子串.md) </li>
-<li>[76. 最小覆盖子串.md](76. 最小覆盖子串.md) </li>
-<li><a href="159.至多包含两个不同字符的最长子串.md">159.至多包含两个不同字符的最长子串.md</a> </li>
-<li><a href="632.最小区间.md">632.最小区间.md</a> </li>
-<li>[209. 长度最小的子数组.md](209. 长度最小的子数组.md) </li>
-<li>[239. 滑动窗口最大值.md](239. 滑动窗口最大值.md) </li>
-<li><a href="567.字符串排列.md">567.字符串排列.md</a> </li>
-</ul>
 
       
     </div>
@@ -434,7 +225,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/05/17/leetcode/53.最大子序和/">
+    <link itemprop="mainEntityOfPage" href="/2021/05/19/leetcode/字符串/30. 串联所有单词的子串/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -448,7 +239,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/05/17/leetcode/53.最大子序和/" class="post-title-link" itemprop="url">53.最大子序和</a>
+            <a href="/2021/05/19/leetcode/字符串/30. 串联所有单词的子串/" class="post-title-link" itemprop="url">30. 串联所有单词的子串</a>
         </h2>
 
         <div class="post-meta">
@@ -457,10 +248,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-05-17 16:42:01 / Modified: 18:33:42" itemprop="dateCreated datePublished" datetime="2021-05-17T16:42:01+08:00">2021-05-17</time>
+              <time title="Created: 2021-05-19 12:42:01" itemprop="dateCreated datePublished" datetime="2021-05-19T12:42:01+08:00">2021-05-19</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-31 16:24:47" itemprop="dateModified" datetime="2021-05-31T16:24:47+08:00">2021-05-31</time>
+              </span>
 
           
 
@@ -473,23 +270,95 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a href="https://leetcode-cn.com/problems/maximum-subarray" target="_blank" rel="noopener">https://leetcode-cn.com/problems/maximum-subarray</a></p>
-<p>给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。</p>
+          <p><a href="https://leetcode-cn.com/problems/substring-with-concatenation-of-all-words" target="_blank" rel="noopener">https://leetcode-cn.com/problems/substring-with-concatenation-of-all-words</a></p>
+<p>给定一个字符串 s 和一些 长度相同 的单词 words 。找出 s 中恰好可以由 words 中所有单词串联形成的子串的起始位置。</p>
+<p>注意子串要与 words 中的单词完全匹配，中间不能有其他字符 ，但不需要考虑 words 中单词串联的顺序。</p>
 <p>示例 1：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [-2,1,-3,4,-1,2,1,-5,4]</span><br><span class="line">输出：6</span><br><span class="line">解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">输入：s = &quot;barfoothefoobarman&quot;, words = [&quot;foo&quot;,&quot;bar&quot;]</span><br><span class="line">输出：[0,9]</span><br><span class="line"></span><br><span class="line">解释：</span><br><span class="line">从索引 0 和 9 开始的子串分别是 &quot;barfoo&quot; 和 &quot;foobar&quot; 。</span><br><span class="line">输出的顺序不重要, [9,0] 也是有效答案。</span><br></pre></td></tr></table></figure>
 
 <p>示例 2：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [1]</span><br><span class="line">输出：1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：s = &quot;wordgoodgoodgoodbestword&quot;, words = [&quot;word&quot;,&quot;good&quot;,&quot;best&quot;,&quot;word&quot;]</span><br><span class="line">输出：[]</span><br></pre></td></tr></table></figure>
 
-<p>思路</p>
-<ul>
-<li>这道题用动态规划的思路并不难解决，比较难的是后文提出的用分治法求解，但由于其不是最优解法，所以先不列出来</li>
-<li>动态规划的是首先对数组进行遍历，当前最大连续子序列和为 sum，结果为 ans</li>
-<li>如果 sum &gt; 0，则说明 sum 对结果有增益效果，则 sum 保留并加上当前遍历数字</li>
-<li>如果 sum &lt;= 0，则说明 sum 对结果无增益效果，需要舍弃，则 sum 直接更新为当前遍历数字</li>
-<li>每次比较 sum 和 ans的大小，将最大值置为ans，遍历结束返回结果</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxSubArray</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ans = nums[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> num: nums) &#123;</span><br><span class="line">            <span class="keyword">if</span>(sum &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                sum += num;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                sum = num;</span><br><span class="line">            &#125;</span><br><span class="line">            ans = Math.max(ans, sum);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>示例 3：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：s = &quot;barfoofoobarthefoobarman&quot;, words = [&quot;bar&quot;,&quot;foo&quot;,&quot;the&quot;]</span><br><span class="line">输出：[6,9,12]</span><br></pre></td></tr></table></figure>
+
+<p>滑动窗口+HashMap</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">findSubstring</span><span class="params">(String str, String[] arr)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">if</span> (str == <span class="keyword">null</span> || str.length() == <span class="number">0</span> || arr.length == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> wordLen = arr[<span class="number">0</span>].length();</span><br><span class="line">        <span class="keyword">int</span> arrLen = arr.length;</span><br><span class="line">        Map&lt;String, Integer&gt; count = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (String temp : arr) &#123;</span><br><span class="line">            count.put(temp, count.getOrDefault(temp, <span class="number">0</span>) + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.length() - wordLen * arrLen + <span class="number">1</span>; i++) &#123;</span><br><span class="line">            String substr = str.substring(i, i + wordLen * arrLen);</span><br><span class="line">            Map&lt;String, Integer&gt; clone = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; arrLen * wordLen; j += wordLen) &#123;</span><br><span class="line">                String temp = substr.substring(j, j + wordLen);</span><br><span class="line">                <span class="keyword">if</span> (!count.containsKey(temp)) &#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                clone.put(temp, clone.getOrDefault(temp, <span class="number">0</span>) + <span class="number">1</span>);</span><br><span class="line">                <span class="keyword">if</span> (clone.get(temp) &gt; count.get(temp)) &#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (clone.equals(count)) &#123;</span><br><span class="line">                result.add(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/05/19/leetcode/字符串/159.至多包含两个不同字符的最长子串/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/19/leetcode/字符串/159.至多包含两个不同字符的最长子串/" class="post-title-link" itemprop="url">159. 至多包含两个不同字符的最长子串</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-05-19 12:42:01" itemprop="dateCreated datePublished" datetime="2021-05-19T12:42:01+08:00">2021-05-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-31 16:24:52" itemprop="dateModified" datetime="2021-05-31T16:24:52+08:00">2021-05-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>给定一个字符串 s ，找出 至多 包含两个不同字符的最长子串 t 。</p>
+<p>示例：</p>
+<p>例 1:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入: “eceba”</span><br><span class="line"></span><br><span class="line">输出: 3</span><br><span class="line"></span><br><span class="line">解释: t 是 “ece”，长度为3。</span><br></pre></td></tr></table></figure>
+
+<p>例 2:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入: “ccaabbb”</span><br><span class="line"></span><br><span class="line">输出: 5</span><br><span class="line"></span><br><span class="line">解释: t 是 “aabbb”，长度为5。</span><br></pre></td></tr></table></figure>
+
+<p>双指针 + 哈希表(滑动窗口)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstringTwoDistinct</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (s.length() &lt; <span class="number">1</span>) &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          Map&lt;Character, Integer&gt; index = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">          <span class="keyword">int</span> lo = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">int</span> hi = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">int</span> maxLength = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">while</span> (hi &lt; s.length()) &#123;</span><br><span class="line">              <span class="keyword">if</span> (index.size() &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">                  <span class="keyword">char</span> c = s.charAt(hi);</span><br><span class="line">                  index.put(c, hi);</span><br><span class="line">                  hi++;</span><br><span class="line">              &#125;</span><br><span class="line">              <span class="keyword">if</span> (index.size() &gt; <span class="number">2</span>) &#123;</span><br><span class="line">                  <span class="keyword">int</span> leftMost = s.length();</span><br><span class="line">                  <span class="keyword">for</span> (<span class="keyword">int</span> i : index.values()) &#123;</span><br><span class="line">                      leftMost = Math.min(leftMost, i);</span><br><span class="line">                  &#125;</span><br><span class="line">                  <span class="keyword">char</span> c = s.charAt(leftMost);</span><br><span class="line">                  index.remove(c);</span><br><span class="line">                  lo = leftMost + <span class="number">1</span>;</span><br><span class="line">              &#125;</span><br><span class="line">              maxLength = Math.max(maxLength, hi - lo);</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> maxLength;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 
 
       
@@ -509,7 +378,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/18/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><span class="page-number current">19</span><a class="page-number" href="/page/20/">20</a><span class="space">&hellip;</span><a class="page-number" href="/page/43/">43</a><a class="extend next" rel="next" href="/page/20/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/18/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><span class="page-number current">19</span><a class="page-number" href="/page/20/">20</a><span class="space">&hellip;</span><a class="page-number" href="/page/44/">44</a><a class="extend next" rel="next" href="/page/20/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -575,14 +444,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">129</span>
+          <span class="site-state-item-count">132</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

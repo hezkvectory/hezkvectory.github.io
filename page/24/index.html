@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/15/arch/架构/">
+    <link itemprop="mainEntityOfPage" href="/2021/04/19/dubbo/dubbo消费者调用流程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/04/15/arch/架构/" class="post-title-link" itemprop="url">架构</a>
+            <a href="/2021/04/19/dubbo/dubbo消费者调用流程/" class="post-title-link" itemprop="url">dubbo消费者调用流程</a>
         </h2>
 
         <div class="post-meta">
@@ -173,16 +173,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2021-04-15 18:45:02" itemprop="dateCreated datePublished" datetime="2021-04-15T18:45:02+08:00">2021-04-15</time>
+              <time title="Created: 2021-04-19 10:28:35 / Modified: 18:15:19" itemprop="dateCreated datePublished" datetime="2021-04-19T10:28:35+08:00">2021-04-19</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-28 10:14:20" itemprop="dateModified" datetime="2021-05-28T10:14:20+08:00">2021-05-28</time>
-              </span>
 
           
 
@@ -195,23 +189,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>1、单点故障</p>
-<p>2、系统间依赖复杂</p>
-<p>3、服务补偿</p>
-<p>4、幂等设计</p>
-<p>5、超时设置</p>
-<p>6、流量控制</p>
-<p>7、监控预警</p>
-<p>8、重试策略</p>
-<p>9、系统隔离</p>
-<p>10、代码同步调用</p>
-<p>11、热数据缓存</p>
-<p>12、系统分级</p>
-<p>13、服务降级</p>
-<p>14、灰度和回滚方案</p>
-<p>15、熔断机制</p>
-<p>16、线上压测</p>
-<p>17、代码扫描</p>
+          <h4 id="Dubbo消费者"><a href="#Dubbo消费者" class="headerlink" title="Dubbo消费者"></a>Dubbo消费者</h4><h5 id="调用入口"><a href="#调用入口" class="headerlink" title="调用入口"></a>调用入口</h5><p>ReferenceBean</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ReferenceBean</span><br><span class="line">  -&gt; get #获取代理对象</span><br><span class="line">  -&gt; createProxy # 创建代理</span><br><span class="line">    RegistryProtocol</span><br><span class="line">      -&gt; refer # 从注册中心获取invoker</span><br><span class="line">      RegistryFactory.getRegistry</span><br><span class="line">      -&gt; doRefer</span><br><span class="line">      RegistryDirectory.subscribe # 订阅providers, 此处会监听注册中心providers的变化，并重新创建invokers</span><br><span class="line">      Cluster.join</span><br><span class="line">        MockClusterWrapper </span><br><span class="line">          -&gt; join #创建cluster</span><br><span class="line">            FailoverCluster</span><br><span class="line">              -&gt; doInvoke 服务调用</span><br></pre></td></tr></table></figure>
+
+<h5 id="创建消费者代理"><a href="#创建消费者代理" class="headerlink" title="创建消费者代理"></a>创建消费者代理</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&quot;main@1&quot; prio=5 tid=0x1 nid=NA runnable</span><br><span class="line">  java.lang.Thread.State: RUNNABLE</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.RouterChain.&lt;init&gt;(RouterChain.java:53)</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.RouterChain.buildChain(RouterChain.java:46)</span><br><span class="line">	  at org.apache.dubbo.registry.integration.RegistryDirectory.buildRouterChain(RegistryDirectory.java:664)</span><br><span class="line">	  at org.apache.dubbo.registry.integration.RegistryProtocol.doRefer(RegistryProtocol.java:473)</span><br><span class="line">	  at org.apache.dubbo.registry.integration.RegistryProtocol.refer(RegistryProtocol.java:455)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolListenerWrapper.refer(ProtocolListenerWrapper.java:70)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper.refer(ProtocolFilterWrapper.java:159)</span><br><span class="line">	  at org.apache.dubbo.rpc.Protocol$Adaptive.refer(Protocol$Adaptive.java:-1)</span><br><span class="line">	  at org.apache.dubbo.config.ReferenceConfig.createProxy(ReferenceConfig.java:318)</span><br><span class="line">	  at org.apache.dubbo.config.ReferenceConfig.init(ReferenceConfig.java:258)</span><br><span class="line">	  - locked &lt;0xb11&gt; (a org.apache.dubbo.config.spring.ReferenceBean)</span><br><span class="line">	  at org.apache.dubbo.config.ReferenceConfig.get(ReferenceConfig.java:158)</span><br></pre></td></tr></table></figure>
+
+<h5 id="消费者方法调用"><a href="#消费者方法调用" class="headerlink" title="消费者方法调用"></a>消费者方法调用</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&quot;main@1&quot; prio=5 tid=0x1 nid=NA runnable</span><br><span class="line">  java.lang.Thread.State: RUNNABLE</span><br><span class="line">	  at org.apache.dubbo.remoting.transport.AbstractPeer.send(AbstractPeer.java:53)</span><br><span class="line">	  at org.apache.dubbo.remoting.exchange.support.header.HeaderExchangeChannel.request(HeaderExchangeChannel.java:135)</span><br><span class="line">	  at org.apache.dubbo.remoting.exchange.support.header.HeaderExchangeClient.request(HeaderExchangeClient.java:95)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.dubbo.ReferenceCountExchangeClient.request(ReferenceCountExchangeClient.java:91)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.dubbo.DubboInvoker.doInvoke(DubboInvoker.java:105)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.AbstractInvoker.invoke(AbstractInvoker.java:163)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.AsyncToSyncInvoker.invoke(AsyncToSyncInvoker.java:52)</span><br><span class="line">	  at org.apache.dubbo.rpc.listener.ListenerInvokerWrapper.invoke(ListenerInvokerWrapper.java:78)</span><br><span class="line">	  at org.apache.dubbo.monitor.support.MonitorFilter.invoke(MonitorFilter.java:89)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.dubbo.filter.FutureFilter.invoke(FutureFilter.java:51)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.ConsumerContextFilter.invoke(ConsumerContextFilter.java:69)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.InvokerWrapper.invoke(InvokerWrapper.java:56)</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.support.FailoverClusterInvoker.doInvoke(FailoverClusterInvoker.java:82)</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.support.AbstractClusterInvoker.invoke(AbstractClusterInvoker.java:259)</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.interceptor.ClusterInterceptor.intercept(ClusterInterceptor.java:47)</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.support.wrapper.AbstractCluster$InterceptorInvokerNode.invoke(AbstractCluster.java:92)</span><br><span class="line">	  at org.apache.dubbo.rpc.cluster.support.wrapper.MockClusterInvoker.invoke(MockClusterInvoker.java:82)</span><br><span class="line">	  at org.apache.dubbo.rpc.proxy.InvokerInvocationHandler.invoke(InvokerInvocationHandler.java:74)</span><br><span class="line">	  at org.apache.dubbo.common.bytecode.proxy0.sayHello(proxy0.java:-1)</span><br><span class="line">	  at org.apache.dubbo.demo.consumer.comp.DemoServiceComponent.sayHello(DemoServiceComponent.java:33)</span><br><span class="line">	  at org.apache.dubbo.demo.consumer.Application.main(Application.java:37)</span><br></pre></td></tr></table></figure>
+
+<p>服务提供者方法调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&quot;DubboServerHandler-172.23.120.26:20880-thread-4@4410&quot; daemon prio=5 tid=0x20 nid=NA runnable</span><br><span class="line">  java.lang.Thread.State: RUNNABLE</span><br><span class="line">	  at org.apache.dubbo.demo.provider.DemoServiceImpl.sayHello(DemoServiceImpl.java:34)</span><br><span class="line">	  at org.apache.dubbo.common.bytecode.Wrapper1.invokeMethod(Wrapper1.java:-1)</span><br><span class="line">	  at org.apache.dubbo.rpc.proxy.javassist.JavassistProxyFactory$1.doInvoke(JavassistProxyFactory.java:47)</span><br><span class="line">	  at org.apache.dubbo.rpc.proxy.AbstractProxyInvoker.invoke(AbstractProxyInvoker.java:84)</span><br><span class="line">	  at org.apache.dubbo.config.invoker.DelegateProviderMetaDataInvoker.invoke(DelegateProviderMetaDataInvoker.java:56)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.InvokerWrapper.invoke(InvokerWrapper.java:56)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.ExceptionFilter.invoke(ExceptionFilter.java:52)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.monitor.support.MonitorFilter.invoke(MonitorFilter.java:89)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.TimeoutFilter.invoke(TimeoutFilter.java:46)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.dubbo.filter.TraceFilter.invoke(TraceFilter.java:77)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.ContextFilter.invoke(ContextFilter.java:129)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.GenericFilter.invoke(GenericFilter.java:152)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.ClassLoaderFilter.invoke(ClassLoaderFilter.java:38)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.filter.EchoFilter.invoke(EchoFilter.java:41)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.ProtocolFilterWrapper$1.invoke(ProtocolFilterWrapper.java:81)</span><br><span class="line">	  at org.apache.dubbo.rpc.protocol.dubbo.DubboProtocol$1.reply(DubboProtocol.java:145)</span><br><span class="line">	  at org.apache.dubbo.remoting.exchange.support.header.HeaderExchangeHandler.handleRequest(HeaderExchangeHandler.java:100)</span><br><span class="line">	  at org.apache.dubbo.remoting.exchange.support.header.HeaderExchangeHandler.received(HeaderExchangeHandler.java:175)</span><br><span class="line">	  at org.apache.dubbo.remoting.transport.DecodeHandler.received(DecodeHandler.java:51)</span><br><span class="line">	  at org.apache.dubbo.remoting.transport.dispatcher.ChannelEventRunnable.run(ChannelEventRunnable.java:57)</span><br><span class="line">	  at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)</span><br><span class="line">	  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)</span><br><span class="line">	  at java.lang.Thread.run(Thread.java:748)</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -231,7 +218,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/04/15/arch/架构师修炼之道/">
+    <link itemprop="mainEntityOfPage" href="/2021/04/19/dubbo/dubbo编解码和协议/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -245,7 +232,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/04/15/arch/架构师修炼之道/" class="post-title-link" itemprop="url">架构</a>
+            <a href="/2021/04/19/dubbo/dubbo编解码和协议/" class="post-title-link" itemprop="url">dubbo编解码和协议</a>
         </h2>
 
         <div class="post-meta">
@@ -254,16 +241,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2021-04-15 18:45:02" itemprop="dateCreated datePublished" datetime="2021-04-15T18:45:02+08:00">2021-04-15</time>
+              <time title="Created: 2021-04-19 10:28:35 / Modified: 10:41:06" itemprop="dateCreated datePublished" datetime="2021-04-19T10:28:35+08:00">2021-04-19</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-28 10:56:18" itemprop="dateModified" datetime="2021-05-28T10:56:18+08:00">2021-05-28</time>
-              </span>
 
           
 
@@ -276,54 +257,29 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h4 id="架构师成长之旅，是心性修炼之旅"><a href="#架构师成长之旅，是心性修炼之旅" class="headerlink" title="架构师成长之旅，是心性修炼之旅"></a>架构师成长之旅，是心性修炼之旅</h4><p>架构之道，是虚实结合之道。理论与实践相结合。</p>
-<p>从实悟虚，从虚就实，运用得当方得升华。架构思维的感悟并不能一步到位，永远有进步的空间，需要我们在不断实践中感悟，升华自己的认知。</p>
-<p>从技能来说，我们可能把架构师能力去归结为：</p>
-<ul>
-<li>理需求的能力；</li>
-<li>读代码的能力；</li>
-<li>抽象系统的能力。</li>
-</ul>
-<p>但是架构师修炼之道，更难的是在心性上，这包括：</p>
-<ul>
-<li>同理心的修炼，认同他人的能力。<ul>
-<li>认同他人的能力，读懂他人的思想。</li>
-<li>架构师的同理心，也体现在需求分析上。</li>
-<li>你真的是在改善系统，还是在破坏系统？</li>
-<li>重构，不为体验，消除臭味。</li>
-</ul>
-</li>
-<li>全局观的修炼，保持好奇心和学习的韧性。<ul>
-<li>架构之道，是虚实结合之道。虚实结合之道，优先实。</li>
-<li>保持对这个世界的好奇心。看到新科技与新思想，先认同它，去体会它，理解它产生的需求背景与技术脉络，以此融入自己的知识体系。</li>
-<li>持续地学习。</li>
-<li>好的架构师 有化腐朽为神奇之力。</li>
-</ul>
-</li>
-<li>迭代能力的修炼，学会反思，学会在自我否定中不断成长。<ul>
-<li>架构师第三大能力的修炼，是迭代，是反思，是自我批判</li>
-<li>迭代能力修炼。早迭代，小步迭代。</li>
-</ul>
-</li>
-</ul>
-<p>解决问题是目的，优雅的解决问题才是追求。</p>
-<p>软件架构师的职责，并不单单是我们通常理解的，对软件系统进行边界划分和模块规格的定义。从根本目标来说，软件架构师要对软件工程的执行结果负责，这包括：按时按质进行软件的迭代和发布、敏捷地响应需求变更、防范软件质量风险（避免发生软件质量事故）、降低迭代维护成本。</p>
-<p>共识大于能力。</p>
-<p>尊重契约，尊重共识精确的、无歧义的表达，非常非常重要。</p>
-<p>今天我们谈的 “设计文档”，重点聊的是 “架构设计文档” 怎么写，但是本质上所有 “设计文档” 的内容组织逻辑，都应该是相通的。</p>
-<p>它们的内容大体如下：</p>
-<ul>
-<li><p>现状 ：我们在哪里，现状是什么样的？</p>
-</li>
-<li><p>需求：我们的问题或诉求是什么，要做何改进？</p>
-</li>
-<li><p>需求满足方式：</p>
-<ul>
-<li>要做成什么样，交付物规格，或者说使用界面（接口）是什么？</li>
-<li>怎么做到？交付物的实现原理。</li>
-</ul>
-</li>
-</ul>
+          <h4 id="Dubbo编解码"><a href="#Dubbo编解码" class="headerlink" title="Dubbo编解码"></a>Dubbo编解码</h4><h5 id="消费者入口"><a href="#消费者入口" class="headerlink" title="消费者入口"></a>消费者入口</h5><p>消费者口在NettyClient#doOpen方法发起连接，初始化BootStrap时，会在Netty的pipeline里添加不同类型的ChannelHandler，其中就有编解码器。</p>
+<p>同理，提供者在NettyServer#doOpen方法提供服务，初始化ServerBootstrap时，会添加编解码器。（adapter.getDecoder（）- 解码器，adapater.getEncoder（） - 编码器）。</p>
+<p><strong>NettyClient</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Init bootstrap</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> Throwable</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doOpen</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    bootstrap = <span class="keyword">new</span> Bootstrap();</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    bootstrap.handler(<span class="keyword">new</span> ChannelInitializer&lt;SocketChannel&gt;() &#123;</span><br><span class="line"> </span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(SocketChannel ch)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">            ch.pipeline()</span><br><span class="line">                    .addLast(<span class="string">"decoder"</span>, adapter.getDecoder())</span><br><span class="line">                    .addLast(<span class="string">"encoder"</span>, adapter.getEncoder())</span><br><span class="line">                    .addLast(<span class="string">"client-idle-handler"</span>, <span class="keyword">new</span> IdleStateHandler(heartbeatInterval, <span class="number">0</span>, <span class="number">0</span>, MILLISECONDS))</span><br><span class="line">                    .addLast(<span class="string">"handler"</span>, nettyClientHandler);</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="NettyServer"><a href="#NettyServer" class="headerlink" title="NettyServer"></a>NettyServer</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Init and start netty server</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> Throwable</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doOpen</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    bootstrap = <span class="keyword">new</span> ServerBootstrap();</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"> </span><br><span class="line">    bootstrap.group(bossGroup, workerGroup)</span><br><span class="line">            .channel(NettyEventLoopFactory.serverSocketChannelClass())</span><br><span class="line">            .option(ChannelOption.SO_REUSEADDR, Boolean.TRUE)</span><br><span class="line">            .childOption(ChannelOption.TCP_NODELAY, Boolean.TRUE)</span><br><span class="line">            .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)</span><br><span class="line">            .childHandler(<span class="keyword">new</span> ChannelInitializer&lt;SocketChannel&gt;() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initChannel</span><span class="params">(SocketChannel ch)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                    <span class="comment">// ...</span></span><br><span class="line">                    ch.pipeline()</span><br><span class="line">                            .addLast(<span class="string">"decoder"</span>, adapter.getDecoder())</span><br><span class="line">                            .addLast(<span class="string">"encoder"</span>, adapter.getEncoder())</span><br><span class="line">                            .addLast(<span class="string">"server-idle-handler"</span>, <span class="keyword">new</span> IdleStateHandler(<span class="number">0</span>, <span class="number">0</span>, idleTimeout, MILLISECONDS))</span><br><span class="line">                            .addLast(<span class="string">"handler"</span>, nettyServerHandler);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="消费端链路"><a href="#消费端链路" class="headerlink" title="消费端链路"></a>消费端链路</h5><p>消费者在发送消息时编码，接收响应时解码。</p>
+<p><strong>发送消息</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ChannelInboundHandler</span><br><span class="line">...</span><br><span class="line">NettyCodecAdapter#getEncoder()</span><br><span class="line">    -&gt;NettyCodecAdapter$InternalEncoder#encode</span><br><span class="line">         -&gt;DubboCountCodec#encode</span><br><span class="line">             -&gt;DubboCodec#encode</span><br><span class="line">                -&gt;ExchangeCodec#encode</span><br><span class="line">                -&gt;ExchangeCodec#encodeRequest</span><br><span class="line"> </span><br><span class="line">DubboCountCodec类实际引用的是DubboCodec，因DubboCodec继承于ExchangeCodec，并未重写encode方法，所以实际代码跳转会直接进入ExchangeCodec#encode方法</span><br></pre></td></tr></table></figure>
+
+<p><strong>接收响应</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">NettyCodecAdapter#getDecoder()</span><br><span class="line">    -&gt;NettyCodecAdapter$InternalDecoder#decode</span><br><span class="line">         -&gt;DubboCountCodec#decode</span><br><span class="line">             -&gt;DubboCodec#decode</span><br><span class="line">                 -&gt;ExchangeCodec#decode</span><br><span class="line">             -&gt;DubboCodec#decodeBody</span><br><span class="line">...</span><br><span class="line">MultiMessageHandler#received</span><br><span class="line">    -&gt;HeartbeatHadnler#received</span><br><span class="line">        -&gt;AllChannelHandler#received</span><br><span class="line">...</span><br><span class="line">ChannelEventRunnable#run</span><br><span class="line">    -&gt;DecodeHandler#received</span><br><span class="line">    -&gt;DecodeHandler#decode</span><br><span class="line">        -&gt;DecodeableRpcResult#decode</span><br><span class="line"> </span><br><span class="line">解码链路相对复杂，过程中做了两次解码，在一次DubboCodec#decodeBody内，并未实际解码channel的数据，而是构建成DecodeableRpcResult对象，然后在业务处理的Handler里通过异步线程进行实际解码。</span><br></pre></td></tr></table></figure>
+
+<h5 id="提供端链路"><a href="#提供端链路" class="headerlink" title="提供端链路"></a>提供端链路</h5><p>提供者在接收消息时解码，回复响应时编码。</p>
+<p><strong>接收消息</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">NettyCodecAdapter#getDecoder()</span><br><span class="line">    -&gt;NettyCodecAdapter$InternalDecoder#decode</span><br><span class="line">         -&gt;DubboCountCodec#decode</span><br><span class="line">             -&gt;DubboCodec#decode</span><br><span class="line">                 -&gt;ExchangeCodec#decode</span><br><span class="line">             -&gt;DubboCodec#decodeBody</span><br><span class="line">...</span><br><span class="line">MultiMessageHandler#received</span><br><span class="line">    -&gt;HeartbeatHadnler#received</span><br><span class="line">        -&gt;AllChannelHandler#received</span><br><span class="line">...</span><br><span class="line">ChannelEventRunnable#run</span><br><span class="line">    -&gt;DecodeHandler#received</span><br><span class="line">    -&gt;DecodeHandler#decode</span><br><span class="line">        -&gt;DecodeableRpcInvocation#decode</span><br><span class="line"> </span><br><span class="line">提供端解码链路与消费端的类似，区别在于实际解码对象不一样，DecodeableRpcResult 替换成 DecodeableRpcInvocation。</span><br><span class="line"> </span><br><span class="line">体现了Dubbo代码里的良好设计，抽象处理链路，屏蔽处理细节，流程清晰可复用。</span><br></pre></td></tr></table></figure>
+
+<p><strong>回复响应</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">NettyCodecAdapter#getEncoder()</span><br><span class="line">    -&gt;NettyCodecAdapter$InternalEncoder#encode</span><br><span class="line">         -&gt;DubboCountCodec#encode</span><br><span class="line">             -&gt;DubboCodec#encode</span><br><span class="line">                -&gt;ExchangeCodec#encode</span><br><span class="line">                -&gt;ExchangeCodec#encodeResponse</span><br><span class="line"> </span><br><span class="line">与消费方发送消息链路一致，区别在于最后一步区分Request和Response，进行不同内容编码</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://dubbo.apache.org/zh/docs/v2.7/dev/implementation/" target="_blank" rel="noopener">dubbo协议</a></p>
+<p><a href="https://mp.weixin.qq.com/s/tl4iSZUYV5GWTqyWhaDkfw" target="_blank" rel="noopener">原文链接</a></p>
 
       
     </div>
@@ -619,7 +575,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/23/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><span class="page-number current">24</span><a class="page-number" href="/page/25/">25</a><span class="space">&hellip;</span><a class="page-number" href="/page/43/">43</a><a class="extend next" rel="next" href="/page/25/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/23/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><span class="page-number current">24</span><a class="page-number" href="/page/25/">25</a><span class="space">&hellip;</span><a class="page-number" href="/page/44/">44</a><a class="extend next" rel="next" href="/page/25/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -685,14 +641,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">129</span>
+          <span class="site-state-item-count">132</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

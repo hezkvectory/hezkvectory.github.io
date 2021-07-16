@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="我的博客">
 <meta property="og:description" content="1 两数之和：用数组位置查找数组值，O(1)；用数组值查找数组位置想要达到O(1)，用HashMap–常用技巧。 20 有效的括号： 【栈】。 21 合并两个有序链表：可以【循环】，也可以采用【递归】。 53 最大子序和： 一次循环，maxEndingHere储存以该点结尾的子序和，maxSoFar储存到该点的最大子序和。 70 爬楼梯： 循环，一次只储存两个值。 101 对称二叉树：日常递归。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-07-09T11:28:59.380Z">
+<meta property="og:updated_time" content="2021-07-14T12:37:59.845Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HOT 100 Easy">
 <meta name="twitter:description" content="1 两数之和：用数组位置查找数组值，O(1)；用数组值查找数组位置想要达到O(1)，用HashMap–常用技巧。 20 有效的括号： 【栈】。 21 合并两个有序链表：可以【循环】，也可以采用【递归】。 53 最大子序和： 一次循环，maxEndingHere储存以该点结尾的子序和，maxSoFar储存到该点的最大子序和。 70 爬楼梯： 循环，一次只储存两个值。 101 对称二叉树：日常递归。">
@@ -186,7 +186,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-07-09 19:28:59" itemprop="dateModified" datetime="2021-07-09T19:28:59+08:00">2021-07-09</time>
+                <time title="Modified: 2021-07-14 20:37:59" itemprop="dateModified" datetime="2021-07-14T20:37:59+08:00">2021-07-14</time>
               </span>
 
           
@@ -315,6 +315,12 @@ for (int num : nums){
 <pre><code>sum+=isPalindrome(ch, i, i);
 sum+=isPalindrome(ch, i, i+1);</code></pre><p>什么，你不明白？？？那你可以看一下【我的代码】 。</p>
 <p>739 每日温度：显然【暴力破解】在这里是可行的。但实际上，我们可以根据已知结果跳过一些元素的验证。我们可以从数组末端开始依次向前，如果我们比较的元素ans[j]比当下元素ans[i]还要小，那么我们知道至少还要经过ans[j]个元素才能碰到比ans[i]大的元素–那么我们就可以一次性跳过ans[j]个元素的逐一比较。注意这里可能会碰到为0的情况需要单独讨论。详细内容可见【我的代码】 。</p>
+<ol>
+<li>(392) s是否是t的子序列 [双指针]</li>
+<li>(28) subStr，s是否是t的子串(kmp)</li>
+<li>(784) 字母大小写全排列</li>
+<li>(46)全排列</li>
+</ol>
 <h4 id="把数组排成最小的数"><a href="#把数组排成最小的数" class="headerlink" title="把数组排成最小的数"></a><a href="https://leetcode-cn.com/problems/ba-shu-zu-pai-cheng-zui-xiao-de-shu-lcof/" target="_blank" rel="noopener">把数组排成最小的数</a></h4><h4 id="礼物的最大价值"><a href="#礼物的最大价值" class="headerlink" title="礼物的最大价值"></a><a href="https://leetcode-cn.com/problems/li-wu-de-zui-da-jie-zhi-lcof/" target="_blank" rel="noopener">礼物的最大价值</a></h4><h4 id="在排序数组中查找数字-I"><a href="#在排序数组中查找数字-I" class="headerlink" title="在排序数组中查找数字 I"></a><a href="https://leetcode-cn.com/problems/zai-pai-xu-shu-zu-zhong-cha-zhao-shu-zi-lcof/" target="_blank" rel="noopener">在排序数组中查找数字 I</a></h4>
     </div>
 
@@ -412,14 +418,14 @@ sum+=isPalindrome(ch, i, i+1);</code></pre><p>什么，你不明白？？？那�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">129</span>
+          <span class="site-state-item-count">132</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

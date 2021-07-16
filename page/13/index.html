@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/05/31/leetcode/树/103. 二叉树的锯齿形层序遍历/">
+    <link itemprop="mainEntityOfPage" href="/2021/05/31/leetcode/树/107. 二叉树的层序遍历 II/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/05/31/leetcode/树/103. 二叉树的锯齿形层序遍历/" class="post-title-link" itemprop="url">103. 二叉树的锯齿形层序遍历</a>
+            <a href="/2021/05/31/leetcode/树/107. 二叉树的层序遍历 II/" class="post-title-link" itemprop="url">107. 二叉树的层序遍历 II</a>
         </h2>
 
         <div class="post-meta">
@@ -173,16 +173,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2021-05-31 14:45:02" itemprop="dateCreated datePublished" datetime="2021-05-31T14:45:02+08:00">2021-05-31</time>
+              <time title="Created: 2021-05-31 14:45:02 / Modified: 17:49:08" itemprop="dateCreated datePublished" datetime="2021-05-31T14:45:02+08:00">2021-05-31</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-06-01 11:13:57" itemprop="dateModified" datetime="2021-06-01T11:13:57+08:00">2021-06-01</time>
-              </span>
 
           
 
@@ -195,8 +189,20 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>给定一个二叉树，返回其节点值的锯齿形层序遍历。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; zigzagLevelOrder(TreeNode root) &#123;</span><br><span class="line">        Queue&lt;TreeNode&gt; q = <span class="keyword">new</span> LinkedList();</span><br><span class="line">        List&lt;List&lt;Integer&gt;&gt; levels = <span class="keyword">new</span> ArrayList();</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> levels;</span><br><span class="line">        &#125;</span><br><span class="line">        q.offer(root);</span><br><span class="line">        <span class="keyword">boolean</span> forward = <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">while</span> (!q.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">int</span> size = q.size();</span><br><span class="line">            List&lt;Integer&gt; level = <span class="keyword">new</span> ArrayList();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">                TreeNode curr = q.poll();</span><br><span class="line">                level.add(curr.val);</span><br><span class="line">                <span class="keyword">if</span> (curr.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    q.offer(curr.left);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (curr.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    q.offer(curr.right);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (forward) &#123;</span><br><span class="line">                forward = <span class="keyword">false</span>;</span><br><span class="line">                levels.add(level);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                Collections.reverse(level);</span><br><span class="line">                levels.add(level);</span><br><span class="line">                forward = <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> levels;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <p><a href="https://leetcode-cn.com/problems/binary-tree-level-order-traversal-ii" target="_blank" rel="noopener">https://leetcode-cn.com/problems/binary-tree-level-order-traversal-ii</a></p>
+<p>给定一个二叉树，返回其节点值自底向上的层序遍历。 （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）</p>
+<p>例如：<br>给定二叉树 [3,9,20,null,null,15,7],</p>
+<pre><code>        3
+   / \
+  9  20
+    /  \
+   15   7
+返回其自底向上的层序遍历为：
+[
+  [15,7],
+  [9,20],
+  [3]
+]</code></pre><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; levelOrder(TreeNode root) &#123;</span><br><span class="line">            List&lt;List&lt;Integer&gt;&gt; result = <span class="keyword">new</span> ArrayList();</span><br><span class="line">            <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> result;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            Queue&lt;TreeNode&gt; q = <span class="keyword">new</span> LinkedList();</span><br><span class="line">            q.offer(root);</span><br><span class="line">            <span class="keyword">while</span> (!q.isEmpty()) &#123;</span><br><span class="line">                List&lt;Integer&gt; thisLevel = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">                <span class="keyword">int</span> qSize = q.size();</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; qSize; i++) &#123;</span><br><span class="line">                    TreeNode curr = q.poll();</span><br><span class="line">                    thisLevel.add(curr.val);</span><br><span class="line">                    <span class="keyword">if</span> (curr.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        q.offer(curr.left);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (curr.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        q.offer(curr.right);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                result.add(<span class="number">0</span>, thisLevel);</span><br><span class="line">            &#125;</span><br><span class="line"><span class="comment">//            Collections.reverse(result);</span></span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
 
       
@@ -217,7 +223,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/05/31/leetcode/1143. 最长公共子序列/">
+    <link itemprop="mainEntityOfPage" href="/2021/05/31/leetcode/树/144. 二叉树的前序遍历/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -231,7 +237,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/05/31/leetcode/1143. 最长公共子序列/" class="post-title-link" itemprop="url">1143. 最长公共子序列</a>
+            <a href="/2021/05/31/leetcode/树/144. 二叉树的前序遍历/" class="post-title-link" itemprop="url">144. 二叉树的前序遍历</a>
         </h2>
 
         <div class="post-meta">
@@ -242,7 +248,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-05-31 10:45:02 / Modified: 11:00:32" itemprop="dateCreated datePublished" datetime="2021-05-31T10:45:02+08:00">2021-05-31</time>
+              <time title="Created: 2021-05-31 14:45:02 / Modified: 17:10:18" itemprop="dateCreated datePublished" datetime="2021-05-31T14:45:02+08:00">2021-05-31</time>
             </span>
 
           
@@ -256,23 +262,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a href="https://leetcode-cn.com/problems/longest-common-subsequence" target="_blank" rel="noopener">https://leetcode-cn.com/problems/longest-common-subsequence</a></p>
-<p>给定两个字符串 text1 和 text2，返回这两个字符串的最长 公共子序列 的长度。如果不存在 公共子序列 ，返回 0 。</p>
-<p>一个字符串的 子序列 是指这样一个新的字符串：它是由原字符串在不改变字符的相对顺序的情况下删除某些字符（也可以不删除任何字符）后组成的新字符串。</p>
-<p>例如，”ace” 是 “abcde” 的子序列，但 “aec” 不是 “abcde” 的子序列。<br>两个字符串的 公共子序列 是这两个字符串所共同拥有的子序列。</p>
-<p>示例 1：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：text1 = &quot;abcde&quot;, text2 = &quot;ace&quot; </span><br><span class="line">输出：3  </span><br><span class="line">解释：最长公共子序列是 &quot;ace&quot; ，它的长度为 3 。</span><br></pre></td></tr></table></figure>
+          <p>二叉树先序遍历 </p>
+<p>前序遍历</p>
+<p>递归</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">preorder</span><span class="params">(TreeNode root)</span></span>&#123;</span><br><span class="line">		List&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList();</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> res;</span><br><span class="line">		&#125;</span><br><span class="line">		preorder(root, res);</span><br><span class="line">		<span class="keyword">return</span> res;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">preorder</span><span class="params">(TreeNode root, List&lt;Intger&gt; res)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		res.add(root.val);</span><br><span class="line">		preorder(root.left, res);</span><br><span class="line">		preorder(root.right, res);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>示例 2：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：text1 = &quot;abc&quot;, text2 = &quot;abc&quot;</span><br><span class="line">输出：3</span><br><span class="line">解释：最长公共子序列是 &quot;abc&quot; ，它的长度为 3 。</span><br></pre></td></tr></table></figure>
+<p>栈</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">preorderTraversal</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> res;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Deque&lt;TreeNode&gt; stack = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        TreeNode node = root;</span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() || node != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">while</span> (node != <span class="keyword">null</span>) &#123;</span><br><span class="line">                res.add(node.val);</span><br><span class="line">                stack.push(node);</span><br><span class="line">                node = node.left;</span><br><span class="line">            &#125;</span><br><span class="line">            node = stack.pop();</span><br><span class="line">            node = node.right;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>示例 3：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：text1 = &quot;abc&quot;, text2 = &quot;def&quot;</span><br><span class="line">输出：0</span><br><span class="line">解释：两个字符串没有公共子序列，返回 0 。</span><br></pre></td></tr></table></figure>
-
-<p>动态规划</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public int longestCommonSubsequence(String text1, String text2) &#123;</span><br><span class="line">        int m = text1.length(), n = text2.length();</span><br><span class="line">        int[][] dp = new int[m + 1][n + 1];</span><br><span class="line">        for (int i = 1; i &lt;= m; i++) &#123;</span><br><span class="line">            char c1 = text1.charAt(i - 1);</span><br><span class="line">            for (int j = 1; j &lt;= n; j++) &#123;</span><br><span class="line">                char c2 = text2.charAt(j - 1);</span><br><span class="line">                if (c1 == c2) &#123;</span><br><span class="line">                    dp[i][j] = dp[i - 1][j - 1] + 1;</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return dp[m][n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://pic.leetcode-cn.com/1617411822-KhEKGw-image.png" alt></p>
 
       
     </div>
@@ -292,7 +289,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/05/31/leetcode/字符串/567.字符串排列/">
+    <link itemprop="mainEntityOfPage" href="/2021/05/31/leetcode/树/94. 二叉树的中序遍历/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -306,7 +303,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/05/31/leetcode/字符串/567.字符串排列/" class="post-title-link" itemprop="url">567.字符串排列</a>
+            <a href="/2021/05/31/leetcode/树/94. 二叉树的中序遍历/" class="post-title-link" itemprop="url">94. 二叉树的中序遍历</a>
         </h2>
 
         <div class="post-meta">
@@ -317,7 +314,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-05-31 10:42:01 / Modified: 10:55:02" itemprop="dateCreated datePublished" datetime="2021-05-31T10:42:01+08:00">2021-05-31</time>
+              <time title="Created: 2021-05-31 14:45:02 / Modified: 17:10:04" itemprop="dateCreated datePublished" datetime="2021-05-31T14:45:02+08:00">2021-05-31</time>
             </span>
 
           
@@ -331,20 +328,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a href="https://leetcode-cn.com/problems/permutation-in-string" target="_blank" rel="noopener">https://leetcode-cn.com/problems/permutation-in-string</a></p>
-<p>给定两个字符串 s1 和 s2，写一个函数来判断 s2 是否包含 s1 的排列。</p>
-<p>换句话说，第一个字符串的排列之一是第二个字符串的 子串 。</p>
-<p> 示例 1：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: s1 = &quot;ab&quot; s2 = &quot;eidbaooo&quot;</span><br><span class="line">输出: True</span><br><span class="line">解释: s2 包含 s1 的排列之一 (&quot;ba&quot;).</span><br></pre></td></tr></table></figure>
-
-<p>示例 2：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: s1= &quot;ab&quot; s2 = &quot;eidboaoo&quot;</span><br><span class="line">输出: False</span><br></pre></td></tr></table></figure>
-
-<p>滑动窗口</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">checkInclusion</span><span class="params">(String s1, String s2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = s1.length(), m = s2.length();</span><br><span class="line">        <span class="keyword">if</span> (n &gt; m) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span>[] cnt1 = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">26</span>];</span><br><span class="line">        <span class="keyword">int</span>[] cnt2 = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">26</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            ++cnt1[s1.charAt(i) - <span class="string">'a'</span>];</span><br><span class="line">            ++cnt2[s2.charAt(i) - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (Arrays.equals(cnt1, cnt2)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = n; i &lt; m; ++i) &#123;</span><br><span class="line">            ++cnt2[s2.charAt(i) - <span class="string">'a'</span>];</span><br><span class="line">            --cnt2[s2.charAt(i - n) - <span class="string">'a'</span>];</span><br><span class="line">            <span class="keyword">if</span> (Arrays.equals(cnt1, cnt2)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>双指针</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">checkInclusion</span><span class="params">(String s1, String s2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = s1.length(), m = s2.length();</span><br><span class="line">        <span class="keyword">if</span> (n &gt; m) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span>[] cnt = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">26</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            --cnt[s1.charAt(i) - <span class="string">'a'</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> right = <span class="number">0</span>; right &lt; m; ++right) &#123;</span><br><span class="line">            <span class="keyword">int</span> x = s2.charAt(right) - <span class="string">'a'</span>;</span><br><span class="line">            ++cnt[x];</span><br><span class="line">            <span class="keyword">while</span> (cnt[x] &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                --cnt[s2.charAt(left) - <span class="string">'a'</span>];</span><br><span class="line">                ++left;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (right - left + <span class="number">1</span> == n) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <p>(搜索二叉树，中序遍历，遍历结果是升序排序) </p>
+<p>递归+栈</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">inorderTraversal</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> inorder(root, <span class="keyword">new</span> ArrayList());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> List&lt;Integer&gt; <span class="title">inorder</span><span class="params">(TreeNode root, List&lt;Integer&gt; result)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">        inorder(root.left, result);</span><br><span class="line">        result.add(root.val);</span><br><span class="line">        <span class="keyword">return</span> inorder(root.right, result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution3</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">inorderTraversal</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        Stack&lt;TreeNode&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty() || root != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">while</span> (root != <span class="keyword">null</span>) &#123;</span><br><span class="line">                stack.push(root);</span><br><span class="line">                root = root.left;</span><br><span class="line">            &#125;</span><br><span class="line">            root = stack.pop();</span><br><span class="line">            result.add(root.val);</span><br><span class="line">            root = root.right;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
       
@@ -364,7 +350,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/43/">43</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/44/">44</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -430,14 +416,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">129</span>
+          <span class="site-state-item-count">132</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

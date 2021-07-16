@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/05/26/leetcode/23.合并K个有序链表/">
+    <link itemprop="mainEntityOfPage" href="/2021/05/27/leetcode/字符串/316.移除重复字母/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +164,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/05/26/leetcode/23.合并K个有序链表/" class="post-title-link" itemprop="url">23.合并K个有序链表</a>
+            <a href="/2021/05/27/leetcode/字符串/316.移除重复字母/" class="post-title-link" itemprop="url">316.删除重复字母</a>
         </h2>
 
         <div class="post-meta">
@@ -173,10 +173,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2021-05-26 10:42:01 / Modified: 12:00:50" itemprop="dateCreated datePublished" datetime="2021-05-26T10:42:01+08:00">2021-05-26</time>
+              <time title="Created: 2021-05-27 10:48:21" itemprop="dateCreated datePublished" datetime="2021-05-27T10:48:21+08:00">2021-05-27</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-31 16:24:58" itemprop="dateModified" datetime="2021-05-31T16:24:58+08:00">2021-05-31</time>
+              </span>
 
           
 
@@ -189,111 +195,113 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><a href="https://leetcode-cn.com/problems/merge-k-sorted-lists" target="_blank" rel="noopener">https://leetcode-cn.com/problems/merge-k-sorted-lists</a></p>
-<p>给你一个链表数组，每个链表都已经按升序排列。</p>
-<p>请你将所有链表合并到一个升序链表中，返回合并后的链表。</p>
+          <p><a href="https://leetcode-cn.com/problems/remove-duplicate-letters/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/remove-duplicate-letters/</a></p>
+<p>给你一个字符串 <code>s</code> ，请你去除字符串中重复的字母，使得每个字母只出现一次。需保证 <strong>返回结果的字典序最小</strong>（要求不能打乱其他字符的相对位置）。</p>
+<p> 和1081题目类似</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：s = &quot;bcabc&quot;</span><br><span class="line">输出：&quot;abc&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：s = &quot;cbacdcbc&quot;</span><br><span class="line">输出：&quot;acdb&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>使用栈+数组</p>
+<p><a href="https://leetcode-cn.com/problems/remove-duplicate-letters/solution/you-qian-ru-shen-dan-diao-zhan-si-lu-qu-chu-zhong-/?um_chnnl=huawei?um_from_appkey=5fcda41c42348b56d6f8e8d5" target="_blank" rel="noopener">https://leetcode-cn.com/problems/remove-duplicate-letters/solution/you-qian-ru-shen-dan-diao-zhan-si-lu-qu-chu-zhong-/?um_chnnl=huawei?um_from_appkey=5fcda41c42348b56d6f8e8d5</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="comment">//1、去除重复字母</span></span><br><span class="line">    <span class="comment">//2、保持原有字符顺序</span></span><br><span class="line">    <span class="comment">//3、保证字典顺序最小</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">removeDuplicateLetters</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (str == <span class="keyword">null</span> || str.length() &lt;= <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> str;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> len = str.length();</span><br><span class="line">        Stack&lt;Character&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">        <span class="keyword">int</span>[] count = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">256</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">            count[str.charAt(i)]++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">boolean</span>[] inStack = <span class="keyword">new</span> <span class="keyword">boolean</span>[<span class="number">256</span>];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">            <span class="keyword">char</span> c = str.charAt(i);</span><br><span class="line">            count[c]--;</span><br><span class="line">            <span class="keyword">if</span> (inStack[c]) &#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">while</span> (!stack.isEmpty() &amp;&amp; stack.peek() &gt; c) &#123;</span><br><span class="line">                <span class="keyword">if</span> (count[stack.peek()] == <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                inStack[stack.pop()] = <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            stack.push(c);</span><br><span class="line">            inStack[c] = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        StringBuffer buffer = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">        <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">            buffer.append(stack.pop());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> buffer.reverse().toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><a href="316.移除重复字母.md">316.移除重复字母.md</a> </li>
+<li>[321. 拼接最大数.md](321. 拼接最大数.md) </li>
+<li><a href="402.移除K位数字.md">402.移除K位数字.md</a> </li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="/2021/05/26/leetcode/字符串/632.最小区间/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hezhengkui">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="我的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/26/leetcode/字符串/632.最小区间/" class="post-title-link" itemprop="url">632. 最小覆盖子串</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-05-26 12:42:01" itemprop="dateCreated datePublished" datetime="2021-05-26T12:42:01+08:00">2021-05-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-05-31 16:25:10" itemprop="dateModified" datetime="2021-05-31T16:25:10+08:00">2021-05-31</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="https://leetcode-cn.com/problems/smallest-range-covering-elements-from-k-lists" target="_blank" rel="noopener">https://leetcode-cn.com/problems/smallest-range-covering-elements-from-k-lists</a></p>
+<p>你有 k 个 非递减排列 的整数列表。找到一个 最小 区间，使得 k 个列表中的每个列表至少有一个数包含在其中。</p>
+<p>我们定义如果 b-a &lt; d-c 或者在 b-a == d-c 时 a &lt; c，则区间 [a,b] 比 [c,d] 小。</p>
 <p>示例 1：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">输入：lists = [[1,4,5],[1,3,4],[2,6]]</span><br><span class="line">输出：[1,1,2,3,4,4,5,6]</span><br><span class="line">解释：链表数组如下：</span><br><span class="line">[</span><br><span class="line">  1-&gt;4-&gt;5,</span><br><span class="line">  1-&gt;3-&gt;4,</span><br><span class="line">  2-&gt;6</span><br><span class="line">]</span><br><span class="line">将它们合并到一个有序链表中得到。</span><br><span class="line">1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [[4,10,15,24,26], [0,9,12,20], [5,18,22,30]]</span><br><span class="line">输出：[20,24]</span><br><span class="line">解释： </span><br><span class="line">列表 1：[4, 10, 15, 24, 26]，24 在区间 [20,24] 中。</span><br><span class="line">列表 2：[0, 9, 12, 20]，20 在区间 [20,24] 中。</span><br><span class="line">列表 3：[5, 18, 22, 30]，22 在区间 [20,24] 中。</span><br></pre></td></tr></table></figure>
 
 <p>示例 2：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：lists = []</span><br><span class="line">输出：[]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [[1,2,3],[1,2,3],[1,2,3]]</span><br><span class="line">输出：[1,1]</span><br></pre></td></tr></table></figure>
 
 <p>示例 3：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：lists = [[]]</span><br><span class="line">输出：[]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [[10,10],[11,11]]</span><br><span class="line">输出：[10,11]</span><br></pre></td></tr></table></figure>
 
-<p>解决方法</p>
-<ol>
-<li>顺序合并</li>
-<li>分治合并</li>
-<li>使用优先队列</li>
-</ol>
-<p>优先队列</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ListNode <span class="title">mergeKLists</span><span class="params">(ListNode[] lists)</span> </span>&#123;</span><br><span class="line">        PriorityQueue&lt;ListNode&gt; heap = <span class="keyword">new</span> PriorityQueue((Comparator&lt;ListNode&gt;) (o1, o2) -&gt; o1.val - o2.val);</span><br><span class="line">        <span class="keyword">for</span> (ListNode node : lists) &#123;</span><br><span class="line">            <span class="keyword">if</span> (node != <span class="keyword">null</span>) &#123;</span><br><span class="line">                heap.add(node);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ListNode dummy = <span class="keyword">new</span> ListNode(-<span class="number">1</span>);</span><br><span class="line">        ListNode temp = dummy;</span><br><span class="line">        <span class="keyword">while</span> (!heap.isEmpty()) &#123;</span><br><span class="line">            temp.next = heap.poll();</span><br><span class="line">            temp = temp.next;</span><br><span class="line">            <span class="keyword">if</span> (temp.next != <span class="keyword">null</span>) &#123;</span><br><span class="line">                heap.add(temp.next);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dummy.next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>示例 4：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [[10],[11]]</span><br><span class="line">输出：[10,11]</span><br></pre></td></tr></table></figure>
 
+<p>示例 5：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：nums = [[1],[2],[3],[4],[5],[6],[7]]</span><br><span class="line">输出：[1,7]</span><br></pre></td></tr></table></figure>
 
-      
-    </div>
+<p>优先队列解法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">		<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span>[] smallestRange(List&lt;List&lt;Integer&gt;&gt; nums) &#123;</span><br><span class="line">            <span class="keyword">int</span> n = nums.size();</span><br><span class="line">            <span class="keyword">int</span> inf = <span class="number">0x3f3f3f</span>;</span><br><span class="line">            <span class="keyword">int</span> max = -inf; <span class="comment">// 当前最大值</span></span><br><span class="line">            <span class="keyword">int</span> st = -inf;  <span class="comment">// 起点</span></span><br><span class="line">            <span class="keyword">int</span> ed = inf;   <span class="comment">// 终点</span></span><br><span class="line"></span><br><span class="line">            PriorityQueue&lt;Node&gt; pq = <span class="keyword">new</span> PriorityQueue&lt;&gt;(((o1, o2) -&gt; o1.val - o2.val));</span><br><span class="line">            PriorityQueue&lt;Node&gt; pq1 = <span class="keyword">new</span> PriorityQueue&lt;&gt;((o1, o2) -&gt; Integer.compare(o1.val, o2.val));</span><br><span class="line">            PriorityQueue&lt;Node&gt; pq2 = <span class="keyword">new</span> PriorityQueue&lt;&gt;(Comparator.comparingInt(o -&gt; o.val));</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 相当于合并k个有序链表，把 head 放进去</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">                <span class="keyword">int</span> val = nums.get(i).get(<span class="number">0</span>);</span><br><span class="line">                pq.offer(<span class="keyword">new</span> Node(i, <span class="number">0</span>, val));</span><br><span class="line">                max = Math.max(max, val);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 必须包含 k 个元素</span></span><br><span class="line">            <span class="keyword">while</span> (pq.size() == n) &#123;</span><br><span class="line">                Node node = pq.poll();</span><br><span class="line">                <span class="keyword">int</span> i = node.i;</span><br><span class="line">                <span class="keyword">int</span> j = node.j;</span><br><span class="line">                <span class="keyword">int</span> val = node.val;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 更新区间长度</span></span><br><span class="line">                <span class="keyword">if</span> (max - val &lt; ed - st) &#123;</span><br><span class="line">                    st = val;</span><br><span class="line">                    ed = max;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 为堆中填充元素</span></span><br><span class="line">                <span class="keyword">if</span> (j + <span class="number">1</span> &lt; nums.get(i).size()) &#123;</span><br><span class="line">                    <span class="keyword">int</span> nVal = nums.get(i).get(j + <span class="number">1</span>);</span><br><span class="line">                    pq.offer(<span class="keyword">new</span> Node(i, j + <span class="number">1</span>, nVal));</span><br><span class="line">                    max = Math.max(max, nVal);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;st, ed&#125;;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">            <span class="keyword">int</span> i, j, val;</span><br><span class="line"></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">this</span>.i = i;</span><br><span class="line">                <span class="keyword">this</span>.j = j;</span><br><span class="line">                <span class="keyword">this</span>.val = val;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;List&lt;Integer&gt;&gt; nums = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"><span class="comment">//        nums.add(Arrays.asList(4, 10, 15, 24, 26));</span></span><br><span class="line"><span class="comment">//        nums.add(Arrays.asList(0, 9, 12, 20));</span></span><br><span class="line"><span class="comment">//        nums.add(Arrays.asList(5, 18, 22, 30));</span></span><br><span class="line">        nums.add(Arrays.asList(<span class="number">4</span>, <span class="number">10</span>, <span class="number">15</span>, <span class="number">24</span>, <span class="number">26</span>));</span><br><span class="line">        nums.add(Arrays.asList(<span class="number">0</span>));</span><br><span class="line">        nums.add(Arrays.asList(<span class="number">5</span>, <span class="number">18</span>, <span class="number">22</span>, <span class="number">30</span>));</span><br><span class="line">        Solution solution = <span class="keyword">new</span> Solution();</span><br><span class="line">        <span class="keyword">int</span>[] result = solution.smallestRange(nums);</span><br><span class="line">        System.out.print(result[<span class="number">0</span>] + <span class="string">"\t"</span>);</span><br><span class="line">        System.out.println(result[<span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/05/21/spring/hystrix metrics总结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hezhengkui">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="我的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/21/spring/hystrix metrics总结/" class="post-title-link" itemprop="url">hystrix metrics总结</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2021-05-21 10:55:00 / Modified: 11:39:09" itemprop="dateCreated datePublished" datetime="2021-05-21T10:55:00+08:00">2021-05-21</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>hystrix metrics监控是基于rxjava设计的，基础指标监控包含Health(请求成功、失败)、Concurrency(并发)、Distribution(Histogram柱状图，采集P50、P99、平均响应时间)、线程池ThreadPool(执行、拒绝)、Collapser等指标</p>
-<p>指标数据是通过rxjava的BehaviorSubject类(getValue)方法记录并返回的</p>
-<p>指标监控入口可以看类AbstractCommand.executeCommandWithSpecifiedIsolation，通过</p>
-<p>metrics.markCommandStart(commandKey, threadPoolKey, ExecutionIsolationStrategy.THREAD)方法，统计指标</p>
-<p>关键类：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">HystrixCommandMetrics</span><br><span class="line">HystrixThreadPoolMetrics</span><br><span class="line">HystrixCollapserMetrics</span><br><span class="line">AbstractCommand   具体执行指标和业务入口</span><br><span class="line">HystrixCommandAspect  拦截@HystrixCommand相关类</span><br><span class="line">HystrixMetricsStreamServlet</span><br><span class="line">SerialHystrixDashboardData  指标聚合成json类</span><br><span class="line">HystrixCommandProperties 配置相关类</span><br></pre></td></tr></table></figure>
-
-<p>熔断相关类</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HystrixCircuitBreaker.allowRequest</span><br></pre></td></tr></table></figure>
-
-<p>判断熔断开关是否打开逻辑</p>
-<ol>
-<li>判断当前command总请求数是否小于默认20，小于则表示未打开</li>
-<li>判断当前command错误率是否小雨默认50%，是则表示未打开</li>
-<li>熔断器如果未打开，则设置为true，并设置熔断器最近打开时间</li>
-<li>如果熔断器打开，再判断是否允许单个请求通过、<ol>
-<li>熔断器打开，并且熔断器最近打开时间和当前时间相差大于默认配置5s，则通过此请求</li>
-<li>更新熔断器最近打开时间为当前时间</li>
-</ol>
-</li>
-</ol>
-<p>熔断相关配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">circuitBreaker.sleepWindowInMilliseconds</span><br><span class="line">circuitBreaker.errorThresholdPercentage</span><br><span class="line">circuitBreaker.requestVolumeThreshold</span><br></pre></td></tr></table></figure>
-
-<p>熔断相关类</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">allowRequest</span><span class="params">()</span> </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (properties.circuitBreakerForceOpen().get()) &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">if</span> (properties.circuitBreakerForceClosed().get()) &#123;</span><br><span class="line">              isOpen();</span><br><span class="line">              <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> !isOpen() || allowSingleTest();</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isOpen</span><span class="params">()</span> </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (circuitOpen.get()) &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          HealthCounts health = metrics.getHealthCounts();</span><br><span class="line"></span><br><span class="line">          <span class="keyword">if</span> (health.getTotalRequests() &lt; properties.circuitBreakerRequestVolumeThreshold().get()) &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">if</span> (health.getErrorPercentage() &lt; properties.circuitBreakerErrorThresholdPercentage().get()) &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              <span class="keyword">if</span> (circuitOpen.compareAndSet(<span class="keyword">false</span>, <span class="keyword">true</span>)) &#123;</span><br><span class="line">                  circuitOpenedOrLastTestedTime.set(System.currentTimeMillis());</span><br><span class="line">                  <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">              &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                  <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">allowSingleTest</span><span class="params">()</span> </span>&#123;</span><br><span class="line">          <span class="keyword">long</span> timeCircuitOpenedOrWasLastTested = circuitOpenedOrLastTestedTime.get();</span><br><span class="line">          <span class="keyword">if</span> (circuitOpen.get() &amp;&amp; System.currentTimeMillis() &gt; timeCircuitOpenedOrWasLastTested + properties.circuitBreakerSleepWindowInMilliseconds().get()) &#123;</span><br><span class="line">              <span class="keyword">if</span> (circuitOpenedOrLastTestedTime.compareAndSet(timeCircuitOpenedOrWasLastTested, System.currentTimeMillis())) &#123;</span><br><span class="line">                  <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+<p>哈希表+滑动窗口（类似倒排索引）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution3</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[] smallestRange(List&lt;List&lt;Integer&gt;&gt; nums) &#123;</span><br><span class="line">        <span class="keyword">int</span> size = nums.size();</span><br><span class="line">        Map&lt;Integer, List&lt;Integer&gt;&gt; indices = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">int</span> xMin = Integer.MAX_VALUE, xMax = Integer.MIN_VALUE;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> x : nums.get(i)) &#123;</span><br><span class="line">                List&lt;Integer&gt; list = indices.getOrDefault(x, <span class="keyword">new</span> ArrayList&lt;&gt;());</span><br><span class="line">                list.add(i);</span><br><span class="line">                indices.put(x, list);</span><br><span class="line">                xMin = Math.min(xMin, x);</span><br><span class="line">                xMax = Math.max(xMax, x);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span>[] freq = <span class="keyword">new</span> <span class="keyword">int</span>[size];</span><br><span class="line">        <span class="keyword">int</span> inside = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> left = xMin, right = xMin - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> bestLeft = xMin, bestRight = xMax;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (right &lt; xMax) &#123;</span><br><span class="line">            right++;</span><br><span class="line">            <span class="keyword">if</span> (indices.containsKey(right)) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> x : indices.get(right)) &#123;</span><br><span class="line">                    freq[x]++;</span><br><span class="line">                    <span class="keyword">if</span> (freq[x] == <span class="number">1</span>) &#123;</span><br><span class="line">                        inside++;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">while</span> (inside == size) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (right - left &lt; bestRight - bestLeft) &#123;</span><br><span class="line">                        bestLeft = left;</span><br><span class="line">                        bestRight = right;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (indices.containsKey(left)) &#123;</span><br><span class="line">                        <span class="keyword">for</span> (<span class="keyword">int</span> x: indices.get(left)) &#123;</span><br><span class="line">                            freq[x]--;</span><br><span class="line">                            <span class="keyword">if</span> (freq[x] == <span class="number">0</span>) &#123;</span><br><span class="line">                                inside--;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    left++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;bestLeft, bestRight&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
       
@@ -314,7 +322,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="/2021/05/19/面试题/面试题-3/">
+    <link itemprop="mainEntityOfPage" href="/2021/05/26/leetcode/21.合并两个有序链表/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -328,7 +336,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2021/05/19/面试题/面试题-3/" class="post-title-link" itemprop="url">面试题3</a>
+            <a href="/2021/05/26/leetcode/21.合并两个有序链表/" class="post-title-link" itemprop="url">21.合并两个有序链表</a>
         </h2>
 
         <div class="post-meta">
@@ -339,7 +347,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-05-19 18:45:02 / Modified: 14:14:20" itemprop="dateCreated datePublished" datetime="2021-05-19T18:45:02+08:00">2021-05-19</time>
+              <time title="Created: 2021-05-26 10:42:01 / Modified: 10:22:51" itemprop="dateCreated datePublished" datetime="2021-05-26T10:42:01+08:00">2021-05-26</time>
             </span>
 
           
@@ -353,22 +361,23 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>曾经见过一套面试题，从原理到架构都考了，但是公司负责人跟我说，并不需要大家都会而是考一个思维和态度。</p>
-<p>面试官主要会问到的就是：项目难点是什么，设计是什么，如何解决某一个点，为什么这么解决，还有什么方法可以解决。你在这个项目中的优势是什么。</p>
-<p>我们应该关注的是：自己的<strong>全局观</strong>，以及<strong>发现问题</strong>和<strong>解决问题</strong>的能力</p>
-<p>技术要为业务服务，业务倒逼技术发展</p>
-<p>有计划、执行力和效率</p>
-<p>时间、计划、行动、学习、思维、才能和成功</p>
-<p><em>STAR法则</em>是情境(situation)、任务（task）、行动(action)、结果(result)四项的缩写</p>
-<p>What（发生了什么）Who（利益相关方）Where（哪里有问题）When（什么时候发生的）Why（为什么会这样）</p>
-<p><strong>What（干什么）和How（怎么干）</strong></p>
-<ol>
-<li><strong>确立可量化的目标</strong></li>
-<li><strong>结构化思维拆解目标</strong></li>
-<li><strong>具体执行</strong></li>
-</ol>
-<p>设定目标需要遵循 SMART（Specific, Measurable, Actionable, Relevant, Time limit  具体、可衡量、可实现、相关、时限）</p>
-<p><img src="https://pic4.zhimg.com/80/v2-af83d67b951cd18bee1ffde6a5a86209_1440w.jpg?source=1940ef5c" alt="img"></p>
+          <p><a href="https://leetcode-cn.com/problems/merge-two-sorted-lists" target="_blank" rel="noopener">https://leetcode-cn.com/problems/merge-two-sorted-lists</a></p>
+<p>将两个升序链表合并为一个新的 <strong>升序</strong> 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 </p>
+<p>示例 1：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：l1 = [1,2,4], l2 = [1,3,4]</span><br><span class="line">输出：[1,1,2,3,4,4]</span><br></pre></td></tr></table></figure>
+
+<p>示例 2：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：l1 = [], l2 = []</span><br><span class="line">输出：[]</span><br></pre></td></tr></table></figure>
+
+<p>示例 3：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：l1 = [], l2 = [0]</span><br><span class="line">输出：[0]</span><br></pre></td></tr></table></figure>
+
+<p>递归</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution1</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ListNode <span class="title">mergeTwoLists</span><span class="params">(ListNode l1, ListNode l2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (l1 == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> l2;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (l2 == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> l1;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (l1.val &lt; l2.val) &#123;</span><br><span class="line">            l1.next = mergeTwoLists(l1.next, l2);</span><br><span class="line">            <span class="keyword">return</span> l1;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            l2.next = mergeTwoLists(l1, l2.next);</span><br><span class="line">            <span class="keyword">return</span> l2;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>迭代</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ListNode <span class="title">mergeTwoLists</span><span class="params">(ListNode l1, ListNode l2)</span> </span>&#123;</span><br><span class="line">        ListNode dummy = <span class="keyword">new</span> ListNode(-<span class="number">1</span>);</span><br><span class="line">        ListNode curr = dummy;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (l1 != <span class="keyword">null</span> &amp;&amp; l2 != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (l1.val &lt; l2.val) &#123;</span><br><span class="line">                curr.next = l1;</span><br><span class="line">                l1 = l1.next;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                curr.next = l2;</span><br><span class="line">                l2 = l2.next;</span><br><span class="line">            &#125;</span><br><span class="line">            curr = curr.next;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        curr.next = l1 == <span class="keyword">null</span> ? l2 : l1;</span><br><span class="line">        <span class="keyword">return</span> dummy.next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -387,7 +396,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/16/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><span class="page-number current">17</span><a class="page-number" href="/page/18/">18</a><span class="space">&hellip;</span><a class="page-number" href="/page/43/">43</a><a class="extend next" rel="next" href="/page/18/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/16/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><span class="page-number current">17</span><a class="page-number" href="/page/18/">18</a><span class="space">&hellip;</span><a class="page-number" href="/page/44/">44</a><a class="extend next" rel="next" href="/page/18/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -453,14 +462,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">129</span>
+          <span class="site-state-item-count">132</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

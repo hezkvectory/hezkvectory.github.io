@@ -29,7 +29,7 @@
 <meta property="og:description" content="Ribbon的负载均衡策略   类 命名 说明    RoundRobinRule 轮询策略 Ribbon的默认负载均衡策略   RandomRule 随机策略 从所有可用的提供者中随机选择一个   RetryRule 重试策略 从所有可用的提供者中随机选择一个,若获取失败的话，则可以在指定的时间内重试，默认为500毫秒   BestAvailableRule 最低并发策略 选择并发量最小的 提供">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="/2021/04/27/spring/feign-ribbon-loadbalancer/openfeign-ribbon.jpg">
-<meta property="og:updated_time" content="2021-05-17T04:09:12.940Z">
+<meta property="og:updated_time" content="2021-07-14T03:31:08.017Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="spring openfeign ribbon loadbalancer">
 <meta name="twitter:description" content="Ribbon的负载均衡策略   类 命名 说明    RoundRobinRule 轮询策略 Ribbon的默认负载均衡策略   RandomRule 随机策略 从所有可用的提供者中随机选择一个   RetryRule 重试策略 从所有可用的提供者中随机选择一个,若获取失败的话，则可以在指定的时间内重试，默认为500毫秒   BestAvailableRule 最低并发策略 选择并发量最小的 提供">
@@ -188,7 +188,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-05-17 12:09:12" itemprop="dateModified" datetime="2021-05-17T12:09:12+08:00">2021-05-17</time>
+                <time title="Modified: 2021-07-14 11:31:08" itemprop="dateModified" datetime="2021-07-14T11:31:08+08:00">2021-07-14</time>
               </span>
 
           
@@ -258,6 +258,74 @@
 <p>此类中有一个定时任务，updateListOfServers方法，从eureka-client客户端缓存中加载对应的Server信息。</p>
 <p>PollingServerListUpdater</p>
 <p>CommonClientConfigKey</p>
+<h4 id="feign-ribbon服务化调用流程"><a href="#feign-ribbon服务化调用流程" class="headerlink" title="feign ribbon服务化调用流程"></a>feign ribbon服务化调用流程</h4><ol>
+<li><p>@EnableFeignClients 打开注解，扫描@FeignClient 注解，@FeignClient注解最后被FeignClientsRegistrar（ImportBeanDefinitionRegistrar）扫描，并注入到spring工厂中</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ClassPathScanningCandidateComponentProvider</span><br><span class="line">AnnotationTypeFilter</span><br><span class="line">FeignClientFactoryBean</span><br></pre></td></tr></table></figure>
+
+
+
+
+</li>
+</ol>
+<ol start="2">
+<li><p>FeignClientFactoryBean</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">FactoryBean</span><br><span class="line">Feign.Builder</span><br><span class="line">Retryer</span><br><span class="line">RequestInterceptor</span><br><span class="line">FeignContext</span><br><span class="line">Targeter</span><br><span class="line">InvocationHandlerFactory</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<p>   factoryBean的getObject方法，调用getTarget，通过FeignContext构建生成代理类ReflectiveFeign.FeignInvocationHandler</p>
+<ol start="3">
+<li><p>SynchronousMethodHandler <strong>feign发起服务调用最终处理类</strong></p>
+<p> 构建RequestTemplate</p>
+</li>
+</ol>
+<pre><code>此处while循环，会判断是否要重试**Retryer**
+
+1. 方法executeAndDecode()
+   1. 构建Request请求
+   2. 通过Client执行请求**execute(Request request, Options options)**</code></pre><ol start="4">
+<li><p>LoadBalancerFeignClient 执行http请求的实现类</p>
+<ol>
+<li>转化为ribbon的Request</li>
+<li>通过CachingSpringLoadBalancerFactory创建FeignLoadBalancer</li>
+<li>执行AbstractLoadBalancerAwareClient.executeWithLoadBalancer()，FeignLoadBalancer继承AbstractLoadBalancerAwareClient</li>
+</ol>
+</li>
+<li><p>AbstractLoadBalancerAwareClient.executeWithLoadBalancer</p>
+<ol>
+<li>构建LoadBalancerCommand</li>
+<li>调用LoadBalancerCommand的submit方法，此处submit参数是一个<strong>ServerOperation</strong>匿名类，通过balancer获取到真正被调用的server信息，然后构建http请求并执行</li>
+</ol>
+</li>
+<li><p>LoadBalancerCommand.submit</p>
+<ol>
+<li><p>selectServer()从注册中心中选择server节点</p>
+</li>
+<li><p>loadBalancerContext.getServerFromLoadBalancer</p>
+</li>
+<li><p>ILoadBalancer lb = getLoadBalancer();  <strong>Ribbon的loadBalancer</strong></p>
+</li>
+<li><p>lb.chooseServer()对应的其中一个实现<strong>ZoneAwareLoadBalancer</strong>，此类继承<strong>DynamicServerListLoadBalancer</strong>，里面有一个ServerListUpdater.UpdateAction(updateListOfServers)线程，默认每30s执行一次，刷新ribbon服务列表缓存</p>
+</li>
+<li><p>ZoneAwareLoadBalancer继承BaseLoadBalancer，里面有一个<strong>IRule</strong>接口，对应的是服务负责规则引擎</p>
+</li>
+<li><p>chooseServer方法调用rule.choose方法，选择出server信息</p>
+</li>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">AbstractLoadBalancerRule (com.netflix.loadbalancer)</span><br><span class="line">  ClientConfigEnabledRoundRobinRule (com.netflix.loadbalancer)</span><br><span class="line">    BestAvailableRule (com.netflix.loadbalancer)</span><br><span class="line">    PredicateBasedRule (com.netflix.loadbalancer)</span><br><span class="line">      ZoneAvoidanceRule (com.netflix.loadbalancer)</span><br><span class="line">      AvailabilityFilteringRule (com.netflix.loadbalancer)</span><br><span class="line">  RoundRobinRule (com.netflix.loadbalancer)</span><br><span class="line">    WeightedResponseTimeRule (com.netflix.loadbalancer)</span><br><span class="line">    ResponseTimeWeightedRule (com.netflix.loadbalancer)</span><br><span class="line">  RandomRule (com.netflix.loadbalancer)</span><br><span class="line">  RetryRule (com.netflix.loadbalancer)</span><br></pre></td></tr></table></figure>
+
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CompositePredicate</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+</li>
+</ol>
+</li>
+</ol>
+<p>​    </p>
 
     </div>
 
@@ -341,7 +409,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Ribbon的负载均衡策略"><span class="nav-number">1.</span> <span class="nav-text">Ribbon的负载均衡策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#spring-openfeign"><span class="nav-number">2.</span> <span class="nav-text">spring-openfeign</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#feign调用流程"><span class="nav-number">2.1.</span> <span class="nav-text">feign调用流程</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何从eureka-client加载并缓存Server信息"><span class="nav-number">3.</span> <span class="nav-text">如何从eureka-client加载并缓存Server信息</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Ribbon的负载均衡策略"><span class="nav-number">1.</span> <span class="nav-text">Ribbon的负载均衡策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#spring-openfeign"><span class="nav-number">2.</span> <span class="nav-text">spring-openfeign</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#feign调用流程"><span class="nav-number">2.1.</span> <span class="nav-text">feign调用流程</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何从eureka-client加载并缓存Server信息"><span class="nav-number">3.</span> <span class="nav-text">如何从eureka-client加载并缓存Server信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#feign-ribbon服务化调用流程"><span class="nav-number">4.</span> <span class="nav-text">feign ribbon服务化调用流程</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -355,14 +423,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">129</span>
+          <span class="site-state-item-count">132</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-count">23</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
